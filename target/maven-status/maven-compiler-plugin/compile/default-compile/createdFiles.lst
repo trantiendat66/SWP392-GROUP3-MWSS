@@ -1,8 +1,12 @@
-com\mycompany\swp_mwss\resources\JakartaEE10Resource.class
 controller\ProductServlet.class
-model\Product.class
 controller\SearchServlet.class
-db\DBContext.class
-dao\ProductDAO.class
+dao\CustomerDAO.class
+controller\EditProfileServlet.class
 com\mycompany\swp_mwss\JakartaRestConfiguration.class
+com\mycompany\swp_mwss\resources\JakartaEE10Resource.class
+model\Product.class
+db\DBContext.class
+controller\ProfileServlet.class
+dao\ProductDAO.class
+model\Customer.class
 controller\HomeServlet.class
