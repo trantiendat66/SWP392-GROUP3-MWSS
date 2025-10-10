@@ -1,2 +1,8 @@
-com\mycompany\swp_mwss\JakartaRestConfiguration.class
 com\mycompany\swp_mwss\resources\JakartaEE10Resource.class
+controller\ProductServlet.class
+model\Product.class
+controller\SearchServlet.class
+db\DBContext.class
+dao\ProductDAO.class
+com\mycompany\swp_mwss\JakartaRestConfiguration.class
+controller\HomeServlet.class
