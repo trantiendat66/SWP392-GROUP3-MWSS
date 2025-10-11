@@ -1,186 +1,179 @@
- /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/*
+ * Document   : Cart DAO
+ * Created on : Jan 10, 2025
+ * Author     : Dang Vi Danh - CE19687
  */
 package dao;
 
-import db.JDBCUtil;
+import db.DBContext;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cart;
-import model.Product;
-import model.User;
 
 /**
- *
- * @author Dang Vi Danh - CE190687
+ * Cart DAO - Data Access Object for Cart operations
+ * Handles all database operations related to shopping cart
+ * @author Dang Vi Danh - CE19687
  */
-public class CartDAO extends JDBCUtil {
+public class CartDAO extends DBContext {
 
-    private static final Logger LOGGER = Logger.getLogger(CartDAO.class.getName());
-
-    public boolean insertCart(Cart cart) {
-        String sql = "INSERT INTO Cart (customer_id, product_id, price, quantity) VALUES (?, ?, (SELECT price FROM Product WHERE product_id = ?), ?)";
-        Object[] params = {
-            cart.getUser().getUserId(),
-            cart.getProduct().getProductId(),
-            cart.getProduct().getProductId(),
-            cart.getQuantity(),};
-
-        try {
-            return execQuery(sql, params) > 0;
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Lỗi khi thêm vào giỏ hàng", ex);
-            return false;
-        }
+    public CartDAO() {
+        super();
     }
 
-    public boolean deleteAllCart() {
-        String sql = "DELETE FROM Cart";
-
-        try {
-            return execQuery(sql, null) > 0;
-        } catch (Exception e) {
+    // Lấy tất cả sản phẩm trong giỏ hàng của customer
+    public List<Cart> getCartByCustomerId(int customerId) {
+        List<Cart> list = new ArrayList<>();
+        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity, "
+                + "p.product_name, p.image, p.brand "
+                + "FROM Cart c "
+                + "INNER JOIN Product p ON c.product_id = p.product_id "
+                + "WHERE c.customer_id = ? "
+                + "ORDER BY c.cart_id DESC";
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Cart cart = new Cart();
+                    cart.setCartId(rs.getInt("cart_id"));
+                    cart.setCustomerId(rs.getInt("customer_id"));
+                    cart.setProductId(rs.getInt("product_id"));
+                    cart.setPrice(rs.getInt("price"));
+                    cart.setQuantity(rs.getInt("quantity"));
+                    cart.setProductName(rs.getString("product_name"));
+                    cart.setProductImage(rs.getString("image"));
+                    cart.setBrand(rs.getString("brand"));
+                    list.add(cart);
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        return list;
+    }
 
+    // Thêm sản phẩm vào giỏ hàng
+    public boolean addToCart(int customerId, int productId, int price, int quantity) {
+        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+        Cart existingCart = getCartItem(customerId, productId);
+        
+        if (existingCart != null) {
+            // Nếu đã có, cập nhật số lượng
+            int newQuantity = existingCart.getQuantity() + quantity;
+            return updateCartQuantity(existingCart.getCartId(), newQuantity);
+        } else {
+            // Nếu chưa có, thêm mới
+            String sql = "INSERT INTO Cart (customer_id, product_id, price, quantity) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, customerId);
+                ps.setInt(2, productId);
+                ps.setInt(3, price);
+                ps.setInt(4, quantity);
+                int rows = ps.executeUpdate();
+                return rows > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 
-    public boolean updateCart(Cart cart) {
-        String sql = "UPDATE Cart SET customer_id = ?, product_id = ?, quantity = ? WHERE cart_id = ?";
-        Object[] params = {
-            cart.getUser().getUserId(),
-            cart.getProduct().getProductId(),
-            cart.getQuantity(),
-            cart.getCartId()
-        };
-
-        try {
-            return execQuery(sql, params) > 0;
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Lỗi khi cập nhật giỏ hàng ID: " + cart.getCartId(), ex);
-            return false;
-        }
-    }
-
-    public boolean deleteCartById(int cartID) {
-        String sql = "DELETE FROM Cart WHERE cart_id=?";
-        Object[] params = {cartID};
-
-        try {
-            return execQuery(sql, params) > 0;
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Lỗi khi xóa giỏ hàng ID: " + cartID, ex);
-            return false;
-        }
-    }
-
-    public Cart getCartByID(int cartID) {
-        String sql = "SELECT \n"
-                + "    c.cart_id, c.customer_id AS user_id, c.product_id, c.quantity,\n"
-                + "    p.product_id AS p_product_id, p.product_name AS name, p.description, p.price, p.quantity_product AS stock_quantity, p.image AS image_url\n"
-                + "FROM Cart c\n"
-                + "JOIN Customer u ON u.customer_id = c.customer_id\n"
-                + "JOIN Product p ON p.product_id = c.product_id\n"
-                + "WHERE c.cart_id = ?;";
-        Object[] params = {cartID};
-
-        try ( ResultSet rs = execSelectQuery(sql, params)) {
-            if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-
-                Product product = new Product();
-                product.setProductId(rs.getInt("product_id"));
-
-                int id = rs.getInt("cart_id");
-                int quantity = rs.getInt("quantity");
-                return new Cart(id, user, product, quantity, null);
+    // Lấy một item cụ thể trong giỏ hàng
+    public Cart getCartItem(int customerId, int productId) {
+        String sql = "SELECT * FROM Cart WHERE customer_id = ? AND product_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ps.setInt(2, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cart cart = new Cart();
+                    cart.setCartId(rs.getInt("cart_id"));
+                    cart.setCustomerId(rs.getInt("customer_id"));
+                    cart.setProductId(rs.getInt("product_id"));
+                    cart.setPrice(rs.getInt("price"));
+                    cart.setQuantity(rs.getInt("quantity"));
+                    return cart;
+                }
             }
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Lỗi khi lấy giỏ hàng ID: " + cartID, ex);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public List<Cart> getCartsByUserId(int userId) {
-        List<Cart> cartItems = new ArrayList<>();
-
-        String sql = "SELECT \n"
-                + "c.cart_id, c.customer_id AS user_id, c.product_id, c.quantity,\n"
-                + "p.product_id, p.product_name AS name, p.description, p.price, p.quantity_product AS stock_quantity, p.image AS image_url\n"
-                + "FROM Cart c\n"
-                + "LEFT JOIN Customer u ON u.customer_id = c.customer_id\n"
-                + "LEFT JOIN Product p ON p.product_id = c.product_id\n"
-                + "WHERE u.customer_id = ?;";
-        Object[] params = {userId};
-
-        try {
-            ResultSet rs = execSelectQuery(sql, params);
-
-            while (rs.next()) {
-                int id = rs.getInt("cart_id");
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-
-                Product product = new Product();
-                product.setProductId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setPrice(rs.getBigDecimal("price"));
-
-                int quantity = rs.getInt("quantity");
-
-                Cart cart = new Cart(id, user, product, quantity, null);
-
-                cartItems.add(cart);
-            }
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Lỗi khi lấy giỏ hàng cho user ID: " + userId, ex);
-        }
-        return cartItems;
-    }
-
-    public Cart getCartByUserAndProduct(int userId, int productId) {
-        Cart cart = null;
-        String sql = "SELECT * FROM Cart WHERE customer_id = ? AND product_id = ?";
-        Object[] params = {userId, productId};
-
-        try ( ResultSet rs = execSelectQuery(sql, params)) {
-            if (rs.next()) {
-                // set User
-                User user = new User();
-                user.setUserId(rs.getInt("customer_id"));
-
-                // set Product
-                Product product = new Product();
-                product.setProductId(rs.getInt("product_id"));
-
-                cart = new Cart(rs.getInt("cart_id"), user, product, rs.getInt("quantity"), null);
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra giỏ hàng: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return cart;
-    }
-
-    public boolean updateCartQuantity(int cartId, int quantity) {
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    public boolean updateCartQuantity(int cartId, int newQuantity) {
         String sql = "UPDATE Cart SET quantity = ? WHERE cart_id = ?";
-        Object[] params = {quantity, cartId};
-
-        try {
-            return execQuery(sql, params) > 0;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newQuantity);
+            ps.setInt(2, cartId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
         } catch (SQLException e) {
-            System.err.println("Lỗi khi cập nhật số lượng giỏ hàng: " + e.getMessage());
             e.printStackTrace();
-            return false;
         }
+        return false;
+    }
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    public boolean removeFromCart(int cartId) {
+        String sql = "DELETE FROM Cart WHERE cart_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, cartId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Xóa tất cả sản phẩm trong giỏ hàng của customer
+    public boolean clearCart(int customerId) {
+        String sql = "DELETE FROM Cart WHERE customer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Đếm số lượng sản phẩm trong giỏ hàng
+    public int getCartItemCount(int customerId) {
+        String sql = "SELECT COUNT(*) as total FROM Cart WHERE customer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Tính tổng tiền trong giỏ hàng
+    public int getCartTotal(int customerId) {
+        String sql = "SELECT SUM(price * quantity) as total FROM Cart WHERE customer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
