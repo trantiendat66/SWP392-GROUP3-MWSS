@@ -1,0 +1,8 @@
+controller\VerifyOtpController.class
+utils\EmailUtil$1.class
+utils\EmailUtil.class
+dao\CustomerDAO.class
+db\DBContext.class
+controller\RegisterController.class
+model\Customer.class
+controller\ForgotPasswordController.class

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    <welcome-file-list>
+        <welcome-file>register.jsp</welcome-file>
+    </welcome-file-list>
+  
+    <!-- SMTP config for EmailUtil (Gmail: dùng App Password) -->
+    <context-param>
+        <param-name>mail.host</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.port</param-name>
+        <param-value>587</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.username</param-name>
+        <param-value>koanhngth@gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.password</param-name>
+        <param-value>ovrlluxoegyukfpm</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.from</param-name>
+        <param-value>Watch Shop &lt;yourgmail@gmail.com&gt;</param-value>
+    </context-param>
+    
+</web-app>
