@@ -62,7 +62,6 @@ public class ProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CustomerDAO dao = new CustomerDAO();
-        // Nếu bạn muốn lấy từ session khi có login: Integer id = (Integer) request.getSession().getAttribute("userID");
         Customer customer = dao.getCustomerById(TEST_CUSTOMER_ID);
         if (customer == null) {
             request.setAttribute("errorMessage", "Customer not found (ID=" + TEST_CUSTOMER_ID + ")");

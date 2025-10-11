@@ -91,16 +91,13 @@ public class EditProfileServlet extends HttpServlet {
         String password = request.getParameter("password");
         String dateOfBirthStr = request.getParameter("dob");
         String genderParam = request.getParameter("gender");
-//        String account_status = request.getParameter("account_status");
-        String image = request.getParameter("image"); // hiện để test (path) - nếu null, ta có thể set default
+        String image = request.getParameter("image");
 
         Date dob = null;
         if (dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
             try {
-                // expected format yyyy-MM-dd from input type=date
                 dob = Date.valueOf(dateOfBirthStr);
             } catch (IllegalArgumentException ex) {
-                // ignore - null giữ nguyên
                 dob = null;
             }
         }
@@ -123,7 +120,6 @@ public class EditProfileServlet extends HttpServlet {
             }
             c.setGender(genderValue);
             if (image == null || image.trim().isEmpty()) {
-                // giữ nguyên avatar hiện có hoặc set mặc định
                 if (c.getImage() == null || c.getImage().trim().isEmpty()) {
                     c.setImage("images/2.jpg");
                 }

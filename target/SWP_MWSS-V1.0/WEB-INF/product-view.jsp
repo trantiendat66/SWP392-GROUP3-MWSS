@@ -28,11 +28,12 @@
                     <p class="text-muted">Thương hiệu: ${product.brand} — Xuất xứ: ${product.origin}</p>
                     <h3 class="text-danger">${product.price} VNĐ</h3>
 
-                    <form action="${pageContext.request.contextPath}/cart/add" method="post" class="d-flex align-items-center mb-3">
-                        <input type="hidden" name="pid" value="${product.productId}">
-                        <input type="number" name="quantity" value="1" min="1" class="form-control me-2" style="width:100px;">
-                        <button type="submit" class="btn btn-success">Thêm vào giỏ</button>
-                    </form>
+                    <div class="d-flex align-items-center mb-3">
+                        <input type="number" id="quantity-input" value="1" min="1" class="form-control me-2" style="width:100px;">
+                        <button type="button" class="btn btn-success" onclick="addToCart(${product.productId})">
+                            <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                        </button>
+                    </div>
 
                     <hr>
                     <h5>Mô tả</h5>
@@ -52,5 +53,74 @@
         </div>
     </c:otherwise>
 </c:choose>
+
+<script>
+    function addToCart(productId) {
+        const quantity = document.getElementById('quantity-input').value;
+        
+        if (quantity < 1) {
+            alert('Số lượng phải lớn hơn 0');
+            return;
+        }
+        
+        fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Hiển thị thông báo thành công
+                showMessage(data.message, 'success');
+                
+                // Cập nhật số lượng giỏ hàng trong header
+                updateCartCount();
+            } else {
+                showMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
+        });
+    }
+    
+    function showMessage(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const alertHtml = `
+            <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999;">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // Tự động ẩn sau 3 giây
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+    
+    function updateCartCount() {
+        fetch('${pageContext.request.contextPath}/cart?action=count', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Cập nhật số lượng trong header nếu có
+            const cartBadge = document.querySelector('.cart-badge');
+            if (cartBadge) {
+                cartBadge.textContent = data.count;
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart count:', error);
+        });
+    }
+</script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />

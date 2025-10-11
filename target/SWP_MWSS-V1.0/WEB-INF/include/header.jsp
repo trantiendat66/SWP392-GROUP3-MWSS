@@ -88,8 +88,11 @@
 
                                 <!-- Cart -->
                                 <li class="nav-item me-2">
-                                    <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/cart">
+                                    <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                         <i class="bi bi-cart"></i> Cart
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                            0
+                                        </span>
                                     </a>
                                 </li>
 
@@ -104,7 +107,12 @@
                                     <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/login.jsp">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/cart">Cart</a>
+                                    <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
+                                        <i class="bi bi-cart"></i> Cart
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                            0
+                                        </span>
+                                    </a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -112,4 +120,33 @@
                 </div>
             </div>
         </nav>
+        
+        <script>
+            // Cập nhật số lượng giỏ hàng khi tải trang
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();
+            });
+            
+            function updateCartCount() {
+                fetch('${pageContext.request.contextPath}/cart?action=count', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const cartBadge = document.getElementById('cart-count');
+                    if (cartBadge) {
+                        cartBadge.textContent = data.count;
+                        if (data.count > 0) {
+                            cartBadge.style.display = 'inline';
+                        } else {
+                            cartBadge.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart count:', error);
+                });
+            }
+        </script>
+        
         <div class="container mt-4">
