@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <label>Avatar path (optional)</label>
-                <input type="image" name="image" value="<%= (c != null ? c.getImage() : "images/2.jpg")%>" />
+                <input type="image" name="image" value="<%= (c != null ? c.getImage() : "image/2.jpg")%>" />
                 <img src="<%= (c != null && c.getImage() != null && !c.getImage().isEmpty() ? (c.getImage().startsWith("/") ? ctx + c.getImage() : (c.getImage().startsWith("http") ? c.getImage() : ctx + "/" + c.getImage())) : ctx + "/images/2.jpg")%>" alt="image" class="image-preview"/>
 
                 <div>

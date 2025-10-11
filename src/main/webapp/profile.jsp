@@ -101,7 +101,7 @@
         <div class="card">
             <div class="left">
                 <%
-                    String avatarPath = (c != null && c.getImage() != null && !c.getImage().isEmpty()) ? c.getImage() : (ctx + "/images/2.jpg");
+                    String avatarPath = (c != null && c.getImage() != null && !c.getImage().isEmpty()) ? c.getImage() : (ctx + "/image/2.jpg");
                     if (!avatarPath.startsWith("http") && !avatarPath.startsWith("/")) {
                         avatarPath = ctx + "/" + avatarPath;
                     } else if (avatarPath.startsWith("/")) {
