@@ -1,215 +1,254 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Document   : Cart Servlet
+ * Created on : Jan 10, 2025
+ * Author     : Dang Vi Danh - CE19687
  */
 package controller;
 
 import dao.CartDAO;
 import dao.ProductDAO;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Cart;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Customer;
 import model.Product;
-import model.User;
 
 /**
- *
- * @author Dang Vi Danh - CE190687
+ * Cart Servlet - Controller for Cart operations
+ * Handles all cart-related HTTP requests and responses
+ * @author Dang Vi Danh - CE19687
  */
 @WebServlet(name = "CartServlet", urlPatterns = {"/cart"})
 public class CartServlet extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private CartDAO cartDAO;
+    private ProductDAO productDAO;
+
+    @Override
+    public void init() throws ServletException {
+        cartDAO = new CartDAO();
+        productDAO = new ProductDAO();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        CartDAO cartDAO = new CartDAO();
-        HttpSession session = request.getSession(false);
+        
+        if (action == null) {
+            action = "view";
+        }
 
-        // Perform actions based on the "action" parameter
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("customer");
+
+        if (customer == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         switch (action) {
-            case "add":
-                System.out.println("add");
-                addCart(request, response, cartDAO, session);
+            case "view":
+                viewCart(request, response, customer);
                 break;
-            case "delete":
-                deleteCart(request, response, cartDAO, session);
+            case "add":
+                addToCart(request, response, customer);
+                break;
+            case "update":
+                updateCart(request, response, customer);
+                break;
+            case "remove":
+                removeFromCart(request, response, customer);
                 break;
             case "clear":
-                clearCart(request, response, cartDAO, session);
+                clearCart(request, response, customer);
+                break;
+            case "count":
+                getCartCount(request, response, customer);
                 break;
             default:
-                throw new AssertionError();
+                viewCart(request, response, customer);
+                break;
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        doGet(request, response);
     }
 
-    /**
-     * Deletes a cart item based on its ID.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @param dao CartDAO for database operations
-     * @param session HttpSession to store success or failure messages
-     * @throws ServletException
-     * @throws IOException
-     */
-    private void deleteCart(HttpServletRequest request, HttpServletResponse response, CartDAO dao, HttpSession session) throws ServletException, IOException {
-        String cartIdStr = request.getParameter("cartId");
-
-        int cartId = 0;
+    private void viewCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
         try {
-            cartId = Integer.parseInt(cartIdStr);
+            var cartItems = cartDAO.getCartByCustomerId(customer.getCustomer_id());
+            int totalAmount = cartDAO.getCartTotal(customer.getCustomer_id());
+            
+            request.setAttribute("cartItems", cartItems);
+            request.setAttribute("totalAmount", totalAmount);
+            request.setAttribute("cartItemCount", cartItems.size());
+            
+            request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
         } catch (Exception e) {
-            session.setAttribute("deleteFail", "Cart deletion failed!");
-            response.sendRedirect(request.getContextPath() + "/account?view=cart");
-            return;
-        }
-
-        boolean isDelete = dao.deleteCartById(cartId);
-
-        if (isDelete) {
-            session.setAttribute("deleteSuccess", "Cart deleted successfully!");
-            response.sendRedirect(request.getContextPath() + "/account?view=cart");
-        } else {
-            session.setAttribute("deleteFail", "Cart deletion failed!");
-            response.sendRedirect(request.getContextPath() + "/account?view=cart");
+            e.printStackTrace();
+            response.sendRedirect("home");
         }
     }
 
-    /**
-     * Adds a product to the cart or updates the quantity if the product is
-     * already in the cart.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @param dao CartDAO for database operations
-     * @param session HttpSession to store success or failure messages
-     * @throws ServletException
-     * @throws IOException
-     */
-    private void addCart(HttpServletRequest request, HttpServletResponse response, CartDAO dao, HttpSession session) throws ServletException, IOException {
-
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        // Validate productId and quantity parameters
-        String productIdStr = request.getParameter("productId");
-        String quantityStr = request.getParameter("quantity");
-        if (productIdStr == null || productIdStr.trim().isEmpty() || quantityStr == null || quantityStr.trim().isEmpty()) {
-            System.out.println("error params");
-            response.sendRedirect(request.getContextPath() + "error-page/404page.jsp");
-            return;
-        }
-
-        // Parse product ID
-        int productId;
+    private void addToCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
         try {
-            productId = Integer.parseInt(productIdStr);
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            
+            Product product = productDAO.getProductById(productId);
+            if (product != null) {
+                boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
+                
+                if (success) {
+                    // Trả về JSON response cho AJAX
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"success\": true, \"message\": \"Đã thêm sản phẩm vào giỏ hàng\"}");
+                    out.flush();
+                } else {
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi thêm sản phẩm\"}");
+                    out.flush();
+                }
+            } else {
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print("{\"success\": false, \"message\": \"Sản phẩm không tồn tại\"}");
+                out.flush();
+            }
         } catch (NumberFormatException e) {
-            System.out.println("error prodc id");
-            session.setAttribute("addFail", "Invalid product ID!");
-            response.sendRedirect(request.getContextPath() + "error-page/404page.jsp");
-            return;
-        }
-
-        // check product
-        Product product = new ProductDAO().getProductById(productId);
-        if (product == null) {
-            System.out.println("get ptoduct fail");
-            session.setAttribute("addFail", "Product does not exist!");
-            response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            return;
-        }
-
-        // check quantity
-        int quantity = 1;
-        quantity = Integer.parseInt(quantityStr);
-        if (quantity < 1 || quantity > product.getStockQuantity()) {
-            session.setAttribute("addFail", "Invalid quantity. Please choose quantity again!");
-            response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            return;
-        }
-
-        // add to cart
-        Cart existingCart = dao.getCartByUserAndProduct(user.getUserId(), productId);
-        if (existingCart != null) {
-            // Update quantity if it exists
-            boolean isUpdated = dao.updateCartQuantity(existingCart.getCartId(), quantity);
-            if (isUpdated) {
-                System.out.println("upd ate sc");
-                session.setAttribute("addSuccess", "Updated quantity of products in cart successfully!");
-                response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            } else {
-                System.out.println("update dail");
-                session.setAttribute("addFail", "Cart update failed!");
-                response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            }
-        } else {
-            // Add new product to the cart
-            Cart cart = new Cart(user, product, quantity, null);
-            boolean isInsertCart = dao.insertCart(cart);
-            if (isInsertCart) {
-                System.out.println("thanh cong");
-                session.setAttribute("addSuccess", "Add to cart successfully!");
-                response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            } else {
-                System.out.println("that bai");
-                session.setAttribute("addFail", "Add to cart failed!");
-                response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
-            }
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Dữ liệu không hợp lệ\"}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra\"}");
+            out.flush();
         }
     }
 
-    /**
-     * Clears all items from the cart.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @param dao CartDAO for database operations
-     * @param session HttpSession to store success or failure messages
-     * @throws ServletException
-     * @throws IOException
-     */
-    private void clearCart(HttpServletRequest request, HttpServletResponse response, CartDAO dao, HttpSession session) throws ServletException, IOException {
-        boolean isClear = dao.deleteAllCart();
+    private void updateCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
+        try {
+            int cartId = Integer.parseInt(request.getParameter("cartId"));
+            int newQuantity = Integer.parseInt(request.getParameter("quantity"));
+            
+            if (newQuantity <= 0) {
+                // Nếu số lượng <= 0, xóa item khỏi giỏ hàng
+                boolean success = cartDAO.removeFromCart(cartId);
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                if (success) {
+                    out.print("{\"success\": true, \"message\": \"Đã xóa sản phẩm khỏi giỏ hàng\"}");
+                } else {
+                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi xóa sản phẩm\"}");
+                }
+                out.flush();
+            } else {
+                boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                if (success) {
+                    out.print("{\"success\": true, \"message\": \"Đã cập nhật số lượng\"}");
+                } else {
+                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi cập nhật\"}");
+                }
+                out.flush();
+            }
+        } catch (NumberFormatException e) {
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Dữ liệu không hợp lệ\"}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra\"}");
+            out.flush();
+        }
+    }
 
-        if (isClear) {
-            session.setAttribute("deleteSuccess", "Clear all carts successfully");
-            response.sendRedirect(request.getContextPath() + "/account?view=cart");
-        } else {
-            session.setAttribute("deleteFail", "Clear all failed carts");
-            response.sendRedirect(request.getContextPath() + "/account?view=cart");
+    private void removeFromCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
+        try {
+            int cartId = Integer.parseInt(request.getParameter("cartId"));
+            boolean success = cartDAO.removeFromCart(cartId);
+            
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            if (success) {
+                out.print("{\"success\": true, \"message\": \"Đã xóa sản phẩm khỏi giỏ hàng\"}");
+            } else {
+                out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi xóa sản phẩm\"}");
+            }
+            out.flush();
+        } catch (NumberFormatException e) {
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Dữ liệu không hợp lệ\"}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra\"}");
+            out.flush();
+        }
+    }
+
+    private void clearCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
+        try {
+            boolean success = cartDAO.clearCart(customer.getCustomer_id());
+            
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            if (success) {
+                out.print("{\"success\": true, \"message\": \"Đã xóa tất cả sản phẩm khỏi giỏ hàng\"}");
+            } else {
+                out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi xóa giỏ hàng\"}");
+            }
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra\"}");
+            out.flush();
+        }
+    }
+
+    private void getCartCount(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws ServletException, IOException {
+        try {
+            int count = cartDAO.getCartItemCount(customer.getCustomer_id());
+            
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"count\": " + count + "}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"count\": 0}");
+            out.flush();
         }
     }
 }
