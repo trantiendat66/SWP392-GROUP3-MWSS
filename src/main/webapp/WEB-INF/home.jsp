@@ -111,7 +111,10 @@
                         <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
 
                         <div class="mt-auto text-center">
-                            <a href="${pageContext.request.contextPath}/product-detail?pid=${p.productId}" class="btn btn-primary btn-sm">Details</a>
+                            <a href="${pageContext.request.contextPath}/product-detail?pid=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
+                            <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -119,5 +122,68 @@
         </c:forEach>
     </div>
 </section>
+
+<script>
+    function addToCartFromHome(productId) {
+        fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=1', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage(data.message, 'success');
+                updateCartCount();
+            } else {
+                showMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
+        });
+    }
+    
+    function showMessage(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const alertHtml = `
+            <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999;">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // Tự động ẩn sau 3 giây
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+    
+    function updateCartCount() {
+        fetch('${pageContext.request.contextPath}/cart?action=count', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                cartBadge.textContent = data.count;
+                if (data.count > 0) {
+                    cartBadge.style.display = 'inline';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart count:', error);
+        });
+    }
+</script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
