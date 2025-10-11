@@ -63,8 +63,13 @@ public class SearchServlet extends HttpServlet {
         String keyword = request.getParameter("keyword");
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.searchProducts(keyword == null ? "" : keyword);
-        request.setAttribute("listP", list);
-        request.setAttribute("keyword", keyword);
-        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+
+        if (list == null || list.isEmpty()) {
+            request.getRequestDispatcher("/WEB-INF/unfind-product.jsp").forward(request, response);
+        } else {
+            request.setAttribute("listP", list);
+            request.setAttribute("keyword", keyword);
+            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        }
     }
 }

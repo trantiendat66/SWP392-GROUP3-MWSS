@@ -6,49 +6,110 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><c:out value="${pageTitle != null ? pageTitle : 'Watch Store'}"/></title>
-    
-    <!-- ✅ Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assert/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assert/css/home.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assert/css/product.view.css">
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp">WatchStore</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><c:out value="${pageTitle != null ? pageTitle : 'WatchStore'}"/></title>
 
-    <div class="collapse navbar-collapse" id="mainNav">
-      <form class="d-flex ms-auto" action="${pageContext.request.contextPath}/search" method="get">
-        <input class="form-control me-2" type="search" name="keyword" placeholder="Tìm kiếm..." value="${param.keyword}">
-        <button class="btn btn-outline-light" type="submit">Tìm</button>
-      </form>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-      <ul class="navbar-nav ms-3">
-        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/cart">Giỏ hàng</a></li>
-        <c:choose>
-            <c:when test="${not empty sessionScope.account}">
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user/profile.jsp">${sessionScope.account.username}</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
-            </c:when>
-            <c:otherwise>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/login.jsp">Đăng nhập</a></li>
-            </c:otherwise>
-        </c:choose>
-      </ul>
-    </div>
-  </div>
-</nav>
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-<main class="container mt-4">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assert/css/home.css">
 
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2">
+            <div class="container">
+
+                <!-- Left: logo -->
+                <a class="navbar-brand d-flex align-items-center me-3" href="${pageContext.request.contextPath}/home">
+                    <img src="${pageContext.request.contextPath}/assert/image/logo.jpg" alt="WatchStore" class="logo-icon me-2">
+                    <span class="d-none d-lg-inline logo-text"><strong>Watch<span class="logo-accent">Store</span></strong></span>
+                </a>
+
+                <!-- Toggler cho mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+          
+                <div class="collapse navbar-collapse" id="mainNav">          
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/category?gender=male">Men</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/category?gender=female">Women</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="brandDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Brand</a>
+                            <ul class="dropdown-menu" aria-labelledby="brandDropdown">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/brand?name=Casio">Casio</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/brand?name=Seiko">Seiko</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/brand?name=Citizen">Citizen</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/brand">All brands</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/service">Service and Repair</a>
+                        </li>
+                    </ul>
+
+                    <form class="d-flex mx-lg-3 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
+                        <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
+                        <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+                    </form>
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.account}">
+                               
+                                <li class="nav-item dropdown me-2">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle"></i> ${sessionScope.account.username}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile.jsp">Profile</a></li>
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/orders.jsp">Order</a></li>
+                                    </ul>
+                                </li>
+
+                                <!-- Cart -->
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/cart">
+                                        <i class="bi bi-cart"></i> Cart
+                                    </a>
+                                </li>
+
+                                <!-- Logout button -->
+                                <li class="nav-item">
+                                    <a class="btn btn-warning btn-sm" href="${pageContext.request.contextPath}/logout">Logout</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/login.jsp">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/cart">Cart</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container mt-4">
