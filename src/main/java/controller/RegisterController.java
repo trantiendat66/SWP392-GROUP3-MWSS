@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import hashpw.MD5PasswordHasher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -128,7 +129,7 @@ public class RegisterController extends HttpServlet {
                 return;
             }
 
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+            String hash = MD5PasswordHasher.hashPassword(password);
             String imagePath = saveImage(request, imagePart);
 
             Customer c = new Customer();
