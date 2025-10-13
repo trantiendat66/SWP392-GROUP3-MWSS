@@ -7,6 +7,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!doctype html>
 <html lang="vi">
     <head>
         <meta charset="utf-8">
@@ -41,8 +44,8 @@
 
 
                 <div class="collapse navbar-collapse" id="mainNav">          
-              
 
+                    <!-- Search + Filter -->
                     <form class="d-flex mx-lg-3 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
                         <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
                         <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
@@ -56,6 +59,7 @@
                             <span style="color: white; margin-left: 5px;">Filter</span>
                         </div>
                     </form>
+
                     <!-- Popup filter -->
                     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -109,18 +113,22 @@
                         </div>
                     </div>
 
+                    <!-- Right Side -->
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.account}">
 
+                        <c:choose>
+                            <!-- Nếu đã login -->
+                            <c:when test="${not empty sessionScope.customer}">
                                 <li class="nav-item dropdown me-2">
                                     <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button"
                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-circle"></i> ${sessionScope.account.username}
+                                        <i class="bi bi-person-circle"></i> 
+                                        ${sessionScope.customer.customer_name}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/profile.jsp">Profile</a></li>
-                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/orders.jsp">Order</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
                                     </ul>
                                 </li>
 
@@ -133,14 +141,10 @@
                                         </span>
                                     </a>
                                 </li>
-
-                                <!-- Logout button -->
-                                <li class="nav-item">
-                                    <a class="btn btn-warning btn-sm" href="${pageContext.request.contextPath}/logout">Logout</a>
-                                </li>
                             </c:when>
-                            <c:otherwise>
 
+                            <!-- Nếu chưa login -->
+                            <c:otherwise>
                                 <li class="nav-item me-2">
                                     <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/login.jsp">Login</a>
                                 </li>
@@ -154,6 +158,7 @@
                                 </li>
                             </c:otherwise>
                         </c:choose>
+
                     </ul>
                 </div>
             </div>
@@ -185,27 +190,50 @@
                             console.error('Error updating cart count:', error);
                         });
             }
+
+            document.getElementById("filterButton").addEventListener("click", function () {
+                const modal = new bootstrap.Modal(document.getElementById('filterModal'));
+                modal.show();
+            });
+
+            document.getElementById("applyFilter").addEventListener("click", function () {
+                const priceRange = document.getElementById("priceRange").value;
+                const brand = document.getElementById("brand").value;
+                const gender = document.getElementById("gender").value;
+                const baseUrl = "${pageContext.request.contextPath}/filterServlet";
+                const params = new URLSearchParams({
+                    brand,
+                    gender,
+                    priceRange
+                });
+                window.location.href = baseUrl + "?" + params.toString();
+            });
         </script>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
+
         <div class="container mt-4">
-            
+
+
             <script>
-                document.getElementById("filterButton").addEventListener("click", function () {
-                    const modal = new bootstrap.Modal(document.getElementById('filterModal'));
-                    modal.show();
+            document.getElementById("filterButton").addEventListener("click", function () {
+                const modal = new bootstrap.Modal(document.getElementById('filterModal'));
+                modal.show();
+            });
+            document.getElementById("applyFilter").addEventListener("click", function () {
+                const priceRange = document.getElementById("priceRange").value;
+                const brand = document.getElementById("brand").value;
+                const gender = document.getElementById("gender").value;
+                const baseUrl = "${pageContext.request.contextPath}/filterServlet";
+                const params = new URLSearchParams({
+                    brand,
+                    gender,
+                    priceRange
                 });
-                document.getElementById("applyFilter").addEventListener("click", function () {
-                    const priceRange = document.getElementById("priceRange").value;
-                    const brand = document.getElementById("brand").value;
-                    const gender = document.getElementById("gender").value;
-                    const baseUrl = "${pageContext.request.contextPath}/filterServlet";
-                    const params = new URLSearchParams({
-                        brand,
-                        gender,
-                        priceRange
-                    });
-                    window.location.href = baseUrl + "?" + params.toString();
-                });
+                window.location.href = baseUrl + "?" + params.toString();
+            });
             </script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     </body>
