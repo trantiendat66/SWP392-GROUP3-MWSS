@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import hashpw.MD5PasswordHasher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -86,7 +87,7 @@ public class VerifyOtpController extends HttpServlet {
             }
 
             // OTP đúng -> cập nhật mật khẩu
-            String hash = BCrypt.hashpw(newPass, BCrypt.gensalt(12));
+            String hash = MD5PasswordHasher.hashPassword(newPass);
             CustomerDAO cdao = new CustomerDAO();
             boolean ok = cdao.updatePasswordByEmail(email, hash);
             if (!ok) {
