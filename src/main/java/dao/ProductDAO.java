@@ -3,23 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
-
 import db.DBContext;
 import java.sql.*;
 import java.util.*;
 import model.Product;
-
 /**
  *
  * @author Tran Tien Dat - CE190362
  */
 public class ProductDAO extends DBContext {
-
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM Product ORDER BY product_id DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductId(rs.getInt("product_id"));
@@ -48,7 +44,6 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-
     public Product getProductById(int id) {
         String sql = "SELECT * FROM Product p WHERE p.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -83,7 +78,6 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-
     public List<Product> searchProducts(String keyword) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM Product p WHERE p.product_name LIKE ? OR p.description LIKE ? ORDER BY p.product_id DESC";
@@ -121,12 +115,10 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-
     public List<Product> filterProducts(String brand, String gender, int minPrice, int maxPrice) {
         List<Product> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
-
         if (brand != null && !brand.trim().isEmpty()) {
             sql.append(" AND brand = ?");
             params.add(brand);
@@ -143,9 +135,7 @@ public class ProductDAO extends DBContext {
             sql.append(" AND price >= ?");
             params.add(minPrice);
         }
-
         sql.append(" ORDER BY price ASC");
-
         try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
@@ -177,7 +167,6 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return list;
     }
 }

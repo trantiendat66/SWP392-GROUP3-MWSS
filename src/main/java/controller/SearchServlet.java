@@ -62,14 +62,28 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
         ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.searchProducts(keyword == null ? "" : keyword);
 
-        if (list == null || list.isEmpty()) {
-            request.getRequestDispatcher("/WEB-INF/unfind-product.jsp").forward(request, response);
-        } else {
-            request.setAttribute("listP", list);
-            request.setAttribute("keyword", keyword);
-            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        // LẤY TOÀN BỘ SẢN PHẨM (dùng cho Featured cuối trang)
+        List<Product> allProducts = dao.getAllProducts(); // thêm method nếu chưa có
+        if (allProducts == null) {
+            allProducts = new java.util.ArrayList<>();
         }
+        request.setAttribute("listAll", allProducts);
+
+        // XỬ LÝ TÌM KIẾM -> listP
+        List<Product> searchResult;
+        if (keyword == null || keyword.trim().isEmpty()) {
+            searchResult = new java.util.ArrayList<>(); // rỗng nếu không tìm
+            request.setAttribute("keyword", "");
+        } else {
+            searchResult = dao.searchProducts(keyword.trim());
+            if (searchResult == null) {
+                searchResult = new java.util.ArrayList<>();
+            }
+            request.setAttribute("keyword", keyword.trim());
+        }
+        request.setAttribute("listP", searchResult);
+
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
 }
