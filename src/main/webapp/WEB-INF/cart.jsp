@@ -157,7 +157,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-cart"></i> Your Cart
                 <c:if test="${not empty cartItems}">
-                    <span class="badge bg-primary ms-2">${cartItemCount} Product</span>
+                    <span class="badge bg-primary ms-2">${cartItemCount} Product(s)</span>
                 </c:if>
             </h2>
         </div>
@@ -193,7 +193,7 @@
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="price-display mb-0">
-                                        <fmt:formatNumber value="${item.price}" type="number"/> VNĐ
+                                        <fmt:formatNumber value="${item.price}" type="number"/> VND
                                     </p>
                                 </div>
                                 
@@ -217,14 +217,14 @@
                                 
                                 <div class="col-md-2 col-3 text-end">
                                     <p class="total-price mb-1" id="total-${item.cartId}">
-                                        <fmt:formatNumber value="${item.totalPrice}" type="number"/> VNĐ
+                                        <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
                                     </p>
                                 </div>
                                 
                                 <div class="col-md-1 col-3 text-end">
                                     <button class="btn-cart-action btn-remove" 
                                             data-cart-id="${item.cartId}"
-                                            title="Xóa sản phẩm">
+                                            title="Remove item">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -253,7 +253,7 @@
                         <div class="d-flex justify-content-between mb-3">
                             <span>Total Amount:</span>
                             <span class="total-price" id="cart-total">
-                                <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
+                                <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                             </span>
                         </div>
                         
@@ -276,9 +276,8 @@
 </div>
 
 <script>
-    // Event listeners cho các nút điều khiển số lượng
+    // Event listeners for quantity control buttons
     document.addEventListener('DOMContentLoaded', function() {
-        // Nút tăng/giảm số lượng
         document.querySelectorAll('.quantity-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const cartId = this.getAttribute('data-cart-id');
@@ -296,7 +295,6 @@
             });
         });
         
-        // Input số lượng
         document.querySelectorAll('.quantity-input').forEach(input => {
             input.addEventListener('change', function() {
                 const cartId = this.getAttribute('data-cart-id');
@@ -305,7 +303,6 @@
             });
         });
         
-        // Nút xóa sản phẩm
         document.querySelectorAll('.btn-remove').forEach(button => {
             button.addEventListener('click', function() {
                 const cartId = this.getAttribute('data-cart-id');
@@ -314,7 +311,7 @@
         });
     });
     
-    // Cập nhật số lượng sản phẩm
+    // Update item quantity
     function updateQuantity(cartId, newQuantity) {
         if (newQuantity < 1) {
             removeFromCart(cartId);
@@ -327,10 +324,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Cập nhật UI
                 document.getElementById('quantity-' + cartId).value = newQuantity;
-                
-                // Tính lại tổng tiền cho item này
                 const priceElement = document.querySelector('#total-' + cartId);
                 const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
                 const currentTotal = parseInt(currentTotalText);
@@ -338,11 +332,9 @@
                 const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
                 const total = price * newQuantity;
                 document.getElementById('total-' + cartId).textContent = 
-                    new Intl.NumberFormat('vi-VN').format(total) + ' VNĐ';
+                    new Intl.NumberFormat('en-US').format(total) + ' VND';
                 
-                // Cập nhật tổng tiền giỏ hàng
                 updateCartTotal();
-                
                 showMessage(data.message, 'success');
             } else {
                 showMessage(data.message, 'error');
@@ -350,28 +342,22 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            showMessage('Có lỗi xảy ra khi cập nhật', 'error');
+            showMessage('An error occurred while updating.', 'error');
         });
     }
     
-    // Xóa sản phẩm khỏi giỏ hàng
+    // Remove an item
     function removeFromCart(cartId) {
-        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+        if (confirm('Are you sure you want to remove this item from your cart?')) {
             fetch('${pageContext.request.contextPath}/cart?action=remove&cartId=' + cartId, {
                 method: 'GET'
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Xóa item khỏi UI
                     document.getElementById('cart-item-' + cartId).remove();
-                    
-                    // Cập nhật tổng tiền
                     updateCartTotal();
-                    
-                    // Kiểm tra nếu giỏ hàng trống
                     checkEmptyCart();
-                    
                     showMessage(data.message, 'success');
                 } else {
                     showMessage(data.message, 'error');
@@ -379,21 +365,20 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showMessage('Có lỗi xảy ra khi xóa sản phẩm', 'error');
+                showMessage('An error occurred while removing item.', 'error');
             });
         }
     }
     
-    // Xóa tất cả sản phẩm
+    // Clear all items
     function clearCart() {
-        if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?')) {
+        if (confirm('Are you sure you want to clear all items from your cart?')) {
             fetch('${pageContext.request.contextPath}/cart?action=clear', {
                 method: 'GET'
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Reload trang để hiển thị giỏ hàng trống
                     location.reload();
                 } else {
                     showMessage(data.message, 'error');
@@ -401,12 +386,12 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showMessage('Có lỗi xảy ra khi xóa giỏ hàng', 'error');
+                showMessage('An error occurred while clearing the cart.', 'error');
             });
         }
     }
     
-    // Kiểm tra giỏ hàng trống
+    // Check if cart is empty
     function checkEmptyCart() {
         const cartItems = document.querySelectorAll('.cart-item');
         if (cartItems.length === 0) {
@@ -414,9 +399,8 @@
         }
     }
     
-    // Cập nhật tổng tiền giỏ hàng
+    // Update total cart amount
     function updateCartTotal() {
-        // Tính tổng từ tất cả items còn lại
         let total = 0;
         document.querySelectorAll('[id^="total-"]').forEach(element => {
             const priceText = element.textContent.replace(/[^\d]/g, '');
@@ -424,16 +408,15 @@
         });
         
         document.getElementById('cart-total').textContent = 
-            new Intl.NumberFormat('vi-VN').format(total) + ' VNĐ';
+            new Intl.NumberFormat('en-US').format(total) + ' VND';
     }
     
-    // Thanh toán
+    // Checkout
     function checkout() {
-        // TODO: Implement checkout functionality
-        alert('Chức năng thanh toán đang được phát triển!');
+        alert('Checkout feature is under development!');
     }
     
-    // Hiển thị thông báo
+    // Show message
     function showMessage(message, type) {
         const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
         const alertHtml = `
@@ -446,7 +429,6 @@
         
         document.body.insertAdjacentHTML('beforeend', alertHtml);
         
-        // Tự động ẩn sau 3 giây
         setTimeout(() => {
             const alert = document.querySelector('.alert');
             if (alert) {
@@ -457,4 +439,3 @@
 </script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
-
