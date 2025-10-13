@@ -127,7 +127,7 @@ public class ProductDAO extends DBContext {
             sql.append(" AND gender = ?");
             params.add(gender);
         }
-        if (minPrice != 0 && maxPrice != 0) {
+        if (minPrice == 0 && maxPrice != 0) {
             sql.append(" AND price BETWEEN ? AND ?");
             params.add(minPrice);
             params.add(maxPrice);

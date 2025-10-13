@@ -23,7 +23,7 @@ public class DBContext {
             String dbURL = "jdbc:sqlserver://localhost:1433;"
                     + "databaseName= Watch_System;"
                     + "user=sa;"
-                    + "password=123456;"
+                    + "password=thiendat.CE190879@;" //123456
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {
