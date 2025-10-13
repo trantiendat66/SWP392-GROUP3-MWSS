@@ -220,37 +220,6 @@
     <div id="productList">
         <jsp:include page="/partials/product-list.jsp" />
     </div>
-<!--    <div class="row g-4">
-        <c:forEach var="p" items="${listP}">
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="card product-card h-100">
-                    <c:choose>
-                        <c:when test="${not empty p.image}">
-                            <img src="${pageContext.request.contextPath}/assert/image/${p.image}"
-                                 class="card-img-top product-media"
-                                 alt="${p.productName}" />
-                        </c:when>
-                        <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/assert/image/no-image.png"
-                                 class="card-img-top product-media"
-                                 alt="no-image" />
-                        </c:otherwise>
-                    </c:choose>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-center">${p.productName}</h5>
-                        <p class="text-center text-muted mb-1">${p.brand}</p>
-                        <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
-                        <div class="mt-auto text-center">
-                            <a href="${pageContext.request.contextPath}/product-view?pid=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
-                            <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})">
-                                <i class="bi bi-cart-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </c:forEach>
-    </div>-->
 </section>
 
 <script>
@@ -352,9 +321,8 @@
             priceRange
         });
         fetch(baseUrl + "?" + params.toString())
-                .then(response => response.text()) // nếu Servlet trả HTML
+                .then(response => response.text())
                 .then(html => {
-                    // Giả sử kết quả sản phẩm nằm trong <div id="productList">
                     document.getElementById("productList").innerHTML = html;
                 })
                 .catch(err => console.error("Lỗi khi lọc:", err));
@@ -362,6 +330,7 @@
         const modal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
         modal.hide();
     });
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <jsp:include page="/WEB-INF/include/footer.jsp" />
