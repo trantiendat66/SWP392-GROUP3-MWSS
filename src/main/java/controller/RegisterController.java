@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import model.Customer;
@@ -136,7 +137,7 @@ public class RegisterController extends HttpServlet {
             c.setEmail(email);
             c.setAddress(address);
             c.setPassword(hash);
-            c.setDob(parseDob(dobStr));
+            c.setDob((Date) parseDob(dobStr));
             c.setGender(gender);
             c.setAccount_status("ACTIVE");
             c.setImage(imagePath);

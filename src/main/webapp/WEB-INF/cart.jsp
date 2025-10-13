@@ -155,9 +155,9 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4">
-                <i class="bi bi-cart"></i> Giỏ hàng của bạn
+                <i class="bi bi-cart"></i> Your Cart
                 <c:if test="${not empty cartItems}">
-                    <span class="badge bg-primary ms-2">${cartItemCount} sản phẩm</span>
+                    <span class="badge bg-primary ms-2">${cartItemCount} Product</span>
                 </c:if>
             </h2>
         </div>
@@ -168,10 +168,10 @@
             <!-- Empty Cart -->
             <div class="empty-cart">
                 <i class="bi bi-cart-x"></i>
-                <h3>Giỏ hàng trống</h3>
-                <p class="text-muted">Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+                <h3>Your cart is empty</h3>
+                <p class="text-muted">You have no items in your cart.</p>
                 <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">
-                    <i class="bi bi-house"></i> Tiếp tục mua sắm
+                    <i class="bi bi-house"></i> Continue Shopping
                 </a>
             </div>
         </c:when>
@@ -235,7 +235,7 @@
                     <!-- Clear Cart Button -->
                     <div class="text-end mb-3">
                         <button class="btn-cart-action btn-clear" onclick="clearCart()">
-                            <i class="bi bi-trash"></i> Xóa tất cả
+                            <i class="bi bi-trash"></i> Clear All
                         </button>
                     </div>
                 </div>
@@ -243,15 +243,15 @@
                 <!-- Cart Summary -->
                 <div class="col-lg-4">
                     <div class="cart-summary">
-                        <h4 class="mb-3">Tóm tắt đơn hàng</h4>
+                        <h4 class="mb-3">Order Summary</h4>
                         
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Số sản phẩm:</span>
+                            <span>Number of Items:</span>
                             <span id="total-items">${cartItemCount}</span>
                         </div>
                         
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Tổng tiền:</span>
+                            <span>Total Amount:</span>
                             <span class="total-price" id="cart-total">
                                 <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
                             </span>
@@ -260,12 +260,12 @@
                         <hr>
                         
                         <button class="btn-checkout" onclick="checkout()">
-                            <i class="bi bi-credit-card"></i> Thanh toán
+                            <i class="bi bi-credit-card"></i> Checkout
                         </button>
                         
                         <div class="mt-3">
                             <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary w-100">
-                                <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
+                                <i class="bi bi-arrow-left"></i> Continue Shopping
                             </a>
                         </div>
                     </div>
