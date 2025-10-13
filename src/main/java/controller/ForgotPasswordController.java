@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import hashpw.MD5PasswordHasher;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -72,7 +73,7 @@ public class ForgotPasswordController extends HttpServlet {
 
             // OTP 6 số + hash
             String otp = generateOtp();
-            String otpHash = BCrypt.hashpw(otp, BCrypt.gensalt(10)); // ✔ Lưu HASH, không lưu thô
+            String otpHash = MD5PasswordHasher.hashPassword(otp); // ✔ Lưu HASH, không lưu thô
 
             // Nội dung email
             String html = """
