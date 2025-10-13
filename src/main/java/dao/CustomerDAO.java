@@ -20,9 +20,9 @@ public class CustomerDAO extends DBContext {
 
     public boolean existsByEmail(String email) {
         String sql = "SELECT 1 FROM Customer WHERE email = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
         } catch (SQLException e) {
@@ -34,7 +34,7 @@ public class CustomerDAO extends DBContext {
     // Cập nhật password đã băm cho email
     public boolean updatePasswordByEmail(String email, String newHash) {
         final String sql = "UPDATE Customer SET password = ? WHERE email = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, newHash);
             ps.setString(2, email);
             return ps.executeUpdate() == 1;
@@ -46,9 +46,9 @@ public class CustomerDAO extends DBContext {
 
     public boolean existsByPhone(String phone) {
         String sql = "SELECT 1 FROM Customer WHERE phone = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, phone);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
         } catch (SQLException e) {
@@ -62,7 +62,7 @@ public class CustomerDAO extends DBContext {
                 + "(customer_name, phone, email, address, password, dob, gender, account_status, image) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setNString(1, c.getCustomer_name());
             ps.setString(2, c.getPhone());
@@ -92,7 +92,7 @@ public class CustomerDAO extends DBContext {
                 return -1;
             }
 
-            try (ResultSet rs = ps.getGeneratedKeys()) {
+            try ( ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -105,11 +105,12 @@ public class CustomerDAO extends DBContext {
             return -1;
         }
     }
+
     public Customer getCustomerById(int id) {
         String sql = "SELECT Customer_id, Customer_name, Phone, Email, Address, Password, Dob, Gender, Account_status, Image FROM Customer WHERE Customer_id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Customer c = new Customer();
                     c.setCustomer_id(rs.getInt("Customer_id"));
@@ -138,10 +139,9 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-
     public boolean updateCustomer(Customer c) {
         String sql = "UPDATE Customer SET Customer_name = ?, Phone = ?, Email = ?, Address = ?, Password = ?, Dob = ?, Gender = ?, Image = ? WHERE Customer_id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, c.getCustomer_name());
             ps.setString(2, c.getPhone());
             ps.setString(3, c.getEmail());
@@ -165,9 +165,10 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
+
     public Customer getCustomerByEmailAndPassword(String email, String password) {
         String sql = "SELECT * FROM Customer WHERE email = ? AND password = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
