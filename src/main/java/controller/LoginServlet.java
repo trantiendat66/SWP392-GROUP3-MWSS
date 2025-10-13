@@ -1,4 +1,5 @@
 package controller;
+
 import dao.CustomerDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -9,7 +10,7 @@ import model.Customer;
 
 /**
  *
- * @author Nguyen Phi Thuong 
+ * @author Nguyen Phi Thuong
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
@@ -31,7 +32,7 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");            
+            out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
@@ -52,7 +53,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         request.getRequestDispatcher("/login.jsp").forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("customer") != null) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
     /**
@@ -63,22 +69,24 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
 
-        String username = request.getParameter("username");
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+
+        String email = request.getParameter("username");
         String password = request.getParameter("password");
 
         CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerByEmailAndPassword(username, password);
+        Customer customer = dao.getCustomerByEmailAndPassword(email, password);
 
         if (customer != null) {
             HttpSession session = request.getSession();
             session.setAttribute("customer", customer);
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
-            request.setAttribute("error", "Invalid username or password!");
+            request.setAttribute("error", "Invalid email or password!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
