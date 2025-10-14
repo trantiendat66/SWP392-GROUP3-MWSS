@@ -14,7 +14,7 @@
 <!-- Intro Section -->
 <section class="intro-section position-relative text-center text-white">
     <video class="intro-video" autoplay muted loop playsinline>
-        <source src="${pageContext.request.contextPath}/assert/css/video/intro.mp4" type="video/mp4">
+        <source src="${pageContext.request.contextPath}/assert/css/video/introwatch.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <div class="video-blocker"></div>
@@ -32,7 +32,7 @@
         right: 50%;
         margin-left: -50vw;
         margin-right: -50vw;
-        height: 50vh;
+        height: 70vh;
         overflow: hidden;
     }
     .intro-video {
@@ -195,9 +195,13 @@
                         <select class="form-select" id="brand" name="brand">
                             <option value="">-- All brands --</option>
                             <option value="Casio">Casio</option>
-                            <option value="Seiko">Rolex</option>
+                            <option value="Seiko">Seiko</option>
                             <option value="Citizen">Citizen</option>
-                            <option value="Omega">Koi</option>
+                            <option value="Tissot">Tissot</option>
+                            <option value="Doxa">Doxa</option>
+                            <option value="KOI">KOI</option>
+                            <option value="Saga">Saga</option>
+                            <option value="Orient">Orient</option>
                         </select>
                     </div>
                     <div class="mb-3">
