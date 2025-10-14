@@ -8,10 +8,15 @@ import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
 import java.sql.Date;
 import model.Customer;
 
@@ -19,6 +24,11 @@ import model.Customer;
  *
  * @author hau
  */
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 @WebServlet(name = "EditProfileServlet", urlPatterns = {"/edit_profile"})
 public class EditProfileServlet extends HttpServlet {
 
@@ -57,13 +67,22 @@ public class EditProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final int TEST_CUSTOMER_ID = 2;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("customer") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+
+        // Load lại dữ liệu từ DB để có dữ liệu mới nhất
         CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerById(TEST_CUSTOMER_ID);
+        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
+
         request.setAttribute("customer", customer);
         request.getRequestDispatcher("/edit_profile.jsp").forward(request, response);
     }
@@ -81,18 +100,54 @@ public class EditProfileServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerById(TEST_CUSTOMER_ID);
-        request.setAttribute("customer", customer);
+        HttpSession session = request.getSession(false);
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        Customer c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
 
         String customer_name = request.getParameter("customer_name");
+        if (customer_name == null || !customer_name.matches("[a-zA-Z\\s]+")) {
+            request.setAttribute("nameError", "Name can only contain letters.");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
+        }
         String phone = request.getParameter("phone");
+        if (phone == null || !phone.matches("^0\\d{9}$")) {
+            request.setAttribute("phoneError", "Phone must be exactly 10 digits and only numbers.");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
+        }
         String email = request.getParameter("email");
+        if (email == null || !email.matches("^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$")) {
+            request.setAttribute("emailError", "Email cannot be blank and must have @ and domain extension (eg .com, .vn ...).");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
+        }
         String address = request.getParameter("address");
+        if (address == null || address.trim().isEmpty()) {
+            request.setAttribute("addressError", "Address cannot be blank.");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
+        }
         String password = request.getParameter("password");
         String dateOfBirthStr = request.getParameter("dob");
         String genderParam = request.getParameter("gender");
         String image = request.getParameter("image");
 
+        Part filePart = request.getPart("image");
+        String fileName = null;
+        if (filePart != null && filePart.getSize() > 0) {
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        }
+        String uploadPath = getServletContext().getRealPath("/") + "images/uploads";
+
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
         Date dob = null;
         if (dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
             try {
@@ -100,9 +155,13 @@ public class EditProfileServlet extends HttpServlet {
             } catch (IllegalArgumentException ex) {
                 dob = null;
             }
+        }else{
+            request.setAttribute("dobError", "Address cannot be blank.");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
         }
 
-        Customer c = dao.getCustomerById(TEST_CUSTOMER_ID);
         if (c != null) {
             c.setCustomer_name(customer_name);
             c.setPhone(phone);
@@ -119,14 +178,14 @@ public class EditProfileServlet extends HttpServlet {
                 genderValue = "1";
             }
             c.setGender(genderValue);
-            if (image == null || image.trim().isEmpty()) {
-                if (c.getImage() == null || c.getImage().trim().isEmpty()) {
-                    c.setImage("images/2.jpg");
-                }
+            // Nếu có upload ảnh mới
+            if (fileName != null && !fileName.isEmpty()) {
+                filePart.write(uploadPath + File.separator + fileName);
+                c.setImage("images/uploads/" + fileName); // Cập nhật ảnh mới
             } else {
-                c.setImage(image);
+                // Không upload ảnh mới → giữ ảnh cũ
+                c.setImage(c.getImage());
             }
-
             boolean ok = dao.updateCustomer(c);
             if (ok) {
                 request.getSession().setAttribute("updateStatus", "success");
@@ -136,7 +195,7 @@ public class EditProfileServlet extends HttpServlet {
         } else {
             request.getSession().setAttribute("updateStatus", "error");
         }
-
+        session.setAttribute("customer", c);
         response.sendRedirect(request.getContextPath() + "/profile");
     }
 

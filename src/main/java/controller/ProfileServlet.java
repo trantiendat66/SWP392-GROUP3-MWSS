@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Customer;
 
 /**
@@ -56,16 +57,21 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final int TEST_CUSTOMER_ID = 2;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerById(TEST_CUSTOMER_ID);
-        if (customer == null) {
-            request.setAttribute("errorMessage", "Customer not found (ID=" + TEST_CUSTOMER_ID + ")");
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("customer") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
+
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+
+        // Load lại dữ liệu từ DB để có dữ liệu mới nhất
+        CustomerDAO dao = new CustomerDAO();
+        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
+
         request.setAttribute("customer", customer);
         request.getRequestDispatcher("/profile.jsp").forward(request, response);
     }

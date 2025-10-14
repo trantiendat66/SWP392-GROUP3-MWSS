@@ -98,17 +98,15 @@
         </style>
     </head>
     <body>
+
         <div class="card">
             <div class="left">
                 <%
-                    String avatarPath = (c != null && c.getImage() != null && !c.getImage().isEmpty()) ? c.getImage() : (ctx + "/image/2.jpg");
-                    if (!avatarPath.startsWith("http") && !avatarPath.startsWith("/")) {
-                        avatarPath = ctx + "/" + avatarPath;
-                    } else if (avatarPath.startsWith("/")) {
-                        avatarPath = ctx + avatarPath;
-                    }
+                    String avatarPath = (c != null && c.getImage() != null && !c.getImage().isEmpty())
+                            ? ctx + "/" + c.getImage()
+                            : ctx + "/images/2.jpg";
                 %>
-                <img src="<%=avatarPath%>" alt="Image" class="image" />
+                <img src="<%=avatarPath%>" alt="Avatar" class="avatar" />
                 <div class="name"><%= (c != null ? c.getCustomer_name() : "No name")%></div>
                 <div class="status small"><%= (c != null ? c.getAccount_status() : "")%></div>
             </div>
@@ -129,9 +127,9 @@
             </div>
         </div>
         <%
-       String status = (String) session.getAttribute("updateStatus");
-       if (status != null) {
-           session.removeAttribute("updateStatus");
+            String status = (String) session.getAttribute("updateStatus");
+            if (status != null) {
+                session.removeAttribute("updateStatus");
         %>
         <script>
             <% if ("success".equals(status)) { %>

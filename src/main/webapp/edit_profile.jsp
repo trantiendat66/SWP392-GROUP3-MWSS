@@ -89,32 +89,46 @@
     <body>
         <div class="container">
             <h2>Edit Profile</h2>
-            <form method="post" action="<%=ctx%>/edit_profile">
+            <form method="post" action="<%=ctx%>/edit_profile" enctype="multipart/form-data">
                 <input type="hidden" name="customerID" value="<%= (c != null ? c.getCustomer_id() : "")%>" />
                 <label>User Name</label>
-                <input type="name" name="customer_name" value="<%= (c != null ? c.getCustomer_name() : "")%>" required />
+                <input type="name" name="customer_name" value="<%= (c != null ? c.getCustomer_name() : "")%>" />
+                <% if (request.getAttribute("nameError") != null) {%>
+                <p class="error"><%= request.getAttribute("nameError")%></p>
+                <% }%>
 
                 <div class="row">
                     <div class="col">
                         <label>Phone</label>
-                        <input type="text" name="phone" value="<%= (c != null ? c.getPhone() : "")%>" />
+                        <input type="text" name="phone" value="<%= (c != null ? c.getPhone() : "")%>"/>
+                        <% if (request.getAttribute("phoneError") != null) {%>
+                        <p class="error"><%= request.getAttribute("phoneError")%></p>
+                        <% }%>
                     </div>
                     <div class="col">
                         <label>Email</label>
                         <input type="email" name="email" value="<%= (c != null ? c.getEmail() : "")%>" />
+                        <% if (request.getAttribute("emailError") != null) {%>
+                        <p class="error"><%= request.getAttribute("emailError")%></p>
+                        <% }%>
                     </div>
                 </div>
 
                 <label>Address</label>
                 <input type="address" name="address" value="<%= (c != null ? c.getAddress() : "")%>" />
-
+                <% if (request.getAttribute("addressError") != null) {%>
+                <p class="error"><%= request.getAttribute("addressError")%></p>
+                <% }%>
                 <label>Password</label>
-                <input type="password" name="password" value="<%= (c != null ? c.getPassword() : "")%>" />
+                <input type="password" name="password" value="<%= (c != null ? c.getPassword() : "")%>" required/>
 
                 <div class="row">
                     <div class="col">
                         <label>Date of Birth</label>
-                        <input type="date" name="dob" value="<%= (c != null && c.getDob() != null ? c.getDob().toString() : "")%>" />
+                        <input type="date" name="dob" value="<%= (c != null && c.getDob() != null ? c.getDob().toString() : "")%>"/>
+                    <% if (request.getAttribute("dobError") != null) {%>
+                <p class="error"><%= request.getAttribute("dobError")%></p>
+                <% }%>
                     </div>
                     <div class="col">
                         <label>Gender</label>
@@ -124,10 +138,33 @@
                         </select>
                     </div>
                 </div>
-                <label>Avatar path (optional)</label>
-                <input type="image" name="image" value="<%= (c != null ? c.getImage() : "image/2.jpg")%>" />
-                <img src="<%= (c != null && c.getImage() != null && !c.getImage().isEmpty() ? (c.getImage().startsWith("/") ? ctx + c.getImage() : (c.getImage().startsWith("http") ? c.getImage() : ctx + "/" + c.getImage())) : ctx + "/images/2.jpg")%>" alt="image" class="image-preview"/>
-
+                <%
+                    String avatarPath;
+                    if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
+                        // Nếu là link HTTP thì giữ nguyên
+                        if (c.getImage().startsWith("http")) {
+                            avatarPath = c.getImage();
+                        } // Nếu là ảnh trong thư mục project (images/...)
+                        else {
+                            avatarPath = ctx + "/" + c.getImage();
+                        }
+                    } else {
+                        // Ảnh mặc định
+                        avatarPath = ctx + "/images/2.jpg";
+                    }
+                %>
+                <label>Avatar (Upload)</label>
+                <input type="file" name="image" accept="image/*" onchange="previewImage(event)">
+                <img id="preview" class="avatar-preview" src="<%=avatarPath%>">
+                <script>
+                    function previewImage(event) {
+                        const reader = new FileReader();
+                        reader.onload = function () {
+                            document.getElementById('preview').src = reader.result;
+                        };
+                        reader.readAsDataURL(event.target.files[0]);
+                    }
+                </script>
                 <div>
                     <button type="submit" class="btn btn-save">Save</button>
                     <a href="<%=ctx%>/profile" class="btn btn-cancel" style="text-decoration:none; display:inline-block; padding:10px 14px; border-radius:6px;">Cancel</a>
