@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-4">
                 <h5 class="mb-3">Contact Us</h5>
-                <p class="mb-1">123 Music Street, District 1, Ho Chi Minh City</p>
+                <p class="mb-1">123 Ham Nghi Street, District 1, Ho Chi Minh City</p>
                 <p class="mb-1">Email: support@watchshop.vn</p>
                 <p class="mb-0">Phone: +84 234 567 890</p>
             </div>
