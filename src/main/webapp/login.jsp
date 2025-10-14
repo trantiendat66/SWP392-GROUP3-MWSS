@@ -29,6 +29,7 @@
                 text-align: center;
                 color: white;
             }
+            
 
             h2 {
                 color: white;
@@ -115,15 +116,15 @@
                 <h2>Login</h2>
 
                 <div class="input-box">
-                    <input type="text" name="username" placeholder="UserName" required>
+                    <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
 
                 <button type="submit">LOGIN</button>
 
                 <div class="links">
-                    <a href="#">Forgot Password ?</a>
-                    <a href="#">Register An Account</a>
+                    <a href="${pageContext.request.contextPath}/forgot">Forgot Password ?</a>
+                    <a href="${pageContext.request.contextPath}/register">Register An Account</a>
                 </div>
 
                 <div class="error">

@@ -13,7 +13,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.security.SecureRandom;
 import org.mindrot.jbcrypt.BCrypt;
-import utils.EmailUtil;
+import util.EmailUtil;
 
 /**
  *
@@ -51,8 +51,10 @@ public class ForgotPasswordController extends HttpServlet {
         }
 
         try {
+            System.out.println("[FP] stage=dao:new");
             CustomerDAO cdao = new CustomerDAO();
-            // ✔ Không tiết lộ email có/không
+
+            System.out.println("[FP] stage=dao:existsByEmail? " + email);
             if (!cdao.existsByEmail(email)) {
                 req.setAttribute("info", "If the email is registered, an OTP has been sent.");
                 req.getRequestDispatcher("/forgot_password.jsp").forward(req, resp);
@@ -61,7 +63,7 @@ public class ForgotPasswordController extends HttpServlet {
 
             HttpSession ss = req.getSession(true);
 
-            // ✔ Resend cooldown
+            System.out.println("[FP] stage=rate-limit");
             Long last = (Long) ss.getAttribute("fp_last_sent");
             long now = System.currentTimeMillis();
             if (last != null && now - last < RESEND_COOLDOWN_SEC * 1000L) {
@@ -71,45 +73,49 @@ public class ForgotPasswordController extends HttpServlet {
                 return;
             }
 
-            // OTP 6 số + hash
+            System.out.println("[FP] stage=otp:gen+hash");
             String otp = generateOtp();
-            String otpHash = MD5PasswordHasher.hashPassword(otp); // ✔ Lưu HASH, không lưu thô
+            String otpHash = MD5PasswordHasher.hashPassword(otp);
 
-            // Nội dung email
             String html = """
-                <div style="font-family:Arial;line-height:1.6">
-                  <h3>Password Reset OTP</h3>
-                  <p>Your OTP is:</p>
-                  <div style="font-size:24px;font-weight:700">%s</div>
-                  <p>This OTP will expire in %d minutes.</p>
-                  <p>If you didn't request this, you can ignore this email.</p>
-                </div>
-            """.formatted(otp, OTP_TTL_MIN);
+            <div style="font-family:Arial;line-height:1.6">
+              <h3>Password Reset OTP</h3>
+              <p>Your OTP is:</p>
+              <div style="font-size:24px;font-weight:700">%s</div>
+              <p>This OTP will expire in %d minutes.</p>
+              <p>If you didn't request this, you can ignore this email.</p>
+            </div>
+        """.formatted(otp, OTP_TTL_MIN);
 
-            // ✔ BẮT MessagingException NGAY TẠI ĐÂY
+            System.out.println("[FP] stage=email:construct");
+            EmailUtil mail = new EmailUtil(getServletContext()); // <-- nếu NPE/cấu hình SMTP thiếu, nó sẽ nổ ở đây
+
+            System.out.println("[FP] stage=email:send");
             try {
-                EmailUtil mail = new EmailUtil(getServletContext());
                 mail.send(email, "Your OTP for password reset", html);
-            } catch (MessagingException me) {
+            } catch (jakarta.mail.MessagingException me) {
                 me.printStackTrace();
                 req.setAttribute("error", "Could not send OTP email. Please try again.");
                 req.getRequestDispatcher("/forgot_password.jsp").forward(req, resp);
                 return;
             }
 
-            // ✔ Mỗi lần yêu cầu mới -> vô hiệu hoá OTP cũ bằng cách GHI ĐÈ session
+            System.out.println("[FP] stage=session:set");
             ss.setAttribute("fp_email", email);
             ss.setAttribute("fp_otp_hash", otpHash);
-            ss.setAttribute("fp_exp", now + OTP_TTL_MIN * 60_000L); // TTL 5'
-            ss.setAttribute("fp_attempts", 0);                      // ✔ reset số lần sai
+            ss.setAttribute("fp_exp", now + OTP_TTL_MIN * 60_000L);
+            ss.setAttribute("fp_attempts", 0);
             ss.setAttribute("fp_last_sent", now);
             ss.setAttribute("otp_ttl_min", OTP_TTL_MIN);
 
+            System.out.println("[FP] stage=redirect:/verify");
             resp.sendRedirect(req.getContextPath() + "/verify");
         } catch (Exception e) {
+            System.out.println("[FP] stage=ERROR");
             e.printStackTrace();
             req.setAttribute("error", "Could not process your request. Please try again.");
             req.getRequestDispatcher("/forgot_password.jsp").forward(req, resp);
         }
     }
+
 }

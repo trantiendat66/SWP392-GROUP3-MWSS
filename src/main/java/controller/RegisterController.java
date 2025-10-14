@@ -23,7 +23,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Oanh Nguyen
  */
 @MultipartConfig
-@WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
+@WebServlet(name = "RegisterController", urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet {
 
     private static final String UPLOAD_DIR = "uploads";
@@ -50,13 +50,17 @@ public class RegisterController extends HttpServlet {
         return request.getContextPath() + "/" + UPLOAD_DIR + "/" + fileName;
     }
 
-    private java.util.Date parseDob(String dobStr) {
+    private java.sql.Date parseDob(String dobStr) {
         if (dobStr == null || dobStr.isBlank()) {
             return null;
         }
         try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+            // Chuyển chuỗi "yyyy-MM-dd" sang java.util.Date trước
+            java.util.Date utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+            // Rồi chuyển sang java.sql.Date đúng chuẩn JDBC
+            return new java.sql.Date(utilDate.getTime());
         } catch (ParseException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -145,7 +149,7 @@ public class RegisterController extends HttpServlet {
 
             int id = dao.insert(c);
             if (id > 0) {
-                response.sendRedirect(request.getContextPath() + "/register_success.jsp");
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
             } else {
                 request.setAttribute("error", "Register failed. Please try again.");
                 request.getRequestDispatcher("/register.jsp").forward(request, response);

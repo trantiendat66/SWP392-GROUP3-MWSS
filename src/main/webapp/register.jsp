@@ -4,153 +4,220 @@
     Author     : Oanh Nguyen
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%
-  String ctx = request.getContextPath();
-  String err = (String) request.getAttribute("error");
-  String name   = request.getParameter("customer_name")==null?"":request.getParameter("customer_name");
-  String phone  = request.getParameter("phone")==null?"":request.getParameter("phone");
-  String email  = request.getParameter("email")==null?"":request.getParameter("email");
-  String address= request.getParameter("address")==null?"":request.getParameter("address");
-  String gender = request.getParameter("gender")==null?"":request.getParameter("gender");
-  String dob    = request.getParameter("dob")==null?"":request.getParameter("dob");
+  String err     = (String) request.getAttribute("error");
+  String name    = request.getParameter("customer_name")==null?"":request.getParameter("customer_name");
+  String phone   = request.getParameter("phone")==null?"":request.getParameter("phone");
+  String email   = request.getParameter("email")==null?"":request.getParameter("email");
+  String address = request.getParameter("address")==null?"":request.getParameter("address");
+  String gender  = request.getParameter("gender")==null?"":request.getParameter("gender");
+  String dob     = request.getParameter("dob")==null?"":request.getParameter("dob");
 %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Create Your Account</title>
+        <title>Register - WatchStore</title>
         <style>
-            body{
-                font-family:Arial;
-                background:#f4f6f8;
-                margin:0
+            /* ===== Background (giống login) ===== */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                background: url("${pageContext.request.contextPath}/assert/image/login-bg.jpg") no-repeat center center fixed;
+                background-size: cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: "Poppins", Arial, sans-serif;
             }
-            .wrap{
-                max-width:980px;
-                margin:40px auto;
-                background:#fff;
-                border-radius:10px;
-                box-shadow:0 6px 20px rgba(0,0,0,.08);
-                display:flex;
-                overflow:hidden
+
+            .auth-container{
+                display: block;         
+                text-align: center;
+                color: #fff;
+                margin-top: 300px;
+                padding: 60px 0;        
+                overflow: visible;      
             }
-            .left{
-                flex:1;
-                padding:40px;
-                background:linear-gradient(135deg,#0ea5e9,#2563eb);
-                color:#fff
+
+            h2{
+                display: block;
+                width: 440px;           /* trùng với .input-box */
+                margin: 0 auto 18px;    /* căn giữa + khoảng cách dưới */
+                font-size: 26px;
+                font-weight: 700;
+                color: #fff;
+                text-shadow: 0 0 8px rgba(0,0,0,.6);
             }
-            .left h2{
-                margin:0 0 10px
+
+            /* ===== Khung nhập ===== */
+            .input-box {
+                background: rgba(20, 20, 20, 0.9);
+                padding: 40px 45px;
+                border-radius: 14px;
+                width: 440px;
+                text-align: left;
+                box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+                margin: 18px auto 0; /* ⬅️ tạo khoảng cách giữa tiêu đề và khung */
             }
-            .right{
-                flex:1.2;
-                padding:40px
+
+            .field {
+                margin-bottom: 16px; /* đều giữa các ô input */
             }
-            .grid{
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:16px
+
+            label {
+                display: block;
+                margin-bottom: 6px;
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.85);
+                font-weight: 600;
             }
-            .grid .full{
-                grid-column:1 / -1
+
+            input, select {
+                width: 100%;
+                padding: 12px;
+                border: none;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.15);
+                color: #fff;
+                font-size: 14px;
+                outline: none;
+                box-sizing: border-box;
             }
-            label{
-                font-weight:600;
-                font-size:14px
+
+            input::placeholder {
+                color: rgba(255, 255, 255, 0.6);
             }
-            input,select{
-                width:100%;
-                padding:10px 12px;
-                border:1px solid #e5e7eb;
-                border-radius:8px
+
+            input[type="file"] {
+                background: rgba(255, 255, 255, 0.08);
             }
-            .btn{
-                width:100%;
-                padding:12px 14px;
-                border:0;
-                border-radius:10px;
-                background:#2563eb;
-                color:#fff;
-                font-weight:700;
-                cursor:pointer
+
+            button {
+                width: 100%;
+                padding: 13px;
+                border: none;
+                border-radius: 6px;
+                background: #e50914;
+                color: white;
+                font-size: 15px;
+                font-weight: bold;
+                margin-top: 10px;
+                cursor: pointer;
+                transition: background 0.3s;
             }
-            .err{
-                background:#fee2e2;
-                color:#b91c1c;
-                padding:10px 12px;
-                border-radius:8px;
-                margin-bottom:12px
+
+            button:hover {
+                background: #b00610;
+            }
+
+            .links {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+                font-size: 13px;
+                width: 440px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .links a {
+                color: #ccc;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+
+            .links a:hover {
+                color: #fff;
+            }
+
+            .error {
+                color: #ff6666;
+                margin-top: 10px;
+                font-size: 14px;
             }
         </style>
     </head>
     <body>
-        <div class="wrap">
-            <div class="left">
-                <h2>Welcome to Watch Shop</h2>
-                <p>Join a thriving community and access premium content.<br/>Your time starts here.</p>
-            </div>
-            <div class="right">
-                <h2>Create Your Account</h2>
 
-                <% if (err != null) { %><div class="err"><%= err %></div><% } %>
+        <form action="${pageContext.request.contextPath}/register"
+              method="post"
+              enctype="multipart/form-data"
+              accept-charset="UTF-8">
+            <div class="auth-container">
 
-                <form action="${pageContext.request.contextPath}/RegisterController"
-                      method="post"
-                      enctype="multipart/form-data"
-                      accept-charset="UTF-8">
+                <h2>Register</h2>
 
-                    <div class="grid">
-                        <div>
-                            <label>Full Name</label>
-                            <input type="text" name="customer_name" value="<%=name%>" required>
-                        </div>
-                        <div>
-                            <label>Phone</label>
-                            <input type="text" name="phone" value="<%=phone%>" required>
-                        </div>
-                        <div class="full">
-                            <label>Email</label>
-                            <input type="email" name="email" value="<%=email%>" required>
-                        </div>
-                        <div class="full">
-                            <label>Address</label>
-                            <input type="text" name="address" value="<%=address%>">
-                        </div>
-                        <div>
-                            <label>Date of Birth</label>
-                            <input type="date" name="dob" value="<%=dob%>">
-                        </div>
-                        <div>
-                            <label>Gender</label>
-                            <select name="gender">
-                                <option value="" <%= gender.equals("")?"selected":"" %> >-- Select --</option>
-                                <option value="Male"   <%= gender.equals("Male")?"selected":"" %>>Male</option>
-                                <option value="Female" <%= gender.equals("Female")?"selected":"" %>>Female</option>
-                                <option value="Other"  <%= gender.equals("Other")?"selected":"" %>>Other</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Password</label>
-                            <input type="password" name="password" required>
-                        </div>
-                        <div>
-                            <label>Confirm Password</label>
-                            <input type="password" name="confirm_password" required>
-                        </div>
-                        <div class="full">
-                            <label>Avatar (optional)</label>
-                            <input type="file" name="image" accept="image/*">
-                        </div>
-                        <div class="full">
-                            <button class="btn" type="submit">Register</button>
-                        </div>
+
+                <div class="input-box">
+                    <% if (err != null) { %>
+                    <div class="error"><%= err %></div>
+                    <% } %>
+
+                    <div class="field">
+                        <label>Full Name</label>
+                        <input type="text" name="customer_name" value="<%=name%>" placeholder="Your full name" required>
                     </div>
-                </form>
+
+                    <div class="field">
+                        <label>Phone</label>
+                        <input type="text" name="phone" value="<%=phone%>" placeholder="Phone number" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="email" name="email" value="<%=email%>" placeholder="Email" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Address</label>
+                        <input type="text" name="address" value="<%=address%>" placeholder="Address">
+                    </div>
+
+                    <div class="field">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dob" value="<%=dob%>">
+                    </div>
+
+                    <div class="field">
+                        <label>Gender</label>
+                        <select name="gender">
+                            <option value="" <%= gender.equals("")?"selected":"" %> >-- Select --</option>
+                            <option value="Male"   <%= gender.equals("Male")?"selected":"" %>>Male</option>
+                            <option value="Female" <%= gender.equals("Female")?"selected":"" %>>Female</option>
+                            <option value="Other"  <%= gender.equals("Other")?"selected":"" %>>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Avatar (optional)</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+
+                    <button type="submit">REGISTER</button>
+                </div>
+
+                <div class="links">
+                    <a href="${pageContext.request.contextPath}/forgot">Forgot Password ?</a>
+                    <a href="${pageContext.request.contextPath}/login">Back to Login</a>
+                </div>
             </div>
-        </div>
+        </form>
+
     </body>
 </html>
-
 
