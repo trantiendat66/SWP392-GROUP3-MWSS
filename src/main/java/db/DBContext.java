@@ -10,11 +10,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Tran Tien Dat - CE190362
  */
 public class DBContext {
+
     protected Connection conn = null;
 
     public DBContext() {
@@ -23,11 +25,11 @@ public class DBContext {
             String dbURL = "jdbc:sqlserver://localhost:1433;"
                     + "databaseName= Watch_System;"
                     + "user=sa;"
-                    + "password=123456;" //123456
+                    + "password=123;" //123456
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {
-                DatabaseMetaData dm =  conn.getMetaData();
+                DatabaseMetaData dm = conn.getMetaData();
                 System.out.println("Driver name: " + dm.getDriverName());
                 System.out.println("Driver version: " + dm.getDriverVersion());
                 System.out.println("Product name: "
@@ -39,5 +41,9 @@ public class DBContext {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Connection getConnection() {
+        return conn;
     }
 }

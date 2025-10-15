@@ -176,4 +176,15 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
+    
+    public int getCurrentPrice(int productId) throws SQLException {
+        try (Connection cn = new DBContext().getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT price FROM Product WHERE product_id=?")) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) throw new SQLException("Không tìm thấy sản phẩm #" + productId);
+                return rs.getInt(1);
+            }
+        }
+    }
 }

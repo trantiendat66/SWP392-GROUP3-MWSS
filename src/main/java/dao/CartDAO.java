@@ -6,6 +6,7 @@
 package dao;
 
 import db.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -175,5 +176,33 @@ public class CartDAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+    
+    public List<Cart> findItemsForCheckout(int customerId) throws SQLException {
+        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.quantity, " +
+                     "       p.product_name, p.image, p.brand " +
+                     "FROM Cart c JOIN Product p ON p.product_id = c.product_id " +
+                     "WHERE c.customer_id = ?";
+        try (Connection cn = new DBContext().getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Cart> list = new ArrayList<>();
+                while (rs.next()) {
+                    Cart x = new Cart(
+                        rs.getInt("cart_id"),
+                        rs.getInt("customer_id"),
+                        rs.getInt("product_id"),
+                        rs.getInt("price"),
+                        rs.getInt("quantity"),
+                        rs.getString("product_name"),
+                        rs.getString("image"),
+                        rs.getString("brand")
+                    );
+                    list.add(x);
+                }
+                return list;
+            }
+        }
     }
 }

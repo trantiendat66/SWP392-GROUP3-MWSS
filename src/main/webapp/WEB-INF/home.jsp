@@ -104,11 +104,23 @@
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
                                     <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
                                     <div class="mt-auto text-center">
-                                       <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
-                                        <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})">
+                                        <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
+                                           class="btn btn-outline-primary btn-sm me-2">Details</a>
+
+                                        <!-- BUY NOW: thêm vào cart rồi chuyển đến trang giỏ -->
+                                        <form action="${pageContext.request.contextPath}/order/buy-now" method="post" class="d-inline">
+                                            <input type="hidden" name="product_id" value="${p.productId}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-danger btn-sm me-2">Buy now</button>
+                                        </form>
+
+                                        <!-- Add to cart (giữ nguyên nếu bạn dùng AJAX) -->
+                                        <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})" title="Add to cart">
                                             <i class="bi bi-cart-plus"></i>
                                         </button>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
