@@ -141,7 +141,7 @@ public class LoginServlet extends HttpServlet {
                         redirectPath = request.getContextPath() + "/admin/dashboard";
                     } else {
                         // Staff thông thường được chuyển đến khu vực làm việc giới hạn
-                        redirectPath = request.getContextPath() + "/staff/?";
+                        redirectPath = request.getContextPath() + "/staffcontrol";
                     }
                 }
             }
