@@ -44,6 +44,19 @@ public class CustomerDAO extends DBContext {
         }
     }
 
+    // Cập nhật password đã băm cho id
+    public boolean updatePasswordById(int customer_id, String newHash) {
+        final String sql = "UPDATE Customer SET password = ? WHERE customer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newHash);
+            ps.setInt(2, customer_id);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            System.err.println("updatePasswordById SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            throw new RuntimeException("DB error updating password", e);
+        }
+    }
+
     public boolean existsByPhone(String phone) {
         String sql = "SELECT 1 FROM Customer WHERE phone = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

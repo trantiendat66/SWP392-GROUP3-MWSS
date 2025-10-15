@@ -132,7 +132,7 @@ public class EditProfileServlet extends HttpServlet {
             request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
             return;
         }
-        String password = request.getParameter("password");
+
         String dateOfBirthStr = request.getParameter("dob");
         String genderParam = request.getParameter("gender");
         String image = request.getParameter("image");
@@ -155,7 +155,7 @@ public class EditProfileServlet extends HttpServlet {
             } catch (IllegalArgumentException ex) {
                 dob = null;
             }
-        }else{
+        } else {
             request.setAttribute("dobError", "Address cannot be blank.");
             request.setAttribute("customer", c);
             request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
@@ -167,7 +167,7 @@ public class EditProfileServlet extends HttpServlet {
             c.setPhone(phone);
             c.setEmail(email);
             c.setAddress(address);
-            c.setPassword(password);
+
             if (dob != null) {
                 c.setDob(dob);
             }

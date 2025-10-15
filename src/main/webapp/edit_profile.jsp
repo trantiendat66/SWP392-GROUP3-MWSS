@@ -119,16 +119,15 @@
                 <% if (request.getAttribute("addressError") != null) {%>
                 <p class="error"><%= request.getAttribute("addressError")%></p>
                 <% }%>
-                <label>Password</label>
-                <input type="password" name="password" value="<%= (c != null ? c.getPassword() : "")%>" required/>
+
 
                 <div class="row">
                     <div class="col">
                         <label>Date of Birth</label>
                         <input type="date" name="dob" value="<%= (c != null && c.getDob() != null ? c.getDob().toString() : "")%>"/>
-                    <% if (request.getAttribute("dobError") != null) {%>
-                <p class="error"><%= request.getAttribute("dobError")%></p>
-                <% }%>
+                        <% if (request.getAttribute("dobError") != null) {%>
+                        <p class="error"><%= request.getAttribute("dobError")%></p>
+                        <% }%>
                     </div>
                     <div class="col">
                         <label>Gender</label>

@@ -122,6 +122,7 @@
 
                 <div class="actions">
                     <a href="<%=ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
+                    <a href="<%=ctx%>/change_password" class="btn btn-back">Change Password</a>
                     <a href="<%=ctx%>/home" class="btn btn-back">Back</a>
                 </div>
             </div>
