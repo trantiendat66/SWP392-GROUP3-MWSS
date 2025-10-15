@@ -34,7 +34,7 @@
                                 <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
 
                                 <div class="mt-auto text-center">
-                                    <a href="${pageContext.request.contextPath}/product-view?pid=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
+                                    <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
                                     <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>

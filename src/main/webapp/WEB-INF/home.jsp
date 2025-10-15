@@ -104,7 +104,7 @@
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
                                     <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
                                     <div class="mt-auto text-center">
-                                        <a href="${pageContext.request.contextPath}/product-view?pid=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
+                                       <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}" class="btn btn-primary btn-sm me-2">Details</a>
                                         <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})">
                                             <i class="bi bi-cart-plus"></i>
                                         </button>
@@ -282,7 +282,7 @@
                  style="top: 20px; right: 20px; z-index: 9999;">
     ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>xcx
+            </div>
         `;
         document.body.insertAdjacentHTML('beforeend', alertHtml);
         setTimeout(() => {
@@ -309,32 +309,38 @@
     }
 </script>
 <script>
-    document.getElementById("filterButton").addEventListener("click", function () {
-        const modal = new bootstrap.Modal(document.getElementById('filterModal'));
-        modal.show();
-    });
-    document.getElementById("applyFilter").addEventListener("click", function (e) {
-        e.preventDefault();
-        const priceRange = document.getElementById("priceRange").value;
-        const brand = document.getElementById("brand").value;
-        const gender = document.getElementById("gender").value;
-        const baseUrl = "${pageContext.request.contextPath}/filterServlet";
-        const params = new URLSearchParams({
-            brand,
-            gender,
-            priceRange
+    // guard for filterButton existence (avoid JS error)
+    const filterBtn = document.getElementById("filterButton");
+    if (filterBtn) {
+        filterBtn.addEventListener("click", function () {
+            const modal = new bootstrap.Modal(document.getElementById('filterModal'));
+            modal.show();
         });
-        fetch(baseUrl + "?" + params.toString())
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("productList").innerHTML = html;
-                })
-                .catch(err => console.error("Lỗi khi lọc:", err));
+    }
+    const applyFilterBtn = document.getElementById("applyFilter");
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const priceRange = document.getElementById("priceRange").value;
+            const brand = document.getElementById("brand").value;
+            const gender = document.getElementById("gender").value;
+            const baseUrl = "${pageContext.request.contextPath}/filterServlet";
+            const params = new URLSearchParams({
+                brand,
+                gender,
+                priceRange
+            });
+            fetch(baseUrl + "?" + params.toString())
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById("productList").innerHTML = html;
+                    })
+                    .catch(err => console.error("Lỗi khi lọc:", err));
 
-        const modal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
-        modal.hide();
-    });
-
+            const modal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
+            modal.hide();
+        });
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <jsp:include page="/WEB-INF/include/footer.jsp" />

@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import model.Product;
 
 /**
@@ -47,7 +48,6 @@ public class ProductServlet extends HttpServlet {
         }
     }
 
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -59,14 +59,10 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pid = request.getParameter("pid");
-        if (pid == null) {
-            response.sendRedirect("home");
-            return;
-        }
         ProductDAO dao = new ProductDAO();
-        Product p = dao.getProductById(Integer.parseInt(pid));
-        request.setAttribute("product", p);
-        request.getRequestDispatcher("/WEB-INF/product-view.jsp").forward(request, response);
+        List<Product> products = dao.getAllProducts();
+
+        request.setAttribute("products", products);
+        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
 }

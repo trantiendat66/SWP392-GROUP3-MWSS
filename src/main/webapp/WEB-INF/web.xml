@@ -30,5 +30,5 @@
         <param-name>mail.from</param-name>
         <param-value>Watch Shop &lt;yourgmail@gmail.com&gt;</param-value>
     </context-param>
-    
+  
 </web-app>
