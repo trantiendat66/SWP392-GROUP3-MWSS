@@ -91,6 +91,11 @@
                 color:#333;
                 margin-left:8px;
             }
+            .btn-password {
+                background:#43a047;
+                color:white;
+                margin-left:8px;
+            }
             .small {
                 font-size:13px;
                 color:#666;
@@ -122,7 +127,7 @@
 
                 <div class="actions">
                     <a href="<%=ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
-                    <a href="<%=ctx%>/change_password" class="btn btn-back">Change Password</a>
+                    <a href="<%=ctx%>/change_password" class="btn btn-password">Change Password</a>
                     <a href="<%=ctx%>/home" class="btn btn-back">Back</a>
                 </div>
             </div>
