@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import dao.StaffDAO;
 import hashpw.MD5PasswordHasher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.PrintWriter;
 import model.Customer;
+import model.Staff;
 
 /**
  *
@@ -19,6 +21,8 @@ import model.Customer;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,22 +62,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("customer") != null) {
-            response.sendRedirect(request.getContextPath() + "/home");
-            return;
+
+        // Kiểm tra đã có session hoạt động chưa
+        if (session != null) {
+            // Nếu là Customer đã đăng nhập
+            if (session.getAttribute("customer") != null) {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            }
+            // Nếu là Staff đã đăng nhập
+            if (session.getAttribute("staff") != null) {
+                // Chuyển hướng Staff đến trang quản trị chung
+                Staff staff = (Staff) session.getAttribute("staff");
+                if ("Admin".equalsIgnoreCase(staff.getRole())) {
+                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/staff/orders");
+                }
+                return;
+            }
         }
+        // Nếu chưa đăng nhập, chuyển hướng đến trang login.jsp
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -81,44 +99,67 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String email = request.getParameter("email");
-        String password = request.getParameter("password"); // Mật khẩu người dùng nhập (plaintext)
+        String password = request.getParameter("password");
 
-        CustomerDAO dao = new CustomerDAO();
-
-        // BẮT ĐẦU PHẦN THAY THẾ CHO DÒNG 86 TRƯỚC ĐÓ
-        // 1. Lấy khách hàng theo email để lấy mật khẩu đã băm
-        Customer customer = dao.getCustomerByEmail(email);
+        CustomerDAO customerDao = new CustomerDAO();
+        StaffDAO staffDao = new StaffDAO();
 
         boolean isAuthenticated = false;
+        Object user = null;
+        String redirectPath = null;
+        String sessionKey = null;
+
+        // --- BƯỚC 1: THỬ ĐĂNG NHẬP VỚI VAI TRÒ KHÁCH HÀNG (CUSTOMER) ---
+        Customer customer = customerDao.getCustomerByEmail(email);
 
         if (customer != null) {
-            // Lấy mật khẩu MD5 đã lưu trong database
             String storedHashedPassword = customer.getPassword();
-
-            // Dùng hàm checkPassword để so sánh mật khẩu nhập (plaintext) với mật khẩu đã băm (MD5)
             isAuthenticated = MD5PasswordHasher.checkPassword(password, storedHashedPassword);
+
+            if (isAuthenticated) {
+                user = customer;
+                sessionKey = "customer";
+                redirectPath = request.getContextPath() + "/home";
+            }
         }
 
-        // KẾT THÚC PHẦN THAY THẾ
+        // --- BƯỚC 2: NẾU KHÔNG PHẢI KHÁCH HÀNG, THỬ ĐĂNG NHẬP VỚI VAI TRÒ NHÂN VIÊN (STAFF) ---
+        if (!isAuthenticated) {
+            Staff staff = staffDao.getStaffByEmail(email);
+
+            if (staff != null) {
+                String storedHashedPassword = staff.getPassword();
+                isAuthenticated = MD5PasswordHasher.checkPassword(password, storedHashedPassword);
+
+                if (isAuthenticated) {
+                    user = staff;
+                    sessionKey = "staff"; // Key session cho Staff
+
+                    // PHÂN QUYỀN CHUYỂN HƯỚNG DỰA TRÊN ROLE
+                    if ("Admin".equalsIgnoreCase(staff.getRole())) {
+                        // Admin được chuyển đến khu vực quản trị viên cao nhất
+                        redirectPath = request.getContextPath() + "/admin/dashboard";
+                    } else {
+                        // Staff thông thường được chuyển đến khu vực làm việc giới hạn
+                        redirectPath = request.getContextPath() + "/staff/?";
+                    }
+                }
+            }
+        }
+
+        // --- BƯỚC 3: XỬ LÝ KẾT QUẢ ĐĂNG NHẬP ---
         if (isAuthenticated) {
             HttpSession session = request.getSession();
-            // Đặt tên session là "customer" để khớp với logic hiển thị trên navbar
-            session.setAttribute("customer", customer);
-            response.sendRedirect(request.getContextPath() + "/home");
+
+            // Đặt đối tượng (Customer HOẶC Staff) vào session
+            session.setAttribute(sessionKey, user);
+
+            response.sendRedirect(redirectPath);
         } else {
+            // Đăng nhập thất bại (sai email hoặc mật khẩu)
             request.setAttribute("error", "Invalid email or password!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
