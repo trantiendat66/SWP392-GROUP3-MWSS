@@ -115,7 +115,7 @@ public class CartServlet extends HttpServlet {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 if (success) {
-                    // Trả về JSON response cho AJAX (thông báo bằng tiếng Anh)
+                    // Trả về JSON response cho AJAX 
                     out.print("{\"success\": true, \"message\": \"Product added to cart successfully\"}");
                 } else {
                     out.print("{\"success\": false, \"message\": \"Error occurred while adding product\"}");
