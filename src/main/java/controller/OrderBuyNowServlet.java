@@ -40,29 +40,11 @@ public class OrderBuyNowServlet extends HttpServlet {
         int productId = Integer.parseInt(req.getParameter("product_id"));
         int qty = Math.max(1, Integer.parseInt(req.getParameter("quantity")));
 
-        ProductDAO productDAO = new ProductDAO();
-        CartDAO cartDAO = new CartDAO();
+        // ĐÁNH DẤU Buy-Now đang chờ thanh toán (KHÔNG thêm vào cart)
+        session.setAttribute("bn_pid", productId);
+        session.setAttribute("bn_qty", qty);
 
-        try {
-            // Lấy giá hiện tại rồi add vào giỏ
-            int price = productDAO.getCurrentPrice(productId);
-            boolean ok = cartDAO.addToCart(cus.getCustomer_id(), productId, price, qty);
-
-            if (ok) {
-                session.setAttribute("flash_success", "Đã thêm vào giỏ. Vui lòng nhập địa chỉ và chọn hình thức thanh toán để đặt hàng.");
-            } else {
-                session.setAttribute("error", "Không thể thêm sản phẩm vào giỏ.");
-            }
-            // Điều hướng sang giỏ hàng để người dùng điền địa chỉ + thanh toán
-            resp.sendRedirect(req.getContextPath() + "/cart");
-        } catch (SQLException e) {
-            session.setAttribute("error", e.getMessage());
-            // quay lại trang trước
-            String back = req.getHeader("Referer");
-            if (back == null) {
-                back = req.getContextPath() + "/";
-            }
-            resp.sendRedirect(back);
-        }
+        // tới trang payment
+        resp.sendRedirect(req.getContextPath() + "/payment?bn=1");
     }
 }

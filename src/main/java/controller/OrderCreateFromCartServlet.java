@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dao.CartDAO;
 import dao.OrderDAO;
+import dao.ProductDAO;
 import jakarta.servlet.http.*;
 
 import java.sql.SQLException;
@@ -53,6 +54,13 @@ public class OrderCreateFromCartServlet extends HttpServlet {
         OrderDAO orderDAO = new OrderDAO();
 
         try {
+            Integer bnPid = (Integer) session.getAttribute("bn_pid");
+            Integer bnQty = (Integer) session.getAttribute("bn_qty");
+            if (bnPid != null && bnQty != null && bnQty > 0) {
+                // tạm add vào giỏ để thống nhất luồng tạo đơn from-cart
+                int price = new ProductDAO().getCurrentPrice(bnPid);
+                cartDAO.addToCart(cus.getCustomer_id(), bnPid, price, bnQty);
+            }
             List<Cart> items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
             int orderId = orderDAO.createOrder(
                     cus.getCustomer_id(),
@@ -61,13 +69,33 @@ public class OrderCreateFromCartServlet extends HttpServlet {
                     paymentBit, // <-- truyền BIT
                     items
             );
-            cartDAO.clearCart(cus.getCustomer_id());
+            // ĐẶT HÀNG THÀNH CÔNG -> XÓA buy-now pending nếu có
+            session.removeAttribute("bn_pid");
+            session.removeAttribute("bn_qty");
 
+            cartDAO.clearCart(cus.getCustomer_id());
             session.setAttribute("flash_success", "Tạo đơn hàng #" + orderId + " thành công!");
             resp.sendRedirect(req.getContextPath() + "/order-success.jsp?orderId=" + orderId);
+
         } catch (SQLException e) {
+            // NẾU LỖI: nếu đang có buy-now pending thì add vào cart rồi về /cart
+            Integer pid = (Integer) session.getAttribute("bn_pid");
+            Integer qty = (Integer) session.getAttribute("bn_qty");
+            if (pid != null && qty != null && qty > 0) {
+                try {
+                    int price = new ProductDAO().getCurrentPrice(pid);
+                    cartDAO.addToCart(cus.getCustomer_id(), pid, price, qty);
+                    session.removeAttribute("bn_pid");
+                    session.removeAttribute("bn_qty");
+                    session.setAttribute("error", "Thanh toán thất bại, sản phẩm đã được đưa vào giỏ.");
+                    resp.sendRedirect(req.getContextPath() + "/cart");
+                    return;
+                } catch (SQLException ex) {
+                    // fallthrough hiển thị lỗi payment
+                }
+            }
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("/WEB-INF/cart.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/payment.jsp").forward(req, resp);
         }
     }
 }
