@@ -7,6 +7,7 @@
 <%@page import="model.Staff"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     Staff t = (Staff) request.getAttribute("staff");
     String ctx = request.getContextPath();
@@ -186,11 +187,64 @@
             </div>
 
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+
+                <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
+                    <section class="main" aria-label="Product management">
+                        <h4 id="products-title">Product List</h4>
+                        <div class="listProducts" role="region" aria-labelledby="products-title">
+                            <table aria-describedby="products-desc">
+                                <thead>
+                                    <tr>
+                                        <th>Product ID</th>
+                                        <th>Product Name</th>
+                                        <th>Machine</th>
+                                        <th>Price (VND)</th>
+                                        <th>Quantity</th>
+                                        <th style="text-align:center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${not empty requestScope.listProducts}">
+                                            <c:forEach var="p" items="${requestScope.listProducts}">
+                                                <tr>
+                                                    <td class="product-id">${p.productId}</td>
+                                                    <td>${p.productName}</td>
+                                                    <td>${p.machine}</td>
+                                                    <td>${p.price}</td>
+                                                    <td>${p.quantityProduct}</td>
+                                                    <td>
+                                                        <div class="right-actions" role="group" aria-label="Actions">
+
+                                                            <a href="productdetail?id=${p.productId}" class="icon view" title="View Detail" aria-label="Xem chi tiết sản phẩm">
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#111" stroke-width="1.6"/></svg>
+                                                            </a>
+
+                                                            <%-- 
+                                                            <button class="icon edit" title="Edit" aria-label="Sửa sản phẩm">
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21h3l11-11-3-3L3 18v3z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 7l3 3" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                            </button> 
+                                                            --%>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="6" style="text-align: center;">No products found in the database.</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
-                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order" tabindex="0"
-                     <!-- Main content -->
-                     <section class="main" aria-label="Order management">
+
+                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
+                    <section class="main" aria-label="Order management">
+                        <h4 id="orders-title">Order List</h4>
                         <div class="listOrders" role="region" aria-labelledby="orders-title">
                             <table aria-describedby="orders-desc">
                                 <thead>
@@ -204,7 +258,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Example rows -->
                                     <tr>
                                         <td class="order-id">ORD001</td>
                                         <td>Nguyễn Văn An</td>
@@ -213,14 +266,13 @@
                                         <td>4,500,000</td>
                                         <td><div class="right-actions" role="group" aria-label="Actions">
                                                 <button class="icon view" title="View" aria-label="Xem">
-                                                    <!-- eye icon -->
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#111" stroke-width="1.6"/></svg>
                                                 </button>
                                                 <button class="icon edit" title="Edit" aria-label="Sửa">
-                                                    <!-- edit icon -->
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21h3l11-11-3-3L3 18v3z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 7l3 3" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                 </button>
                                             </div></td>
+                                    </tr>
                                     </tr>
 
                                     <tr>
