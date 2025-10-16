@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import dao.StaffDAO;
 import dao.ProductDAO;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Staff;
 import model.Product;
 import java.util.List;
+import model.Order;
 
 /**
  *
@@ -70,6 +72,15 @@ public class StaffControlServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Error loading product data.");
         }
 
+//        Khu này là ListOrder cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
+        try {
+            OrderDAO orderDao = new OrderDAO();
+            List<Order> listOrders = orderDao.getOrderByIdStaff(staff.getAccountId());
+            request.setAttribute("listOrders", listOrders);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         // 2. Forward đến JSP
         request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
     }
@@ -86,4 +97,3 @@ public class StaffControlServlet extends HttpServlet {
     }
 
 }
-

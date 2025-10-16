@@ -7,7 +7,9 @@
 <%@page import="model.Staff"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
     Staff t = (Staff) request.getAttribute("staff");
     String ctx = request.getContextPath();
@@ -51,12 +53,12 @@
             .status {
                 color:white;
                 margin-top:6px;
-                font-size:14px;
+                font-weight: 600;
                 background-color: black;
                 text-align: center;
                 padding:4px 8px;
                 border-radius:6px;
-                font-size:12px;
+                font-size:16px;
                 margin-top:6px;
                 width: 40%;
                 margin: 0 auto;
@@ -70,6 +72,11 @@
                 background: #fff;
             }
 
+            #title{
+                margin:0 0 12px 0;
+                font-size:18px;
+                font-weight: 900;
+            }
             /* Table styles */
             table{
                 width:100%;
@@ -190,7 +197,7 @@
 
                 <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
                     <section class="main" aria-label="Product management">
-                        <h4 id="products-title">Product List</h4>
+                        <h4 id="title">Product List</h4>
                         <div class="listProducts" role="region" aria-labelledby="products-title">
                             <table aria-describedby="products-desc">
                                 <thead>
@@ -242,9 +249,11 @@
                     </section>
                 </div>
 
+                <!--ở dưới đây làm order List cấm tk nào ko phận sự vào(ㆆ_ㆆ)-->
+
                 <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
                     <section class="main" aria-label="Order management">
-                        <h4 id="orders-title">Order List</h4>
+                        <h4 id="title">Order List</h4>
                         <div class="listOrders" role="region" aria-labelledby="orders-title">
                             <table aria-describedby="orders-desc">
                                 <thead>
@@ -258,83 +267,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="order-id">ORD001</td>
-                                        <td>Nguyễn Văn An</td>
-                                        <td><span class="date-pill">15/9/2025</span></td>
-                                        <td><span class="status-order pending">Pending</span></td>
-                                        <td>4,500,000</td>
-                                        <td><div class="right-actions" role="group" aria-label="Actions">
-                                                <button class="icon view" title="View" aria-label="Xem">
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#111" stroke-width="1.6"/></svg>
-                                                </button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21h3l11-11-3-3L3 18v3z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 7l3 3" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                                </button>
-                                            </div></td>
-                                    </tr>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="order-id">ORD002</td>
-                                        <td>Trần Thị Hồng</td>
-                                        <td><span class="date-pill">16/9/2025</span></td>
-                                        <td><span class="status-order completed">Completed</span></td>
-                                        <td>7,800,000</td>
-                                        <td><div class="right-actions">
-                                                <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
-                                            </div></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="order-id">ORD003</td>
-                                        <td>Lê Văn Huy</td>
-                                        <td><span class="date-pill">17/9/2025</span></td>
-                                        <td><span class="status-order cancelled">Cancelled</span></td>
-                                        <td>2,500,000</td>
-                                        <td><div class="right-actions">
-                                                <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
-                                            </div></td>
-                                    </tr>
-
-                                    <!-- more rows (for demo, repeated) -->
-                                    <tr>
-                                        <td class="order-id">ORD004</td>
-                                        <td>Phạm Thị Thu</td>
-                                        <td><span class="date-pill">18/9/2025</span></td>
-                                        <td><span class="status-order completed">Completed</span></td>
-                                        <td>9,500,000</td>
-                                        <td><div class="right-actions">
-                                                <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
-                                            </div></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="order-id">ORD005</td>
-                                        <td>Hoàng Minh Quân</td>
-                                        <td><span class="date-pill">19/9/2025</span></td>
-                                        <td><span class="status-order pending">Pending</span></td>
-                                        <td>3,200,000</td>
-                                        <td><div class="right-actions">
-                                                <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
-                                            </div></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="order-id">ORD006</td>
-                                        <td>Võ Thị Lan</td>
-                                        <td><span class="date-pill">20/9/2025</span></td>
-                                        <td><span class="status-order completed">Completed</span></td>
-                                        <td>35,000,000</td>
-                                        <td><div class="right-actions">
-                                                <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
-                                            </div></td>
-                                    </tr>
+                                    <c:choose>
+                                        <c:when test="${not empty requestScope.listOrders}">
+                                            <c:forEach var="o" items="${requestScope.listOrders}">
+                                                <tr>
+                                                    <td class="order-id">${o.order_id}</td>
+                                                    <td>${o.customer_name}</td>
+                                                    <td><span class="date-pill">${o.order_date}</span></td>
+                                                    <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
+                                                    <td>${o.total_amount}</td>
+                                                    <td><div class="right-actions">
+                                                            <button class="icon view" title="View" aria-label="Xem">👁</button>
+                                                            <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
+                                                        </div></td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="6" style="text-align: center;">No orders found in the database.</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
 
                                 </tbody>
                             </table>
