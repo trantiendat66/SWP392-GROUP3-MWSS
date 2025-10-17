@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
+import model.Staff;
 
 /**
  *
@@ -60,19 +62,31 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("customer") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        Customer customer = (Customer) session.getAttribute("customer");
+        Staff staff = (Staff) session.getAttribute("staff");
 
-        // Load lại dữ liệu từ DB để có dữ liệu mới nhất
-        CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
+        if (customer != null) {
+            CustomerDAO cdao = new CustomerDAO();
+            Customer c = cdao.getCustomerById(customer.getCustomer_id());
+            request.setAttribute("userType", "customer");
+            request.setAttribute("user", c);
+        } else if (staff != null) {
+            StaffDAO sdao = new StaffDAO();
+            Staff s = sdao.getStaffByEmail(staff.getEmail());
+            request.setAttribute("userType", "staff");
+            request.setAttribute("user", s);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
 
-        request.setAttribute("customer", customer);
         request.getRequestDispatcher("/profile.jsp").forward(request, response);
     }
 
