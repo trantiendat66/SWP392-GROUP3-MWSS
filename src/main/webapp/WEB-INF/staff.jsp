@@ -21,17 +21,16 @@
         <style>
             body {
                 font-family: Arial, sans-serif;
-                        background:#f4f6f8;
-                        margin: 0;
-                        padding: 0;
-                        display: flex;
-                        flex-direction: column;
-                        min-height: 100vh;
+                background:#f4f6f8;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
             }
             .d-flex.align-items-start {
-                        flex-grow: 1;
-                        padding: 20px;
-                   
+                flex-grow: 1;
+                padding: 20px;
             }
             .card {
                 width:240px;
@@ -89,7 +88,7 @@
             /* Table styles */
             table{
                 width:100%;
-                border-collapse:collapse;
+                border-collapse: inherit;
                 font-size:16px;
                 min-width:980px;
                 box-shadow:0 2px 6px rgba(0,0,0,0.1);
@@ -173,6 +172,24 @@
                 background:#fff;
                 color:#111;
                 border:1px solid #111
+            }
+            #popupModal {
+                max-width:900px;
+                margin:0 auto;
+                background:#fff;
+                border-radius:8px;
+                box-shadow:0 2px 6px rgba(0,0,0,0.1);
+                display: inline-flex;
+                overflow:hidden;
+            }
+            .left {
+                width: 50%;
+                padding:30px;
+                background:linear-gradient(180deg,#ffffff,#f7f9fb);
+            }
+            .right {
+                flex:1;
+                padding:30px 40px;
             }
 
             @media (max-width:980px){
@@ -260,7 +277,7 @@
 
                 <!--ở dưới đây làm order List cấm tk nào ko phận sự vào(ㆆ_ㆆ)-->
 
-                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
+                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="-1">
                     <section class="main" aria-label="Order management">
                         <h4 id="title">Order List</h4>
                         <div class="listOrders" role="region" aria-labelledby="orders-title">
@@ -302,6 +319,26 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!-- Popup filter -->
+                        <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-light text-black" id="popupModal">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="orderDetailLabel">Order Detail</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="left"></div>
+                                        <div class="right"></div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
                 </div>
@@ -320,15 +357,13 @@
             });
 
             // Example: action button handlers (just demo)
-            /*document.querySelectorAll('.icon.view').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tr = e.target.closest('tr');
-                    if (!tr)
-                        return;
-                    const id = tr.querySelector('.order-id')?.textContent || 'Unknown';
-                    alert('Xem chi tiết ' + id);
+            document.querySelectorAll('.icon.view').forEach(viewBtn => {
+                viewBtn.addEventListener('click', (e) => {
+                    const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+                    modal.show();
                 });
-            });*/
+            });
+
             document.querySelectorAll('.icon.edit').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const tr = e.target.closest('tr');

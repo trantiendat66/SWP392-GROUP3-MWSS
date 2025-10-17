@@ -12,37 +12,29 @@ import java.math.BigDecimal;
  */
 public class OrderDetail {
 
-    private int order_id;
-    private int product_id;
+    private String product_name;
     private int quantity;
     private BigDecimal unit_price;
     private BigDecimal total_price;
+    private String image;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(int order_id, int product_id, int quantity, BigDecimal unit_price, BigDecimal total_price) {
-        this.order_id = order_id;
-        this.product_id = product_id;
+    public OrderDetail(String product_name, int quantity, BigDecimal unit_price, BigDecimal total_price, String image) {
+        this.product_name = product_name;
         this.quantity = quantity;
         this.unit_price = unit_price;
         this.total_price = total_price;
+        this.image = image;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public String getProduct_name() {
+        return product_name;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
-    }
-
-    public int getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
     public int getQuantity() {
@@ -69,9 +61,12 @@ public class OrderDetail {
         this.total_price = total_price;
     }
 
-    @Override
-    public String toString() {
-        return "OrderDetail{" + "order_id=" + order_id + ", product_id=" + product_id + ", quantity=" + quantity + ", unit_price=" + unit_price + ", total_price=" + total_price + '}';
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

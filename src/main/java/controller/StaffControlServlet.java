@@ -18,6 +18,7 @@ import model.Staff;
 import model.Product;
 import java.util.List;
 import model.Order;
+import model.OrderDetail;
 
 /**
  *
@@ -80,7 +81,22 @@ public class StaffControlServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+//        Khu này là getOrder để hiện một order cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
+        try {
+            OrderDAO orderDetailDao = new OrderDAO();
+            Order orderDetail = orderDetailDao.getOrderByOrderId(0);
+            request.setAttribute("orderDetail", orderDetail);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+//        Khu này là getProductInOrder để hiện một product list trong order cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
+        try {
+            OrderDAO listPIO = new OrderDAO();
+            List<OrderDetail> orderP = listPIO.getOrderDetailByOrderId(0);
+            request.setAttribute("orderP", orderP);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         // 2. Forward đến JSP
         request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
     }

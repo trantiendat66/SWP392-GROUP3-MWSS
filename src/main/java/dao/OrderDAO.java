@@ -259,7 +259,67 @@ public class OrderDAO extends DBContext {
         return listOrders;
     }
 
-//    public List<OrderDetail> getOrderDetailByOrderId(int order_id){
-//    
-//    }
+    public Order getOrderByOrderId(int order_id) {
+        Order order = new Order();
+        String sql = "SELECT \n"
+                + "	o.order_id,\n"
+                + "	c.customer_name,\n"
+                + "	o.phone,\n"
+                + "	o.order_date,\n"
+                + "	o.order_status,\n"
+                + "	o.shipping_address,\n"
+                + "	o.payment_method,\n"
+                + "	o.total_amount\n"
+                + "FROM [Order] o\n"
+                + "JOIN Customer c ON c.customer_id = o.customer_id\n"
+                + "Where o.order_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, order_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    order.setOrder_id(order_id);
+                    order.setCustomer_name(rs.getString("customer_name"));
+                    order.setPhone(rs.getString("phone"));
+                    order.setOrder_date(rs.getString("order_date"));
+                    order.setOrder_status(rs.getString("order_status"));
+                    order.setShipping_address(rs.getString("shipping_address"));
+                    order.setPayment_method(rs.getInt("payment_method"));
+                    order.setTotal_amount(rs.getBigDecimal("total_amount"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("getOrderInfo error: SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            e.printStackTrace();
+        }
+        return order;
+    }
+
+    public List<OrderDetail> getOrderDetailByOrderId(int order_id) {
+        List<OrderDetail> listOD = new ArrayList<>();
+        String sql = "SELECT p.product_name\n"
+                + ",[quantity]\n"
+                + ",[unit_price]\n"
+                + ",[total_price]\n"
+                + ",p.[image]\n"
+                + "  FROM [dbo].[OrderDetail] od\n"
+                + "  JOIN [Product] p ON p.product_id = od.product_id\n"
+                + "  Where [order_id] = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, order_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String product_name = rs.getString("product_name");
+                    int quantity = rs.getInt("quantity");
+                    BigDecimal unit_price = rs.getBigDecimal("unit_price");
+                    BigDecimal total_price = rs.getBigDecimal("total_price");
+                    String image = rs.getString("image");
+
+                    listOD.add(new OrderDetail(product_name, quantity, unit_price, total_price, image));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return listOD;
+    }
 }
