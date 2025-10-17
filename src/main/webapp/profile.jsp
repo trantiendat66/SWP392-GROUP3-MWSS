@@ -4,12 +4,31 @@
     Author     : hau
 --%>
 
-<%@page import="model.Customer"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.Customer,model.Staff" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%
-    Customer c = (Customer) request.getAttribute("customer");
     String ctx = request.getContextPath();
+    Object user = request.getAttribute("user");
+    String type = (String) request.getAttribute("userType");
+
+    String avatarPath = ctx + "/images/2.jpg"; // mặc định
+    String name = "-";
+    String status = "";
+
+    if ("customer".equals(type)) {
+        Customer c = (Customer) user;
+        if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
+            avatarPath = ctx + "/" + c.getImage();
+        }
+        name = c != null ? c.getCustomer_name() : "-";
+        status = c != null ? c.getAccount_status() : "";
+    } else if ("staff".equals(type)) {
+        Staff s = (Staff) user;
+        name = s != null ? s.getUserName() : "-";
+        status = s != null ? s.getStatus() : "";
+    }
 %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -103,42 +122,50 @@
         </style>
     </head>
     <body>
-
         <div class="card">
             <div class="left">
-                <%
-                    String avatarPath = (c != null && c.getImage() != null && !c.getImage().isEmpty())
-                            ? ctx + "/" + c.getImage()
-                            : ctx + "/images/2.jpg";
-                %>
-                <img src="<%=avatarPath%>" alt="Avatar" class="avatar" />
-                <div class="name"><%= (c != null ? c.getCustomer_name() : "No name")%></div>
-                <div class="status small"><%= (c != null ? c.getAccount_status() : "")%></div>
+                <img src="<%= avatarPath%>" alt="Avatar" class="avatar" />
+                <div class="name"><%= name%></div>
+                <div class="status small"><%= status%></div>
             </div>
+
             <div class="right">
-                <h2>Customer Profile</h2>
-                <div class="row"><div class="label">User Name</div><div class="value"><%= (c != null ? c.getCustomer_name() : "-")%></div></div>
-                <div class="row"><div class="label">Phone</div><div class="value"><%= (c != null ? c.getPhone() : "-")%></div></div>
-                <div class="row"><div class="label">Email</div><div class="value"><%= (c != null ? c.getEmail() : "-")%></div></div>
-                <div class="row"><div class="label">Address</div><div class="value"><%= (c != null ? c.getAddress() : "-")%></div></div>
-                <div class="row"><div class="label">Date of Birth</div><div class="value"><%= (c != null && c.getDob() != null ? c.getDob().toString() : "-")%></div></div>
-                <div class="row"><div class="label">Gender</div><div class="value"><%= (c != null ? c.getGender() : "-")%></div></div>
-                <div class="row"><div class="label">Account Status</div><div class="value"><%= (c != null ? c.getAccount_status() : "-")%></div></div>
+                <h2><%= "staff".equals(type) ? "Staff Profile" : "Customer Profile"%></h2>
+
+                <% if ("staff".equals(type)) {
+                        Staff s = (Staff) user;%>
+                <div class="row"><div class="label">User Name</div><div class="value"><%= s.getUserName()%></div></div>
+                <div class="row"><div class="label">Email</div><div class="value"><%= s.getEmail()%></div></div>
+                <div class="row"><div class="label">Phone</div><div class="value"><%= s.getPhone()%></div></div>
+                <div class="row"><div class="label">Role</div><div class="value"><%= s.getRole()%></div></div>
+                <div class="row"><div class="label">Position</div><div class="value"><%= s.getPosition()%></div></div>
+                <div class="row"><div class="label">Address</div><div class="value"><%= s.getAddress()%></div></div>
+                <div class="row"><div class="label">Status</div><div class="value"><%= s.getStatus()%></div></div>
+
+                <% } else {
+                    Customer c = (Customer) user;%>
+                <div class="row"><div class="label">User Name</div><div class="value"><%= c.getCustomer_name()%></div></div>
+                <div class="row"><div class="label">Phone</div><div class="value"><%= c.getPhone()%></div></div>
+                <div class="row"><div class="label">Email</div><div class="value"><%= c.getEmail()%></div></div>
+                <div class="row"><div class="label">Address</div><div class="value"><%= c.getAddress()%></div></div>
+                <div class="row"><div class="label">Date of Birth</div><div class="value"><%= (c.getDob() != null ? c.getDob().toString() : "-")%></div></div>
+                <div class="row"><div class="label">Gender</div><div class="value"><%= c.getGender()%></div></div>
+                <div class="row"><div class="label">Account Status</div><div class="value"><%= c.getAccount_status()%></div></div>
+                    <% }%>
 
                 <div class="actions">
-                    <a href="<%=ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
-                    <a href="<%=ctx%>/change_password" class="btn btn-password">Change Password</a>
-                    <a href="<%=ctx%>/home" class="btn btn-back">Back</a>
+                    <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
+                    <a href="<%= ctx%>/change_password" class="btn btn-password">Change Password</a>
+                    <a href="<%= ctx%>/home" class="btn btn-back">Back</a>
                 </div>
             </div>
         </div>
-        <%
-            String status = (String) session.getAttribute("updateStatus");
-            if (status != null) {
-                session.removeAttribute("updateStatus");
-        %>
+
+        <% String updateStatus = (String) session.getAttribute("updateStatus");
+            if (updateStatus != null) {
+                session.removeAttribute("updateStatus"); %>
         <script>
-            <% if ("success".equals(status)) { %>
+            <% if ("success".equals(updateStatus)) { %>
             Swal.fire({
                 icon: 'success',
                 title: 'Updated!',
@@ -159,3 +186,4 @@
         <% }%>
     </body>
 </html>
+
