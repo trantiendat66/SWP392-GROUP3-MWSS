@@ -3,7 +3,7 @@
     Created on : Oct 15, 2025, 10:29:09 AM
     Author     : Nguyen Thien Dat - CE190879 - 06/05/2005
 --%>
-
+<%-- File: /WEB-INF/staff.jsp --%>
 <%@page import="model.Staff"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
@@ -21,8 +21,17 @@
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background:#f4f6f8;
-                padding:30px;
+                        background:#f4f6f8;
+                        margin: 0;
+                        padding: 0;
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 100vh;
+            }
+            .d-flex.align-items-start {
+                        flex-grow: 1;
+                        padding: 20px;
+                   
             }
             .card {
                 width:240px;
@@ -311,7 +320,7 @@
             });
 
             // Example: action button handlers (just demo)
-            document.querySelectorAll('.icon.view').forEach(btn => {
+            /*document.querySelectorAll('.icon.view').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const tr = e.target.closest('tr');
                     if (!tr)
@@ -319,7 +328,7 @@
                     const id = tr.querySelector('.order-id')?.textContent || 'Unknown';
                     alert('Xem chi tiết ' + id);
                 });
-            });
+            });*/
             document.querySelectorAll('.icon.edit').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const tr = e.target.closest('tr');
