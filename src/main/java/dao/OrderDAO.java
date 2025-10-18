@@ -322,4 +322,101 @@ public class OrderDAO extends DBContext {
         }
         return listOD;
     }
+
+    /**
+     * Lấy danh sách đơn theo 1..n trạng thái cho 1 customer. Ví dụ:
+     * findOrdersByStatuses(5, "PENDING", "CONFIRMED") findOrdersByStatuses(5,
+     * "SHIPPING") findOrdersByStatuses(5, "DELIVERED")
+     */
+    public List<Order> findOrdersByStatuses(int customerId, String... statuses) throws SQLException {
+        if (statuses == null || statuses.length == 0) {
+            statuses = new String[]{"PENDING", "CONFIRMED", "SHIPPING", "DELIVERED"};
+        }
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT o.order_id, c.customer_name, o.phone, ")
+                // chuyển datetime -> string theo model bạn
+                .append("       CONVERT(varchar(19), o.order_date, 120) AS order_date, ")
+                .append("       o.order_status, o.shipping_address, o.payment_method, o.total_amount ")
+                .append("FROM [Order] o ")
+                .append("JOIN Customer c ON c.customer_id = o.customer_id ")
+                .append("WHERE o.customer_id = ? AND o.order_status IN (");
+        for (int i = 0; i < statuses.length; i++) {
+            sql.append("?");
+            if (i < statuses.length - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(") ORDER BY o.order_date DESC, o.order_id DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            ps.setInt(1, customerId);
+            for (int i = 0; i < statuses.length; i++) {
+                ps.setString(2 + i, statuses[i]);
+            }
+
+            List<Order> list = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Order o = new Order();
+                    o.setOrder_id(rs.getInt("order_id"));
+                    o.setCustomer_name(rs.getString("customer_name"));
+                    o.setPhone(rs.getString("phone"));
+                    o.setOrder_date(rs.getString("order_date"));
+                    o.setOrder_status(rs.getString("order_status"));
+                    o.setShipping_address(rs.getString("shipping_address"));
+                    // bit -> int 0/1 theo model hiện tại của bạn
+                    o.setPayment_method(rs.getBoolean("payment_method") ? 1 : 0);
+                    o.setTotal_amount(rs.getBigDecimal("total_amount"));
+                    list.add(o);
+                }
+            }
+            return list;
+        }
+    }
+
+    // ====== Hàm tiện ích (tuỳ dùng) ======
+    public List<Order> findPlacedOrders(int customerId) throws SQLException {
+        return findOrdersByStatuses(customerId, "PENDING", "CONFIRMED");
+    }
+
+    public List<Order> findShippingOrders(int customerId) throws SQLException {
+        return findOrdersByStatuses(customerId, "SHIPPING");
+    }
+
+    public List<Order> findDeliveredOrders(int customerId) throws SQLException {
+        return findOrdersByStatuses(customerId, "DELIVERED");
+    }
+
+    /**
+     * Lấy chi tiết sản phẩm của 1 đơn (phục vụ accordion ở trang /orders)
+     */
+    public List<OrderDetail> findOrderDetails(int orderId) throws SQLException {
+        String sql
+                = "SELECT p.product_name, d.quantity, "
+                + "       CAST(d.unit_price AS DECIMAL(12,2)) AS unit_price, "
+                + "       CAST(d.total_price AS DECIMAL(12,2)) AS total_price, "
+                + "       p.image "
+                + "FROM [OrderDetail] d "
+                + "JOIN Product p ON p.product_id = d.product_id "
+                + "WHERE d.order_id = ? "
+                + "ORDER BY d.product_id";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            List<OrderDetail> list = new ArrayList<>();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetail it = new OrderDetail();
+                    it.setProduct_name(rs.getString("product_name"));
+                    it.setQuantity(rs.getInt("quantity"));
+                    it.setUnit_price(rs.getBigDecimal("unit_price"));
+                    it.setTotal_price(rs.getBigDecimal("total_price"));
+                    it.setImage(rs.getString("image"));
+                    list.add(it);
+                }
+            }
+            return list;
+        }
+    }
 }
