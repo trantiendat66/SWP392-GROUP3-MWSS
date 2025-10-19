@@ -270,8 +270,8 @@
                                                     <td>
                                                         <div class="right-actions" role="group" aria-label="Actions">
 
-                                                            <a href="productdetail?id=${p.productId}" class="icon view" title="View Detail" aria-label="Xem chi tiết sản phẩm">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#111" stroke-width="1.6"/></svg>
+                                                            <a href="viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">
+                                                                👁
                                                             </a>
 
                                                             <%-- 
