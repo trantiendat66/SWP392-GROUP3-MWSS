@@ -228,7 +228,9 @@
 
                 <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
                     <section class="main" aria-label="Product management">
-                        <h4 id="title">Product List</h4>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-md-8">
+                                <h3>Product List</h3>
                                 <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" class="d-flex">
                                     <input type="text" 
                                            name="keyword" 
