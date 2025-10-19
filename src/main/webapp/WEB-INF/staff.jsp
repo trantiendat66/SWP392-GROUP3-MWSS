@@ -168,6 +168,11 @@
                 color:#111;
                 border:1px solid #111
             }
+            .icon.view{
+                background:#fff;
+                color:#111;
+                border:1px solid #111
+            }
             .icon.edit{
                 background:#fff;
                 color:#111;
@@ -224,6 +229,22 @@
                 <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
                     <section class="main" aria-label="Product management">
                         <h4 id="title">Product List</h4>
+                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" class="d-flex">
+                                    <input type="text" 
+                                           name="keyword" 
+                                           class="form-control me-2" 
+                                           placeholder="Search by product name..." 
+                                           value="${param.keyword != null ? param.keyword : ''}"
+                                           aria-label="Search">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                            </table>
+                        </div>
                         <div class="listProducts" role="region" aria-labelledby="products-title">
                             <table aria-describedby="products-desc">
                                 <thead>
