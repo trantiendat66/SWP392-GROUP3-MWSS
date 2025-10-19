@@ -154,9 +154,20 @@
                     <% }%>
 
                 <div class="actions">
+                    <% if ("staff".equals(type)) {%>
+                    <a href="<%= ctx%>/edit_staff_profile" class="btn btn-edit">Edit Profile</a>
+                    <% } else {%>
                     <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
+                    <% } %>
+                    
+<!--                    <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>-->
+                    
                     <a href="<%= ctx%>/change_password" class="btn btn-password">Change Password</a>
+                    <% if ("staff".equals(type)) {%>
+                    <a href="<%= ctx%>/staffcontrol" class="btn btn-back">Back</a>
+                    <% } else {%>
                     <a href="<%= ctx%>/home" class="btn btn-back">Back</a>
+                    <% } %>
                 </div>
             </div>
         </div>

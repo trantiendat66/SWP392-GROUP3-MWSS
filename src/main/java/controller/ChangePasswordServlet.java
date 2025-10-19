@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import dao.StaffDAO;
 import hashpw.MD5PasswordHasher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
+import model.Staff;
 
 /**
  *
@@ -78,29 +80,56 @@ public class ChangePasswordServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         Customer c = (Customer) session.getAttribute("customer");
         CustomerDAO dao = new CustomerDAO();
+        StaffDAO sdao = new StaffDAO();
+        Staff s = (Staff) session.getAttribute("staff");
 
         String oldPass = request.getParameter("oldPassword");
         String newPass = request.getParameter("newPassword");
         String confirmPass = request.getParameter("confirmPassword");
 
-        // Mã hóa MD5 pass cũ để so sánh
-        String oldPassMD5 = MD5PasswordHasher.hashPassword(oldPass);
+        // Kiểm tra Customer
+        if (c != null) {
+            // Mã hóa MD5 pass cũ để so sánh
+            String oldPassMD5 = MD5PasswordHasher.hashPassword(oldPass);
+            if (!c.getPassword().equals(oldPassMD5)) {
+                request.setAttribute("error", "Old password is incorrect");
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
 
-        if (!c.getPassword().equals(oldPassMD5)) {
-            request.setAttribute("error", "Old password is incorrect");
-            request.getRequestDispatcher("change_password.jsp").forward(request, response);
+            if (!newPass.equals(confirmPass)) {
+                request.setAttribute("error", "New password and confirm password do not match");
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
+            // Mã hóa mật khẩu mới
+            String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
+            dao.updatePasswordById(c.getCustomer_id(), newPassMD5);
+            response.sendRedirect("profile");
             return;
         }
 
-        if (!newPass.equals(confirmPass)) {
-            request.setAttribute("error", "New password and confirm password do not match");
-            request.getRequestDispatcher("change_password.jsp").forward(request, response);
+        // Kiểm tra Staff
+        if (s != null) {
+            // Mã hóa MD5 pass cũ để so sánh
+            String oldPassMD5 = MD5PasswordHasher.hashPassword(oldPass);
+            if (!s.getPassword().equals(oldPassMD5)) {
+                request.setAttribute("error", "Old password is incorrect");
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
+
+            if (!newPass.equals(confirmPass)) {
+                request.setAttribute("error", "New password and confirm password do not match");
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
+            // Mã hóa mật khẩu mới
+            String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
+            sdao.updatePasswordById(s.getAccountId(), newPassMD5);
+            response.sendRedirect("profile");
             return;
         }
-
-        // Mã hóa mật khẩu mới
-        String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
-        dao.updatePasswordById(c.getCustomer_id(), newPassMD5);
 
         response.sendRedirect("profile");
     }
