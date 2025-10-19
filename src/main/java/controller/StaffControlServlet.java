@@ -96,20 +96,19 @@ private String generateSearchStringFromSubstrings(String input, int size) {
 
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String trimmedKeyword = keyword.trim();
+                request.setAttribute("keyword", trimmedKeyword);
 
-                String searchStringForDAO = generateSearchStringFromSubstrings(trimmedKeyword, 2);
-
-                if (!searchStringForDAO.isEmpty()) {
-
-                    listProducts = productDAO.searchProducts(searchStringForDAO);
+                // Đảm bảo từ khóa hợp lệ (ít nhất 2 ký tự sau khi bỏ khoảng trắng)
+                if (trimmedKeyword.length() >= 2) {
+                    // KHÔNG dùng generateSearchStringFromSubstrings. 
+                    // Gửi từ khóa gốc vào DAO để nó tìm kiếm LIKE '%keyword%'
+                    listProducts = productDAO.searchProducts(trimmedKeyword);
                 } else {
-                    // Từ khóa quá ngắn (dưới 2 ký tự sau khi bỏ khoảng trắng)
+                    // Từ khóa quá ngắn (ví dụ: "a"), trả về danh sách rỗng
                     listProducts = new ArrayList<>();
                 }
-
-                request.setAttribute("keyword", trimmedKeyword);
             } else {
-
+                // Không có từ khóa, tải tất cả sản phẩm
                 listProducts = productDAO.getAllProducts();
                 request.setAttribute("keyword", "");
             }
