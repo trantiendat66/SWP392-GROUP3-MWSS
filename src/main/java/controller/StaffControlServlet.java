@@ -26,7 +26,20 @@ import model.OrderDetail;
  */
 @WebServlet(name = "StaffControlServlet", urlPatterns = {"/staffcontrol"})
 public class StaffControlServlet extends HttpServlet {
-
+private String generateSearchStringFromSubstrings(String input, int size) {
+        StringBuilder sb = new StringBuilder();
+        String cleanInput = input.replaceAll("\\s+", "");
+        if (cleanInput.length() < size) {
+            return "";
+        }
+        for (int i = 0; i <= cleanInput.length() - size; i++) {
+            if (i > 0) {
+                sb.append(" ");
+            }
+            sb.append(cleanInput.substring(i, i + size));
+        }
+        return sb.toString();
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,6 +59,8 @@ public class StaffControlServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");                
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("staff") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -60,7 +75,7 @@ public class StaffControlServlet extends HttpServlet {
         request.setAttribute("staff", staff);
 
         // 🛑 BỔ SUNG LOGIC LOAD DANH SÁCH SẢN PHẨM 🛑
-        try {
+        /*try {
             ProductDAO productDAO = new ProductDAO();
             // Lấy danh sách sản phẩm (Product List)
             List<Product> listProducts = productDAO.getAllProducts();
@@ -69,6 +84,37 @@ public class StaffControlServlet extends HttpServlet {
             request.setAttribute("listProducts", listProducts);
         } catch (Exception e) {
             // Log lỗi hoặc đặt thông báo lỗi nếu cần
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error loading product data.");
+        }*/
+        try {
+            ProductDAO productDAO = new ProductDAO();
+            List<Product> listProducts;
+
+            String keyword = request.getParameter("keyword");
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String trimmedKeyword = keyword.trim();
+
+                String searchStringForDAO = generateSearchStringFromSubstrings(trimmedKeyword, 2);
+
+                if (!searchStringForDAO.isEmpty()) {
+
+                    listProducts = productDAO.searchProducts(searchStringForDAO);
+                } else {
+                    // Từ khóa quá ngắn (dưới 2 ký tự sau khi bỏ khoảng trắng)
+                    listProducts = new ArrayList<>();
+                }
+
+                request.setAttribute("keyword", trimmedKeyword);
+            } else {
+
+                listProducts = productDAO.getAllProducts();
+                request.setAttribute("keyword", "");
+            }
+
+            request.setAttribute("listProducts", listProducts);
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error loading product data.");
         }
