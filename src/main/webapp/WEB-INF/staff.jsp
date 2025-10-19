@@ -168,7 +168,7 @@
                 color:#111;
                 border:1px solid #111
             }
-            .icon.view{
+            .icon.view1{
                 background:#fff;
                 color:#111;
                 border:1px solid #111
