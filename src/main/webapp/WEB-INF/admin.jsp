@@ -21,18 +21,18 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assert/css/home.css">
     <style>
-        /* CSS cho bảng sản phẩm */
+        
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
         .actions { display: flex; gap: 8px; }
         
-        /* CSS cho các nút action */
+        
         .btn { padding: 5px 10px; margin: 2px; text-decoration: none; border: 1px solid #ccc; background: #f5f5f5; color: #333; }
         .btn:hover { background: #e0e0e0; }
-        .btn-add { background: #4CAF50; color: white; }      /* Nút Add Product - màu xanh lá */
-        .btn-edit { background: #2196F3; color: white; }     /* Nút Edit - màu xanh dương */
-        .btn-delete { background: #f44336; color: white; }   /* Nút Delete - màu đỏ */
-        .btn-view { background: #FF9800; color: white; }     /* Nút View Detail - màu cam */
+        .btn-add { background: #4CAF50; color: white; }     
+        .btn-edit { background: #2196F3; color: white; }     
+        .btn-delete { background: #f44336; color: white; }   
+        .btn-view { background: #FF9800; color: white; }     
     </style>
     
     
@@ -41,7 +41,7 @@
 <body>
 <h2>Admin Dashboard</h2>
 
-<!-- Nút Add Product - Giao diện sẵn sàng để implement -->
+
 <div style="margin-bottom: 20px;">
     <a href="#" class="btn btn-add">Add Product</a>
 </div>
@@ -71,11 +71,11 @@
                 <td><%= p.getPrice() %></td>
                 <td><%= p.getQuantityProduct() %></td>
                 <td class="actions">
-                    <!-- Nút View Detail - Hoạt động, link đến trang chi tiết sản phẩm -->
+                    
                     <a href="<%=request.getContextPath()%>/viewproductdetail?id=<%=p.getProductId()%>" class="btn btn-view">View Detail</a>
-                    <!-- Nút Edit - Giao diện sẵn sàng để implement -->
+                    
                     <a href="#" class="btn btn-edit">Edit</a>
-                    <!-- Nút Delete - Giao diện sẵn sàng để implement -->
+                    
                     <a href="#" class="btn btn-delete">Delete</a>
                 </td>
             </tr>
