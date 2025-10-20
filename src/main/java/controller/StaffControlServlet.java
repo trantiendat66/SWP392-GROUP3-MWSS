@@ -27,7 +27,8 @@ import model.OrderDetail;
  */
 @WebServlet(name = "StaffControlServlet", urlPatterns = {"/staffcontrol"})
 public class StaffControlServlet extends HttpServlet {
-private String generateSearchStringFromSubstrings(String input, int size) {
+
+    private String generateSearchStringFromSubstrings(String input, int size) {
         StringBuilder sb = new StringBuilder();
         String cleanInput = input.replaceAll("\\s+", "");
         if (cleanInput.length() < size) {
@@ -41,6 +42,7 @@ private String generateSearchStringFromSubstrings(String input, int size) {
         }
         return sb.toString();
     }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -61,7 +63,7 @@ private String generateSearchStringFromSubstrings(String input, int size) {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");                
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("staff") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -124,22 +126,6 @@ private String generateSearchStringFromSubstrings(String input, int size) {
             OrderDAO orderDao = new OrderDAO();
             List<Order> listOrders = orderDao.getOrderByIdStaff(staff.getAccountId());
             request.setAttribute("listOrders", listOrders);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-//        Khu này là getOrder để hiện một order cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
-        try {
-            OrderDAO orderDetailDao = new OrderDAO();
-            Order orderDetail = orderDetailDao.getOrderByOrderId(0);
-            request.setAttribute("orderDetail", orderDetail);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-//        Khu này là getProductInOrder để hiện một product list trong order cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
-        try {
-            OrderDAO listPIO = new OrderDAO();
-            List<OrderDetail> orderP = listPIO.getOrderDetailByOrderId(0);
-            request.setAttribute("orderP", orderP);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

@@ -4,6 +4,9 @@
     Author     : Nguyen Thien Dat - CE190879 - 06/05/2005
 --%>
 <%-- File: /WEB-INF/staff.jsp --%>
+<%@page import="java.util.List"%>
+<%@page import="model.Order"%>
+<%@page import="model.OrderDetail"%>
 <%@page import="model.Staff"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
@@ -178,23 +181,25 @@
                 color:#111;
                 border:1px solid #111
             }
+            .container-flex {
+                display: flex;
+                min-height: 100%;
+            }
             #popupModal {
-                max-width:900px;
-                margin:0 auto;
-                background:#fff;
-                border-radius:8px;
-                box-shadow:0 2px 6px rgba(0,0,0,0.1);
-                display: inline-flex;
-                overflow:hidden;
+                max-width: 880px;
+                width: 100%;
+                border-radius: 8px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                overflow: hidden;
             }
             .left {
-                width: 50%;
-                padding:30px;
+                flex: 5;
+                padding:50px;
                 background:linear-gradient(180deg,#ffffff,#f7f9fb);
             }
             .right {
-                flex:1;
-                padding:30px 40px;
+                flex: 1;
+                margin-left: 20px;
             }
 
             @media (max-width:980px){
@@ -219,7 +224,7 @@
                     <div class="status small"><%= (t != null ? t.getRole() : "None")%></div>
                 </div>
                 <button class="nav-link active" id="pill-product" data-bs-toggle="pill" data-bs-target="#v-pills-product" type="button" role="tab" aria-controls="v-pills-products" aria-selected="true">Product Management</button>
-                <button class="nav-link" id="pill-order" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Order Management</button>
+                <button class="nav-link" id="pill-order" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="false">Order Management</button>
                 <button class="nav-link" id="pill-rate-feedback" data-bs-toggle="pill" data-bs-target="#v-pills-rate-feedback" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Rate And Feedback Management</button>
                 <button class="nav-link" id="pill-profile" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Profile Management</button>
             </div>
@@ -326,8 +331,10 @@
                                                     <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
                                                     <td>${o.total_amount}</td>
                                                     <td><div class="right-actions">
-                                                            <button class="icon view" title="View" aria-label="Xem">👁</button>
-                                                            <button class="icon edit" title="Edit" aria-label="Sửa">✏️</button>
+                                                            <form action="orderdetail">
+                                                                <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
+                                                                <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
+                                                            </form>
                                                         </div></td>
                                                 </tr>
                                             </c:forEach>
@@ -342,26 +349,51 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Popup filter -->
+                        <!-- Popup View -->
                         <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content bg-light text-black" id="popupModal">
+                            <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                                <div class="modal-content bg-light text-black" >
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="orderDetailLabel">Order Detail</h5>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
-
                                     <div class="modal-body">
-                                        <div class="left"></div>
-                                        <div class="right"></div>
-                                    </div>
 
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Popup Edit -->
+                        <form action="orderdetail" method="post">
+                            <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
+                                <div class="modal-dialog editPopup modal-dialog-centered">
+                                    <div class="modal-content bg-light text-black" id="popupEdit">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <input type="hidden" id="orderIdInput" name="orderId" />
+                                            <select class="form-select" id="order-status" name="order-status">
+                                                <option value="PENDING">PENDING</option>
+                                                <option value="COMPLETED"> COMPLETED</option>
+                                                <option value="CANCELLED">CANCELLED</option>
+                                            </select> 
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </section>
 
                 </div>
@@ -382,19 +414,50 @@
             // Example: action button handlers (just demo)
             document.querySelectorAll('.icon.view').forEach(viewBtn => {
                 viewBtn.addEventListener('click', (e) => {
-                    const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
-                    modal.show();
+                    const orderId = viewBtn.value;
+                    console.log("Fetching order detail for ID:", orderId);
+
+                    fetch('orderdetail?orderIdV=' + orderId, {method: 'GET'})
+                            .then(response => response.text())
+                            .then(html => {
+                                document.querySelector('#orderDetailModal .modal-body').innerHTML = html;
+                                const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+                                modal.show();
+                            })
+                            .catch(err => {
+                                console.error('Error loading order detail:', err);
+                                alert('Không thể tải chi tiết đơn hàng.');
+                            });
                 });
             });
 
-            document.querySelectorAll('.icon.edit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tr = e.target.closest('tr');
-                    if (!tr)
-                        return;
-                    const id = tr.querySelector('.order-id')?.textContent || 'Unknown';
-                    alert('Chỉnh sửa ' + id);
+            document.querySelectorAll('.icon.edit').forEach(editBtw => {
+                editBtw.addEventListener('click', (e) => {
+                    const orderId = e.currentTarget.value;
+                    const status = e.currentTarget.getAttribute('data-status');
+                    document.getElementById('orderIdInput').value = orderId;
+                    const select = document.getElementById('order-status');
+                    select.value = status;
+                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+                    modal.show();
                 });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : ""%>";
+                console.log("ActiveTab:", activeTab);
+
+                if (activeTab === "order") {
+                    const trigger = document.querySelector('[data-bs-target="#v-pills-order"]');
+                    if (trigger) {
+                        const tab = new bootstrap.Tab(trigger);
+                        tab.show();
+                        console.log("Tab Order shown");
+                    } else {
+                        console.log("Không tìm thấy trigger tab order");
+                    }
+                }
             });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
