@@ -93,9 +93,15 @@
             }
             .actions {
                 margin-top:20px;
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 10px;
+                justify-content: center;
             }
             .btn {
                 display:inline-block;
+                align-items: center;
+                justify-content: center;
                 padding:10px 16px;
                 border-radius:6px;
                 text-decoration:none;
@@ -105,15 +111,19 @@
                 background:#1976d2;
                 color:#fff;
             }
+            .btn-order{
+                background:#E8C920;
+                color:#fff;
+            }
             .btn-back {
                 background:#eee;
                 color:#333;
-                margin-left:8px;
+                
             }
             .btn-password {
                 background:#43a047;
                 color:white;
-                margin-left:8px;
+                
             }
             .small {
                 font-size:13px;
@@ -158,11 +168,9 @@
                     <a href="<%= ctx%>/edit_staff_profile" class="btn btn-edit">Edit Profile</a>
                     <% } else {%>
                     <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
-                    <% } %>
-                    
-<!--                    <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>-->
-                    
+                    <% }%>
                     <a href="<%= ctx%>/change_password" class="btn btn-password">Change Password</a>
+                    <a href="<%= ctx%>/orders?tab=placed" class="btn btn-order">Order History</a>
                     <% if ("staff".equals(type)) {%>
                     <a href="<%= ctx%>/staffcontrol" class="btn btn-back">Back</a>
                     <% } else {%>
