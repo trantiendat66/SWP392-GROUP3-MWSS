@@ -77,8 +77,10 @@ public class LoginServlet extends HttpServlet {
                 // Chuyển hướng Staff đến trang quản trị chung
                 Staff staff = (Staff) session.getAttribute("staff");
                 if ("Admin".equalsIgnoreCase(staff.getRole())) {
+                    // Admin được chuyển đến trang admin dashboard
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 } else {
+                    // Staff thông thường được chuyển đến trang staff control
                     response.sendRedirect(request.getContextPath() + "/staff/orders");
                 }
                 return;
@@ -137,10 +139,10 @@ public class LoginServlet extends HttpServlet {
 
                     // PHÂN QUYỀN CHUYỂN HƯỚNG DỰA TRÊN ROLE
                     if ("Admin".equalsIgnoreCase(staff.getRole())) {
-                        // Admin được chuyển đến khu vực quản trị viên cao nhất
+                        // Admin được chuyển đến trang admin dashboard (có đầy đủ quyền quản lý sản phẩm)
                         redirectPath = request.getContextPath() + "/admin/dashboard";
                     } else {
-                        // Staff thông thường được chuyển đến khu vực làm việc giới hạn
+                        // Staff thông thường được chuyển đến trang staff control (quyền hạn chế)
                         redirectPath = request.getContextPath() + "/staffcontrol";
                     }
                 }
