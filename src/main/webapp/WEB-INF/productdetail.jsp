@@ -5,9 +5,10 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <c:choose>
     <c:when test="${empty product}">
-        <div class="container"><div class="alert alert-warning">Sản phẩm không tồn tại.</div></div>
+        <div class="container"><div class="alert alert-warning">Product not found.</div></div>
     </c:when>
     <c:otherwise>
         <div class="container product-details py-4">
@@ -19,8 +20,8 @@
 
                 <div class="col-md-6">
                     <h2>${product.productName}</h2>
-                    <p class="text-muted">Thương hiệu: ${product.brand} — Xuất xứ: ${product.origin}</p>
-                    <h3 class="text-danger">${product.price} VNĐ</h3>
+                    <p class="text-muted">Brand: ${product.brand} — Origin: ${product.origin}</p>
+                    <h3 class="text-danger">${product.price} VND</h3>
 
                     <div class="d-flex align-items-center mb-3">
                         <input type="number" id="quantity-input" value="1" min="1"
@@ -34,9 +35,9 @@
                                 onclick="buyNow(${product.productId})">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
-
                     </div>
-                    <!-- FORM ẨN: Buy Now -> /order/buy-now (không thêm vào cart) -->
+
+                    <!-- HIDDEN FORM: Buy Now -> /order/buy-now (not added to cart) -->
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
                         <input type="hidden" name="quantity" id="buyNowQty" value="1">
@@ -44,32 +45,31 @@
 
                     <hr>
 
-                    <h5>Mô tả</h5>
+                    <h5>Description</h5>
                     <p><c:out value="${product.description}" /></p>
 
-                    <h5>Thông số kỹ thuật</h5>
+                    <h5>Specifications</h5>
                     <ul>
-                        <li><strong>Bảo hành:</strong> ${product.warranty}</li>
-                        <li><strong>Máy:</strong> ${product.machine}</li>
-                        <li><strong>Kính:</strong> ${product.glass}</li>
-                        <li><strong>Đường kính mặt:</strong> ${product.dialDiameter}</li>
-                        <li><strong>Vành bezel:</strong> ${product.bezel}</li>
-                        <li><strong>Dây:</strong> ${product.strap}</li>
-                        <li><strong>Màu mặt:</strong> ${product.dialColor}</li>
-                        <li><strong>Chức năng:</strong> ${product.function}</li>
-                        <li><strong>Số lượng còn:</strong> ${product.quantityProduct}</li>
-                        <li><strong>Giới tính:</strong> <c:out value="${product.gender ? 'Nam' : 'Nữ'}" /></li>
+                        <li><strong>Warranty:</strong> ${product.warranty}</li>
+                        <li><strong>Movement:</strong> ${product.machine}</li>
+                        <li><strong>Glass:</strong> ${product.glass}</li>
+                        <li><strong>Dial diameter:</strong> ${product.dialDiameter}</li>
+                        <li><strong>Bezel:</strong> ${product.bezel}</li>
+                        <li><strong>Strap:</strong> ${product.strap}</li>
+                        <li><strong>Dial color:</strong> ${product.dialColor}</li>
+                        <li><strong>Functions:</strong> ${product.function}</li>
+                        <li><strong>Stock quantity:</strong> ${product.quantityProduct}</li>
+                        <li><strong>Gender:</strong> <c:out value="${product.gender ? 'Male' : 'Female'}" /></li>
                     </ul>
                 </div>
             </div>
-
         </div>
 
         <!-- Product Reviews -->
         <div class="container my-5">
-            <h3>Đánh giá sản phẩm</h3>
+            <h3>Product Reviews</h3>
             <c:if test="${empty productReviews}">
-                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                <p>No reviews yet for this product.</p>
             </c:if>
             <c:forEach var="review" items="${productReviews}">
                 <div class="card mb-3">
@@ -86,29 +86,28 @@
 </c:choose>
 
 <script>
-    // Giữ nguyên toàn bộ phần script addToCart / showMessage / updateCartCount
     function addToCart(productId) {
         const quantity = document.getElementById('quantity-input').value;
         if (quantity < 1) {
-            alert('Số lượng phải lớn hơn 0');
+            alert('Quantity must be greater than 0');
             return;
         }
         fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
             method: 'GET'
         })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showMessage(data.message, 'success');
-                        updateCartCount();
-                    } else {
-                        showMessage(data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
-                });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage(data.message, 'success');
+                updateCartCount();
+            } else {
+                showMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('An error occurred while adding the product to the cart', 'error');
+        });
     }
 
     function showMessage(message, type) {
@@ -116,7 +115,7 @@
         const alertHtml = `
             <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
                  style="top: 20px; right: 20px; z-index: 9999;">
-    ${message}
+                ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         `;
@@ -127,19 +126,15 @@
                 alert.remove();
         }, 3000);
     }
-</script>
 
-<script>
-  function buyNow(productId) {
-    // lấy số lượng hiện trên trang
-    var qtyEl = document.getElementById('quantity-input');
-    var qty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
-    if (!qty || qty < 1) qty = 1;
+    function buyNow(productId) {
+        var qtyEl = document.getElementById('quantity-input');
+        var qty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
+        if (!qty || qty < 1) qty = 1;
 
-    // set vào input hidden và submit form ẩn tới /order/buy-now
-    document.getElementById('buyNowQty').value = qty;
-    document.getElementById('buyNowForm').submit();
-  }
+        document.getElementById('buyNowQty').value = qty;
+        document.getElementById('buyNowForm').submit();
+    }
 </script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
