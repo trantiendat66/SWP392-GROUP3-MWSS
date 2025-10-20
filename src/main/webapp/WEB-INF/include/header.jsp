@@ -9,6 +9,15 @@
 <!doctype html>
 <html lang="vi">
     <head>
+        <style>
+            .nav-link1{
+                box-shadow:0 2px 6px rgba(0,0,0,0.1);
+                color: #ffffff;
+                width: 90%;
+                margin: 5px auto;
+                text-decoration:none !important;
+            }
+        </style>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><c:out value="${pageTitle != null ? pageTitle : 'WatchShop'}"/></title>
@@ -52,7 +61,7 @@
                         <c:choose>
                             <c:when test="${not empty sessionScope.customer or not empty sessionScope.staff}">
                                 <li class="nav-item dropdown me-2">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button"
+                                    <a class="nav-link1 dropdown-toggle" href="#" id="userMenu" role="button"
                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-person-circle"></i>
                                     </a>
