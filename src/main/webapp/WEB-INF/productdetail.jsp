@@ -127,17 +127,6 @@
                 alert.remove();
         }, 3000);
     }
-
-    function updateCartCount() {
-        fetch('${pageContext.request.contextPath}/cart?action=count', {method: 'GET'})
-                .then(response => response.json())
-                .then(data => {
-                    const cartBadge = document.querySelector('.cart-badge');
-                    if (cartBadge)
-                        cartBadge.textContent = data.count;
-                })
-                .catch(error => console.error('Error updating cart count:', error));
-    }
 </script>
 
 <script>
