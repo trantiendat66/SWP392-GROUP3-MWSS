@@ -20,14 +20,7 @@ import model.Staff;
 @WebServlet(name = "AdminDashboardServlet", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardServlet extends HttpServlet {
 
-    /**
-     * Xử lý GET request - Hiển thị trang admin dashboard
-     * 
-     * @param request HTTP request
-     * @param response HTTP response
-     * @throws ServletException nếu có lỗi servlet
-     * @throws IOException nếu có lỗi I/O
-     */
+   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
