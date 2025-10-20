@@ -115,10 +115,13 @@ public class CartServlet extends HttpServlet {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 if (success) {
-                    // Trả về JSON response cho AJAX 
-                    out.print("{\"success\": true, \"message\": \"Product added to cart successfully\"}");
+                    // Lấy số lượng sản phẩm mới trong giỏ hàng
+                    int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
+                    
+                    // Trả về JSON response cho AJAX với thông báo tiếng Anh
+                    out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\", \"cartCount\": " + newCartCount + "}");
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product\"}");
+                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart\"}");
                 }
                 out.flush();
             } else {
