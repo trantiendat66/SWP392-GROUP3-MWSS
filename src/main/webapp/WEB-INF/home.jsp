@@ -303,22 +303,6 @@
                 alert.remove();
         }, 3000);
     }
-    function updateCartCount() {
-        fetch('${pageContext.request.contextPath}/cart?action=count', {
-            method: 'GET'
-        })
-                .then(response => response.json())
-                .then(data => {
-                    const cartBadge = document.getElementById('cart-count');
-                    if (cartBadge) {
-                        cartBadge.textContent = data.count;
-                        cartBadge.style.display = data.count > 0 ? 'inline' : 'none';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error updating cart count:', error);
-                });
-    }
 </script>
 <script>
     // guard for filterButton existence (avoid JS error)
