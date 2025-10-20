@@ -224,4 +224,76 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
+    public void addProduct(Product p) throws SQLException {
+        String sql = "INSERT INTO Product (category_id, account_id, image, product_name, price, brand, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quantity_product) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, p.getCategoryId());
+            ps.setInt(2, p.getAccountId());
+            ps.setString(3, p.getImage());
+            ps.setString(4, p.getProductName());
+            ps.setInt(5, p.getPrice());
+            ps.setString(6, p.getBrand());
+            ps.setString(7, p.getOrigin());
+            ps.setBoolean(8, p.isGender());
+            ps.setString(9, p.getDescription());
+            ps.setString(10, p.getWarranty());
+            ps.setString(11, p.getMachine());
+            ps.setString(12, p.getGlass());
+            ps.setString(13, p.getDialDiameter());
+            ps.setString(14, p.getBezel());
+            ps.setString(15, p.getStrap());
+            ps.setString(16, p.getDialColor());
+            ps.setString(17, p.getFunction());
+            ps.setInt(18, p.getQuantityProduct());
+
+            int rowAffected = ps.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Thêm sản phẩm thất bại, không có hàng nào được thêm.");
+            }
+        }
+    }
+
+    public void updateProduct(Product p) throws SQLException {
+        String sql = "UPDATE Product SET category_id = ?, account_id = ?, image = ?, product_name = ?, price = ?, brand = ?, origin = ?, gender = ?, "
+                + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ?, quantity_product = ? "
+                + "WHERE product_id = ?";
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, p.getCategoryId());
+            ps.setInt(2, p.getAccountId());
+            ps.setString(3, p.getImage());
+            ps.setString(4, p.getProductName());
+            ps.setInt(5, p.getPrice());
+            ps.setString(6, p.getBrand());
+            ps.setString(7, p.getOrigin());
+            ps.setBoolean(8, p.isGender());
+            ps.setString(9, p.getDescription());
+            ps.setString(10, p.getWarranty());
+            ps.setString(11, p.getMachine());
+            ps.setString(12, p.getGlass());
+            ps.setString(13, p.getDialDiameter());
+            ps.setString(14, p.getBezel());
+            ps.setString(15, p.getStrap());
+            ps.setString(16, p.getDialColor());
+            ps.setString(17, p.getFunction());
+            ps.setInt(18, p.getQuantityProduct());
+            ps.setInt(19, p.getProductId());
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Cập nhật thất bại, không tìm thấy product_id = " + p.getProductId());
+            }
+        }
+    }
+
+    public void deleteProduct(int productId) throws SQLException {
+        String sql = "DELETE FROM Product WHERE product_id = ?";
+        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Xóa thất bại, không tìm thấy product_id = " + productId);
+            }
+        }
+    }
 }

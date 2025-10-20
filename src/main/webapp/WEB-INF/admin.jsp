@@ -3,89 +3,130 @@
     Created on : Jan 20, 2025
     Author     : Dang Vi Danh - CE19687
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.Product" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%
-    // Kiểm tra session - Admin phải đăng nhập
-    Object staffObj = session.getAttribute("staff");
-    if (staffObj == null) {
+    // session check (nếu servlet đã redirect rồi thì không cần, nhưng giữ an toàn)
+    if (session.getAttribute("staff") == null) {
         response.sendRedirect(request.getContextPath() + "/login");
         return;
     }
 %>
+
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assert/css/home.css">
-    <style>
-        
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
-        .actions { display: flex; gap: 8px; }
-        
-        
-        .btn { padding: 5px 10px; margin: 2px; text-decoration: none; border: 1px solid #ccc; background: #f5f5f5; color: #333; }
-        .btn:hover { background: #e0e0e0; }
-        .btn-add { background: #4CAF50; color: white; }     
-        .btn-edit { background: #2196F3; color: white; }     
-        .btn-delete { background: #f44336; color: white; }   
-        .btn-view { background: #FF9800; color: white; }     
-    </style>
-    
-    
-    
-</head>
-<body>
-<h2>Admin Dashboard</h2>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Admin Dashboard</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assert/css/home.css" />
+        <style>
+            /* (giữ style ngắn gọn) */
+            body{
+                font-family:Arial, sans-serif;
+                background:#f4f6f8;
+                margin:0;
+                padding:20px
+            }
+            .add-btn{
+                background:#4CAF50;
+                color:#fff;
+                padding:8px 12px;
+                border-radius:6px;
+                text-decoration:none
+            }
+            table{
+                width:100%;
+                border-collapse:collapse;
+                margin-top:12px
+            }
+            th,td{
+                padding:10px;
+                border-bottom:1px solid #eee;
+                text-align:left
+            }
+            .btn{
+                padding:6px 8px;
+                border-radius:4px;
+                color:#fff;
+                text-decoration:none
+            }
+            .btn-edit{
+                background:#2196F3
+            }
+            .btn-delete{
+                background:#f44336
+            }
+            .btn-view{
+                background:#FF9800
+            }
+        </style>
+    </head>
+    <body>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h2>Admin Dashboard</h2>
+            <a href="${pageContext.request.contextPath}/addproduct" class="add-btn">Add New Product</a>
+        </div>
 
+        <!-- messages -->
+        <c:if test="${not empty sessionScope.successMessage}">
+            <div style="background:#e6ffed;padding:8px;border-radius:6px;margin-bottom:8px;">
+                <c:out value="${sessionScope.successMessage}"/>
+            </div>
+            <c:remove var="successMessage" scope="session"/>
+        </c:if>
+        <c:if test="${not empty sessionScope.errorMessage}">
+            <div style="background:#ffe6e6;padding:8px;border-radius:6px;margin-bottom:8px;">
+                <c:out value="${sessionScope.errorMessage}"/>
+            </div>
+            <c:remove var="errorMessage" scope="session"/>
+        </c:if>
 
-<div style="margin-bottom: 20px;">
-    <a href="#" class="btn btn-add">Add Product</a>
-</div>
-
-<!-- Lấy danh sách sản phẩm từ AdminDashboardServlet -->
-<% List<Product> products = (List<Product>) request.getAttribute("products"); %>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Brand</th>
-        <th>Price</th>
-        <th>Qty</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% if (products != null) {
-        for (Product p : products) { %>
-            <tr>
-                <td><%= p.getProductId() %></td>
-                <td><img src="<%=request.getContextPath()%>/assert/image/<%= p.getImage() %>" alt="img" width="60"></td>
-                <td><%= p.getProductName() %></td>
-                <td><%= p.getBrand() %></td>
-                <td><%= p.getPrice() %></td>
-                <td><%= p.getQuantityProduct() %></td>
-                <td class="actions">
-                    
-                    <a href="<%=request.getContextPath()%>/viewproductdetail?id=<%=p.getProductId()%>" class="btn btn-view">View Detail</a>
-                    
-                    <a href="#" class="btn btn-edit">Edit</a>
-                    
-                    <a href="#" class="btn btn-delete">Delete</a>
-                </td>
-            </tr>
-    <%  }
-    } %>
-    </tbody>
-    
-</table>
-
-</body>
+        <!-- product table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Image</th><th>Name</th><th>Brand</th><th>Price</th><th>Qty</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:choose>
+                    <c:when test="${not empty products}">
+                        <c:forEach var="p" items="${products}">
+                            <tr>
+                                <td><c:out value="${p.productId}"/></td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${not empty p.image}">
+                                            <img src="${pageContext.request.contextPath}/assert/image/${p.image}" alt="img" width="60"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span style="color:#999">No image</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td><c:out value="${p.productName}"/></td>
+                                <td><c:out value="${p.brand}"/></td>
+                                <td><fmt:formatNumber value="${p.price}" type="number" maxFractionDigits="0"/> ₫</td>
+                                <td><c:out value="${p.quantityProduct}"/></td>
+                                <td>
+                                    <a class="btn btn-view" href="${pageContext.request.contextPath}/viewproductdetail?id=${p.productId}">View</a>
+                                    <a class="btn btn-edit" href="${pageContext.request.contextPath}/editproduct?id=${p.productId}">Edit</a>
+                                    <form method="post" action="${pageContext.request.contextPath}/deleteproduct" style="display:inline" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                        <input type="hidden" name="id" value="${p.productId}" />
+                                        <button type="submit" class="btn btn-delete">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <tr><td colspan="7" style="text-align:center;padding:18px 0;">No products found.</td></tr>
+                    </c:otherwise>
+                </c:choose>
+            </tbody>
+        </table>
+    </body>
 </html>
-
-
