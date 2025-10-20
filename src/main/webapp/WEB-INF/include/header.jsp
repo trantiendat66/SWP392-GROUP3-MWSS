@@ -120,10 +120,11 @@
                             const cartBadge = document.getElementById('cart-count');
                             if (cartBadge) {
                                 cartBadge.textContent = data.count;
+                                // Thay đổi màu sắc dựa trên số lượng
                                 if (data.count > 0) {
-                                    cartBadge.style.display = 'inline';
+                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
                                 } else {
-                                    cartBadge.style.display = 'none';
+                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary cart-badge';
                                 }
                             }
                         })
@@ -131,6 +132,9 @@
                             console.error('Error updating cart count:', error);
                         });
             }
+
+            // Hàm để cập nhật số lượng giỏ hàng từ các trang khác
+            window.updateCartCount = updateCartCount;
         </script>
         <div class="container mt-4">
     </body>
