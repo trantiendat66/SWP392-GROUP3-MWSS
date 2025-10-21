@@ -110,6 +110,28 @@ public class CartServlet extends HttpServlet {
             
             Product product = productDAO.getProductById(productId);
             if (product != null) {
+                // Kiểm tra số lượng sản phẩm trong kho
+                if (quantity > product.getQuantityProduct()) {
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"success\": false, \"message\": \"Số lượng sản phẩm trong kho không đủ. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                    out.flush();
+                    return;
+                }
+                
+                // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, tính tổng số lượng
+                Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
+                if (existingCart != null) {
+                    int totalQuantity = existingCart.getQuantity() + quantity;
+                    if (totalQuantity > product.getQuantityProduct()) {
+                        response.setContentType("application/json");
+                        PrintWriter out = response.getWriter();
+                        out.print("{\"success\": false, \"message\": \"Tổng số lượng vượt quá số lượng trong kho. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                        out.flush();
+                        return;
+                    }
+                }
+                
                 boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
                 
                 response.setContentType("application/json");
@@ -163,6 +185,17 @@ public class CartServlet extends HttpServlet {
                     out.print("{\"success\": false, \"message\": \"Error occurred while removing item\"}");
                 }
             } else {
+                // Kiểm tra số lượng sản phẩm trong kho trước khi cập nhật
+                Cart cartItem = cartDAO.getCartItemById(cartId);
+                if (cartItem != null) {
+                    Product product = productDAO.getProductById(cartItem.getProductId());
+                    if (product != null && newQuantity > product.getQuantityProduct()) {
+                        out.print("{\"success\": false, \"message\": \"Số lượng sản phẩm trong kho không đủ. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                        out.flush();
+                        return;
+                    }
+                }
+                
                 boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
                 if (success) {
                     out.print("{\"success\": true, \"message\": \"Quantity updated successfully\"}");
