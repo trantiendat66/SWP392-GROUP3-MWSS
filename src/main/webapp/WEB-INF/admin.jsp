@@ -1,515 +1,252 @@
-<%--
-    Document   : Admin Dashboard JSP
-    Created on : Jan 20, 2025
-    Author     : Dang Vi Danh - CE19687
+<%-- /WEB-INF/admin.jsp
+     Admin Dashboard (fixed: avatar/product image sizes + sidebar layout)
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="model.Product" %>
-<%@ page import="model.Staff" %>
 <%@ page import="model.TopProduct" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%
-    // Kiểm tra session - Admin phải đăng nhập
-    Staff staff = (Staff) session.getAttribute("staff");
-    if (staff == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
+<%@ include file="/WEB-INF/include/header.jsp" %>
+<style>
+    /* Layout */
+    .page-wrap {
+        padding: 10px; /* tăng khoảng cách 2 bên tổng thể */
+        background: #f5f7fb;
     }
-    String ctx = request.getContextPath();
-%>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Admin Dashboard - WatchShop</title>
-    <style>
-        /*
-         * Admin Dashboard CSS
-         * Created on : Jan 20, 2025
-         * Author     : Dang Vi Danh - CE19687
-         */
+    .main-container {
+        display: flex;
+        gap: 10px; /* rộng ra 1 chút */
+        align-items: flex-start;
+        max-width: 1500px; /* giới hạn chiều ngang để nội dung bự nhưng trung tâm */
+        margin: 0 auto; /* căn giữa */
+    }
+    /* Sidebar */
+    .sidebar {
+        width: 300px; /* to hơn */
+        min-width: 220px;
+        max-width: 320px;
+        background: #fff;
+        padding: 22px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+        border-radius: 8px;
+        flex-shrink: 0;
+        position: relative;
+    }
+    /* Profile card */
+    .profile-card {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+    .profile-avatar {
+        width: 72px;            /* to hơn */
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-block;
+        border: 2px solid #e9ecef;
+        background: #f0f0f0;
+    }
+    .profile-name {
+        font-size: 16px;
+        font-weight: 700;
+        margin-top: 8px;
+    }
+    .profile-role {
+        font-size: 13px;
+        color: #6c757d;
+        margin-top: 4px;
+    }
+    /* Nav */
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0 0;
+    }
+    .nav-menu li {
+        margin-bottom: 10px;
+    }
+    .nav-link {
+        display: block;
+        padding: 10px 14px; /* to hơn */
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .nav-link.active, .nav-link:hover {
+        background: #dc3545;
+        color: white;
+    }
+    /* Main content */
+    .main-content {
+        background: white;
+        flex: 1 1 auto;
+        padding: 24px;
+        border-radius: 10px;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        min-width: 0; /* allow shrink */
+    }
+    /* Top controls row */
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+    .page-title {
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .add-product-btn {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        background: #28a745;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .add-product-btn:hover {
+        transform: translateY(-1px);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    /* stats row */
+    .stats-grid {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:14px;
+        margin-bottom:18px;
+    }
+    .stat-card {
+        padding:16px;
+        border-radius:8px;
+        background:#fff;
+        box-shadow:0 1px 6px rgba(0,0,0,0.03);
+    }
+    /* Table & product images */
+    .table-container {
+        overflow-x: auto;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px; /* để table đc rộng hơn */
+    }
+    .table th, .table td {
+        padding: 14px 14px; /* tăng padding để cảm giác bự hơn */
+        border-bottom: 1px solid #eee;
+        font-size: 15px; /* to hơn */
+        vertical-align: middle;
+    }
+    .table th {
+        background: #fafafa;
+        text-align: left;
+        font-weight: 700;
+    }
+    .table td.product-price {
+    white-space: nowrap;       
+    min-width: 100px;          
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-        }
+    /* Product image: larger thumbnail */
+    .product-image {
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        display: block;
+    }
+    /* Action buttons (nằm ngang, rõ ràng hơn) */
+    .action-btn {
+        min-width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 15px;
+        margin: 0 6px;
+        vertical-align: middle;
+    }
+    .edit-btn {
+        background: #007bff;
+        color: #fff;
+    }
+    .delete-btn {
+        background: #dc3545;
+        color: #fff;
+    }
+    .table td.actions-cell {
+        white-space: nowrap;
+        text-align: center;
+        width: 160px;
+    }
 
-        /* Header */
-        .header {
-            background-color: #343a40;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            background-color: #007bff;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .brand-text {
-            display: flex;
+    /* Responsive: stack sidebar above content on small screens */
+    @media (max-width: 900px) {
+        .main-container {
             flex-direction: column;
         }
-
-        .brand-name {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .brand-name .watch {
-            color: #000;
-        }
-
-        .brand-name .shop {
-            color: #007bff;
-        }
-
-        .search-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-input {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px;
-            width: 300px;
-            font-size: 14px;
-        }
-
-        .search-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .user-icon {
-            width: 30px;
-            height: 30px;
-            background-color: #6c757d;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        /* Main Layout */
-        .main-container {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-
-        /* Sidebar */
         .sidebar {
-            width: 280px;
-            background-color: white;
-            padding: 20px;
-            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
-        }
-
-        .profile-card {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-            border: 3px solid #e9ecef;
-        }
-
-
-        .profile-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 10px;
-        }
-
-        .nav-link {
+            width: 100%;
+            max-width: none;
             display: block;
-            padding: 12px 20px;
-            text-decoration: none;
-            color: #333;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
         }
-
-        .nav-link:hover {
-            background-color: #f8f9fa;
-        }
-
-        .nav-link.active {
-            background-color: #dc3545;
-            color: white;
-        }
-
-
-        .logout-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 20px;
-        }
-
-        /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 30px;
-            background-color: white;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 12px;
         }
-
-        /* Dashboard Stats */
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .stat-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .revenue-amount {
-            font-size: 32px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 15px;
-        }
-
-        .chart-placeholder {
-            height: 60px;
-            background: linear-gradient(90deg, #007bff 0%, #28a745 50%, #ffc107 100%);
-            border-radius: 5px;
-            position: relative;
-        }
-
-        .chart-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #007bff;
-            transform: translateY(-50%);
-        }
-
-        .top-products-list {
-            list-style: none;
-        }
-
-        .top-product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .top-product-item:last-child {
-            border-bottom: none;
-        }
-
-        .product-name {
-            font-weight: 500;
-        }
-
-        .product-sold {
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        .add-product-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 15px;
-        }
-
-        /* Product Table */
-        .table-container {
-            margin-top: 30px;
-        }
-
         .table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-width: 100%;
         }
-
-        .table th {
-            background-color: #f8f9fa;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .table td {
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-            vertical-align: middle;
-        }
-
-        .table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .product-image {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-
-        .product-id {
-            font-weight: 600;
-            color: #007bff;
-        }
-
-        .product-name {
-            font-weight: 500;
-        }
-
-        .product-brand {
-            color: #6c757d;
-        }
-
-        .product-category {
-            background-color: #e9ecef;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .product-price {
-            font-weight: 600;
-            color: #28a745;
-        }
-
-        .product-stock {
-            font-weight: 500;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .edit-btn {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .delete-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .action-btn:hover {
-            opacity: 0.8;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .dashboard-stats {
-                grid-template-columns: 1fr;
-            }
-            
-            .search-input {
-                width: 200px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                order: 2;
-            }
-            
-            .main-content {
-                margin: 10px;
-                padding: 20px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
-            }
-            
-            .search-section {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .search-input {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo-section">
-            <div class="logo">C</div>
-            <div class="brand-text">
-                <div class="brand-name">
-                    <span class="watch">CHRONOX</span>
-                </div>
-                <div class="brand-name">
-                    <span class="watch">Watch</span><span class="shop">Shop</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="search-section">
-            <input type="text" class="search-input" placeholder="Search by name..." value="${keyword != null ? keyword : ''}">
-            <button class="search-btn">Search</button>
-        </div>
-
-        <div class="user-section">
-            <div class="user-icon">👤</div>
-            <span>▼</span>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
+    }
+</style>
+<!-- MAIN PAGE CONTENT -->
+<div class="page-wrap">
+    <div class="main-container" role="main">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" aria-label="Admin sidebar">
             <div class="profile-card">
-                <img src="./assert/image/trikhue.jpg" alt="Avatar" class="profile-avatar" />
-                <div class="profile-name"><%= admin.getUserName() %></div>
+                <img class="profile-avatar"
+                     src="${pageContext.request.contextPath}/assert/image/trikhue.jpg"
+                     alt="avatar"
+                     onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.staff}">
+                        <div class="profile-name">${sessionScope.staff.userName}</div>
+                        <div class="profile-role">${sessionScope.staff.role}</div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="profile-name">Guest</div>
+                    </c:otherwise>
+                </c:choose>
             </div>
-            
             <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">Product Management</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Order Management</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Manage Rating And Feedback</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Customer Management</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Staff Management</a>
-                </li>
+                <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">Order Management</a></li>
+                <li><a class="nav-link" href="#">Ratings & Feedback</a></li>
+                <li><a class="nav-link" href="#">Customer Management</a></li>
+                <li><a class="nav-link" href="#">Staff Management</a></li>
             </ul>
-            
-            <button class="logout-btn">Logout</button>
+            <button id="logoutBtn" style="margin-top:18px;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;width:100%;">Logout</button>
         </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Dashboard Stats -->
-            <div class="dashboard-stats">
-                <!-- Revenue Section -->
+        <!-- CONTENT -->
+        <main class="main-content" aria-label="Admin main content">
+            <div class="controls">
+                <div class="page-title">Product Management</div>
+
+            </div>
+
+            <!-- stats row -->
+            <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-title">Total Revenue</div>
-                    <div class="revenue-amount">
+                    <div style="font-weight:700;">Total Revenue</div>
+                    <div style="font-size:20px;color:#28a745;margin-top:10px;">
                         <%
                             Long totalRevenue = (Long) request.getAttribute("totalRevenue");
                             if (totalRevenue != null) {
@@ -519,186 +256,166 @@
                             }
                         %>
                     </div>
-                    <div class="chart-placeholder">
-                        <div class="chart-line"></div>
-                    </div>
                 </div>
-                
-                <!-- Top Products Section -->
                 <div class="stat-card">
-                    <div class="stat-title">Top Products</div>
-                    <ul class="top-products-list">
+                    <div style="font-weight:700;">Top Products</div>
+                    <ul style="margin-top:8px; padding-left:0; list-style:none;">
                         <%
                             List<TopProduct> topProducts = (List<TopProduct>) request.getAttribute("topProducts");
                             if (topProducts != null && !topProducts.isEmpty()) {
                                 for (TopProduct tp : topProducts) {
                         %>
-                        <li class="top-product-item">
-                            <span class="product-name"><%= tp.getProductName() %></span>
-                            <span class="product-sold"><%= tp.getTotalSold() %> sold</span>
+                        <li style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f2f2f2;">
+                            <span><%= tp.getProductName()%></span>
+                            <span style="color:#6c757d"><%= tp.getTotalSold()%> sold</span>
                         </li>
-                        <%
-                                }
-                            } else {
-                        %>
-                        <li class="top-product-item">
-                            <span class="product-name">No sales data available</span>
-                            <span class="product-sold">0 sold</span>
-                        </li>
-                        <%
-                            }
-                        %>
+                        <%      }
+                        } else { %>
+                        <li>No sales data</li>
+                            <% } %>
                     </ul>
-                    <button class="add-product-btn">Add New Product</button>
-                        </div>
-            </div>
-
-            <!-- Additional Stats -->
-            <div class="dashboard-stats">
-                <!-- Monthly Revenue -->
-                <div class="stat-card">
-                    <div class="stat-title">This Month Revenue</div>
-                    <div class="revenue-amount" style="color: #007bff;">
-                        <%
-                            Long currentMonthRevenue = (Long) request.getAttribute("currentMonthRevenue");
-                            if (currentMonthRevenue != null) {
-                                out.print(String.format("%,d", currentMonthRevenue) + " ₫");
-                            } else {
-                                out.print("0 ₫");
-                            }
-                        %>
-                        </div>
-                    </div>
-
-                <!-- Total Orders -->
-                <div class="stat-card">
-                    <div class="stat-title">Completed Orders</div>
-                    <div class="revenue-amount" style="color: #28a745;">
-                        <%
-                            Integer totalCompletedOrders = (Integer) request.getAttribute("totalCompletedOrders");
-                            if (totalCompletedOrders != null) {
-                                out.print(String.format("%,d", totalCompletedOrders));
-                            } else {
-                                out.print("0");
-                            }
-                        %>
-                    </div>
                 </div>
             </div>
+            <div style="text-align: right;">
+                <button class="add-product-btn" id="addProductBtn">Add New Product</button>
+            </div>
+            <%-- Simple flash (no hide, no JS) --%>
+            <%
+                String successMessage = (String) session.getAttribute("successMessage");
+                String errorMessage = (String) session.getAttribute("errorMessage");
+                if (successMessage != null) {
+            %>
+            <div style="color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-weight:600;">
+                <%= successMessage%>
+            </div>
+            <%
+                session.removeAttribute("successMessage");
+            } else if (errorMessage != null) {
+            %>
+            <div style="color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-weight:600;">
+                <%= errorMessage%>
+            </div>
+            <%
+                    session.removeAttribute("errorMessage");
+                }
+            %>
 
-            <!-- Product Table -->
+            <!-- product table -->
             <div class="table-container">
-                <table class="table">
-                            <thead>
-                                <tr>
+                <table class="table" aria-describedby="product-list">
+                    <thead>
+                        <tr>
                             <th></th>
-                                    <th>Product ID</th>
-                                    <th>Product Name</th>
-                                    <th>Brand</th>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Brand</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Stock</th>
-                            <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% List<Product> products = (List<Product>) request.getAttribute("products"); %>
-                                <% if (products != null && !products.isEmpty()) {
-                                    for (Product p : products) { %>
-                                        <tr>
-                                    <td>
-                                        <img src="./assert/image/<%= p.getProductId() %>.jpg" 
-                                             alt="<%= p.getProductName() %>" 
-                                             class="product-image"
-                                             onerror="this.src='./assert/image/watch1.jpg'">
-                                    </td>
-                                            <td class="product-id"><%= p.getProductId() %></td>
-                                    <td class="product-name"><%= p.getProductName() %></td>
-                                    <td class="product-brand"><%= p.getBrand() %></td>
-                                    <td>
-                                        <span class="product-category">
-                                            <%= p.isGender() ? "Men" : "Women" %>
-                                        </span>
-                                    </td>
-                                    <td class="product-price"><%= String.format("%,d", p.getPrice()) %> ₫</td>
-                                    <td class="product-stock"><%= p.getQuantityProduct() %></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="action-btn edit-btn" title="Edit">✏️</button>
-                                            <button class="action-btn delete-btn" title="Delete">🗑️</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                <%  }
-                                } else { %>
-                                    <tr>
-                                <td colspan="8" style="text-align: center;">No products found in the database.</td>
-                                    </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
+                            <th style="text-align:center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            List<Product> products = (List<Product>) request.getAttribute("products");
+                            if (products != null && !products.isEmpty()) {
+                                for (Product p : products) {
+                        %>
+                        <tr>
+                            <td style="width:96px;">
+                                <img class="product-image"
+                                     src="${pageContext.request.contextPath}/assert/image/<%= p.getProductId()%>.jpg"
+                                     alt="<%= p.getProductName()%>"
+                                     onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
+                            </td>
+                            <td class="product-id"><%= p.getProductId()%></td>
+                            <td class="product-name"><%= p.getProductName()%></td>
+                            <td class="product-brand"><%= p.getBrand()%></td>
+                            <td><%= p.isGender() ? "Men" : "Women"%></td>
+                            <td class="product-price"><%= String.format("%d", p.getPrice())%> ₫</td>
+                            <td class="product-stock"><%= p.getQuantityProduct()%></td>
+                            <td class="actions-cell">
+                                <button class="action-btn edit-btn" data-id="<%= p.getProductId()%>" title="Edit">✏️</button>
+                                <button class="action-btn delete-btn" data-id="<%= p.getProductId()%>" title="Delete">🗑️</button>
+                            </td>
+
+                        </tr>
+                        <%      }
+                        } else { %>
+                        <tr><td colspan="8" style="text-align:center;padding:18px;">No products found in the database.</td></tr>
+                        <% }%>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
-    
-    <script>
-        // Sidebar navigation handling
-        document.querySelectorAll('.nav-link').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-            });
-        });
+</div>
 
-        // Action button handlers
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const tr = e.target.closest('tr');
-                if (!tr) return;
-                const id = tr.querySelector('.product-id')?.textContent || 'Unknown';
-                alert('Edit product: ' + id);
-            });
-        });
-
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const tr = e.target.closest('tr');
-                if (!tr) return;
-                const id = tr.querySelector('.product-id')?.textContent || 'Unknown';
-                if (confirm('Are you sure you want to delete product: ' + id + '?')) {
-                    alert('Delete product: ' + id);
+<!-- small page JS -->
+<!-- small page JS: cập nhật routes để khớp với servlet mappings -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Logout (giữ nguyên)
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function () {
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href = '${pageContext.request.contextPath}/logout';
                 }
             });
+        }
+
+        // Add product -> ProductAddServlet (GET shows add form)
+        const addBtn = document.getElementById('addProductBtn');
+        if (addBtn) {
+            addBtn.addEventListener('click', function () {
+                window.location.href = '${pageContext.request.contextPath}/addproduct';
+            });
+        }
+
+        // Edit handler -> ProductEditServlet expects parameter "id" (GET)
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = btn.getAttribute('data-id') || '';
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
+                // navigate to edit servlet with parameter name "id"
+                window.location.href = '${pageContext.request.contextPath}/editproduct?id=' + encodeURIComponent(id);
+            });
         });
 
-        // Add product button
-        document.querySelector('.add-product-btn').addEventListener('click', () => {
-            alert('Add new product');
-        });
+        // Delete handler -> POST to /deleteproduct with parameter "id"
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = btn.getAttribute('data-id') || '';
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
+                if (!confirm('Delete product: ' + id + '?'))
+                    return;
 
-        // Logout button
-        document.querySelector('.logout-btn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = '<%= ctx %>/logout';
-            }
-        });
+                // Create and submit a form POST to deleteproduct with param name "id"
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '${pageContext.request.contextPath}/deleteproduct';
 
-        // Search functionality
-        document.querySelector('.search-btn').addEventListener('click', () => {
-            const keyword = document.querySelector('.search-input').value;
-            if (keyword.trim()) {
-                window.location.href = '<%= ctx %>/admin?keyword=' + encodeURIComponent(keyword);
-            }
-        });
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id';        // <-- tên param theo ProductDeleteServlet.doPost
+                input.value = id;
+                form.appendChild(input);
 
-        // Enter key search
-        document.querySelector('.search-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.querySelector('.search-btn').click();
-            }
-        });
+                // CSRF token? If your app uses CSRF protection, append token input here.
 
-    </script>
-</body>
-</html>
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+</script>
+
+<jsp:include page="/WEB-INF/include/footer.jsp" />
+
