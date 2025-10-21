@@ -29,7 +29,7 @@ public class CartDAO extends DBContext {
     public List<Cart> getCartByCustomerId(int customerId) {
         List<Cart> list = new ArrayList<>();
         String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity, "
-                + "p.product_name, p.image, p.brand "
+                + "p.product_name, p.image, p.brand, p.quantity_product "
                 + "FROM Cart c "
                 + "INNER JOIN Product p ON c.product_id = p.product_id "
                 + "WHERE c.customer_id = ? "
@@ -48,6 +48,7 @@ public class CartDAO extends DBContext {
                     cart.setProductName(rs.getString("product_name"));
                     cart.setProductImage(rs.getString("image"));
                     cart.setBrand(rs.getString("brand"));
+                    cart.setAvailableQuantity(rs.getInt("quantity_product"));
                     list.add(cart);
                 }
             }
@@ -89,6 +90,28 @@ public class CartDAO extends DBContext {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             ps.setInt(2, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cart cart = new Cart();
+                    cart.setCartId(rs.getInt("cart_id"));
+                    cart.setCustomerId(rs.getInt("customer_id"));
+                    cart.setProductId(rs.getInt("product_id"));
+                    cart.setPrice(rs.getInt("price"));
+                    cart.setQuantity(rs.getInt("quantity"));
+                    return cart;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Lấy một item trong giỏ hàng theo cartId
+    public Cart getCartItemById(int cartId) {
+        String sql = "SELECT * FROM Cart WHERE cart_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, cartId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Cart cart = new Cart();
