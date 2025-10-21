@@ -139,11 +139,11 @@
                 color:black;
                 font-weight:700;
             }
-            .status-order.completed{
+            .status-order.shipping{
                 color:#00cc33;
                 font-weight:700;
             }
-            .status-order.cancelled{
+            .status-order.delivered{
                 color:red;
                 font-weight:700;
             }
@@ -381,8 +381,8 @@
                                             <input type="hidden" id="orderIdInput" name="orderId" />
                                             <select class="form-select" id="order-status" name="order-status">
                                                 <option value="PENDING">PENDING</option>
-                                                <option value="COMPLETED"> COMPLETED</option>
-                                                <option value="CANCELLED">CANCELLED</option>
+                                                <option value="SHIPPING">SHIPPING</option>
+                                                <option value="DELIVERED">DELIVERED</option>
                                             </select> 
 
                                         </div>
