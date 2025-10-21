@@ -5,7 +5,6 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <c:choose>
     <c:when test="${empty product}">
         <div class="container"><div class="alert alert-warning">Product not found.</div></div>
@@ -24,7 +23,7 @@
                     <h3 class="text-danger">${product.price} VND</h3>
 
                     <div class="d-flex align-items-center mb-3">
-                        <input type="number" id="quantity-input" value="1" min="1"
+                        <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
                                class="form-control me-2" style="width:100px;">
                         <button type="button" class="btn btn-danger btn-lg me-2" 
                                 onclick="addToCart(${product.productId})">
@@ -33,11 +32,11 @@
 
                         <button type="button" class="btn btn-primary btn-lg" 
                                 onclick="buyNow(${product.productId})">
-                            <i class="fas fa-shopping-cart"></i> Buy Now
+                            <i class="fas fa-shopping-cart"></i> Buy now
                         </button>
                     </div>
 
-                    <!-- HIDDEN FORM: Buy Now -> /order/buy-now (not added to cart) -->
+                    <!-- HIDDEN FORM: Buy Now -> /order/buy-now (does not add to cart) -->
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
                         <input type="hidden" name="quantity" id="buyNowQty" value="1">
@@ -58,18 +57,19 @@
                         <li><strong>Strap:</strong> ${product.strap}</li>
                         <li><strong>Dial color:</strong> ${product.dialColor}</li>
                         <li><strong>Functions:</strong> ${product.function}</li>
-                        <li><strong>Stock quantity:</strong> ${product.quantityProduct}</li>
+                        <li><strong>In stock:</strong> ${product.quantityProduct}</li>
                         <li><strong>Gender:</strong> <c:out value="${product.gender ? 'Male' : 'Female'}" /></li>
                     </ul>
                 </div>
             </div>
+
         </div>
 
         <!-- Product Reviews -->
         <div class="container my-5">
             <h3>Product Reviews</h3>
             <c:if test="${empty productReviews}">
-                <p>No reviews yet for this product.</p>
+                <p>No reviews for this product yet.</p>
             </c:if>
             <c:forEach var="review" items="${productReviews}">
                 <div class="card mb-3">
@@ -86,28 +86,37 @@
 </c:choose>
 
 <script>
+    // Keep the same logic for addToCart / showMessage / updateCartCount
     function addToCart(productId) {
         const quantity = document.getElementById('quantity-input').value;
+        const maxQuantity = ${product.quantityProduct};
+        
         if (quantity < 1) {
             alert('Quantity must be greater than 0');
             return;
         }
+        
+        if (quantity > maxQuantity) {
+            alert('Quantity cannot exceed ' + maxQuantity + ' items remaining in stock');
+            return;
+        }
+        
         fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
             method: 'GET'
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showMessage(data.message, 'success');
-                updateCartCount();
-            } else {
-                showMessage(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showMessage('An error occurred while adding the product to the cart', 'error');
-        });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage(data.message, 'success');
+                        updateCartCount();
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('An error occurred while adding the product to the cart', 'error');
+                });
     }
 
     function showMessage(message, type) {
@@ -115,7 +124,7 @@
         const alertHtml = `
             <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
                  style="top: 20px; right: 20px; z-index: 9999;">
-                ${message}
+    ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         `;
@@ -126,15 +135,17 @@
                 alert.remove();
         }, 3000);
     }
+</script>
 
-    function buyNow(productId) {
-        var qtyEl = document.getElementById('quantity-input');
-        var qty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
-        if (!qty || qty < 1) qty = 1;
+<script>
+  function buyNow(productId) {
+    var qtyEl = document.getElementById('quantity-input');
+    var qty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
+    if (!qty || qty < 1) qty = 1;
 
-        document.getElementById('buyNowQty').value = qty;
-        document.getElementById('buyNowForm').submit();
-    }
+    document.getElementById('buyNowQty').value = qty;
+    document.getElementById('buyNowForm').submit();
+  }
 </script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
