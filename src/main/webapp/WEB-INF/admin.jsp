@@ -5,9 +5,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="model.Product" %>
 <%@ page import="model.Staff" %>
-<%@ include file="/WEB-INF/include/header.jsp" %>
+<%@ page import="model.TopProduct" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -24,267 +25,580 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Admin Dashboard - WatchShop</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background:#f4f6f8;
+        /*
+         * Admin Dashboard CSS
+         * Created on : Jan 20, 2025
+         * Author     : Dang Vi Danh - CE19687
+         */
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .brand-text {
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
         }
-        .d-flex.align-items-start {
-            flex-grow: 1;
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .brand-name .watch {
+            color: #000;
+        }
+
+        .brand-name .shop {
+            color: #007bff;
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .user-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: white;
             padding: 20px;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
         }
-        .card {
-            width:240px;
-            margin:0 auto;
-            background:#fff;
-            border-radius:8px;
-            box-shadow:0 2px 6px rgba(0,0,0,0.1);
-            display:flex;
-            padding-bottom: 10px;
-            overflow:hidden;
-        }
-        .avatar {
-            width:160px;
-            height:160px;
-            border-radius:50%;
-            object-fit:cover;
-            border:6px solid #fff;
-            box-shadow:0 2px 6px rgba(0,0,0,0.1);
-            background:#ddd;
-            align-self: center;
-        }
-        .name {
-            font-size:20px;
-            margin-top:12px;
-            font-weight:700;
+
+        .profile-card {
             text-align: center;
+            margin-bottom: 30px;
         }
-        .status {
-            color:white;
-            margin-top:6px;
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #e9ecef;
+        }
+
+
+        .profile-name {
+            font-size: 18px;
             font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-link.active {
             background-color: #dc3545;
-            text-align: center;
-            padding:4px 8px;
-            border-radius:6px;
-            font-size:16px;
-            margin-top:6px;
-            width: 40%;
-            margin: 0 auto;
-            display:inline-block;
-        }
-        .nav-link{
-            box-shadow:0 2px 6px rgba(0,0,0,0.1);
-            color: black;
-            width: 80%;
-            margin: 5px auto;
-            background: #fff;
+            color: white;
         }
 
-        #title{
-            margin:0 0 12px 0;
-            font-size:18px;
-            font-weight: 900;
-        }
-        /* Table styles */
-        table{
-            width:100%;
-            border-collapse: inherit;
-            font-size:16px;
-            min-width:980px;
-            box-shadow:0 2px 6px rgba(0,0,0,0.1);
-        }
-        thead th{
-            text-align:left;
-            padding:10px;
-            background:#fff;
-            border-bottom:2px solid #222;
-            font-weight:700;
-            font-size:13px;
-        }
-        tbody td{
-            padding:12px 10px;
-            border-bottom:1px solid rgba(0,0,0,0.08);
-            vertical-align:middle;
-        }
-        tbody tr:hover td{
-            background: rgba(139,92,246,0.04)
-        }
-        .order-id{
-            font-weight:700;
-            color:#333
-        }
-        .date-pill{
-            display:inline-block;
-            padding:6px 8px;
-            border-radius:20px;
-            background:#f0f0f0;
-            font-size:13px;
-            color:#333;
-        }
-        .status-order{
-            padding:6px 10px;
-            border-radius:16px;
-            font-weight:600;
-            font-size:13px;
-            display:inline-block;
-            min-width:84px;
-            text-align:center;
-            border-radius:20px;
-            background:#f0f0f0;
-        }
-        .status-order.pending{
-            color:black;
-            font-weight:700;
-        }
-        .status-order.completed{
-            color:#00cc33;
-            font-weight:700;
-        }
-        .status-order.cancelled{
-            color:red;
-            font-weight:700;
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 20px;
         }
 
-        .right-actions{
-            display:flex;
-            gap:10px;
-            justify-content:center
-        }
-        .icon {
-            width:34px;
-            height:34px;
-            border-radius:50%;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            background:#111;
-            color:#fff;
-            font-size:14px;
-            cursor:pointer;
-            border:1px solid rgba(0,0,0,0.08);
-        }
-        .icon.view{
-            background:#fff;
-            color:#111;
-            border:1px solid #111
-        }
-        .icon.view1{
-            background:#fff;
-            color:#111;
-            border:1px solid #111
-        }
-        .icon.edit{
-            background:#fff;
-            color:#111;
-            border:1px solid #111
-        }
-        .icon.delete{
-            background:#dc3545;
-            color:#fff;
-            border:1px solid #dc3545
-        }
-        .icon.add{
-            background:#28a745;
-            color:#fff;
-            border:1px solid #28a745
-        }
-        .icon.manage{
-            background:#6f42c1;
-            color:#fff;
-            border:1px solid #6f42c1
-        }
-        #popupModal {
-            max-width:900px;
-            margin:0 auto;
-            background:#fff;
-            border-radius:8px;
-            box-shadow:0 2px 6px rgba(0,0,0,0.1);
-            display: inline-flex;
-            overflow:hidden;
-        }
-        .left {
-            width: 50%;
-            padding:30px;
-            background:linear-gradient(180deg,#ffffff,#f7f9fb);
-        }
-        .right {
-            flex:1;
-            padding:30px 40px;
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: white;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        @media (max-width:980px){
-            table{
-                min-width:680px
+        /* Dashboard Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .revenue-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .chart-placeholder {
+            height: 60px;
+            background: linear-gradient(90deg, #007bff 0%, #28a745 50%, #ffc107 100%);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .chart-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #007bff;
+            transform: translateY(-50%);
+        }
+
+        .top-products-list {
+            list-style: none;
+        }
+
+        .top-product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .top-product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 500;
+        }
+
+        .product-sold {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .add-product-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+
+        /* Product Table */
+        .table-container {
+            margin-top: 30px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .product-id {
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .product-name {
+            font-weight: 500;
+        }
+
+        .product-brand {
+            color: #6c757d;
+        }
+
+        .product-category {
+            background-color: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .product-stock {
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-input {
+                width: 200px;
             }
         }
-        @media (max-width:760px){
-            table{
-                min-width:0;
-                font-size:13px
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .main-content {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .search-section {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 100%;
+                max-width: 300px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="d-flex align-items-start">
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <div class="card">
-                <img src="./assert/image/trikhue.jpg" alt="Avatar" class="avatar" />
-                <div class="name"><%= (staff != null ? staff.getUserName() : "Admin")%></div>
-                <div class="status small">ADMIN</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo">C</div>
+            <div class="brand-text">
+                <div class="brand-name">
+                    <span class="watch">CHRONOX</span>
+                </div>
+                <div class="brand-name">
+                    <span class="watch">Watch</span><span class="shop">Shop</span>
+                </div>
             </div>
-            <button class="nav-link active" id="pill-product" data-bs-toggle="pill" data-bs-target="#v-pills-product" type="button" role="tab" aria-controls="v-pills-products" aria-selected="true">Product Management</button>
-            <button class="nav-link" id="pill-order" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Order Management</button>
-            <button class="nav-link" id="pill-staff" data-bs-toggle="pill" data-bs-target="#v-pills-staff" type="button" role="tab" aria-controls="v-pills-staff" aria-selected="false">Staff Management</button>
-            <button class="nav-link" id="pill-customer" data-bs-toggle="pill" data-bs-target="#v-pills-customer" type="button" role="tab" aria-controls="v-pills-customer" aria-selected="false">Customer Management</button>
-            <button class="nav-link" id="pill-analytics" data-bs-toggle="pill" data-bs-target="#v-pills-analytics" type="button" role="tab" aria-controls="v-pills-analytics" aria-selected="false">Analytics & Reports</button>
-            <button class="nav-link" id="pill-profile" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Profile Management</button>
         </div>
 
-        <div class="tab-content" id="v-pills-tabContent">
+        <div class="search-section">
+            <input type="text" class="search-input" placeholder="Search by name..." value="${keyword != null ? keyword : ''}">
+            <button class="search-btn">Search</button>
+        </div>
 
-            <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
-                <section class="main" aria-label="Product management">
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-8">
-                            <h3>Product Management</h3>
-                            <form action="${pageContext.request.contextPath}/admin" method="GET" class="d-flex">
-                                <input type="text" 
-                                       name="keyword" 
-                                       class="form-control me-2" 
-                                       placeholder="Search by product name..." 
-                                       value="${param.keyword != null ? param.keyword : ''}"
-                                       aria-label="Search">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </form>
+        <div class="user-section">
+            <div class="user-icon">👤</div>
+            <span>▼</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <img src="./assert/image/trikhue.jpg" alt="Avatar" class="profile-avatar" />
+                <div class="profile-name"><%= admin.getUserName() %></div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">Product Management</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Order Management</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Manage Rating And Feedback</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Customer Management</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Staff Management</a>
+                </li>
+            </ul>
+            
+            <button class="logout-btn">Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Stats -->
+            <div class="dashboard-stats">
+                <!-- Revenue Section -->
+                <div class="stat-card">
+                    <div class="stat-title">Total Revenue</div>
+                    <div class="revenue-amount">
+                        <%
+                            Long totalRevenue = (Long) request.getAttribute("totalRevenue");
+                            if (totalRevenue != null) {
+                                out.print(String.format("%,d", totalRevenue) + " ₫");
+                            } else {
+                                out.print("0 ₫");
+                            }
+                        %>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div class="chart-line"></div>
+                    </div>
+                </div>
+                
+                <!-- Top Products Section -->
+                <div class="stat-card">
+                    <div class="stat-title">Top Products</div>
+                    <ul class="top-products-list">
+                        <%
+                            List<TopProduct> topProducts = (List<TopProduct>) request.getAttribute("topProducts");
+                            if (topProducts != null && !topProducts.isEmpty()) {
+                                for (TopProduct tp : topProducts) {
+                        %>
+                        <li class="top-product-item">
+                            <span class="product-name"><%= tp.getProductName() %></span>
+                            <span class="product-sold"><%= tp.getTotalSold() %> sold</span>
+                        </li>
+                        <%
+                                }
+                            } else {
+                        %>
+                        <li class="top-product-item">
+                            <span class="product-name">No sales data available</span>
+                            <span class="product-sold">0 sold</span>
+                        </li>
+                        <%
+                            }
+                        %>
+                    </ul>
+                    <button class="add-product-btn">Add New Product</button>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <button class="icon add" title="Add Product" aria-label="Thêm sản phẩm mới">
-                                ➕ Add Product
-                            </button>
+            </div>
+
+            <!-- Additional Stats -->
+            <div class="dashboard-stats">
+                <!-- Monthly Revenue -->
+                <div class="stat-card">
+                    <div class="stat-title">This Month Revenue</div>
+                    <div class="revenue-amount" style="color: #007bff;">
+                        <%
+                            Long currentMonthRevenue = (Long) request.getAttribute("currentMonthRevenue");
+                            if (currentMonthRevenue != null) {
+                                out.print(String.format("%,d", currentMonthRevenue) + " ₫");
+                            } else {
+                                out.print("0 ₫");
+                            }
+                        %>
                         </div>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                        </table>
+                <!-- Total Orders -->
+                <div class="stat-card">
+                    <div class="stat-title">Completed Orders</div>
+                    <div class="revenue-amount" style="color: #28a745;">
+                        <%
+                            Integer totalCompletedOrders = (Integer) request.getAttribute("totalCompletedOrders");
+                            if (totalCompletedOrders != null) {
+                                out.print(String.format("%,d", totalCompletedOrders));
+                            } else {
+                                out.print("0");
+                            }
+                        %>
                     </div>
-                    <div class="listProducts" role="region" aria-labelledby="products-title">
-                        <table aria-describedby="products-desc">
+                </div>
+            </div>
+
+            <!-- Product Table -->
+            <div class="table-container">
+                <table class="table">
                             <thead>
                                 <tr>
+                            <th></th>
                                     <th>Product ID</th>
                                     <th>Product Name</th>
                                     <th>Brand</th>
-                                    <th>Price (VND)</th>
-                                    <th>Quantity</th>
-                                    <th style="text-align:center">Action</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -292,189 +606,53 @@
                                 <% if (products != null && !products.isEmpty()) {
                                     for (Product p : products) { %>
                                         <tr>
+                                    <td>
+                                        <img src="./assert/image/<%= p.getProductId() %>.jpg" 
+                                             alt="<%= p.getProductName() %>" 
+                                             class="product-image"
+                                             onerror="this.src='./assert/image/watch1.jpg'">
+                                    </td>
                                             <td class="product-id"><%= p.getProductId() %></td>
-                                            <td><%= p.getProductName() %></td>
-                                            <td><%= p.getBrand() %></td>
-                                            <td><%= p.getPrice() %></td>
-                                            <td><%= p.getQuantityProduct() %></td>
-                                            <td>
-                                                <div class="right-actions" role="group" aria-label="Actions">
-                                                    <a href="viewproductdetail?id=<%=p.getProductId()%>" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">
-                                                        👁
-                                                    </a>
-                                                    <button class="icon edit" title="Edit" aria-label="Sửa sản phẩm">
-                                                        ✏️
-                                                    </button>
-                                                    <button class="icon delete" title="Delete" aria-label="Xóa sản phẩm">
-                                                        🗑️
-                                                    </button>
+                                    <td class="product-name"><%= p.getProductName() %></td>
+                                    <td class="product-brand"><%= p.getBrand() %></td>
+                                    <td>
+                                        <span class="product-category">
+                                            <%= p.isGender() ? "Men" : "Women" %>
+                                        </span>
+                                    </td>
+                                    <td class="product-price"><%= String.format("%,d", p.getPrice()) %> ₫</td>
+                                    <td class="product-stock"><%= p.getQuantityProduct() %></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn edit-btn" title="Edit">✏️</button>
+                                            <button class="action-btn delete-btn" title="Delete">🗑️</button>
                                                 </div>
                                             </td>
                                         </tr>
                                 <%  }
                                 } else { %>
                                     <tr>
-                                        <td colspan="6" style="text-align: center;">No products found in the database.</td>
+                                <td colspan="8" style="text-align: center;">No products found in the database.</td>
                                     </tr>
                                 <% } %>
                             </tbody>
                         </table>
                     </div>
-                </section>
-            </div>
-
-            <!-- Order Management Tab -->
-            <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="-1">
-                <section class="main" aria-label="Order management">
-                    <h4 id="title">Order Management</h4>
-                    <div class="listOrders" role="region" aria-labelledby="orders-title">
-                        <table aria-describedby="orders-desc">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Order Date</th>
-                                    <th>Status</th>
-                                    <th>Total (VND)</th>
-                                    <th style="text-align:center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="6" style="text-align: center;">No orders found in the database.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Staff Management Tab -->
-            <div class="tab-pane fade" id="v-pills-staff" role="tabpanel" aria-labelledby="v-pills-staff-tab" tabindex="-1">
-                <section class="main" aria-label="Staff management">
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-8">
-                            <h4 id="title">Staff Management</h4>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <button class="icon add" title="Add Staff" aria-label="Thêm nhân viên mới">
-                                ➕ Add Staff
-                            </button>
-                        </div>
-                    </div>
-                    <div class="listStaff" role="region" aria-labelledby="staff-title">
-                        <table aria-describedby="staff-desc">
-                            <thead>
-                                <tr>
-                                    <th>Staff ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th style="text-align:center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="6" style="text-align: center;">No staff found in the database.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Customer Management Tab -->
-            <div class="tab-pane fade" id="v-pills-customer" role="tabpanel" aria-labelledby="v-pills-customer-tab" tabindex="-1">
-                <section class="main" aria-label="Customer management">
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-8">
-                            <h4 id="title">Customer Management</h4>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <button class="icon manage" title="Export Data" aria-label="Xuất dữ liệu khách hàng">
-                                📊 Export Data
-                            </button>
-                        </div>
-                    </div>
-                    <div class="listCustomers" role="region" aria-labelledby="customers-title">
-                        <table aria-describedby="customers-desc">
-                            <thead>
-                                <tr>
-                                    <th>Customer ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Registration Date</th>
-                                    <th style="text-align:center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="6" style="text-align: center;">No customers found in the database.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Analytics & Reports Tab -->
-            <div class="tab-pane fade" id="v-pills-analytics" role="tabpanel" aria-labelledby="v-pills-analytics-tab" tabindex="-1">
-                <section class="main" aria-label="Analytics and reports">
-                    <h4 id="title">Analytics & Reports</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Sales Overview</h5>
-                                    <p class="card-text">View sales statistics and trends</p>
-                                    <button class="icon manage" title="View Sales Report">📈 Sales Report</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Inventory Report</h5>
-                                    <p class="card-text">Check stock levels and inventory status</p>
-                                    <button class="icon manage" title="View Inventory Report">📦 Inventory Report</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Profile Management Tab -->
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="-1">
-                <section class="main" aria-label="Profile management">
-                    <h4 id="title">Profile Management</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Admin Profile</h5>
-                            <p class="card-text">Manage your admin account settings</p>
-                            <button class="icon edit" title="Edit Profile" aria-label="Chỉnh sửa thông tin cá nhân">
-                                ✏️ Edit Profile
-                            </button>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
+        </main>
     </div>
     
     <script>
-        // Sidebar active handling
+        // Sidebar navigation handling
         document.querySelectorAll('.nav-link').forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
                 document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
             });
         });
 
-        // Example: action button handlers
-        document.querySelectorAll('.icon.edit').forEach(btn => {
+        // Action button handlers
+        document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const tr = e.target.closest('tr');
                 if (!tr) return;
@@ -483,7 +661,7 @@
             });
         });
 
-        document.querySelectorAll('.icon.delete').forEach(btn => {
+        document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const tr = e.target.closest('tr');
                 if (!tr) return;
@@ -494,15 +672,33 @@
             });
         });
 
-        document.querySelectorAll('.icon.add').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                alert('Add new item');
-            });
+        // Add product button
+        document.querySelector('.add-product-btn').addEventListener('click', () => {
+            alert('Add new product');
         });
+
+        // Logout button
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '<%= ctx %>/logout';
+            }
+        });
+
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', () => {
+            const keyword = document.querySelector('.search-input').value;
+            if (keyword.trim()) {
+                window.location.href = '<%= ctx %>/admin?keyword=' + encodeURIComponent(keyword);
+            }
+        });
+
+        // Enter key search
+        document.querySelector('.search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
+
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
-<jsp:include page="/WEB-INF/include/footer.jsp" />
-
-
