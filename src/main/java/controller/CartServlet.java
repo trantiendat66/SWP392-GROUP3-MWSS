@@ -48,7 +48,11 @@ public class CartServlet extends HttpServlet {
         Customer customer = (Customer) session.getAttribute("customer");
 
         if (customer == null) {
-            response.sendRedirect("login.jsp");
+            // Trả về JSON response thay vì redirect để JavaScript có thể xử lý
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Bạn cần đăng nhập để thực hiện chức năng này\", \"redirect\": \"login.jsp\"}");
+            out.flush();
             return;
         }
 
