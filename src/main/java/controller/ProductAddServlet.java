@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import model.Product;
 
 /**
@@ -81,7 +83,7 @@ public class ProductAddServlet extends HttpServlet {
         // Luôn đặt setCharacterEncoding đầu tiên để đảm bảo parseParameter đúng
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-
+        Map<String, String> errors = new HashMap<>();
         try {
 
             String productName = request.getParameter("product_name");
@@ -89,9 +91,9 @@ public class ProductAddServlet extends HttpServlet {
             String origin = request.getParameter("origin");
             String genderParam = request.getParameter("gender");
             boolean gender = "1".equals(genderParam) || "true".equalsIgnoreCase(genderParam);
-            int price = Integer.parseInt(request.getParameter("price"));
-            int quantity = Integer.parseInt(request.getParameter("quantity_product"));
-            int categoryId = Integer.parseInt(request.getParameter("category_id"));
+            String priceStr = request.getParameter("price");
+            String quantityStr = request.getParameter("quantity_product");
+            String categoryStr = request.getParameter("category_id");
 
             int accountId = 1;
 
@@ -105,6 +107,87 @@ public class ProductAddServlet extends HttpServlet {
             String strap = request.getParameter("strap");
             String dialColor = request.getParameter("dial_color");
             String function = request.getParameter("function");
+            if (productName == null || productName.trim().isEmpty()) {
+                errors.put("productNameError", "Tên sản phẩm không được để trống.");
+            }
+            if (brand == null || brand.trim().isEmpty()) {
+                errors.put("brandError", "Thương hiệu không được để trống.");
+            }
+            if (origin == null || origin.trim().isEmpty()) {
+                errors.put("originError", "Xuất xứ không được để trống.");
+            }
+            if (priceStr == null || priceStr.trim().isEmpty()) {
+                errors.put("priceError", "Giá sản phẩm không được để trống.");
+            }
+            if (quantityStr == null || quantityStr.trim().isEmpty()) {
+                errors.put("quantityError", "Số lượng không được để trống.");
+            }
+            if (categoryStr == null || categoryStr.trim().isEmpty()) {
+                errors.put("categoryError", "Danh mục không được để trống.");
+            }
+            if (image == null || image.trim().isEmpty()) {
+                errors.put("imageError", "Vui lòng nhập tên hoặc đường dẫn hình ảnh.");
+            }
+            if (description == null || description.trim().isEmpty()) {
+                errors.put("descriptionError", "Mô tả không được để trống.");
+            }
+            if (warranty == null || warranty.trim().isEmpty()) {
+                errors.put("warrantyError", "Vui lòng nhập thông tin bảo hành.");
+            }
+            if (machine == null || machine.trim().isEmpty()) {
+                errors.put("machineError", "Vui lòng nhập thông tin bộ máy.");
+            }
+            if (glass == null || glass.trim().isEmpty()) {
+                errors.put("glassError", "Vui lòng nhập loại kính.");
+            }
+            if (dialDiameter == null || dialDiameter.trim().isEmpty()) {
+                errors.put("dialDiameterError", "Vui lòng nhập đường kính mặt đồng hồ.");
+            }
+            if (bezel == null || bezel.trim().isEmpty()) {
+                errors.put("bezelError", "Vui lòng nhập chất liệu viền.");
+            }
+            if (strap == null || strap.trim().isEmpty()) {
+                errors.put("strapError", "Vui lòng nhập loại dây đeo.");
+            }
+            if (dialColor == null || dialColor.trim().isEmpty()) {
+                errors.put("dialColorError", "Vui lòng nhập màu mặt đồng hồ.");
+            }
+            if (function == null || function.trim().isEmpty()) {
+                errors.put("functionError", "Vui lòng nhập chức năng của sản phẩm.");
+            }
+
+            // 🟥 Nếu có bất kỳ lỗi rỗng nào → quay lại form
+            if (!errors.isEmpty()) {
+                request.setAttribute("errors", errors);
+                RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // 🟦 Chuyển sang dạng số
+            int price, quantity, categoryId;
+            try {
+                price = Integer.parseInt(priceStr);
+                quantity = Integer.parseInt(quantityStr);
+                categoryId = Integer.parseInt(categoryStr);
+            } catch (NumberFormatException e) {
+                errors.put("numberError", "Giá, số lượng và danh mục phải là số hợp lệ.");
+                request.setAttribute("errors", errors);
+                RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // 🟩 Kiểm tra logic hợp lệ
+            if (price <= 0) {
+                errors.put("priceError", "Giá phải lớn hơn 0.");
+            }
+            if (quantity < 0) {
+                errors.put("quantityError", "Số lượng không được âm.");
+            }
+            if (categoryId <= 0) {
+                errors.put("categoryError", "ID danh mục phải lớn hơn 0.");
+            }
 
             Product p = new Product();
             p.setProductName(productName);

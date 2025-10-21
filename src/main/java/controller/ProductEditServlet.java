@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import model.Product;
 
 /**
@@ -101,33 +103,151 @@ public class ProductEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Map<String, String> errors = new HashMap<>();
+
+        // Lấy dữ liệu
+        String productIdStr = request.getParameter("product_id");
+        String productName = trim(request.getParameter("product_name"));
+        String brand = trim(request.getParameter("brand"));
+        String origin = trim(request.getParameter("origin"));
+        String genderParam = request.getParameter("gender");
+        String priceStr = trim(request.getParameter("price"));
+        String quantityStr = trim(request.getParameter("quantity_product"));
+        String categoryStr = trim(request.getParameter("category_id"));
+        String accountStr = trim(request.getParameter("account_id"));
+        String image = trim(request.getParameter("image"));
+        String description = trim(request.getParameter("description"));
+        String warranty = trim(request.getParameter("warranty"));
+        String machine = trim(request.getParameter("machine"));
+        String glass = trim(request.getParameter("glass"));
+        String dialDiameter = trim(request.getParameter("dial_diameter"));
+        String bezel = trim(request.getParameter("bezel"));
+        String strap = trim(request.getParameter("strap"));
+        String dialColor = trim(request.getParameter("dial_color"));
+        String function = trim(request.getParameter("function"));
+
+        // Kiểm tra rỗng
+        if (productName.isEmpty()) {
+            errors.put("productNameError", "Không được bỏ trống tên sản phẩm");
+        }
+        if (brand.isEmpty()) {
+            errors.put("brandError", "Không được bỏ trống thương hiệu");
+        }
+        if (origin.isEmpty()) {
+            errors.put("originError", "Không được bỏ trống xuất xứ");
+        }
+        if (priceStr.isEmpty()) {
+            errors.put("priceError", "Không được bỏ trống giá");
+        }
+        if (quantityStr.isEmpty()) {
+            errors.put("quantityError", "Không được bỏ trống số lượng");
+        }
+        if (categoryStr.isEmpty()) {
+            errors.put("categoryError", "Không được bỏ trống mã danh mục");
+        }
+        if (accountStr.isEmpty()) {
+            errors.put("accountError", "Không được bỏ trống mã tài khoản");
+        }
+        if (image == null || image.trim().isEmpty()) {
+            errors.put("imageError", "Vui lòng nhập tên hoặc đường dẫn hình ảnh.");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            errors.put("descriptionError", "Mô tả không được để trống.");
+        }
+        if (warranty == null || warranty.trim().isEmpty()) {
+            errors.put("warrantyError", "Vui lòng nhập thông tin bảo hành.");
+        }
+        if (machine == null || machine.trim().isEmpty()) {
+            errors.put("machineError", "Vui lòng nhập thông tin bộ máy.");
+        }
+        if (glass == null || glass.trim().isEmpty()) {
+            errors.put("glassError", "Vui lòng nhập loại kính.");
+        }
+        if (dialDiameter == null || dialDiameter.trim().isEmpty()) {
+            errors.put("dialDiameterError", "Vui lòng nhập đường kính mặt đồng hồ.");
+        }
+        if (bezel == null || bezel.trim().isEmpty()) {
+            errors.put("bezelError", "Vui lòng nhập chất liệu viền.");
+        }
+        if (strap == null || strap.trim().isEmpty()) {
+            errors.put("strapError", "Vui lòng nhập loại dây đeo.");
+        }
+        if (dialColor == null || dialColor.trim().isEmpty()) {
+            errors.put("dialColorError", "Vui lòng nhập màu mặt đồng hồ.");
+        }
+        if (function == null || function.trim().isEmpty()) {
+            errors.put("functionError", "Vui lòng nhập chức năng của sản phẩm.");
+        }
+
+        int price = 0, quantity = 0, categoryId = 0, accountId = 0, productId = 0;
+        boolean gender = "true".equalsIgnoreCase(genderParam);
 
         try {
-            int productId = Integer.parseInt(request.getParameter("product_id"));
-            String productName = trim(request.getParameter("product_name"));
-            String brand = trim(request.getParameter("brand"));
-            String origin = trim(request.getParameter("origin"));
-            boolean gender = "true".equalsIgnoreCase(request.getParameter("gender"));
-            int price = Integer.parseInt(trim(request.getParameter("price")));
-            int quantity = Integer.parseInt(trim(request.getParameter("quantity_product")));
-            int categoryId = Integer.parseInt(trim(request.getParameter("category_id")));
-            int accountId = Integer.parseInt(trim(request.getParameter("account_id")));
-
-            String image = trim(request.getParameter("image"));
-            if (image == null) {
-                image = "";
+            productId = Integer.parseInt(productIdStr);
+        } catch (Exception e) {
+        }
+        try {
+            price = Integer.parseInt(priceStr);
+        } catch (Exception e) {
+            if (!priceStr.isEmpty()) {
+                errors.put("priceError", "Giá phải là số hợp lệ");
             }
+        }
+        try {
+            quantity = Integer.parseInt(quantityStr);
+        } catch (Exception e) {
+            if (!quantityStr.isEmpty()) {
+                errors.put("quantityError", "Số lượng phải là số hợp lệ");
+            }
+        }
+        try {
+            categoryId = Integer.parseInt(categoryStr);
+        } catch (Exception e) {
+            if (!categoryStr.isEmpty()) {
+                errors.put("categoryError", "Mã danh mục phải là số hợp lệ");
+            }
+        }
+        try {
+            accountId = Integer.parseInt(accountStr);
+        } catch (Exception e) {
+            if (!accountStr.isEmpty()) {
+                errors.put("accountError", "Mã tài khoản phải là số hợp lệ");
+            }
+        }
 
-            String description = trim(request.getParameter("description"));
-            String warranty = trim(request.getParameter("warranty"));
-            String machine = trim(request.getParameter("machine"));
-            String glass = trim(request.getParameter("glass"));
-            String dialDiameter = trim(request.getParameter("dial_diameter"));
-            String bezel = trim(request.getParameter("bezel"));
-            String strap = trim(request.getParameter("strap"));
-            String dialColor = trim(request.getParameter("dial_color"));
-            String function = trim(request.getParameter("function"));
+        // Nếu có lỗi → quay lại trang edit_product.jsp
+        if (!errors.isEmpty()) {
+            Product p = new Product();
+            p.setProductId(productId);
+            p.setProductName(productName);
+            p.setBrand(brand);
+            p.setOrigin(origin);
+            p.setGender(gender);
+            p.setPrice(price);
+            p.setQuantityProduct(quantity);
+            p.setCategoryId(categoryId);
+            p.setAccountId(accountId);
+            p.setImage(image);
+            p.setDescription(description);
+            p.setWarranty(warranty);
+            p.setMachine(machine);
+            p.setGlass(glass);
+            p.setDialDiameter(dialDiameter);
+            p.setBezel(bezel);
+            p.setStrap(strap);
+            p.setDialColor(dialColor);
+            p.setFunction(function);
 
+            request.setAttribute("product", p);
+            request.setAttribute("errors", errors);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
+            rd.forward(request, response);
+            return;
+        }
+
+        // Nếu không có lỗi → cập nhật DB
+        try {
             Product p = new Product();
             p.setProductId(productId);
             p.setProductName(productName);
@@ -151,24 +271,13 @@ public class ProductEditServlet extends HttpServlet {
 
             ProductDAO dao = new ProductDAO();
             dao.updateProduct(p);
+
             request.getSession().setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Dữ liệu số không hợp lệ.");
-            RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
-            rd.forward(request, response);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
             request.setAttribute("error", "Lỗi cơ sở dữ liệu: " + ex.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            request.setAttribute("error", "Lỗi hệ thống: " + ex.getMessage());
             RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
             rd.forward(request, response);
         }

@@ -27,29 +27,44 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Product Name</label>
-                        <input type="text" name="product_name" class="form-control" required>
+                        <input type="text" name="product_name" class="form-control"value="${param.product_name}" >
+                        <c:if test="${not empty errors.productNameError}">
+                            <div class="text-danger small mt-1">${errors.productNameError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Price (VND)</label>
-                        <input type="number" name="price" class="form-control" required>
+                        <input type="number" name="price" class="form-control"value="${param.price}">
+                        <c:if test="${not empty errors.priceError}">
+                            <div class="text-danger small mt-1">${errors.priceError}</div>
+                        </c:if>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Brand</label>
-                        <input type="text" name="brand" class="form-control">
+                        <input type="text" name="brand" class="form-control"value="${param.brand}">
+                        <c:if test="${not empty errors.brandError}">
+                            <div class="text-danger small mt-1">${errors.brandError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Origin</label>
-                        <input type="text" name="origin" class="form-control">
+                        <input type="text" name="origin" class="form-control"value="${param.origin}">
+                        <c:if test="${not empty errors.originError}">
+                            <div class="text-danger small mt-1">${errors.originError}</div>
+                        </c:if>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Category ID</label>
-                        <input type="number" name="category_id" class="form-control" required>
+                        <input type="number" name="category_id" class="form-control" value="${param.category_id}">
+                        <c:if test="${not empty errors.categoryError}">
+                            <div class="text-danger small mt-1">${errors.categoryError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Account ID (Admin)</label>
@@ -68,57 +83,91 @@
                 <div class="row mb-3">
                     <div class="col-md-8">
                         <label class="form-label fw-bold">Image (filename or URL)</label>
-                        <input type="text" name="image" class="form-control" placeholder="e.g. product1.jpg">
+                        <input type="text" name="image" class="form-control" placeholder="e.g. product1.jpg"value="${param.image}">
+                        <c:if test="${not empty errors.imageError}">
+                            <div class="text-danger small mt-1">${errors.imageError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Quantity</label>
-                        <input type="number" name="quantity_product" class="form-control" required>
+                        <input type="number" name="quantity_product" class="form-control" value="${param.quantity_product}">
+                        <c:if test="${not empty errors.quantityError}">
+                            <div class="text-danger small mt-1">${errors.quantityError}</div>
+                        </c:if>
                     </div>
+
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Warranty</label>
-                    <input type="text" name="warranty" class="form-control" placeholder="e.g. 2 years">
+                    <input type="text" name="warranty" class="form-control" placeholder="e.g. 2 years"value="${param.warranty}">
+                    <c:if test="${not empty errors.warrantyError}">
+                        <div class="text-danger small mt-1">${errors.warrantyError}</div>
+                    </c:if>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Machine</label>
-                        <input type="text" name="machine" class="form-control">
+                        <input type="text" name="machine" class="form-control"value="${param.machine}">
+                        <c:if test="${not empty errors.machineError}">
+                            <div class="text-danger small mt-1">${errors.machineError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Glass</label>
-                        <input type="text" name="glass" class="form-control">
+                        <input type="text" name="glass" class="form-control"value="${param.glass}">
+                        <c:if test="${not empty errors.glassError}">
+                            <div class="text-danger small mt-1">${errors.glassError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Dial Diameter</label>
-                        <input type="text" name="dial_diameter" class="form-control">
+                        <input type="text" name="dial_diameter" class="form-control"value="${param.dial_diameter}">
+                        <c:if test="${not empty errors.dialDiameterError}">
+                            <div class="text-danger small mt-1">${errors.dialDiameterError}</div>
+                        </c:if>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Bezel</label>
-                        <input type="text" name="bezel" class="form-control">
+                        <input type="text" name="bezel" class="form-control"value="${param.bezel}">
+                        <c:if test="${not empty errors.bezelError}">
+                            <div class="text-danger small mt-1">${errors.bezelError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Strap</label>
-                        <input type="text" name="strap" class="form-control">
+                        <input type="text" name="strap" class="form-control"value="${param.strap}">
+                        <c:if test="${not empty errors.strapError}">
+                            <div class="text-danger small mt-1">${errors.strapError}</div>
+                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Dial Color</label>
-                        <input type="text" name="dial_color" class="form-control">
+                        <input type="text" name="dial_color" class="form-control"value="${param.dial_color}">
+                        <c:if test="${not empty errors.dialColorError}">
+                            <div class="text-danger small mt-1">${errors.dialColorError}</div>
+                        </c:if>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Function</label>
-                    <input type="text" name="function" class="form-control">
+                    <input type="text" name="function" class="form-control"value="${param.function}">
+                    <c:if test="${not empty errors.functionError}">
+                        <div class="text-danger small mt-1">${errors.functionError}</div>
+                    </c:if>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Description</label>
-                    <textarea name="description" class="form-control" rows="3"></textarea>
+                    <textarea name="description" class="form-control" rows="3">${param.description}"</textarea>
+                    <c:if test="${not empty errors.descriptionError}">
+                        <div class="text-danger small mt-1">${errors.descriptionError}</div>
+                    </c:if>
                 </div>
 
                 <div class="text-center">
