@@ -20,6 +20,7 @@ public class Cart {
     private String productName;
     private String productImage;
     private String brand;
+    private int availableQuantity; // Số lượng sản phẩm còn lại trong kho
     
     public Cart() {
     }
@@ -41,6 +42,18 @@ public class Cart {
         this.productName = productName;
         this.productImage = productImage;
         this.brand = brand;
+    }
+
+    public Cart(int cartId, int customerId, int productId, int price, int quantity, String productName, String productImage, String brand, int availableQuantity) {
+        this.cartId = cartId;
+        this.customerId = customerId;
+        this.productId = productId;
+        this.price = price;
+        this.quantity = quantity;
+        this.productName = productName;
+        this.productImage = productImage;
+        this.brand = brand;
+        this.availableQuantity = availableQuantity;
     }
 
     public int getCartId() {
@@ -105,6 +118,14 @@ public class Cart {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
     
     // Tính tổng tiền cho item này
