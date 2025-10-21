@@ -194,8 +194,11 @@
                                 <div class="col-md-4 col-9">
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
-                                    <p class="price-display mb-0">
+                                    <p class="price-display mb-1">
                                         <fmt:formatNumber value="${item.price}" type="number"/> VND
+                                    </p>
+                                    <p class="text-info mb-0">
+                                        <small>Còn lại: ${item.availableQuantity} sản phẩm</small>
                                     </p>
                                 </div>
 
@@ -209,8 +212,9 @@
                                                id="quantity-${item.cartId}"
                                                value="${item.quantity}" 
                                                min="1" 
-                                               max="99"
-                                               data-cart-id="${item.cartId}">
+                                               max="${item.availableQuantity}"
+                                               data-cart-id="${item.cartId}"
+                                               data-max-quantity="${item.availableQuantity}">
                                         <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                             <i class="bi bi-plus"></i>
                                         </button>
@@ -298,6 +302,9 @@
         });
 
         document.querySelectorAll('.quantity-input').forEach(input => {
+            // Lưu giá trị ban đầu
+            input.setAttribute('data-old-value', input.value);
+            
             input.addEventListener('change', function () {
                 const cartId = this.getAttribute('data-cart-id');
                 const newQuantity = parseInt(this.value);
@@ -320,6 +327,17 @@
             return;
         }
 
+        // Kiểm tra số lượng tối đa
+        const quantityInput = document.getElementById('quantity-' + cartId);
+        const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
+        
+        if (newQuantity > maxQuantity) {
+            showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn lại trong kho', 'error');
+            // Reset về giá trị cũ
+            quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
+            return;
+        }
+
         fetch('${pageContext.request.contextPath}/cart?action=update&cartId=' + cartId + '&quantity=' + newQuantity, {
             method: 'GET'
         })
@@ -327,6 +345,9 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById('quantity-' + cartId).value = newQuantity;
+                        // Lưu giá trị cũ để có thể reset nếu cần
+                        quantityInput.setAttribute('data-old-value', newQuantity);
+                        
                         const priceElement = document.querySelector('#total-' + cartId);
                         const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
                         const currentTotal = parseInt(currentTotalText);
@@ -340,11 +361,15 @@
                         showMessage(data.message, 'success');
                     } else {
                         showMessage(data.message, 'error');
+                        // Reset về giá trị cũ nếu có lỗi
+                        quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     showMessage('An error occurred while updating.', 'error');
+                    // Reset về giá trị cũ nếu có lỗi
+                    quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
                 });
     }
 
