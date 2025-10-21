@@ -181,10 +181,14 @@
         background: #dc3545;
         color: #fff;
     }
+    .view-btn {
+        background: #17a2b8;
+        color: #fff;
+    }
     .table td.actions-cell {
         white-space: nowrap;
         text-align: center;
-        width: 160px;
+        width: 200px;
     }
 
     /* Responsive: stack sidebar above content on small screens */
@@ -335,6 +339,7 @@
                             <td class="product-price"><%= String.format("%d", p.getPrice())%> ₫</td>
                             <td class="product-stock"><%= p.getQuantityProduct()%></td>
                             <td class="actions-cell">
+                                <button class="action-btn view-btn" data-id="<%= p.getProductId()%>" title="View Details">👁️</button>
                                 <button class="action-btn edit-btn" data-id="<%= p.getProductId()%>" title="Edit">✏️</button>
                                 <button class="action-btn delete-btn" data-id="<%= p.getProductId()%>" title="Delete">🗑️</button>
                             </td>
@@ -372,6 +377,19 @@
                 window.location.href = '${pageContext.request.contextPath}/addproduct';
             });
         }
+
+        // View handler -> ViewProductDetailServlet expects parameter "id" (GET)
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const id = btn.getAttribute('data-id') || '';
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
+                // navigate to view product detail servlet with parameter name "id"
+                window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id);
+            });
+        });
 
         // Edit handler -> ProductEditServlet expects parameter "id" (GET)
         document.querySelectorAll('.edit-btn').forEach(btn => {
