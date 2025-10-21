@@ -234,7 +234,7 @@
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">Order Management</a></li>
                 <li><a class="nav-link" href="#">Ratings & Feedback</a></li>
                 <li><a class="nav-link" href="#">Customer Management</a></li>
-                <li><a class="nav-link" href="#">Staff Management</a></li>
+               <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
             </ul>
             <button id="logoutBtn" style="margin-top:18px;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;width:100%;">Logout</button>
         </aside>
