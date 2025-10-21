@@ -26,17 +26,17 @@
                         <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
                                class="form-control me-2" style="width:100px;">
                         <button type="button" class="btn btn-danger btn-lg me-2" 
-                                onclick="addToCart(${product.productId})">
+                                onclick="addToCart('${product.productId}')">
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
 
                         <button type="button" class="btn btn-primary btn-lg" 
-                                onclick="buyNow(${product.productId})">
+                                onclick="buyNow('${product.productId}')">
                             <i class="fas fa-shopping-cart"></i> Buy now
                         </button>
                     </div>
 
-                    <!-- HIDDEN FORM: Buy Now -> /order/buy-now (does not add to cart) -->
+                    <!-- HIDDEN FORM: Buy Now -> /order/buy-now (not added to cart) -->
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
                         <input type="hidden" name="quantity" id="buyNowQty" value="1">
@@ -56,13 +56,12 @@
                         <li><strong>Bezel:</strong> ${product.bezel}</li>
                         <li><strong>Strap:</strong> ${product.strap}</li>
                         <li><strong>Dial color:</strong> ${product.dialColor}</li>
-                        <li><strong>Functions:</strong> ${product.function}</li>
-                        <li><strong>In stock:</strong> ${product.quantityProduct}</li>
+                        <li><strong>Function:</strong> ${product.function}</li>
+                        <li><strong>Stock quantity:</strong> ${product.quantityProduct}</li>
                         <li><strong>Gender:</strong> <c:out value="${product.gender ? 'Male' : 'Female'}" /></li>
                     </ul>
                 </div>
             </div>
-
         </div>
 
         <!-- Product Reviews -->
@@ -86,10 +85,10 @@
 </c:choose>
 
 <script>
-    // Keep the same logic for addToCart / showMessage / updateCartCount
+    // Keep the same script for addToCart / showMessage / updateCartCount
     function addToCart(productId) {
         const quantity = document.getElementById('quantity-input').value;
-        const maxQuantity = ${product.quantityProduct};
+        const maxQuantity = parseInt('${product.quantityProduct}');
         
         if (quantity < 1) {
             alert('Quantity must be greater than 0');
@@ -97,7 +96,7 @@
         }
         
         if (quantity > maxQuantity) {
-            alert('Quantity cannot exceed ' + maxQuantity + ' items remaining in stock');
+            alert('Quantity cannot exceed ' + maxQuantity + ' items left in stock');
             return;
         }
         
@@ -108,7 +107,9 @@
                 .then(data => {
                     if (data.success) {
                         showMessage(data.message, 'success');
-                        updateCartCount();
+                        if (typeof updateCartCount === 'function') {
+                            updateCartCount();
+                        }
                     } else {
                         showMessage(data.message, 'error');
                     }
@@ -134,6 +135,30 @@
             if (alert)
                 alert.remove();
         }, 3000);
+    }
+
+    // Function to update cart count
+    function updateCartCount() {
+        fetch('${pageContext.request.contextPath}/cart?action=count', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                cartBadge.textContent = data.count;
+                // Show badge only if cart has items
+                if (data.count > 0) {
+                    cartBadge.style.display = 'block';
+                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart count:', error);
+        });
     }
 </script>
 
