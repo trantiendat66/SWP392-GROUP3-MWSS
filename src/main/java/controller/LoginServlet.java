@@ -121,7 +121,13 @@ public class LoginServlet extends HttpServlet {
             if (isAuthenticated) {
                 user = customer;
                 sessionKey = "customer";
-                redirectPath = request.getContextPath() + "/home";
+                // Kiểm tra có sản phẩm tạm thời không (thông qua parameter hoặc session)
+                String hasPendingProduct = request.getParameter("hasPendingProduct");
+                if ("true".equals(hasPendingProduct)) {
+                    redirectPath = request.getContextPath() + "/pending-product";
+                } else {
+                    redirectPath = request.getContextPath() + "/home";
+                }
             }
         }
 
