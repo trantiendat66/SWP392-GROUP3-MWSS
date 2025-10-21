@@ -77,7 +77,7 @@
                                     <li class="nav-item">
                                         <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                             <i class="bi bi-cart"></i> Cart
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count" style="display: none;">
                                                 0
                                             </span>
                                         </a>
@@ -92,7 +92,7 @@
                                 <li class="nav-item">
                                     <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                         <i class="bi bi-cart"></i> Cart
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count" style="display: none;">
                                             0
                                         </span>
                                     </a>
@@ -120,11 +120,12 @@
                             const cartBadge = document.getElementById('cart-count');
                             if (cartBadge) {
                                 cartBadge.textContent = data.count;
-                                // Thay đổi màu sắc dựa trên số lượng
+                                // Chỉ hiển thị badge khi có sản phẩm trong giỏ hàng
                                 if (data.count > 0) {
+                                    cartBadge.style.display = 'block';
                                     cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
                                 } else {
-                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary cart-badge';
+                                    cartBadge.style.display = 'none';
                                 }
                             }
                         })
