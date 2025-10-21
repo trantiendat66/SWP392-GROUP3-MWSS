@@ -11,6 +11,8 @@ import db.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.Staff;
 
 /**
@@ -56,6 +58,7 @@ public class StaffDAO extends DBContext {
         }
         return staff;
     }
+
     public Staff getStaffById(int account_id) {
         Staff staff = null;
         // Tên bảng Staff
@@ -86,7 +89,8 @@ public class StaffDAO extends DBContext {
         }
         return staff;
     }
-     public boolean updateStaff(Staff s) {
+
+    public boolean updateStaff(Staff s) {
         String sql = "UPDATE Staff SET user_name = ?, phone = ?, email = ?, address = ? WHERE account_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, s.getUserName());
@@ -117,4 +121,30 @@ public class StaffDAO extends DBContext {
     public Staff getStaff(int accountId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public List<Staff> getAllStaff() {
+        List<Staff> list = new ArrayList<>();
+        String sql = "SELECT * FROM Staff ORDER BY account_id DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setAccountId(rs.getInt("account_id"));
+                staff.setUserName(rs.getString("user_name"));
+                staff.setEmail(rs.getString("email"));
+                staff.setPhone(rs.getString("phone"));
+                staff.setPassword(rs.getString("password"));
+                staff.setRole(rs.getString("role"));
+                staff.setPosition(rs.getString("position"));
+                staff.setAddress(rs.getString("address"));
+                staff.setStatus(rs.getString("status"));
+                // nếu chỉ lấy Active: if (!"Active".equalsIgnoreCase(staff.getStatus())) continue;
+                list.add(staff);
+            }
+        } catch (SQLException e) {
+            System.err.println("getAllStaff error: SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
