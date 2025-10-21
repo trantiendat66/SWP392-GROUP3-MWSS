@@ -111,13 +111,14 @@
     </head>
     <body>
 
-        <form action="${pageContext.request.contextPath}/login" method="post">
+        <form action="${pageContext.request.contextPath}/login" method="post" id="loginForm">
             <div class="login-container">
                 <h2>Login</h2>
 
                 <div class="input-box">
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
+                    <input type="hidden" name="hasPendingProduct" id="hasPendingProduct" value="false">
                 </div>
 
                 <button type="submit">LOGIN</button>
@@ -134,6 +135,20 @@
                 </div>
             </div>
         </form>
+
+        <script>
+            // Kiểm tra sản phẩm tạm thời khi trang load
+            document.addEventListener('DOMContentLoaded', function() {
+                const pendingProduct = localStorage.getItem('pendingProduct');
+                const hasPendingProductInput = document.getElementById('hasPendingProduct');
+                
+                if (pendingProduct) {
+                    hasPendingProductInput.value = 'true';
+                } else {
+                    hasPendingProductInput.value = 'false';
+                }
+            });
+        </script>
 
     </body>
 </html>
