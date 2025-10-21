@@ -359,6 +359,10 @@
 
                         updateCartTotal();
                         showMessage(data.message, 'success');
+                        // Cập nhật số lượng giỏ hàng trong header
+                        if (typeof updateCartCount === 'function') {
+                            updateCartCount();
+                        }
                     } else {
                         showMessage(data.message, 'error');
                         // Reset về giá trị cũ nếu có lỗi
@@ -386,6 +390,10 @@
                             updateCartTotal();
                             checkEmptyCart();
                             showMessage(data.message, 'success');
+                            // Cập nhật số lượng giỏ hàng trong header
+                            if (typeof updateCartCount === 'function') {
+                                updateCartCount();
+                            }
                         } else {
                             showMessage(data.message, 'error');
                         }
@@ -462,6 +470,30 @@
                 alert.remove();
             }
         }, 3000);
+    }
+
+    // Function để cập nhật số lượng giỏ hàng trong header
+    function updateCartCount() {
+        fetch('${pageContext.request.contextPath}/cart?action=count', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cartBadge = document.getElementById('cart-count');
+            if (cartBadge) {
+                cartBadge.textContent = data.count;
+                // Chỉ hiển thị badge khi có sản phẩm trong giỏ hàng
+                if (data.count > 0) {
+                    cartBadge.style.display = 'block';
+                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error updating cart count:', error);
+        });
     }
 </script>
 
