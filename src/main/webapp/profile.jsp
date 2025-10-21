@@ -8,26 +8,18 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
     String ctx = request.getContextPath();
-    Object user = request.getAttribute("user");
-    String type = (String) request.getAttribute("userType");
+    Customer c = (Customer) request.getAttribute("user");
 
-    String avatarPath = ctx + "/images/2.jpg"; // mặc định
-    String name = "-";
-    String status = "";
-
-    if ("customer".equals(type)) {
-        Customer c = (Customer) user;
-        if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
-            avatarPath = ctx + "/" + c.getImage();
-        }
-        name = c != null ? c.getCustomer_name() : "-";
-        status = c != null ? c.getAccount_status() : "";
-    } else if ("staff".equals(type)) {
-        Staff s = (Staff) user;
-        name = s != null ? s.getUserName() : "-";
-        status = s != null ? s.getStatus() : "";
+    String avatarPath = ctx + "/images/2.jpg"; // ảnh mặc định
+    if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
+        avatarPath = ctx + "/" + c.getImage();
     }
+
+    String name = c != null ? c.getCustomer_name() : "-";
+    String status = c != null ? c.getAccount_status() : "";
 %>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -40,10 +32,13 @@
                 font-family: Arial, sans-serif;
                 background:#f4f6f8;
                 padding:30px;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                min-height:80vh;
             }
             .card {
                 max-width:900px;
-                margin:0 auto;
                 background:#fff;
                 border-radius:8px;
                 box-shadow:0 2px 6px rgba(0,0,0,0.1);
@@ -93,15 +88,13 @@
             }
             .actions {
                 margin-top:20px;
-                display: flex;
-                flex-wrap: nowrap;
-                gap: 10px;
-                justify-content: center;
+                display:flex;
+                flex-wrap:nowrap;
+                gap:10px;
+                justify-content:center;
             }
             .btn {
                 display:inline-block;
-                align-items: center;
-                justify-content: center;
                 padding:10px 16px;
                 border-radius:6px;
                 text-decoration:none;
@@ -111,6 +104,10 @@
                 background:#1976d2;
                 color:#fff;
             }
+            .btn-password {
+                background:#43a047;
+                color:white;
+            }
             .btn-order{
                 background:#E8C920;
                 color:#fff;
@@ -118,16 +115,6 @@
             .btn-back {
                 background:#eee;
                 color:#333;
-                
-            }
-            .btn-password {
-                background:#43a047;
-                color:white;
-                
-            }
-            .small {
-                font-size:13px;
-                color:#666;
             }
         </style>
     </head>
@@ -136,24 +123,12 @@
             <div class="left">
                 <img src="<%= avatarPath%>" alt="Avatar" class="avatar" />
                 <div class="name"><%= name%></div>
-                <div class="status small"><%= status%></div>
+                <div class="status"><%= status%></div>
             </div>
 
             <div class="right">
-                <h2><%= "staff".equals(type) ? "Staff Profile" : "Customer Profile"%></h2>
+                <h2>Customer Profile</h2>
 
-                <% if ("staff".equals(type)) {
-                        Staff s = (Staff) user;%>
-                <div class="row"><div class="label">User Name</div><div class="value"><%= s.getUserName()%></div></div>
-                <div class="row"><div class="label">Email</div><div class="value"><%= s.getEmail()%></div></div>
-                <div class="row"><div class="label">Phone</div><div class="value"><%= s.getPhone()%></div></div>
-                <div class="row"><div class="label">Role</div><div class="value"><%= s.getRole()%></div></div>
-                <div class="row"><div class="label">Position</div><div class="value"><%= s.getPosition()%></div></div>
-                <div class="row"><div class="label">Address</div><div class="value"><%= s.getAddress()%></div></div>
-                <div class="row"><div class="label">Status</div><div class="value"><%= s.getStatus()%></div></div>
-
-                <% } else {
-                    Customer c = (Customer) user;%>
                 <div class="row"><div class="label">User Name</div><div class="value"><%= c.getCustomer_name()%></div></div>
                 <div class="row"><div class="label">Phone</div><div class="value"><%= c.getPhone()%></div></div>
                 <div class="row"><div class="label">Email</div><div class="value"><%= c.getEmail()%></div></div>
@@ -161,21 +136,12 @@
                 <div class="row"><div class="label">Date of Birth</div><div class="value"><%= (c.getDob() != null ? c.getDob().toString() : "-")%></div></div>
                 <div class="row"><div class="label">Gender</div><div class="value"><%= c.getGender()%></div></div>
                 <div class="row"><div class="label">Account Status</div><div class="value"><%= c.getAccount_status()%></div></div>
-                    <% }%>
 
                 <div class="actions">
-                    <% if ("staff".equals(type)) {%>
-                    <a href="<%= ctx%>/edit_staff_profile" class="btn btn-edit">Edit Profile</a>
-                    <% } else {%>
                     <a href="<%= ctx%>/edit_profile" class="btn btn-edit">Edit Profile</a>
-                    <% }%>
                     <a href="<%= ctx%>/change_password" class="btn btn-password">Change Password</a>
                     <a href="<%= ctx%>/orders?tab=placed" class="btn btn-order">Order History</a>
-                    <% if ("staff".equals(type)) {%>
-                    <a href="<%= ctx%>/staffcontrol" class="btn btn-back">Back</a>
-                    <% } else {%>
                     <a href="<%= ctx%>/home" class="btn btn-back">Back</a>
-                    <% } %>
                 </div>
             </div>
         </div>

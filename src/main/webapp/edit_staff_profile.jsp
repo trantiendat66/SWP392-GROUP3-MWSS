@@ -98,7 +98,7 @@
                 <% }%>
 
                 <button type="submit" class="btn btn-save">Save</button>
-                <a href="<%=ctx%>/profile" class="btn btn-cancel">Cancel</a>
+                <a href="<%=ctx%>/staff_profile" class="btn btn-cancel">Cancel</a>
             </form>
         </div>
     </body>

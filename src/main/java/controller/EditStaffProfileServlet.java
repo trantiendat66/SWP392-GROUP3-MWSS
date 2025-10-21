@@ -138,7 +138,7 @@ public class EditStaffProfileServlet extends HttpServlet {
         else session.setAttribute("updateStatus", "error");
 
         session.setAttribute("staff", s);
-        response.sendRedirect(request.getContextPath() + "/profile");
+        response.sendRedirect(request.getContextPath() + "/staff_profile");
     }
 
     /**

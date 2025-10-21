@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.CustomerDAO;
+import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +13,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Customer;
+import model.Staff;
 
 /**
  *
  * @author hau
  */
-@WebServlet(name = "ProfileServlet", urlPatterns = {"/profile"})
-public class ProfileServlet extends HttpServlet {
+@WebServlet(name = "StaffProfileServlet", urlPatterns = {"/staff_profile"})
+public class StaffProfileServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class ProfileServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileServlet</title>");
+            out.println("<title>Servlet StaffProfileServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StaffProfileServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,26 +60,25 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
         if (session == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        Customer customer = (Customer) session.getAttribute("customer");
+        Staff staff = (Staff) session.getAttribute("staff");
 
-        if (customer != null) {
-            CustomerDAO cdao = new CustomerDAO();
-            Customer c = cdao.getCustomerById(customer.getCustomer_id());
-            request.setAttribute("userType", "customer");
-            request.setAttribute("user", c);
+        if (staff != null) {
+            StaffDAO sdao = new StaffDAO();
+            Staff s = sdao.getStaffById(staff.getAccountId());
+            request.setAttribute("userType", "staff");
+            request.setAttribute("user", s);
         } else {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        request.getRequestDispatcher("/profile.jsp").forward(request, response);
+        request.getRequestDispatcher("/staff_profile.jsp").forward(request, response);
     }
 
     /**

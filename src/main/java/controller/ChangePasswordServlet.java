@@ -127,11 +127,11 @@ public class ChangePasswordServlet extends HttpServlet {
             // Mã hóa mật khẩu mới
             String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
             sdao.updatePasswordById(s.getAccountId(), newPassMD5);
-            response.sendRedirect("profile");
+            response.sendRedirect("staff_profile");
             return;
         }
 
-        response.sendRedirect("profile");
+        response.sendRedirect("login.jsp");
     }
 
     /**

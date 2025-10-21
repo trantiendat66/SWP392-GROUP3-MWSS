@@ -70,6 +70,13 @@
         </style>
     </head>
     <body>
+        <%
+            String ctx = request.getContextPath();
+            String cancelLink = ctx + "/profile"; // mặc định là customer
+            if (session.getAttribute("staff") != null) {
+                cancelLink = ctx + "/staff_profile"; // nếu là staff thì đổi
+            }
+        %>
         <div class="container">
             <h2>Change Password</h2>
             <form action="change_password" method="post">
@@ -83,7 +90,7 @@
                 <input type="password" name="confirmPassword" required>
 
                 <button type="submit">Update Password</button>
-                <a class="link" href="profile">Cancel</a>
+                <a class="link" href="<%= cancelLink %>">Cancel</a>
             </form>
 
             <% if (request.getAttribute("error") != null) {%>

@@ -66,9 +66,19 @@
                                         <i class="bi bi-person-circle"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                                        <!-- Nếu là CUSTOMER -->
+                                        <c:if test="${not empty sessionScope.customer}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                                            </c:if>
+
+                                        <!-- Nếu là STAFF -->
+                                        <c:if test="${not empty sessionScope.staff}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/staff_profile">Profile</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                                            </c:if>
                                     </ul>
                                 </li>
 
@@ -77,7 +87,7 @@
                                     <li class="nav-item">
                                         <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                             <i class="bi bi-cart"></i> Cart
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count" style="display: none;">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
                                                 0
                                             </span>
                                         </a>
@@ -92,7 +102,7 @@
                                 <li class="nav-item">
                                     <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                         <i class="bi bi-cart"></i> Cart
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count" style="display: none;">
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
                                             0
                                         </span>
                                     </a>
@@ -120,12 +130,11 @@
                             const cartBadge = document.getElementById('cart-count');
                             if (cartBadge) {
                                 cartBadge.textContent = data.count;
-                                // Chỉ hiển thị badge khi có sản phẩm trong giỏ hàng
+                                // Thay đổi màu sắc dựa trên số lượng
                                 if (data.count > 0) {
-                                    cartBadge.style.display = 'block';
                                     cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
                                 } else {
-                                    cartBadge.style.display = 'none';
+                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary cart-badge';
                                 }
                             }
                         })

@@ -20,7 +20,7 @@ import model.Product;
 import model.Staff;
 import model.TopProduct;
 
-@WebServlet(name = "AdminDashboardServlet", urlPatterns = {"/admin"})
+@WebServlet(name = "AdminDashboardServlet", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardServlet extends HttpServlet {
 
    
