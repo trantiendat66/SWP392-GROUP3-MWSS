@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
 <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -102,7 +103,7 @@
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title text-center">${fn:escapeXml(p.productName)}</h5>
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
-                                    <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
+                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VNĐ</p>
                                     <div class="mt-auto text-center">
                                         <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                            class="btn btn-outline-primary btn-sm me-2">Details</a>
@@ -127,7 +128,7 @@
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
-                    <!-- Khi không tìm thấy: hiển thị giao diện "Product Not Found" ngay dưới nút Shop Now -->
+
                     <div class="col-12">
                         <div class="not-found-container" style="background:#fff; padding:28px; border-radius:12px; text-align:center;">
                             <div class="not-found-img" style="margin-bottom:16px;">

@@ -12,6 +12,7 @@
 <%@ include file="/WEB-INF/include/header.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 
 <%
     Staff t = (Staff) request.getAttribute("staff");
@@ -259,7 +260,7 @@
                                         <th>Product ID</th>
                                         <th>Product Name</th>
                                         <th>Machine</th>
-                                        <th>Price (VND)</th>
+                                        <th>Price (VNĐ)</th>
                                         <th>Quantity</th>
                                         <th style="text-align:center">Action</th>
                                     </tr>
@@ -272,7 +273,7 @@
                                                     <td class="product-id">${p.productId}</td>
                                                     <td>${p.productName}</td>
                                                     <td>${p.machine}</td>
-                                                    <td>${p.price}</td>
+                                                    <td class="text-end text-muted"><fmt:formatNumber value="${p.price}" type="number"/></td>
                                                     <td>${p.quantityProduct}</td>
                                                     <td>
                                                         <div class="right-actions" role="group" aria-label="Actions">
@@ -316,7 +317,7 @@
                                         <th>Customer Name</th>
                                         <th>Order Date</th>
                                         <th>Status</th>
-                                        <th>Total (VND)</th>
+                                        <th>Total (VNĐ)</th>
                                         <th style="text-align:center">Action</th>
                                     </tr>
                                 </thead>
@@ -329,7 +330,7 @@
                                                     <td>${o.customer_name}</td>
                                                     <td><span class="date-pill">${o.order_date}</span></td>
                                                     <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
-                                                    <td>${o.total_amount}</td>
+                                                    <td class="text-end text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
                                                     <td><div class="right-actions">
                                                             <form action="orderdetail">
                                                                 <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>

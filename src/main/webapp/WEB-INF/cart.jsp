@@ -196,10 +196,7 @@
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="price-display mb-1">
                                         <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                    </p>
-                                    <p class="text-info mb-0">
-                                        <small>Còn lại: ${item.availableQuantity} sản phẩm</small>
-                                    </p>
+                                    </p>                                
                                 </div>
 
                                 <div class="col-md-3 col-6">

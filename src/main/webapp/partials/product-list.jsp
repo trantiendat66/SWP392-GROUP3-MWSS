@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -31,8 +32,7 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-center">${p.productName}</h5>
                                 <p class="text-center text-muted mb-1">${p.brand}</p>
-                                <p class="text-center fw-bold text-danger mb-3">${p.price} VNĐ</p>
-
+                                 <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VNĐ</p>
                                 <div class="mt-auto text-center">
                                     <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                        class="btn btn-outline-primary btn-sm me-2">Details</a>

@@ -140,15 +140,14 @@
                 <%
                     String avatarPath;
                     if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
-                        // Nếu là link HTTP thì giữ nguyên
+
                         if (c.getImage().startsWith("http")) {
                             avatarPath = c.getImage();
-                        } // Nếu là ảnh trong thư mục project (images/...)
+                        } 
                         else {
                             avatarPath = ctx + "/" + c.getImage();
                         }
                     } else {
-                        // Ảnh mặc định
                         avatarPath = ctx + "/images/2.jpg";
                     }
                 %>

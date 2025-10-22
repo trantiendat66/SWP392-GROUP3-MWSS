@@ -254,7 +254,7 @@
                         <%
                             Long totalRevenue = (Long) request.getAttribute("totalRevenue");
                             if (totalRevenue != null) {
-                                out.print(String.format("%,d", totalRevenue) + " ₫");
+                                out.print(String.format("%,d", totalRevenue));
                             } else {
                                 out.print("0 ₫");
                             }
@@ -314,7 +314,7 @@
                             <th>Product Name</th>
                             <th>Brand</th>
                             <th>Category</th>
-                            <th>Price</th>
+                            <th>Price (VNĐ)</th>
                             <th>Stock</th>
                             <th style="text-align:center">Actions</th>
                         </tr>
@@ -337,6 +337,7 @@
                             <td class="product-brand"><%= p.getBrand()%></td>
                             <td><%= p.isGender() ? "Men" : "Women"%></td>
                             <td class="product-price"><%= String.format("%d", p.getPrice())%> ₫</td>
+                            
                             <td class="product-stock"><%= p.getQuantityProduct()%></td>
                             <td class="actions-cell">
                                 <button class="action-btn view-btn" data-id="<%= p.getProductId()%>" title="View Details">👁️</button>
