@@ -387,7 +387,7 @@
                     return;
                 }
                 // navigate to view product detail servlet with parameter name "id"
-                window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id);
+                window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id) + '&fromAdmin=true'; //truyền thêm fromAdmin
             });
         });
 
