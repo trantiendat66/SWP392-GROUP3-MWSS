@@ -254,7 +254,7 @@
                         <%
                             Long totalRevenue = (Long) request.getAttribute("totalRevenue");
                             if (totalRevenue != null) {
-                                out.print(String.format("%,d", totalRevenue));
+                                out.print(String.format("%,d", totalRevenue) + " ₫");
                             } else {
                                 out.print("0 ₫");
                             }
@@ -314,7 +314,7 @@
                             <th>Product Name</th>
                             <th>Brand</th>
                             <th>Category</th>
-                            <th>Price (VNĐ)</th>
+                            <th>Price</th>
                             <th>Stock</th>
                             <th style="text-align:center">Actions</th>
                         </tr>
@@ -328,7 +328,7 @@
                         <tr>
                             <td style="width:96px;">
                                 <img class="product-image"
-                                     src="${pageContext.request.contextPath}/assert/image/<%= p.getProductId()%>.jpg"
+                                     src="${pageContext.request.contextPath}/assert/image/<%= p.getImage() %>"
                                      alt="<%= p.getProductName()%>"
                                      onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
                             </td>
@@ -337,7 +337,6 @@
                             <td class="product-brand"><%= p.getBrand()%></td>
                             <td><%= p.isGender() ? "Men" : "Women"%></td>
                             <td class="product-price"><%= String.format("%d", p.getPrice())%> ₫</td>
-                            
                             <td class="product-stock"><%= p.getQuantityProduct()%></td>
                             <td class="actions-cell">
                                 <button class="action-btn view-btn" data-id="<%= p.getProductId()%>" title="View Details">👁️</button>
@@ -388,7 +387,7 @@
                     return;
                 }
                 // navigate to view product detail servlet with parameter name "id"
-                window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id) + '&fromAdmin=true'; //truyền thêm fromAdmin
+                window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id);
             });
         });
 
