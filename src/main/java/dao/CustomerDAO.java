@@ -17,7 +17,41 @@ public class CustomerDAO extends DBContext {
     public CustomerDAO() {
         super();
     }
+    
+    public List<Customer> getAllCustomers() {
+        List<Customer> list = new ArrayList<>();
+        String sql = "SELECT customer_id, customer_name, phone, email, address, dob, gender, account_status, image, password "
+                + "FROM Customer ORDER BY customer_id";
 
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Customer c = new Customer();
+                c.setCustomer_id(rs.getInt("customer_id"));
+                c.setCustomer_name(rs.getString("customer_name"));
+                c.setPhone(rs.getString("phone"));
+                c.setEmail(rs.getString("email"));
+                c.setAddress(rs.getString("address"));
+
+                // LẤY VÀ SET MẬT KHẨU ĐÃ HASH
+                c.setPassword(rs.getString("password"));
+
+                c.setDob(rs.getDate("dob"));
+                boolean genderBit = rs.getBoolean("gender");
+                c.setGender(genderBit ? "Female" : "Male");
+
+                c.setAccount_status(rs.getString("account_status"));
+                c.setImage(rs.getString("image"));
+
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println("getAllCustomers SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     public boolean existsByEmail(String email) {
         String sql = "SELECT 1 FROM Customer WHERE email = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
