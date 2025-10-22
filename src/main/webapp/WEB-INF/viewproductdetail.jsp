@@ -1,9 +1,8 @@
 <%-- 
     Document   : viewproductdetail
-    Created on : Oct 17, 2025, 11:06:30 PM
+    Created on : Oct 17, 2025, 11:06:30 PM
     Author     : Cola
 --%>
-
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -40,7 +39,7 @@
             overflow: hidden;
             flex-shrink: 0;
             margin-right: 20px;
-            border: 3px solid #007bff; /* Viền nổi bật */
+            border: 3px solid #007bff;
         }
         .profile-img { 
             width: 100%; 
@@ -80,7 +79,7 @@
         }
         .detail-item .label { 
             font-weight: 500; 
-            color: #007bff; /* Màu xanh nổi bật cho nhãn */
+            color: #007bff;
             display: block; 
             font-size: 0.85em;
             margin-bottom: 3px;
@@ -104,16 +103,18 @@
 
 <div class="product-card">
     <c:choose>
+        <%-- ✅ Nếu tìm thấy sản phẩm --%>
         <c:when test="${not empty requestScope.viewproductdetail}">
             <c:set var="p" value="${requestScope.viewproductdetail}"/>
 
             <div class="header-section">
-                <%-- Ảnh sản phẩm (Giống ảnh Profile) --%>
                 <div class="profile-img-container">
-                    <img src="${ctx}/assert/image/${p.image}" alt="${p.productName}" class="profile-img" onerror="this.onerror=null;this.src='${ctx}/assert/image/default.png';" />
+                    <img src="${ctx}/assert/image/${p.image}" 
+                         alt="${p.productName}" 
+                         class="profile-img" 
+                         onerror="this.onerror=null;this.src='${ctx}/assert/image/default.png';" />
                 </div>
-                
-                <%-- Thông tin cơ bản bên cạnh ảnh --%>
+
                 <div class="info-header">
                     <h2>${p.productName}</h2>
                     <p>Mã sản phẩm: ${p.productId}</p>
@@ -124,7 +125,7 @@
                 </div>
             </div>
 
-            <%-- Phần Chi tiết Sản Phẩm --%>
+            <%-- Thông số kỹ thuật --%>
             <div class="detail-section">
                 <div class="detail-title">Thông Số Kỹ Thuật</div>
                 <div class="row">
@@ -154,8 +155,8 @@
                     </div>
                 </div>
             </div>
-            
-            <%-- Phần Thông tin Bán hàng & Tình trạng --%>
+
+            <%-- Thông tin bán hàng & tình trạng --%>
             <div class="detail-section">
                 <div class="detail-title">Thông tin Bán hàng & Tình trạng</div>
                 <div class="row">
@@ -188,34 +189,47 @@
                     </div>
                 </div>
             </div>
-            
-            <%-- Phần Mô tả sản phẩm (Giống Activity History) --%>
+
+            <%-- Mô tả sản phẩm --%>
             <div class="detail-section">
                 <div class="detail-title">Mô Tả Sản Phẩm</div>
                 <p style="padding: 0 10px;">${p.description}</p>
             </div>
-            
+
+            <%-- Nút quay lại phù hợp với nguồn truy cập --%>
             <div class="d-flex justify-content-start mt-4">
-    <c:choose>
-        <c:when test="${param.fromAdmin eq 'true'}">
-            <a href="${ctx}/admin/dashboard" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý</a>
+                <c:choose>
+                    <c:when test="${param.fromAdmin eq 'true'}">
+                        <a href="${ctx}/admin/dashboard" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Sản Phẩm</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${ctx}/staffcontrol" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Nhân Viên</a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </c:when>
-        <c:otherwise>
-            <a href="${ctx}/staffcontrol" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Nhân Viên</a>
-        </c:otherwise>
-    </c:choose>
-</div>
 
-        </c:when>
-
-        <%-- KHỐI ELSE: Hiển thị nếu không tìm thấy sản phẩm --%>
+        <%-- ❌ Nếu không tìm thấy sản phẩm --%>
         <c:otherwise>
             <div class="not-found">
-                <h3 style="color:#721c24;">Không tìm thấy thông tin sản phẩm này trong cơ sở dữ liệu.</h3>
-                <p>Vui lòng kiểm tra lại ID sản phẩm hoặc <a href="${ctx}/staffcontrol">quay lại trang quản lý</a>.</p>
+                <h3>Không tìm thấy thông tin sản phẩm này trong cơ sở dữ liệu.</h3>
+                <c:choose>
+                    <c:when test="${param.fromAdmin eq 'true'}">
+                        <p>Vui lòng kiểm tra lại ID sản phẩm hoặc 
+                           <a href="${ctx}/admin/dashboard">quay lại trang quản lý sản phẩm</a>.
+                        </p>
+                    </c:when>
+                    <c:otherwise>
+                        <p>Vui lòng kiểm tra lại ID sản phẩm hoặc 
+                           <a href="${ctx}/staffcontrol">quay lại trang quản lý nhân viên</a>.
+                        </p>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </c:otherwise>
     </c:choose>
 </div>
 
 <%@ include file="/WEB-INF/include/footer.jsp" %>
+</body>
+</html>
