@@ -19,7 +19,7 @@ import model.Customer;
  *
  * @author Cola
  */
-@WebServlet(name = "CustomerListServlet", urlPatterns = {"/customerlist"})
+@WebServlet(name = "CustomerListServlet", urlPatterns = {"/admin/customerlist"})
 public class CustomerListServlet extends HttpServlet {
 
     /**
@@ -98,3 +98,4 @@ public class CustomerListServlet extends HttpServlet {
         return "Servlet to list all customers for admin.";
     }
 }
+
