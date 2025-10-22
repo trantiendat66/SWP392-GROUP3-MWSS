@@ -196,8 +196,15 @@
             </div>
             
             <div class="d-flex justify-content-start mt-4">
-                <a href="${ctx}/staffcontrol" class="btn btn-secondary">Quay lại Trang Quản Lý</a>
-            </div>
+    <c:choose>
+        <c:when test="${param.fromAdmin eq 'true'}">
+            <a href="${ctx}/admin/dashboard" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${ctx}/staffcontrol" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Nhân Viên</a>
+        </c:otherwise>
+    </c:choose>
+</div>
 
         </c:when>
 
