@@ -200,10 +200,10 @@
             <div class="d-flex justify-content-start mt-4">
                 <c:choose>
                     <c:when test="${param.fromAdmin eq 'true'}">
-                        <a href="${ctx}/admin/dashboard" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Sản Phẩm</a>
+                        <a href="${ctx}/admin/dashboard" class="btn btn-secondary">⬅️ Quay lại Trang Admin</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="${ctx}/staffcontrol" class="btn btn-secondary">⬅️ Quay lại Trang Quản Lý Nhân Viên</a>
+                        <a href="${ctx}/staffcontrol" class="btn btn-secondary">⬅️ Quay lại Trang Staff</a>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -216,12 +216,12 @@
                 <c:choose>
                     <c:when test="${param.fromAdmin eq 'true'}">
                         <p>Vui lòng kiểm tra lại ID sản phẩm hoặc 
-                           <a href="${ctx}/admin/dashboard">quay lại trang quản lý sản phẩm</a>.
+                           <a href="${ctx}/admin/dashboard">quay lại trang admin</a>.
                         </p>
                     </c:when>
                     <c:otherwise>
                         <p>Vui lòng kiểm tra lại ID sản phẩm hoặc 
-                           <a href="${ctx}/staffcontrol">quay lại trang quản lý nhân viên</a>.
+                           <a href="${ctx}/staffcontrol">quay lại trang staff</a>.
                         </p>
                     </c:otherwise>
                 </c:choose>
