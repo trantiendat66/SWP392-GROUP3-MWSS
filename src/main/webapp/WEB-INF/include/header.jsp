@@ -50,12 +50,12 @@
 
 
                 <div class="collapse navbar-collapse" id="mainNav">          
-
-
-                    <form class="d-flex mx-lg-3 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
-                        <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
-                        <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
-                    </form>
+                    <c:if test="${empty sessionScope.staff or isHome}">
+                        <form class="d-flex mx-lg-3 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
+                            <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
+                            <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+                        </form>
+                    </c:if>
 
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <c:choose>
