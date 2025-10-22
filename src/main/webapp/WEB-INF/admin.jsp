@@ -7,7 +7,16 @@
 <%@ page import="model.TopProduct" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
 <style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        overflow-x: hidden;
+    }
     /* Layout */
     .page-wrap {
         padding: 10px; /* tăng khoảng cách 2 bên tổng thể */
@@ -17,8 +26,10 @@
         display: flex;
         gap: 10px; /* rộng ra 1 chút */
         align-items: flex-start;
+        width: 100%;
         max-width: 1500px; /* giới hạn chiều ngang để nội dung bự nhưng trung tâm */
         margin: 0 auto; /* căn giữa */
+        overflow: hidden
     }
     /* Sidebar */
     .sidebar {
@@ -27,7 +38,7 @@
         max-width: 320px;
         background: #fff;
         padding: 22px;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.03);
         border-radius: 8px;
         flex-shrink: 0;
         position: relative;
@@ -85,6 +96,7 @@
         border-radius: 10px;
         box-shadow: 0 2px 14px rgba(0,0,0,0.04);
         min-width: 0; /* allow shrink */
+        overflow-x: auto;
     }
     /* Top controls row */
     .controls {
@@ -233,7 +245,7 @@
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">Order Management</a></li>
                 <li><a class="nav-link" href="#">Ratings & Feedback</a></li>
-                <li><a class="nav-link" href="#">Customer Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
             </ul>
             <button id="logoutBtn" style="margin-top:18px;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;width:100%;">Logout</button>
@@ -241,6 +253,131 @@
 
         <!-- CONTENT -->
         <main class="main-content" aria-label="Admin main content">
+            <c:choose>
+                <c:when test="${requestScope.activeTab == 'customer'}">
+                    <div class="controls">
+                        <div class="page-title">Customer Management</div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table" aria-describedby="customer-list">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:60px;">#</th>
+                                    <th>Email</th>
+                                    <th>Password (hash)</th>
+                                    <th style="min-width: 210px; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:choose>
+                                    <c:when test="${not empty listCustomers}">
+                                        <c:forEach var="c" items="${listCustomers}" varStatus="st">
+                                            <tr>
+                                                <td>${st.index + 1}</td>
+                                                <td>${c.email}</td>
+                                                <td>${c.password}</td>
+                                                <td style="text-align:center;">
+
+                                                    <%--VIEW--%>
+                                                    <a href="customerdetail?id=${c.customer_id}" class="btn btn-sm btn-info" title="View Details" style="margin: 2px 1px;">
+                                                        <i class="fa fa-eye"></i> View
+                                                    </a>
+
+                                                    <%-- EDIT--%>
+                                                    <%--Thêm địa chỉ để edit trong admin Customer Management --%>
+                                                    <a href="?id=${c.customer_id}&action=edit" class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
+                                                        <i class="fa fa-edit"></i> Edit
+                                                    </a>
+
+                                                    <%--DELETE--%>
+                                                    <a href="deletecustomer?id=${c.customer_id}" 
+                                                       onclick="return confirm('Xóa? ${c.customer_name} (${c.email})?')"
+                                                       class="btn btn-sm btn-danger" title="Delete Customer" style="margin: 2px 1px;">
+                                                        <i class="fa fa-trash"></i> Delete
+
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr>
+                                            <td colspan="4" style="text-align:center;padding:18px;">
+                                                Éo có khách hàng nào cả ok?.
+                                            </td>
+                                        </tr>
+                                    </c:otherwise>
+                                </c:choose>
+                            </tbody>
+                        </table>
+                    </div>                
+                </c:when>
+                <c:when test="${requestScope.activeTab == 'customerDetail'}">
+                    <div class="controls">
+                        <div class="page-title">Customer Detail <i class="fa fa-eye" style="color:#007bff;"></i></div>
+                    </div>
+
+                    <c:set var="c" value="${requestScope.customerDetail}" />
+
+                    <c:if test="${c != null}">
+                        <div class="customer-detail-card card shadow" style="padding: 20px;">
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <div class="detail-avatar" style="margin-bottom: 20px;">
+                                        <c:choose>
+                                            <c:when test="${c.image != null && c.image != ''}">
+                                                <img src="${pageContext.request.contextPath}/${c.image}" 
+                                                     alt="Customer Avatar" 
+                                                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" />
+                                            </c:when>
+                                            <c:otherwise>
+
+                                                <div style="width: 180px; height: 180px; line-height: 180px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px;">
+                                                    <i class="fa fa-user-circle fa-5x" style="color: #ccc;"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+
+
+                                    <h5 style="margin: 0; padding: 0;">${c.customer_name}</h5>
+                                    <p class="text-muted">Customer #${c.customer_id}</p>
+                                </div>
+                                <div class="col-md-8 detail-info">
+                                    <h4 class="mb-4" style="border-bottom: 1px solid #eee; padding-bottom: 10px;">General Information</h4>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <p><strong>Full Name:</strong> ${c.customer_name}</p>
+                                            <p><strong>Email:</strong> ${c.email}</p>
+                                            <p><strong>Phone:</strong> ${c.phone}</p>
+                                            <p><strong>Date of Birth:</strong> ${c.dob}</p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <p><strong>Address:</strong> ${c.address}</p>
+                                            <p><strong>Gender:</strong> ${c.gender}</p>
+                                            <p><strong>Status:</strong> ${c.account_status}</p>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                                        <a href="customerprofile?id=${c.customer_id}&action=edit" class="btn btn-primary" style="margin-right: 10px;">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                        <a href="customerlist" class="btn btn-danger">
+                                            <i class="fa fa-arrow-left"></i> Back to List
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${c == null}">
+                        <div class="alert alert-danger">
+                            Éo có thằng nào cả! 
+                        </div>
+                    </c:if>
+                </c:when>
+                <c:otherwise>
             <div class="controls">
                 <div class="page-title">Product Management</div>
 
@@ -349,9 +486,11 @@
                         } else { %>
                         <tr><td colspan="8" style="text-align:center;padding:18px;">No products found in the database.</td></tr>
                         <% }%>
-                    </tbody>
-                </table>
-            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </main>
     </div>
 </div>
