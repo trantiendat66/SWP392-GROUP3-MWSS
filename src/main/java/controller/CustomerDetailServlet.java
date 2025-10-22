@@ -18,7 +18,7 @@ import model.Customer;
  *
  * @author Cola
  */
-@WebServlet(name = "CustomerDetailServlet", urlPatterns = {"/customerdetail"})
+@WebServlet(name = "CustomerDetailServlet", urlPatterns = {"/admin/customerdetail"})
 public class CustomerDetailServlet extends HttpServlet {
 
     /**
@@ -112,3 +112,4 @@ public class CustomerDetailServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
