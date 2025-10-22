@@ -21,6 +21,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
             body {
@@ -237,6 +238,9 @@
                         <div class="row mb-3 align-items-center">
                             <div class="col-md-8">
                                 <h3>Product List</h3>
+                                <button id="toggleFilterBtn" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                                    <i class="bi bi-funnel"></i> Filter
+                                </button>
                                 <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" class="d-flex">
                                     <input type="text" 
                                            name="keyword" 
@@ -246,6 +250,63 @@
                                            aria-label="Search">
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </form>
+                                <!-- Filter Modal -->
+                                <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            <form action="${pageContext.request.contextPath}/staffcontrol" method="GET">
+                                                <div class="modal-body">
+                                                    <!-- Brand -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Brand</label>
+                                                        <select name="brand" class="form-select">
+                                                            <option value="">All Brands</option>
+                                                            <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
+                                                            <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
+                                                            <option value="Rolex" ${param.brand == 'Rolex' ? 'selected' : ''}>Rolex</option>
+                                                            <option value="Omega" ${param.brand == 'Omega' ? 'selected' : ''}>Omega</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Gender -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Gender</label>
+                                                        <select name="gender" class="form-select">
+                                                            <option value="">All Genders</option>
+                                                            <option value="1" ${param.gender == '1' ? 'selected' : ''}>Nam</option>
+                                                            <option value="0" ${param.gender == '0' ? 'selected' : ''}>Nữ</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Price Range -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Price Range</label>
+                                                        <select name="priceRange" class="form-select">
+                                                            <option value="">All Prices</option>
+                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>Dưới 2 triệu</option>
+                                                            <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 triệu</option>
+                                                            <option value="4000000-10000000" ${param.priceRange == '4000000-10000000' ? 'selected' : ''}>4 - 10 triệu</option>
+                                                            <option value="10000000-40000000" ${param.priceRange == '10000000-40000000' ? 'selected' : ''}>10 - 40 triệu</option>
+                                                            <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 triệu</option>
+                                                            <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Trên 100 triệu</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Apply Filter</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
