@@ -295,7 +295,7 @@
                                                         <label class="form-label fw-bold">Price Range</label>
                                                         <select name="priceRange" class="form-select">
                                                             <option value="">All Prices</option>
-                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>Dưới 2 triệu</option>
+                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 triệu</option>
                                                             <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 triệu</option>
                                                             <option value="4000000-10000000" ${param.priceRange == '4000000-10000000' ? 'selected' : ''}>4 - 10 triệu</option>
                                                             <option value="10000000-40000000" ${param.priceRange == '10000000-40000000' ? 'selected' : ''}>10 - 40 triệu</option>
