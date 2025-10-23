@@ -60,39 +60,52 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <c:choose>
                             <c:when test="${not empty sessionScope.customer or not empty sessionScope.staff}">
-                                <li class="nav-item dropdown me-2">
-                                    <a class="nav-link1 dropdown-toggle" href="#" id="userMenu" role="button"
-                                       data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-circle"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                        <!-- Nếu là CUSTOMER -->
+
+                                <c:set var="isAdmin" value="${not empty sessionScope.staff and sessionScope.staff.role eq 'Admin'}" />
+
+                                <c:choose>
+                                    <c:when test="${isAdmin}">
+                                        <li class="nav-item me-2">
+                                            <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/staff_profile">
+                                                <i class="bi bi-person-circle"></i> Profile
+                                            </a>
+                                        </li>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <li class="nav-item dropdown me-2">
+                                            <a class="nav-link1 dropdown-toggle" href="#" id="userMenu" role="button"
+                                               data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-person-circle"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+
+                                                <c:if test="${not empty sessionScope.customer}">
+                                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    </c:if>
+
+                                                <c:if test="${not empty sessionScope.staff}">
+                                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/staff_profile">Profile</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    </c:if>
+
+                                                <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                                            </ul>
+                                        </li>
+
                                         <c:if test="${not empty sessionScope.customer}">
-                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
-                                            </c:if>
-
-                                        <!-- Nếu là STAFF -->
-                                        <c:if test="${not empty sessionScope.staff}">
-                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/staff_profile">Profile</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">Logout</a></li>
-                                            </c:if>
-                                    </ul>
-                                </li>
-
-                                <!-- 🛒 Chỉ hiển thị cart nếu là customer -->
-                                <c:if test="${not empty sessionScope.customer}">
-                                    <li class="nav-item">
-                                        <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
-                                            <i class="bi bi-cart"></i> Cart
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                </c:if>
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
+                                                    <i class="bi bi-cart"></i> Cart
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                                        0
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </c:if>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
 
                             <c:otherwise>
