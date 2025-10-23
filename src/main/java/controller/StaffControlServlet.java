@@ -55,7 +55,6 @@ public class StaffControlServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // Giữ nguyên logic processRequest hoặc chuyển hướng đến doGet/doPost nếu cần.
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,20 +75,6 @@ public class StaffControlServlet extends HttpServlet {
         StaffDAO staffDAO = new StaffDAO();
         Staff staff = staffDAO.getStaffByEmail(loggedInCustomer.getEmail());
         request.setAttribute("staff", staff);
-
-        // 🛑 BỔ SUNG LOGIC LOAD DANH SÁCH SẢN PHẨM 🛑
-        /*try {
-            ProductDAO productDAO = new ProductDAO();
-            // Lấy danh sách sản phẩm (Product List)
-            List<Product> listProducts = productDAO.getAllProducts();
-
-            // Đặt danh sách vào request để JSP hiển thị
-            request.setAttribute("listProducts", listProducts);
-        } catch (Exception e) {
-            // Log lỗi hoặc đặt thông báo lỗi nếu cần
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "Error loading product data.");
-        }*/
         try {
             ProductDAO productDAO = new ProductDAO();
             List<Product> listProducts;

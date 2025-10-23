@@ -228,7 +228,6 @@
                 <button class="nav-link active" id="pill-product" data-bs-toggle="pill" data-bs-target="#v-pills-product" type="button" role="tab" aria-controls="v-pills-products" aria-selected="true">Product Management</button>
                 <button class="nav-link" id="pill-order" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="false">Order Management</button>
                 <button class="nav-link" id="pill-rate-feedback" data-bs-toggle="pill" data-bs-target="#v-pills-rate-feedback" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Rate And Feedback Management</button>
-                <button class="nav-link" id="pill-profile" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Profile Management</button>
             </div>
 
             <div class="tab-content" id="v-pills-tabContent">
@@ -245,7 +244,7 @@
                                     <input type="text" 
                                            name="keyword" 
                                            class="form-control me-2" 
-                                           placeholder="Search by product name..." 
+                                           placeholder="Search by name..." 
                                            value="${param.keyword != null ? param.keyword : ''}"
                                            aria-label="Search">
                                     <button type="submit" class="btn btn-primary">Search</button>

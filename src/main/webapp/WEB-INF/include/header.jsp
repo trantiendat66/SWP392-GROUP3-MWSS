@@ -65,11 +65,7 @@
 
                                 <c:choose>
                                     <c:when test="${isAdmin}">
-                                        <li class="nav-item me-2">
-                                            <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/staff_profile">
-                                                <i class="bi bi-person-circle"></i> Profile
-                                            </a>
-                                        </li>
+                                        <li class="nav-item me-2"></li>
                                     </c:when>
 
                                     <c:otherwise>
@@ -113,7 +109,7 @@
                                     <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/login.jsp">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
+                                    <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/login.jsp">
                                         <i class="bi bi-cart"></i> Cart
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
                                             0

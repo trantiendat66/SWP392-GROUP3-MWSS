@@ -208,7 +208,6 @@
                     <td style="text-align:center">
                         <div class="action-links" role="group" aria-label="actions for staff <%= s.getAccountId()%>">
                             <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId()%>">View</a>
-                            <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId()%>">Edit</a>
                             <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
                                 <input type="hidden" name="id" value="<%= s.getAccountId()%>"/>
                                 <button class="action-delete" type="submit" onclick="return confirm('Delete staff #<%= s.getAccountId()%> ?');">Delete</button>

@@ -63,17 +63,15 @@ public class SearchServlet extends HttpServlet {
         String keyword = request.getParameter("keyword");
         ProductDAO dao = new ProductDAO();
 
-        // LẤY TOÀN BỘ SẢN PHẨM (dùng cho Featured cuối trang)
-        List<Product> allProducts = dao.getAllProducts(); // thêm method nếu chưa có
+        List<Product> allProducts = dao.getAllProducts(); 
         if (allProducts == null) {
             allProducts = new java.util.ArrayList<>();
         }
         request.setAttribute("listAll", allProducts);
 
-        // XỬ LÝ TÌM KIẾM -> listP
         List<Product> searchResult;
         if (keyword == null || keyword.trim().isEmpty()) {
-            searchResult = new java.util.ArrayList<>(); // rỗng nếu không tìm
+            searchResult = new java.util.ArrayList<>();
             request.setAttribute("keyword", "");
         } else {
             searchResult = dao.searchProducts(keyword.trim());

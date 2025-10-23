@@ -55,25 +55,16 @@ public class AdminDashboardServlet extends HttpServlet {
             products = productDAO.getAllProducts();
         }
         
-        // Lấy dữ liệu thống kê động
-        AnalyticsDAO analyticsDAO = new AnalyticsDAO();
-        
-        // Tính tổng doanh thu
+        AnalyticsDAO analyticsDAO = new AnalyticsDAO(); 
         long totalRevenue = analyticsDAO.getTotalRevenue();
-        
-        // Lấy top 5 sản phẩm bán chạy
         List<TopProduct> topProducts = analyticsDAO.getTop5Products();
-        
-        // Lấy dữ liệu biểu đồ doanh thu theo tháng
         Map<String, Long> monthlyRevenue = analyticsDAO.getMonthlyRevenueChart();
         
-        // Lấy các thống kê khác
         long currentMonthRevenue = analyticsDAO.getCurrentMonthRevenue();
         long currentYearRevenue = analyticsDAO.getCurrentYearRevenue();
         int totalCompletedOrders = analyticsDAO.getTotalCompletedOrders();
         int totalActiveCustomers = analyticsDAO.getTotalActiveCustomers();
         
-        // Set attributes cho JSP
         request.setAttribute("products", products);
         request.setAttribute("keyword", keyword);
         request.setAttribute("totalRevenue", totalRevenue);
@@ -84,7 +75,9 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("totalCompletedOrders", totalCompletedOrders);
         request.setAttribute("totalActiveCustomers", totalActiveCustomers);
         
-        // Forward đến trang admin.jsp để hiển thị
+        System.out.println("AdminDashboardServlet: keyword=" + keyword + ", products found=" + (products == null ? 0 : products.size()));
+        request.setAttribute("products", products);
+        request.setAttribute("keyword", keyword);
         request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
     }
 }

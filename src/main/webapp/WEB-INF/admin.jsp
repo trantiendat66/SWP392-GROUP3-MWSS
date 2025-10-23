@@ -415,9 +415,19 @@
                             </ul>
                         </div>
                     </div>
-                    <div style="text-align: right;">
-                        <button class="add-product-btn" id="addProductBtn">Add New Product</button>
+                    <div class="d-flex align-items-center mb-3">
+                        <form action="${pageContext.request.contextPath}/admin/dashboard" method="GET" class="d-flex flex-grow-1 me-2">
+                            <input type="text" 
+                                   name="keyword" 
+                                   class="form-control me-2 flex-grow-1"
+                                   placeholder="Search by name..." 
+                                   value="${param.keyword != null ? param.keyword : ''}"
+                                   aria-label="Search">
+                            <button type="submit" class="btn btn-primary me-2">Search</button>
+                        </form>
+                        <button class="btn btn-success" id="addProductBtn">Add New Product</button>
                     </div>
+
                     <%-- Simple flash (no hide, no JS) --%>
                     <%
                         String successMessage = (String) session.getAttribute("successMessage");
@@ -471,7 +481,7 @@
                                     <td class="product-name"><%= p.getProductName()%></td>
                                     <td class="product-brand"><%= p.getBrand()%></td>
                                     <td><%= p.isGender() ? "Men" : "Women"%></td>
-                                    <td class="product-price"><%= String.format(java.util.Locale.US, "%,d", p.getPrice())%> </td>  <%-- Nếu để muốn sử dụng dấu , thay vì dấu . thì phải sử dụng locale mỹ --%></td>
+                                    <td class="product-price"><%= String.format(java.util.Locale.US, "%,d", p.getPrice())%> </td>
                                     <td class="product-stock"><%= p.getQuantityProduct()%></td>
                                     <td class="actions-cell">
                                         <button class="action-btn view-btn" data-id="<%= p.getProductId()%>" title="View Details">👁️</button>
@@ -514,7 +524,10 @@
         document.querySelectorAll('.view-btn').forEach(btn => {
             btn.addEventListener('click', e => {
                 const id = btn.getAttribute('data-id') || '';
-                if (!id) { alert('Missing product id'); return; }
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
                 window.location.href = '${pageContext.request.contextPath}/viewproductdetail?id=' + encodeURIComponent(id);
             });
         });
@@ -522,7 +535,10 @@
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', e => {
                 const id = btn.getAttribute('data-id') || '';
-                if (!id) { alert('Missing product id'); return; }
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
                 window.location.href = '${pageContext.request.contextPath}/editproduct?id=' + encodeURIComponent(id);
             });
         });
@@ -530,8 +546,12 @@
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', e => {
                 const id = btn.getAttribute('data-id') || '';
-                if (!id) { alert('Missing product id'); return; }
-                if (!confirm('Delete product: ' + id + '?')) return;
+                if (!id) {
+                    alert('Missing product id');
+                    return;
+                }
+                if (!confirm('Delete product: ' + id + '?'))
+                    return;
 
                 const form = document.createElement('form');
                 form.method = 'post';

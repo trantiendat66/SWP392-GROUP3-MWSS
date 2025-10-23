@@ -140,7 +140,6 @@
             </table>
 
             <div class="controls">
-                <a href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId()%>" class="btn-primary">Edit</a>
                 <a href="${pageContext.request.contextPath}/admin/staff" class="btn-ghost">Back to list</a>
             </div>
         </div>
