@@ -237,17 +237,20 @@
                         <div class="row mb-3 align-items-center">
                             <div class="col-md-8">
                                 <h3>Product List</h3>
-                                <button id="toggleFilterBtn" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
-                                    <i class="bi bi-funnel"></i> Filter
-                                </button>
-                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" class="d-flex">
+                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" 
+                                      class="d-flex align-items-center gap-2">
                                     <input type="text" 
                                            name="keyword" 
-                                           class="form-control me-2" 
+                                           class="form-control flex-grow-1" 
                                            placeholder="Search by name..." 
                                            value="${param.keyword != null ? param.keyword : ''}"
                                            aria-label="Search">
-                                    <button type="submit" class="btn btn-primary">Search</button>
+                                    <button type="submit" class="btn btn-primary px-4">Search</button>
+                                    <button id="toggleFilterBtn" type="button" 
+                                            class="btn btn-outline-secondary d-inline-flex align-items-center px-4" 
+                                            data-bs-toggle="modal" data-bs-target="#filterModal">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
                                 </form>
                                 <!-- Filter Modal -->
                                 <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -268,8 +271,12 @@
                                                             <option value="">All Brands</option>
                                                             <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
                                                             <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
-                                                            <option value="Rolex" ${param.brand == 'Rolex' ? 'selected' : ''}>Rolex</option>
-                                                            <option value="Omega" ${param.brand == 'Omega' ? 'selected' : ''}>Omega</option>
+                                                            <option value="Seiko" ${param.brand == 'Seiko' ? 'selected' : ''}>Seiko</option>
+                                                            <option value="Tissot" ${param.brand == 'Tissot' ? 'selected' : ''}>Tissot</option>
+                                                            <option value="Doxa" ${param.brand == 'Doxa' ? 'selected' : ''}>Doxa</option>
+                                                            <option value="KOI" ${param.brand == 'KOI' ? 'selected' : ''}>KOI</option>
+                                                            <option value="Saga" ${param.brand == 'Saga' ? 'selected' : ''}>Saga</option>
+                                                            <option value="Orient" ${param.brand == 'Orient' ? 'selected' : ''}>Orient</option>
                                                         </select>
                                                     </div>
 
