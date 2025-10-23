@@ -66,9 +66,6 @@
                                 <c:choose>
                                     <c:when test="${isAdmin}">
                                         <li class="nav-item me-2">
-                                            <a class="btn btn-outline-light btn-sm" href="${pageContext.request.contextPath}/staff_profile">
-                                                <i class="bi bi-person-circle"></i> Profile
-                                            </a>
                                         </li>
                                     </c:when>
 
