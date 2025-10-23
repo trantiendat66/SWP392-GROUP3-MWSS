@@ -1,6 +1,6 @@
-<%-- 
+<%--  
     Document   : orders-table
-    Created on : Oct 18, 2025, 12:35:39 PM
+    Created on : Oct 18, 2025, 12:35:39 PM
     Author     : Oanh Nguyen
 --%>
 
@@ -31,7 +31,15 @@
                                 <div class="d-flex justify-content-between">
                                     <span>
                                         <strong>#${o.order_id}</strong> •
-                                        ${o.order_date}
+                                        <%-- HIỂN THỊ NGÀY: nếu DELIVERED và có delivered_at thì dùng delivered_at, ngược lại dùng order_date (String) --%>
+                                        <c:choose>
+                                            <c:when test="${o.order_status eq 'DELIVERED' and o.delivered_at ne null}">
+                                                <fmt:formatDate value="${o.delivered_at}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${o.order_date}
+                                            </c:otherwise>
+                                        </c:choose>
                                         <span class="badge bg-secondary ms-2">${o.order_status}</span>
                                     </span>
                                     <span class="text-danger">
@@ -57,6 +65,8 @@
                                         <th class="text-center" style="width:100px;">SL</th>
                                         <th class="text-end">Đơn giá</th>
                                         <th class="text-end">Thành tiền</th>
+                                            <%-- FEEDBACK: thêm cột "Đánh giá" --%>
+                                        <th class="text-end" style="width:140px;">Đánh giá</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,14 +76,78 @@
                                                 <img src="${ctx}/assert/image/${it.image}"
                                                      class="img-thumbnail"
                                                      style="width:60px;height:60px;object-fit:cover"
-                                                     alt="${it.product_name}">
+                                                     alt="${it.productName}">
                                             </td>
-                                            <td>${it.product_name}</td>
+                                            <td>${it.productName}</td>
                                             <td class="text-center">${it.quantity}</td>
-                                            <td class="text-end"><fmt:formatNumber value="${it.unit_price}" type="number"/> VNĐ</td>
-                                            <td class="text-end"><fmt:formatNumber value="${it.total_price}" type="number"/> VNĐ</td>
+                                            <td class="text-end"><fmt:formatNumber value="${it.unitPrice}" type="number"/> VNĐ</td>
+                                            <td class="text-end"><fmt:formatNumber value="${it.totalPrice}" type="number"/> VNĐ</td>
+
+                                            <td class="text-end">
+                                                <c:set var="__pid" value="${it.productId}" />
+                                                <c:set var="__key" value="${o.order_id}:${__pid}" />
+
+                                                <c:choose>
+                                                    <c:when test="${not empty eligibleKeys && eligibleKeys.contains(__key)}">
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-primary"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#fbModal-${o.order_id}-${__pid}">
+                                                            Đánh giá
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="fbModal-${o.order_id}-${__pid}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Đánh giá sản phẩm</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="${ctx}/feedback/create" method="post" class="feedback-form">
+                                                                            <input type="hidden" name="order_id" value="${o.order_id}">
+                                                                            <input type="hidden" name="product_id" value="${__pid}">
+
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Đánh giá</label>
+                                                                                <div class="d-flex gap-2">
+                                                                                    <label><input type="radio" name="rating" value="5" checked> 5★</label>
+                                                                                    <label><input type="radio" name="rating" value="4"> 4★</label>
+                                                                                    <label><input type="radio" name="rating" value="3"> 3★</label>
+                                                                                    <label><input type="radio" name="rating" value="2"> 2★</label>
+                                                                                    <label><input type="radio" name="rating" value="1"> 1★</label>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Nhận xét
+                                                                                    <small class="text-muted comment-req d-none">(bắt buộc nếu &lt; 5★)</small>
+                                                                                </label>
+                                                                                <textarea name="comment" class="form-control" rows="3"></textarea>
+                                                                                <div class="form-text text-danger d-none comment-help"></div>
+                                                                            </div>
+
+                                                                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                                        <button type="submit" class="btn btn-primary"
+                                                                                onclick="submitFeedback('${o.order_id}', '${__pid}')">Gửi đánh giá</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="text-muted">—</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                         </tr>
                                     </c:forEach>
+
                                 </tbody>
                             </table>
                         </div>
@@ -83,4 +157,3 @@
         </div>
     </c:otherwise>
 </c:choose>
-

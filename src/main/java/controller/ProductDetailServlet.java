@@ -5,6 +5,7 @@
 package controller;
 
 import dao.ProductDAO;
+import dao.FeedbackDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Product;
+import model.Customer;
+import model.FeedbackView;
+import java.util.Map;
+import java.util.List;
 
 /**
  *
@@ -21,20 +27,10 @@ import model.Product;
 @WebServlet(name = "ProductDetailServlet", urlPatterns = {"/productdetail"})
 public class ProductDetailServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -47,23 +43,13 @@ public class ProductDetailServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String idStr = request.getParameter("id");
+        String idStr = request.getParameter("id");
         System.out.println("ProductDetailServlet called with id=" + idStr); // debug
 
         if (idStr == null || idStr.trim().isEmpty()) {
-            // rõ ràng cho client: thiếu id
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing product id");
             return;
         }
@@ -84,34 +70,50 @@ public class ProductDetailServlet extends HttpServlet {
             return;
         }
 
+        // === BỔ SUNG: nạp feedback để hiển thị ở productdetail.jsp ===
+        try {
+            // === Feedback: nạp dữ liệu hiển thị ở productdetail.jsp ===
+            FeedbackDAO fbDAO = new FeedbackDAO();
+
+            // 1) Danh sách đánh giá để render
+            List<FeedbackView> productReviews = fbDAO.getFeedbackByProduct(id);
+            request.setAttribute("productReviews", productReviews);
+
+            // 2) Tổng số đánh giá & điểm trung bình
+            int ratingCount = fbDAO.getRatingCount(id);
+            double ratingAvg = fbDAO.getAverageRating(id);
+            request.setAttribute("ratingCount", ratingCount);
+            request.setAttribute("ratingAvg", ratingAvg);
+
+            // 3) Khách hiện tại đã review sản phẩm này chưa? (để khoá nút nếu cần)
+            HttpSession session = request.getSession(false);
+            Customer cus = (session != null) ? (Customer) session.getAttribute("customer") : null;
+            boolean hasReviewed = false;
+            if (cus != null) {
+                Map<Integer, Boolean> reviewed
+                        = fbDAO.findReviewedProductIds(cus.getCustomer_id(), java.util.List.of(id));
+                hasReviewed = reviewed.getOrDefault(id, Boolean.FALSE);
+            }
+            request.setAttribute("hasReviewed", hasReviewed);
+
+        } catch (Exception ex) {
+            // không làm gián đoạn trang chi tiết nếu lỗi feedback
+            request.setAttribute("feedbackError", ex.getMessage());
+        }
+        // === END BỔ SUNG ===
+
         request.setAttribute("product", product);
-        // forward tới JSP hiển thị chi tiết (đường dẫn phải tồn tại)
         request.getRequestDispatcher("/WEB-INF/productdetail.jsp").forward(request, response);
-    
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

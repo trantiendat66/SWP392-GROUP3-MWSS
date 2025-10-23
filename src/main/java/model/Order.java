@@ -5,6 +5,7 @@
 package model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -20,6 +21,7 @@ public class Order {
     private String shipping_address;
     private int payment_method;
     private BigDecimal total_amount;
+    private Date delivered_at;
 
     public Order() {
     }
@@ -33,6 +35,18 @@ public class Order {
         this.shipping_address = shipping_address;
         this.payment_method = payment_method;
         this.total_amount = total_amount;
+    }
+    
+        public Order(int order_id, String customer_name, String phone, String order_date, String order_status, String shipping_address, int payment_method, BigDecimal total_amount, Date delivered_at) {
+        this.order_id = order_id;
+        this.customer_name = customer_name;
+        this.phone = phone;
+        this.order_date = order_date;
+        this.order_status = order_status;
+        this.shipping_address = shipping_address;
+        this.payment_method = payment_method;
+        this.total_amount = total_amount;
+        this.delivered_at = delivered_at;
     }
 
     public int getOrder_id() {
@@ -97,6 +111,15 @@ public class Order {
 
     public void setTotal_amount(BigDecimal total_amount) {
         this.total_amount = total_amount;
+    }
+    
+ 
+    public Date getDelivered_at() {              
+        return delivered_at;
+    }
+
+    public void setDelivered_at(Date delivered_at) {
+        this.delivered_at = delivered_at;
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.*;
 import model.Order;
 import model.OrderDetail;
+import model.OrderItemRow;
 
 /**
  *
@@ -336,7 +337,7 @@ public class OrderDAO extends DBContext {
         }
         return "Update Completed";
     }
-    
+
     /**
      * Lấy danh sách đơn theo 1..n trạng thái cho 1 customer. Ví dụ:
      * findOrdersByStatuses(5, "PENDING", "CONFIRMED") findOrdersByStatuses(5,
@@ -348,20 +349,33 @@ public class OrderDAO extends DBContext {
         }
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT o.order_id, c.customer_name, o.phone, ")
-                // chuyển datetime -> string theo model bạn
-                .append("       CONVERT(varchar(19), o.order_date, 120) AS order_date, ")
-                .append("       o.order_status, o.shipping_address, o.payment_method, o.total_amount ")
+        sql.append("SELECT ")
+                .append("  o.order_id, ")
+                .append("  c.customer_name, ")
+                .append("  o.phone, ")
+                .append("  CONVERT(varchar(19), o.order_date, 120) AS order_date, ")
+                .append("  o.order_status, ")
+                .append("  o.shipping_address, ")
+                .append("  o.payment_method, ")
+                .append("  o.total_amount, ")
+                .append("  o.delivered_at ")
                 .append("FROM [Order] o ")
                 .append("JOIN Customer c ON c.customer_id = o.customer_id ")
                 .append("WHERE o.customer_id = ? AND o.order_status IN (");
+
         for (int i = 0; i < statuses.length; i++) {
             sql.append("?");
             if (i < statuses.length - 1) {
                 sql.append(",");
             }
         }
-        sql.append(") ORDER BY o.order_date DESC, o.order_id DESC");
+        sql.append(") ");
+
+        // Sắp xếp: nếu đã giao thì theo delivered_at, ngược lại theo order_date
+        sql.append("ORDER BY ")
+                .append("  CASE WHEN o.order_status = 'DELIVERED' AND o.delivered_at IS NOT NULL ")
+                .append("       THEN o.delivered_at ELSE o.order_date END DESC, ")
+                .append("  o.order_id DESC");
 
         try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             ps.setInt(1, customerId);
@@ -379,9 +393,15 @@ public class OrderDAO extends DBContext {
                     o.setOrder_date(rs.getString("order_date"));
                     o.setOrder_status(rs.getString("order_status"));
                     o.setShipping_address(rs.getString("shipping_address"));
-                    // bit -> int 0/1 theo model hiện tại của bạn
                     o.setPayment_method(rs.getBoolean("payment_method") ? 1 : 0);
                     o.setTotal_amount(rs.getBigDecimal("total_amount"));
+
+                    // >>> NEW: gán delivered_at nếu có
+                    java.sql.Timestamp ts = rs.getTimestamp("delivered_at");
+                    if (ts != null) {
+                        o.setDelivered_at(new java.util.Date(ts.getTime()));
+                    }
+
                     list.add(o);
                 }
             }
@@ -389,19 +409,18 @@ public class OrderDAO extends DBContext {
         }
     }
 
-    // ====== Hàm tiện ích (tuỳ dùng) ======
-    public List<Order> findPlacedOrders(int customerId) throws SQLException {
-        return findOrdersByStatuses(customerId, "PENDING", "CONFIRMED");
-    }
-
-    public List<Order> findShippingOrders(int customerId) throws SQLException {
-        return findOrdersByStatuses(customerId, "SHIPPING");
-    }
-
-    public List<Order> findDeliveredOrders(int customerId) throws SQLException {
-        return findOrdersByStatuses(customerId, "DELIVERED");
-    }
-
+//    // ====== Hàm tiện ích (tuỳ dùng) ======
+//    public List<Order> findPlacedOrders(int customerId) throws SQLException {
+//        return findOrdersByStatuses(customerId, "PENDING", "CONFIRMED");
+//    }
+//
+//    public List<Order> findShippingOrders(int customerId) throws SQLException {
+//        return findOrdersByStatuses(customerId, "SHIPPING");
+//    }
+//
+//    public List<Order> findDeliveredOrders(int customerId) throws SQLException {
+//        return findOrdersByStatuses(customerId, "DELIVERED");
+//    }
     /**
      * Lấy chi tiết sản phẩm của 1 đơn (phục vụ accordion ở trang /orders)
      */
@@ -431,6 +450,130 @@ public class OrderDAO extends DBContext {
                 }
             }
             return list;
+        }
+    }
+
+    /**
+     * Lấy map<orderId, List<OrderItemRow>> cho danh sách orderIds.
+     */
+    public Map<Integer, List<OrderItemRow>> findItemsWithPidByOrderIds(List<Integer> orderIds) throws SQLException {
+        Map<Integer, List<OrderItemRow>> map = new HashMap<>();
+        if (orderIds == null || orderIds.isEmpty()) {
+            return map;
+        }
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT od.order_id, od.product_id, p.product_name, p.image, ")
+                .append("       od.quantity, od.unit_price, (od.quantity * od.unit_price) AS total_price ")
+                .append("FROM OrderDetail od ")
+                .append("JOIN Product p ON p.product_id = od.product_id ")
+                .append("WHERE od.order_id IN (");
+        for (int i = 0; i < orderIds.size(); i++) {
+            if (i > 0) {
+                sql.append(',');
+            }
+            sql.append('?');
+        }
+        sql.append(')');
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < orderIds.size(); i++) {
+                ps.setInt(i + 1, orderIds.get(i));
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int orderId = rs.getInt("order_id");
+                    OrderItemRow row = new OrderItemRow(
+                            orderId,
+                            rs.getInt("product_id"),
+                            rs.getString("product_name"),
+                            rs.getString("image"),
+                            rs.getInt("quantity"),
+                            rs.getBigDecimal("unit_price"),
+                            rs.getBigDecimal("total_price")
+                    );
+                    map.computeIfAbsent(orderId, k -> new ArrayList<>()).add(row);
+                }
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Trả về set "orderId:productId" đủ điều kiện đánh giá: -
+     * Order.order_status = 'DELIVERED' - delivered_at NOT NULL và delivered_at
+     * >= GETDATE()-3 - Chưa có feedback của customer cho product đó kể từ
+     * delivered_at
+     */
+    public Set<String> findEligibleFeedbackKeys(int customerId, List<Integer> orderIds) throws SQLException {
+        Set<String> keys = new HashSet<>();
+        if (orderIds == null || orderIds.isEmpty()) {
+            return keys;
+        }
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT od.order_id, od.product_id ")
+                .append("FROM [Order] o ")
+                .append("JOIN OrderDetail od ON od.order_id = o.order_id ")
+                .append("WHERE o.order_id IN (");
+        for (int i = 0; i < orderIds.size(); i++) {
+            if (i > 0) {
+                sql.append(',');
+            }
+            sql.append('?');
+        }
+        sql.append(") AND o.order_status = 'DELIVERED' ")
+                .append("AND o.delivered_at IS NOT NULL ")
+                .append("AND o.delivered_at >= DATEADD(DAY, -3, GETDATE()) ")
+                .append("AND NOT EXISTS ( ")
+                .append("  SELECT 1 FROM Feedback f ")
+                .append("  WHERE f.customer_id = ? ")
+                .append("    AND f.product_id = od.product_id ")
+                .append("    AND f.create_at >= o.delivered_at ")
+                .append(")");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            for (Integer id : orderIds) {
+                ps.setInt(idx++, id);
+            }
+            ps.setInt(idx, customerId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String key = rs.getInt("order_id") + ":" + rs.getInt("product_id");
+                    keys.add(key);
+                }
+            }
+        }
+        return keys;
+    }
+
+    /*
+    Đơn thuộc về khách đang đăng nhập
+
+    Đơn có trạng thái DELIVERED
+
+    Trong đơn có product_id đó (tồn tại trong OrderDetail)
+
+    delivered_at không null và trong 3 ngày (tính tới hiện tại)
+     */
+    public boolean canReview(int customerId, int orderId, int productId) throws SQLException {
+        String sql
+                = "SELECT 1 "
+                + "FROM [Order] o "
+                + "JOIN OrderDetail od ON od.order_id = o.order_id "
+                + "WHERE o.order_id = ? AND o.customer_id = ? AND od.product_id = ? "
+                + "  AND o.order_status = 'DELIVERED' "
+                + "  AND o.delivered_at IS NOT NULL "
+                + "  AND DATEDIFF(DAY, o.delivered_at, GETDATE()) BETWEEN 0 AND 3";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, customerId);
+            ps.setInt(3, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         }
     }
 }

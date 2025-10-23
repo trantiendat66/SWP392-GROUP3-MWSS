@@ -48,37 +48,51 @@ public class OrderCreateFromCartServlet extends HttpServlet {
 
         // payment_method gửi từ form là "0" hoặc "1"
         String methodParam = req.getParameter("payment_method");
-        int paymentBit = "1".equals(methodParam) ? 1 : 0; // mặc định 0 = COD/chưa thanh toán
+        int paymentBit = "1".equals(methodParam) ? 1 : 0; // 0 = COD (chưa thanh toán)
 
         CartDAO cartDAO = new CartDAO();
         OrderDAO orderDAO = new OrderDAO();
 
         try {
+            // Có buy-now pending hay không?
             Integer bnPid = (Integer) session.getAttribute("bn_pid");
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
-            if (bnPid != null && bnQty != null && bnQty > 0) {
-                // tạm add vào giỏ để thống nhất luồng tạo đơn from-cart
+            boolean isBuyNow = (bnPid != null && bnQty != null && bnQty > 0);
+
+            List<Cart> items;
+
+            if (isBuyNow) {
+                // 👉 KHÔNG add vào giỏ. Build list đơn hàng chỉ với sản phẩm buy-now.
                 int price = new ProductDAO().getCurrentPrice(bnPid);
-                cartDAO.addToCart(cus.getCustomer_id(), bnPid, price, bnQty);
+                items = new java.util.ArrayList<>();
+                items.add(new Cart(0, cus.getCustomer_id(), bnPid, price, bnQty));
+            } else {
+                // Checkout từ giỏ ⇒ lấy toàn bộ item trong giỏ
+                items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
             }
-            List<Cart> items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
+
             int orderId = orderDAO.createOrder(
                     cus.getCustomer_id(),
                     phone,
                     address,
-                    paymentBit, // <-- truyền BIT
+                    paymentBit, // truyền BIT
                     items
             );
-            // ĐẶT HÀNG THÀNH CÔNG -> XÓA buy-now pending nếu có
+
+            // Dọn state buy-now (nếu có)
             session.removeAttribute("bn_pid");
             session.removeAttribute("bn_qty");
 
-            cartDAO.clearCart(cus.getCustomer_id());
+            // 👉 Chỉ clear giỏ khi checkout từ giỏ
+            if (!isBuyNow) {
+                cartDAO.clearCart(cus.getCustomer_id());
+            }
+
             session.setAttribute("flash_success", "Tạo đơn hàng #" + orderId + " thành công!");
             resp.sendRedirect(req.getContextPath() + "/order-success.jsp?orderId=" + orderId);
 
         } catch (SQLException e) {
-            // NẾU LỖI: nếu đang có buy-now pending thì add vào cart rồi về /cart
+            // Nếu lỗi và có buy-now pending: đẩy sản phẩm vào giỏ rồi quay lại giỏ
             Integer pid = (Integer) session.getAttribute("bn_pid");
             Integer qty = (Integer) session.getAttribute("bn_qty");
             if (pid != null && qty != null && qty > 0) {
@@ -91,11 +105,12 @@ public class OrderCreateFromCartServlet extends HttpServlet {
                     resp.sendRedirect(req.getContextPath() + "/cart");
                     return;
                 } catch (SQLException ex) {
-                    // fallthrough hiển thị lỗi payment
+                    // fallthrough
                 }
             }
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("/WEB-INF/payment.jsp").forward(req, resp);
+            req.getRequestDispatcher("/payment.jsp").forward(req, resp);
         }
     }
+
 }

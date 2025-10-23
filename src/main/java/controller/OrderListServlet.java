@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.FeedbackDAO;
 import dao.OrderDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import java.util.*;
 import model.Customer;
 import model.Order;
 import model.OrderDetail;
+import model.OrderItemRow;
 
 /**
  *
@@ -29,44 +31,81 @@ public class OrderListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("customer") == null) {
+        Customer cus = (session != null) ? (Customer) session.getAttribute("customer") : null;
+        if (cus == null) {
             resp.sendRedirect(req.getContextPath() + "/login.jsp?next=orders");
             return;
         }
-        Customer cus = (Customer) session.getAttribute("customer");
 
-        String tab = req.getParameter("tab"); // placed | shipping | delivered
-        if (tab == null || tab.isBlank()) {
+        String tab = req.getParameter("tab");
+        if (tab == null) {
             tab = "placed";
         }
+        req.setAttribute("activeTab", tab);
 
-        OrderDAO dao = new OrderDAO();
+        OrderDAO orderDAO = new OrderDAO();
+
         try {
-            List<Order> placed = dao.findPlacedOrders(cus.getCustomer_id());
-            List<Order> shipping = dao.findShippingOrders(cus.getCustomer_id());
-            List<Order> delivered = dao.findDeliveredOrders(cus.getCustomer_id());
 
-            // Nạp chi tiết cho từng đơn vào map (để JSP truy cập nhanh)
-            Map<Integer, List<OrderDetail>> itemsMap = new LinkedHashMap<>();
-            for (Order o : placed) {
-                itemsMap.put(o.getOrder_id(), dao.findOrderDetails(o.getOrder_id()));
+            List<Order> ordersPlaced = orderDAO.findOrdersByStatuses(
+                    cus.getCustomer_id(), "PENDING", "CONFIRMED");
+            List<Order> ordersShipping = orderDAO.findOrdersByStatuses(
+                    cus.getCustomer_id(), "SHIPPING");
+            List<Order> ordersDelivered = orderDAO.findOrdersByStatuses(
+                    cus.getCustomer_id(), "DELIVERED");
+
+            req.setAttribute("ordersPlaced", ordersPlaced);
+            req.setAttribute("ordersShipping", ordersShipping);
+            req.setAttribute("ordersDelivered", ordersDelivered);
+
+            // Gom orderIds để lấy items + eligible feedback keys
+            List<Integer> orderIds = new ArrayList<>();
+            for (Order o : ordersPlaced) {
+                orderIds.add(o.getOrder_id());
             }
-            for (Order o : shipping) {
-                itemsMap.put(o.getOrder_id(), dao.findOrderDetails(o.getOrder_id()));
+            for (Order o : ordersShipping) {
+                orderIds.add(o.getOrder_id());
             }
-            for (Order o : delivered) {
-                itemsMap.put(o.getOrder_id(), dao.findOrderDetails(o.getOrder_id()));
+            for (Order o : ordersDelivered) {
+                orderIds.add(o.getOrder_id());
             }
 
-            req.setAttribute("ordersPlaced", placed);
-            req.setAttribute("ordersShipping", shipping);
-            req.setAttribute("ordersDelivered", delivered);
+            Map<Integer, List<OrderItemRow>> itemsMap
+                    = orderDAO.findItemsWithPidByOrderIds(orderIds);
             req.setAttribute("itemsMap", itemsMap);
-            req.setAttribute("activeTab", tab);
+
+            // === FEEDBACK (NEW): map các productId mà customer đã từng đánh giá ===
+            // Mục tiêu: hiện chữ "Đã đánh giá" thay vì nút đánh giá
+            if (itemsMap != null && !itemsMap.isEmpty()) {
+                Set<Integer> allProductIds = new HashSet<>();
+                for (List<OrderItemRow> rows : itemsMap.values()) {
+                    if (rows == null) {
+                        continue;
+                    }
+                    for (OrderItemRow r : rows) {
+                        allProductIds.add(r.getProductId());
+                    }
+                }
+                if (!allProductIds.isEmpty()) {
+                    FeedbackDAO fbDAO = new FeedbackDAO();
+                    Map<Integer, Boolean> reviewedMap
+                            = fbDAO.findReviewedProductIds(cus.getCustomer_id(), allProductIds);
+                    req.setAttribute("reviewedMap", reviewedMap);
+                } else {
+                    req.setAttribute("reviewedMap", Collections.emptyMap());
+                }
+            } else {
+                req.setAttribute("reviewedMap", Collections.emptyMap());
+            }
+            // === END FEEDBACK (NEW) ===
+
+            Set<String> eligibleKeys
+                    = orderDAO.findEligibleFeedbackKeys(cus.getCustomer_id(), orderIds);
+            req.setAttribute("eligibleKeys", eligibleKeys);
 
             req.getRequestDispatcher("/order-list.jsp").forward(req, resp);
         } catch (SQLException e) {
-            req.setAttribute("error", e.getMessage());
+            req.setAttribute("error", "Không tải được danh sách đơn hàng: " + e.getMessage());
             req.getRequestDispatcher("/order-list.jsp").forward(req, resp);
         }
     }

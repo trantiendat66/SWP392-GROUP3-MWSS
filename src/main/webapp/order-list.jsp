@@ -58,5 +58,42 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/include/footer.jsp" %>
+<!-- ... Kết thúc tab-content ... -->
 
+<script>
+    // Bắt submit của mọi form đánh giá (kể cả nằm trong partial include)
+    document.addEventListener('submit', function (e) {
+        const form = e.target.closest('.feedback-form');
+        if (!form)
+            return;
+
+        const ratingEl = form.querySelector('input[name="rating"]:checked');
+        const rating = ratingEl ? parseInt(ratingEl.value, 10) : 5;
+        const comment = (form.querySelector('textarea[name="comment"]')?.value || '').trim();
+
+        // Nếu < 5★ thì bắt buộc comment
+        if (rating < 5 && comment.length === 0) {
+            e.preventDefault();
+            const help = form.querySelector('.comment-help');
+            if (help) {
+                help.textContent = 'Vui lòng nhập lý do khi đánh giá dưới 5★.';
+                help.classList.remove('d-none');
+            }
+            form.querySelector('textarea[name="comment"]').focus();
+        }
+    });
+
+    // Khi đổi số sao -> hiển thị/ẩn nhắc "bắt buộc nếu < 5★"
+    document.addEventListener('change', function (e) {
+        if (!e.target.matches('.feedback-form input[name="rating"]'))
+            return;
+        const form = e.target.closest('.feedback-form');
+        const need = parseInt(e.target.value, 10) < 5;
+        form.querySelector('.comment-req')?.classList.toggle('d-none', !need);
+
+        // reset cảnh báo khi đổi sao
+        form.querySelector('.comment-help')?.classList.add('d-none');
+    });
+</script>
+
+<%@ include file="/WEB-INF/include/footer.jsp" %>

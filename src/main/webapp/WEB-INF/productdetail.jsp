@@ -68,16 +68,52 @@
         <!-- Product Reviews -->
         <div class="container my-5">
             <h3>Đánh giá sản phẩm</h3>
+
+            <!-- Tóm tắt nhanh: trung bình/đếm nếu có, mặc định 0/0 -->
+            <p class="text-muted mb-3">
+                Điểm trung bình:
+                <strong>
+                    <c:choose>
+                        <c:when test="${not empty ratingAvg}">
+                            <fmt:formatNumber value="${ratingAvg}" maxFractionDigits="1"/>
+                        </c:when>
+                        <c:otherwise>0</c:otherwise>
+                    </c:choose>
+                    / 5
+                </strong>
+                &nbsp;•&nbsp; Số lượt:
+                <strong><c:out value="${empty ratingCount ? 0 : ratingCount}"/></strong>
+            </p>
+
             <c:if test="${empty productReviews}">
                 <p>Chưa có đánh giá nào cho sản phẩm này.</p>
             </c:if>
+
             <c:forEach var="review" items="${productReviews}">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">${review.username}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${review.date}</h6>
-                        <p class="card-text">${review.comment}</p>
-                        <p class="card-text"><strong>Rating:</strong> ${review.rating}/5</p>
+                        <!-- Tên người dùng: ưu tiên customerName, fallback username nếu trang cũ truyền -->
+                        <h5 class="card-title">
+                            <c:out value="${empty review.customerName ? review.username : review.customerName}"/>
+                        </h5>
+
+                        <!-- Ngày: ưu tiên createAt (java.util.Date/Timestamp), fallback date (string cũ) -->
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <c:choose>
+                                <c:when test="${not empty review.createAt}">
+                                    <fmt:formatDate value="${review.createAt}" pattern="yyyy-MM-dd HH:mm"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:out value="${review.date}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </h6>
+
+                        <p class="card-text"><c:out value="${review.comment}"/></p>
+                        <p class="card-text">
+                            <strong>Rating:</strong>
+                            <c:out value="${review.rating}"/>/5
+                        </p>
                     </div>
                 </div>
             </c:forEach>
