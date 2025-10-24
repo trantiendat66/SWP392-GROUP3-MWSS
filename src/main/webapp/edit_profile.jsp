@@ -148,7 +148,7 @@
                             avatarPath = ctx + "/" + c.getImage();
                         }
                     } else {
-                        avatarPath = ctx + "/images/2.jpg";
+                        avatarPath = ctx + "/image/2.jpg";
                     }
                 %>
                 <label>Avatar (Upload)</label>

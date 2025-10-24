@@ -22,29 +22,29 @@
         display:flex;
         gap:30px;
         align-items:flex-start;
-        flex-wrap: wrap; 
+        flex-wrap: wrap;
     }
     .detail-card > div:first-child {
         flex: 0 0 250px;
     }
     .detail-card > div:last-child {
-        flex: 1;                     
+        flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        margin-left: 80px;          
+        margin-left: 80px;
     }
     .controls {
         margin-top: 16px;
         display: flex;
-        justify-content: flex-end;   
+        justify-content: flex-end;
         gap: 16px;
     }
 
     .controls a.btn-primary,
     .controls a.btn-ghost {
-        padding: 12px 12px;         
-        font-size: 16px;  
+        padding: 12px 12px;
+        font-size: 16px;
     }
 
     .detail-avatar {
@@ -97,7 +97,7 @@
         text-decoration:none;
         font-weight:700;
     }
-    
+
     @media (max-width:720px) {
         .detail-card {
             flex-direction:column;
@@ -123,10 +123,16 @@
     %>
 
     <div class="detail-card" role="region" aria-label="Thông tin staff">
-        <div>
-            <img class="detail-avatar" src="${pageContext.request.contextPath}/assert/image/<%= s.getAccountId()%>.jpg"
-                 alt="<%= s.getUserName()%>" onerror="this.src='${pageContext.request.contextPath}/assert/image/staff.png'"/>
-        </div>
+        <td style="text-align:center; vertical-align:middle;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div style="font-size:42px; line-height:1; margin-bottom:6px;">👤</div>
+                <div style="font-weight:600; color:#333; font-size:15px;">
+                    <%= s.getUserName() != null ? s.getUserName() : "Staff"%>
+                </div>
+            </div>
+        </td>
+
+
         <div style="flex:1;">
             <table class="detail-table">
                 <tr><td class="label">ID</td><td class="value"><%= s.getAccountId()%></td></tr>

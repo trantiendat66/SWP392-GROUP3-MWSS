@@ -3,6 +3,7 @@
     Created on : Oct 15, 2025, 10:29:09 AM
     Author     : Nguyen Thien Dat - CE190879 - 06/05/2005
 --%>
+<%@page import="model.Product"%>
 <%-- File: /WEB-INF/staff.jsp --%>
 <%@page import="java.util.List"%>
 <%@page import="model.Order"%>
@@ -324,6 +325,7 @@
                             <table aria-describedby="products-desc">
                                 <thead>
                                     <tr>
+                                        <th>Product Image</th>
                                         <th>Product ID</th>
                                         <th>Product Name</th>
                                         <th>Machine</th>
@@ -337,35 +339,47 @@
                                         <c:when test="${not empty requestScope.listProducts}">
                                             <c:forEach var="p" items="${requestScope.listProducts}">
                                                 <tr>
+                                                    <td style="width:96px;">
+                                                        <c:set var="imgPath">
+                                                            <c:choose>
+                                                                <c:when test="${not empty p.image}">
+                                                                    ${pageContext.request.contextPath}/assert/image/${p.image}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${pageContext.request.contextPath}/assert/image/watch1.jpg
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:set>
+
+                                                        <img class="product-image"
+                                                             src="${imgPath}"
+                                                             alt="${fn:escapeXml(p.productName)}"
+                                                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg';"
+                                                             style="width:64px; height:64px; object-fit:cover; border-radius:6px;">
+                                                    </td>
+
                                                     <td class="product-id">${p.productId}</td>
-                                                    <td>${p.productName}</td>
-                                                    <td>${p.machine}</td>
+                                                    <td>${fn:escapeXml(p.productName)}</td>
+                                                    <td>${fn:escapeXml(p.machine)}</td>
                                                     <td class="text-end text-muted"><fmt:formatNumber value="${p.price}" type="number"/></td>
                                                     <td>${p.quantityProduct}</td>
                                                     <td>
                                                         <div class="right-actions" role="group" aria-label="Actions">
-
-                                                            <a href="viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">
-                                                                👁
-                                                            </a>
-
-                                                            <%-- 
-                                                            <button class="icon edit" title="Edit" aria-label="Sửa sản phẩm">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21h3l11-11-3-3L3 18v3z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 7l3 3" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                                            </button> 
-                                                            --%>
+                                                            <a href="${pageContext.request.contextPath}/viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">👁</a>
                                                         </div>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
                                         </c:when>
+
                                         <c:otherwise>
                                             <tr>
-                                                <td colspan="6" style="text-align: center;">No products found in the database.</td>
+                                                <td colspan="7" style="text-align:center;">No products found in the database.</td>
                                             </tr>
                                         </c:otherwise>
                                     </c:choose>
                                 </tbody>
+
                             </table>
                         </div>
                     </section>

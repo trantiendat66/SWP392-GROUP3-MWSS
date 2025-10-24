@@ -10,7 +10,7 @@
     String ctx = request.getContextPath();
     Customer c = (Customer) request.getAttribute("user");
 
-    String avatarPath = ctx + "/images/2.jpg"; // ảnh mặc định
+    String avatarPath = ctx + "/image/2.jpg"; // ảnh mặc định
     if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
         avatarPath = ctx + "/" + c.getImage();
     }

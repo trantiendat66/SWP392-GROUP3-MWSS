@@ -454,14 +454,14 @@
                         <table class="table" aria-describedby="product-list">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th style="width:96px;">Product Image</th>
                                     <th>Product ID</th>
                                     <th>Product Name</th>
                                     <th>Brand</th>
                                     <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th style="text-align:center">Actions</th>
+                                    <th>Price(VNĐ)</th>
+                                    <th>Quantity</th>
+                                    <th style="text-align:center; min-width:160px;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
