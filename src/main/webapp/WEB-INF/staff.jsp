@@ -484,6 +484,18 @@
             </div>
         </div>
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : ""%>";
+                if (activeTab === "order") {
+                    const trigger = document.querySelector('[data-bs-target="#v-pills-order"]');
+                    if (trigger) {
+                        const tab = new bootstrap.Tab(trigger);
+                        tab.show();
+                    }
+                }
+            });
+        </script>
+        <script>
             // Sidebar active handling
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -523,23 +535,6 @@
                     const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
                     modal.show();
                 });
-            });
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : ""%>";
-                console.log("ActiveTab:", activeTab);
-
-                if (activeTab === "order") {
-                    const trigger = document.querySelector('[data-bs-target="#v-pills-order"]');
-                    if (trigger) {
-                        const tab = new bootstrap.Tab(trigger);
-                        tab.show();
-                        console.log("Tab Order shown");
-                    } else {
-                        console.log("Không tìm thấy trigger tab order");
-                    }
-                }
             });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

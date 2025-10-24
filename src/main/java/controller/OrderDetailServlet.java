@@ -143,7 +143,7 @@ public class OrderDetailServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("orderId"));
             dao.updateOrderStatus(id, status);
             HttpSession session = request.getSession();
-            request.setAttribute("activeTab", "order");
+            session.setAttribute("activeTab", "order");
             response.sendRedirect(request.getContextPath() + "/staffcontrol");
         } catch (Exception e) {
             e.printStackTrace();
