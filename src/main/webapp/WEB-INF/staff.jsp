@@ -23,6 +23,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
             body {
@@ -406,7 +407,7 @@
                                     <c:choose>
                                         <c:when test="${not empty requestScope.listOrders}">
                                             <c:forEach var="o" items="${requestScope.listOrders}">
-                                                <tr>
+                                                <tr data-id="${o.order_id}">
                                                     <td class="order-id">${o.order_id}</td>
                                                     <td>${o.customer_name}</td>
                                                     <td><span class="date-pill">${o.order_date}</span></td>
@@ -440,7 +441,7 @@
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-
+                                        <!--chứa popup từ servlet-->
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -450,32 +451,30 @@
                         </div>
 
                         <!-- Popup Edit -->
-                        <form action="orderdetail" method="post">
-                            <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
-                                <div class="modal-dialog editPopup modal-dialog-centered">
-                                    <div class="modal-content bg-light text-black" id="popupEdit">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
+                        <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
+                            <div class="modal-dialog editPopup modal-dialog-centered">
+                                <div class="modal-content bg-light text-black" id="popupEdit">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
 
-                                        <div class="modal-body">
-                                            <input type="hidden" id="orderIdInput" name="orderId" />
-                                            <select class="form-select" id="order-status" name="order-status">
-                                                <option value="PENDING">PENDING</option>
-                                                <option value="SHIPPING">SHIPPING</option>
-                                                <option value="DELIVERED">DELIVERED</option>
-                                            </select> 
+                                    <div class="modal-body">
+                                        <input type="hidden" id="orderIdInput" name="orderId" />
+                                        <select class="form-select" id="order-status" name="order-status">
+                                            <option value="PENDING">PENDING</option>
+                                            <option value="SHIPPING">SHIPPING</option>
+                                            <option value="DELIVERED">DELIVERED</option>
+                                        </select> 
 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        <button id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </section>
 
                 </div>
@@ -483,16 +482,49 @@
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
             </div>
         </div>
+
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : ""%>";
-                if (activeTab === "order") {
-                    const trigger = document.querySelector('[data-bs-target="#v-pills-order"]');
-                    if (trigger) {
-                        const tab = new bootstrap.Tab(trigger);
-                        tab.show();
+            let currentOrderId = null;
+            let currentRow = null;
+
+            document.querySelectorAll('.icon.edit').forEach(function (editBtn) {
+                editBtn.addEventListener('click', function (e) {
+                    const orderId = this.value;
+                    const status = this.getAttribute('data-status');
+                    document.getElementById('orderIdInput').value = orderId;
+
+                    const select = document.getElementById('order-status');
+                    select.value = status;
+
+                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+                    currentRow = $(this).closest("tr");
+                    currentOrderId = currentRow.data("id");
+                    modal.show();
+                });
+            });
+
+            // Khi nhấn Apply → gửi AJAX để update
+            $("#applyStatus").click(function () {
+                const newStatus = $("#order-status").val();
+
+                $.ajax({
+                    url: "orderdetail", // Servlet URL
+                    method: "POST",
+                    data: {id: currentOrderId, status: newStatus},
+                    success: function (response) {
+                        // response là JSON do Servlet trả về
+                        if (response.success) {
+                            // ✅ Cập nhật UI ngay tại chỗ
+                            currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
+                            alert("Cập nhật thành công!");
+                        } else {
+                            alert("Lỗi khi cập nhật!");
+                        }
+                    },
+                    error: function () {
+                        alert("Không thể kết nối server!");
                     }
-                }
+                });
             });
         </script>
         <script>
@@ -522,18 +554,6 @@
                                 console.error('Error loading order detail:', err);
                                 alert('Không thể tải chi tiết đơn hàng.');
                             });
-                });
-            });
-
-            document.querySelectorAll('.icon.edit').forEach(editBtw => {
-                editBtw.addEventListener('click', (e) => {
-                    const orderId = e.currentTarget.value;
-                    const status = e.currentTarget.getAttribute('data-status');
-                    document.getElementById('orderIdInput').value = orderId;
-                    const select = document.getElementById('order-status');
-                    select.value = status;
-                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
-                    modal.show();
                 });
             });
         </script>
