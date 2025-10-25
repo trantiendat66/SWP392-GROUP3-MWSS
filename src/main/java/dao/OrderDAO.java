@@ -325,10 +325,14 @@ public class OrderDAO extends DBContext {
     }
 
     public boolean updateOrderStatus(int order_id, String order_status) {
+        
         boolean success = false;
-        String sql = "Update [Order]\n"
-                + "Set order_status = ?\n"
-                + "Where order_id = ?";
+        String sql;
+        if (order_status.equals("DELIVERED")) {
+            sql = "UPDATE [Order] SET order_status = ?, delivered_at = GETDATE() WHERE order_id = ?";
+        } else {
+            sql = "UPDATE [Order] SET order_status = ?, delivered_at = NULL WHERE order_id = ?";
+        }
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, order_status);
             ps.setInt(2, order_id);
