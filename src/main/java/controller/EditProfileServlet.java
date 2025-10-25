@@ -142,7 +142,7 @@ public class EditProfileServlet extends HttpServlet {
         if (filePart != null && filePart.getSize() > 0) {
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         }
-        String uploadPath = getServletContext().getRealPath("/") + "images/uploads";
+        String uploadPath = getServletContext().getRealPath("/") + "assert/image";
 
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
@@ -181,7 +181,7 @@ public class EditProfileServlet extends HttpServlet {
             // Nếu có upload ảnh mới
             if (fileName != null && !fileName.isEmpty()) {
                 filePart.write(uploadPath + File.separator + fileName);
-                c.setImage("images/uploads/" + fileName); // Cập nhật ảnh mới
+                c.setImage("assert/image/" + fileName); // Cập nhật ảnh mới
             } else {
                 // Không upload ảnh mới → giữ ảnh cũ
                 c.setImage(c.getImage());

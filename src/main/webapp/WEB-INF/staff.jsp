@@ -3,6 +3,7 @@
     Created on : Oct 15, 2025, 10:29:09 AM
     Author     : Nguyen Thien Dat - CE190879 - 06/05/2005
 --%>
+<%@page import="model.Product"%>
 <%-- File: /WEB-INF/staff.jsp --%>
 <%@page import="java.util.List"%>
 <%@page import="model.Order"%>
@@ -22,6 +23,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
             body {
@@ -324,6 +326,7 @@
                             <table aria-describedby="products-desc">
                                 <thead>
                                     <tr>
+                                        <th>Product Image</th>
                                         <th>Product ID</th>
                                         <th>Product Name</th>
                                         <th>Machine</th>
@@ -337,35 +340,47 @@
                                         <c:when test="${not empty requestScope.listProducts}">
                                             <c:forEach var="p" items="${requestScope.listProducts}">
                                                 <tr>
+                                                    <td style="width:96px;">
+                                                        <c:set var="imgPath">
+                                                            <c:choose>
+                                                                <c:when test="${not empty p.image}">
+                                                                    ${pageContext.request.contextPath}/assert/image/${p.image}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${pageContext.request.contextPath}/assert/image/watch1.jpg
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:set>
+
+                                                        <img class="product-image"
+                                                             src="${imgPath}"
+                                                             alt="${fn:escapeXml(p.productName)}"
+                                                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg';"
+                                                             style="width:64px; height:64px; object-fit:cover; border-radius:6px;">
+                                                    </td>
+
                                                     <td class="product-id">${p.productId}</td>
-                                                    <td>${p.productName}</td>
-                                                    <td>${p.machine}</td>
+                                                    <td>${fn:escapeXml(p.productName)}</td>
+                                                    <td>${fn:escapeXml(p.machine)}</td>
                                                     <td class="text-end text-muted"><fmt:formatNumber value="${p.price}" type="number"/></td>
                                                     <td>${p.quantityProduct}</td>
                                                     <td>
                                                         <div class="right-actions" role="group" aria-label="Actions">
-
-                                                            <a href="viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">
-                                                                👁
-                                                            </a>
-
-                                                            <%-- 
-                                                            <button class="icon edit" title="Edit" aria-label="Sửa sản phẩm">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21h3l11-11-3-3L3 18v3z" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 7l3 3" stroke="#111" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                                            </button> 
-                                                            --%>
+                                                            <a href="${pageContext.request.contextPath}/viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">👁</a>
                                                         </div>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
                                         </c:when>
+
                                         <c:otherwise>
                                             <tr>
-                                                <td colspan="6" style="text-align: center;">No products found in the database.</td>
+                                                <td colspan="7" style="text-align:center;">No products found in the database.</td>
                                             </tr>
                                         </c:otherwise>
                                     </c:choose>
                                 </tbody>
+
                             </table>
                         </div>
                     </section>
@@ -392,7 +407,7 @@
                                     <c:choose>
                                         <c:when test="${not empty requestScope.listOrders}">
                                             <c:forEach var="o" items="${requestScope.listOrders}">
-                                                <tr>
+                                                <tr data-id="${o.order_id}">
                                                     <td class="order-id">${o.order_id}</td>
                                                     <td>${o.customer_name}</td>
                                                     <td><span class="date-pill">${o.order_date}</span></td>
@@ -426,7 +441,7 @@
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-
+                                        <!--chứa popup từ servlet-->
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -436,32 +451,30 @@
                         </div>
 
                         <!-- Popup Edit -->
-                        <form action="orderdetail" method="post">
-                            <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
-                                <div class="modal-dialog editPopup modal-dialog-centered">
-                                    <div class="modal-content bg-light text-black" id="popupEdit">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
+                        <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
+                            <div class="modal-dialog editPopup modal-dialog-centered">
+                                <div class="modal-content bg-light text-black" id="popupEdit">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
 
-                                        <div class="modal-body">
-                                            <input type="hidden" id="orderIdInput" name="orderId" />
-                                            <select class="form-select" id="order-status" name="order-status">
-                                                <option value="PENDING">PENDING</option>
-                                                <option value="SHIPPING">SHIPPING</option>
-                                                <option value="DELIVERED">DELIVERED</option>
-                                            </select> 
+                                    <div class="modal-body">
+                                        <input type="hidden" id="orderIdInput" name="orderId" />
+                                        <select class="form-select" id="order-status" name="order-status">
+                                            <option value="PENDING">PENDING</option>
+                                            <option value="SHIPPING">SHIPPING</option>
+                                            <option value="DELIVERED">DELIVERED</option>
+                                        </select> 
 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        <button id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </section>
 
                 </div>
@@ -469,6 +482,51 @@
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
             </div>
         </div>
+
+        <script>
+            let currentOrderId = null;
+            let currentRow = null;
+
+            document.querySelectorAll('.icon.edit').forEach(function (editBtn) {
+                editBtn.addEventListener('click', function (e) {
+                    const orderId = this.value;
+                    const status = this.getAttribute('data-status');
+                    document.getElementById('orderIdInput').value = orderId;
+
+                    const select = document.getElementById('order-status');
+                    select.value = status;
+
+                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+                    currentRow = $(this).closest("tr");
+                    currentOrderId = currentRow.data("id");
+                    modal.show();
+                });
+            });
+
+            // Khi nhấn Apply → gửi AJAX để update
+            $("#applyStatus").click(function () {
+                const newStatus = $("#order-status").val();
+
+                $.ajax({
+                    url: "orderdetail", // Servlet URL
+                    method: "POST",
+                    data: {id: currentOrderId, status: newStatus},
+                    success: function (response) {
+                        // response là JSON do Servlet trả về
+                        if (response.success) {
+                            // ✅ Cập nhật UI ngay tại chỗ
+                            currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
+                            alert("Cập nhật thành công!");
+                        } else {
+                            alert("Lỗi khi cập nhật!");
+                        }
+                    },
+                    error: function () {
+                        alert("Không thể kết nối server!");
+                    }
+                });
+            });
+        </script>
         <script>
             // Sidebar active handling
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -497,35 +555,6 @@
                                 alert('Không thể tải chi tiết đơn hàng.');
                             });
                 });
-            });
-
-            document.querySelectorAll('.icon.edit').forEach(editBtw => {
-                editBtw.addEventListener('click', (e) => {
-                    const orderId = e.currentTarget.value;
-                    const status = e.currentTarget.getAttribute('data-status');
-                    document.getElementById('orderIdInput').value = orderId;
-                    const select = document.getElementById('order-status');
-                    select.value = status;
-                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
-                    modal.show();
-                });
-            });
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : ""%>";
-                console.log("ActiveTab:", activeTab);
-
-                if (activeTab === "order") {
-                    const trigger = document.querySelector('[data-bs-target="#v-pills-order"]');
-                    if (trigger) {
-                        const tab = new bootstrap.Tab(trigger);
-                        tab.show();
-                        console.log("Tab Order shown");
-                    } else {
-                        console.log("Không tìm thấy trigger tab order");
-                    }
-                }
             });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

@@ -324,18 +324,19 @@ public class OrderDAO extends DBContext {
         return listOD;
     }
 
-    public String updateOrderStatus(int order_id, String order_status) {
+    public boolean updateOrderStatus(int order_id, String order_status) {
+        boolean success = false;
         String sql = "Update [Order]\n"
                 + "Set order_status = ?\n"
                 + "Where order_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, order_status);
             ps.setInt(2, order_id);
-            ps.executeUpdate();
+            success = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return "Update Completed";
+        return success;
     }
 
     /**

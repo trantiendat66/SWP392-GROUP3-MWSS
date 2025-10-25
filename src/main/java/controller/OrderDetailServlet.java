@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import org.json.JSONObject;
 import java.util.List;
 import model.Order;
 import model.OrderDetail;
@@ -137,19 +137,18 @@ public class OrderDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            OrderDAO dao = new OrderDAO();
-            String status = request.getParameter("order-status");
-            int id = Integer.parseInt(request.getParameter("orderId"));
-            dao.updateOrderStatus(id, status);
-            HttpSession session = request.getSession();
-            request.setAttribute("activeTab", "order");
-            response.sendRedirect(request.getContextPath() + "/staffcontrol");
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Update failed!");
-            request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
-        }
+
+        boolean success = false;
+        OrderDAO dao = new OrderDAO();
+        int id = Integer.parseInt(request.getParameter("id"));
+        String status = request.getParameter("status");
+        success = dao.updateOrderStatus(id, status);
+
+        response.setContentType("application/json");
+        JSONObject json = new JSONObject();
+        json.put("success", success);
+        json.put("orderStatus", status);
+        response.getWriter().write(json.toString());
     }
 
     /**

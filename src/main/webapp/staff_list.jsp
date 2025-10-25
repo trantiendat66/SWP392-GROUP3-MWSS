@@ -26,8 +26,8 @@
     .staff-hero h2 {
         font-size: 30px;
         font-weight: 700;
-        color: #dc3545;       
-        margin-bottom: 20px;   
+        color: #dc3545;
+        margin-bottom: 20px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .btn-primary {
@@ -197,9 +197,15 @@
                 %>
                 <tr>
                     <td>
-                        <img class="staff-avatar" src="${pageContext.request.contextPath}/assert/image/<%= (s.getAccountId())%>.jpg"
-                             alt="<%= s.getUserName()%>" onerror="this.src='${pageContext.request.contextPath}/assert/image/staff.png'"/>
+                        <!-- Placeholder thay cho ảnh -->
+                        <div style="width:66px; height:66px; border-radius:6px; display:flex; align-items:center; justify-content:center; background:#f0f2f5; border:1px solid #e6e9ee; color:#6c757d; font-weight:700;">
+                            <div style="text-align:center; font-size:18px; line-height:1;">
+                                👤
+                                <div style="font-size:10px; margin-top:4px;"><%= s.getUserName() != null ? (s.getUserName().length() > 10 ? s.getUserName().substring(0, 10) + "…" : s.getUserName()) : "Staff"%></div>
+                            </div>
+                        </div>
                     </td>
+
                     <td><%= s.getAccountId()%></td>
                     <td><%= s.getEmail() == null || s.getEmail().isEmpty() ? "-" : s.getEmail()%></td>
                     <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>

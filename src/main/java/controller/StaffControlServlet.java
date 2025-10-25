@@ -141,6 +141,11 @@ public class StaffControlServlet extends HttpServlet {
         }
         // 2. Forward đến JSP
         request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
+        String activeTab = (String) request.getSession().getAttribute("activeTab");
+        if (activeTab != null) {
+            request.setAttribute("activeTab", activeTab);
+            request.getSession().removeAttribute("activeTab");
+        }
     }
 
     @Override
