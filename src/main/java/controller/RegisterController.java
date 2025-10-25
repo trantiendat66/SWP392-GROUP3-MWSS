@@ -26,7 +26,6 @@ import org.mindrot.jbcrypt.BCrypt;
 @WebServlet(name = "RegisterController", urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "uploads";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,20 +34,6 @@ public class RegisterController extends HttpServlet {
         request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
 
-    private String saveImage(HttpServletRequest request, Part part) throws IOException {
-        if (part == null || part.getSize() == 0) {
-            return null;
-        }
-        String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
-        String appPath = request.getServletContext().getRealPath("");
-        File uploadDir = new File(appPath, UPLOAD_DIR);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-        File file = new File(uploadDir, fileName);
-        part.write(file.getAbsolutePath());
-        return request.getContextPath() + "/" + UPLOAD_DIR + "/" + fileName;
-    }
 
     private java.sql.Date parseDob(String dobStr) {
         if (dobStr == null || dobStr.isBlank()) {
@@ -134,7 +119,7 @@ public class RegisterController extends HttpServlet {
             }
 
             String hash = MD5PasswordHasher.hashPassword(password);
-            String imagePath = saveImage(request, imagePart);
+            
 
             Customer c = new Customer();
             c.setCustomer_name(name);
@@ -145,7 +130,6 @@ public class RegisterController extends HttpServlet {
             c.setDob((Date) parseDob(dobStr));
             c.setGender(gender);
             c.setAccount_status("ACTIVE");
-            c.setImage(imagePath);
 
             int id = dao.insert(c);
             if (id > 0) {

@@ -203,11 +203,6 @@
                         <input type="password" name="confirm_password" placeholder="Confirm password" required>
                     </div>
 
-                    <div class="field">
-                        <label>Avatar (optional)</label>
-                        <input type="file" name="image" accept="image/*">
-                    </div>
-
                     <button type="submit">REGISTER</button>
                 </div>
 

@@ -66,58 +66,155 @@
         </div>
 
         <!-- Product Reviews -->
-        <div class="container my-5">
-            <h3>Đánh giá sản phẩm</h3>
+        <!-- === Ratings Summary & Reviews === -->
+        <div class="container my-5" id="ratings">
+            <c:set var="ratingCount" value="${empty ratingCount ? 0 : ratingCount}" />
+            <c:set var="ratingAvg"   value="${empty ratingAvg   ? 0 : ratingAvg}" />
+            <c:set var="star5" value="${empty star5 ? 0 : star5}" />
+            <c:set var="star4" value="${empty star4 ? 0 : star4}" />
+            <c:set var="star3" value="${empty star3 ? 0 : star3}" />
+            <c:set var="star2" value="${empty star2 ? 0 : star2}" />
+            <c:set var="star1" value="${empty star1 ? 0 : star1}" />
 
-            <!-- Tóm tắt nhanh: trung bình/đếm nếu có, mặc định 0/0 -->
-            <p class="text-muted mb-3">
-                Điểm trung bình:
-                <strong>
-                    <c:choose>
-                        <c:when test="${not empty ratingAvg}">
-                            <fmt:formatNumber value="${ratingAvg}" maxFractionDigits="1"/>
-                        </c:when>
-                        <c:otherwise>0</c:otherwise>
-                    </c:choose>
-                    / 5
-                </strong>
-                &nbsp;•&nbsp; Số lượt:
-                <strong><c:out value="${empty ratingCount ? 0 : ratingCount}"/></strong>
-            </p>
+            <!-- phần trăm cho progress bar -->
+            <c:set var="pct5" value="${ratingCount > 0 ? (star5 * 100.0) / ratingCount : 0}" />
+            <c:set var="pct4" value="${ratingCount > 0 ? (star4 * 100.0) / ratingCount : 0}" />
+            <c:set var="pct3" value="${ratingCount > 0 ? (star3 * 100.0) / ratingCount : 0}" />
+            <c:set var="pct2" value="${ratingCount > 0 ? (star2 * 100.0) / ratingCount : 0}" />
+            <c:set var="pct1" value="${ratingCount > 0 ? (star1 * 100.0) / ratingCount : 0}" />
 
-            <c:if test="${empty productReviews}">
-                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
-            </c:if>
+            <h3 class="mb-3">Đánh giá sản phẩm
+                <small class="text-muted">(${ratingCount} đánh giá)</small>
+            </h3>
 
-            <c:forEach var="review" items="${productReviews}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <!-- Tên người dùng: ưu tiên customerName, fallback username nếu trang cũ truyền -->
-                        <h5 class="card-title">
-                            <c:out value="${empty review.customerName ? review.username : review.customerName}"/>
-                        </h5>
-
-                        <!-- Ngày: ưu tiên createAt (java.util.Date/Timestamp), fallback date (string cũ) -->
-                        <h6 class="card-subtitle mb-2 text-muted">
+            <div class="row g-4 align-items-center rating-summary-card">
+                <!-- Cột trái: điểm trung bình -->
+                <div class="col-12 col-md-4 text-center">
+                    <div class="display-4 fw-bold mb-1">
+                        <fmt:formatNumber value="${ratingAvg}" minFractionDigits="1" maxFractionDigits="1"/>
+                    </div>
+                    <div class="rating-stars mb-2">
+                        <c:forEach begin="1" end="5" var="s">
                             <c:choose>
-                                <c:when test="${not empty review.createAt}">
-                                    <fmt:formatDate value="${review.createAt}" pattern="yyyy-MM-dd HH:mm"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:out value="${review.date}"/>
-                                </c:otherwise>
+                                <c:when test="${s <= roundedAvg}">&#9733;</c:when>
+                                <c:otherwise>&#9734;</c:otherwise>
                             </c:choose>
-                        </h6>
+                        </c:forEach>
+                    </div>
+                    <div class="text-muted">Trung bình</div>
+                </div>
 
-                        <p class="card-text"><c:out value="${review.comment}"/></p>
-                        <p class="card-text">
-                            <strong>Rating:</strong>
-                            <c:out value="${review.rating}"/>/5
-                        </p>
+                <!-- Cột phải: phân bố sao -->
+                <div class="col-12 col-md-8">
+                    <div class="rating-row">
+                        <span class="label">5&#9733;</span>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar" role="progressbar" style="width: ${pct5}%"></div>
+                        </div>
+                        <span class="count">${star5}</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="label">4&#9733;</span>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar" role="progressbar" style="width: ${pct4}%"></div>
+                        </div>
+                        <span class="count">${star4}</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="label">3&#9733;</span>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar" role="progressbar" style="width: ${pct3}%"></div>
+                        </div>
+                        <span class="count">${star3}</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="label">2&#9733;</span>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar" role="progressbar" style="width: ${pct2}%"></div>
+                        </div>
+                        <span class="count">${star2}</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="label">1&#9733;</span>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar" role="progressbar" style="width: ${pct1}%"></div>
+                        </div>
+                        <span class="count">${star1}</span>
                     </div>
                 </div>
-            </c:forEach>
+            </div>
+
+            <!-- Danh sách từng đánh giá -->
+            <div class="mt-4">
+                <c:choose>
+                    <c:when test="${empty productReviews}">
+                        <div class="alert alert-info mb-0">Chưa có đánh giá nào cho sản phẩm này.</div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="rv" items="${productReviews}">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="fw-semibold">${rv.customerName}</div>
+                                        <small class="text-muted">
+                                            <fmt:formatDate value="${rv.createAt}" pattern="yyyy-MM-dd HH:mm"/>
+                                        </small>
+                                    </div>
+                                    <div class="text-warning mb-2">
+                                        <c:forEach begin="1" end="5" var="s">
+                                            <c:choose>
+                                                <c:when test="${s <= rv.rating}">
+                                                    <span class="text-warning">&#9733;</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="text-muted">&#9734;</span>  <%-- sao rỗng, thêm class ở đây --%>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </div>
+
+                                    <c:if test="${not empty rv.comment}">
+                                        <p class="mb-0">${rv.comment}</p>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
+
+        <style>
+            .rating-summary-card .progress {
+                height: 10px;
+                background: #e9ecef;
+            }
+            .rating-summary-card .progress-bar {
+                background: #f59f00;
+            } /* màu vàng cam */
+            .rating-row {
+                display:flex;
+                align-items:center;
+                gap:.75rem;
+                margin-bottom:.5rem;
+            }
+            .rating-row .label {
+                width: 48px;
+                text-align:right;
+                font-weight:600;
+            }
+            .rating-row .count {
+                width: 28px;
+                text-align:right;
+                color:#6c757d;
+            }
+            .rating-stars {
+                font-size: 20px;
+                color: #f59f00;
+                letter-spacing:2px;
+            }
+        </style>
+
     </c:otherwise>
 </c:choose>
 
