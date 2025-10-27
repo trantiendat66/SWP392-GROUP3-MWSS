@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import model.Product;
 
 /**
  *
@@ -80,13 +81,25 @@ public class ProductDeleteServlet extends HttpServlet {
             return;
         }
 
+        int id;
         try {
-            int id = Integer.parseInt(idStr.trim());
-            ProductDAO dao = new ProductDAO();
-            dao.deleteProduct(id); // giả sử phương thức này ném SQLException khi lỗi
-            request.getSession().setAttribute("successMessage", "Xóa sản phẩm thành công!");
+            id = Integer.parseInt(idStr.trim());
         } catch (NumberFormatException e) {
             request.getSession().setAttribute("errorMessage", "ID không hợp lệ.");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            return;
+        }
+
+        ProductDAO dao = new ProductDAO();
+        try {
+            Product p = dao.getById(id);
+            if (p == null) {
+                request.getSession().setAttribute("errorMessage", "Không tìm thấy sản phẩm có ID = " + id);
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                return;
+            }
+            dao.deleteProduct(id);
+            request.getSession().setAttribute("successMessage", "Xóa sản phẩm \"" + p.getProductName() + "\" thành công!");
         } catch (SQLException e) {
             e.printStackTrace();
             request.getSession().setAttribute("errorMessage", "Lỗi DB khi xóa: " + e.getMessage());
