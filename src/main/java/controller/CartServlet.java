@@ -52,7 +52,7 @@ public class CartServlet extends HttpServlet {
             // Trả về JSON response thay vì redirect để JavaScript có thể xử lý
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Bạn cần đăng nhập để thực hiện chức năng này\", \"redirect\": \"login.jsp\"}");
+            out.print("{\"success\": false, \"message\": \"You need to log in to perform this action\", \"redirect\": \"login.jsp\"}");
             out.flush();
             return;
         }
@@ -119,7 +119,7 @@ public class CartServlet extends HttpServlet {
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Số lượng sản phẩm trong kho không đủ. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                    out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " items left.\"}");
                     out.flush();
                     return;
                 }
@@ -131,7 +131,7 @@ public class CartServlet extends HttpServlet {
                     if (totalQuantity > product.getQuantityProduct()) {
                         response.setContentType("application/json");
                         PrintWriter out = response.getWriter();
-                        out.print("{\"success\": false, \"message\": \"Tổng số lượng vượt quá số lượng trong kho. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                        out.print("{\"success\": false, \"message\": \"Total quantity exceeds available stock. Only " + product.getQuantityProduct() + " items left.\"}");
                         out.flush();
                         return;
                     }
@@ -148,25 +148,25 @@ public class CartServlet extends HttpServlet {
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\", \"cartCount\": " + newCartCount + "}");
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart\"}");
+                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
                 }
                 out.flush();
             } else {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                out.print("{\"success\": false, \"message\": \"Product not found\"}");
+                out.print("{\"success\": false, \"message\": \"Product not found.\"}");
                 out.flush();
             }
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Invalid input data\"}");
+            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"An unexpected error occurred\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }
@@ -185,9 +185,9 @@ public class CartServlet extends HttpServlet {
                 // Nếu số lượng <= 0, xóa item khỏi giỏ hàng
                 boolean success = cartDAO.removeFromCart(cartId);
                 if (success) {
-                    out.print("{\"success\": true, \"message\": \"Item removed from cart\"}");
+                    out.print("{\"success\": true, \"message\": \"Item removed from cart.\"}");
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Error occurred while removing item\"}");
+                    out.print("{\"success\": false, \"message\": \"Error occurred while removing item.\"}");
                 }
             } else {
                 // Kiểm tra số lượng sản phẩm trong kho trước khi cập nhật
@@ -195,7 +195,7 @@ public class CartServlet extends HttpServlet {
                 if (cartItem != null) {
                     Product product = productDAO.getProductById(cartItem.getProductId());
                     if (product != null && newQuantity > product.getQuantityProduct()) {
-                        out.print("{\"success\": false, \"message\": \"Số lượng sản phẩm trong kho không đủ. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                        out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " items left.\"}");
                         out.flush();
                         return;
                     }
@@ -203,22 +203,22 @@ public class CartServlet extends HttpServlet {
                 
                 boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
                 if (success) {
-                    out.print("{\"success\": true, \"message\": \"Quantity updated successfully\"}");
+                    out.print("{\"success\": true, \"message\": \"Quantity updated successfully.\"}");
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Error occurred while updating quantity\"}");
+                    out.print("{\"success\": false, \"message\": \"Error occurred while updating quantity.\"}");
                 }
             }
             out.flush();
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Invalid input data\"}");
+            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"An unexpected error occurred\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }
@@ -233,21 +233,21 @@ public class CartServlet extends HttpServlet {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
-                out.print("{\"success\": true, \"message\": \"Item removed from cart\"}");
+                out.print("{\"success\": true, \"message\": \"Item removed from cart.\"}");
             } else {
-                out.print("{\"success\": false, \"message\": \"Error occurred while removing item\"}");
+                out.print("{\"success\": false, \"message\": \"Error occurred while removing item.\"}");
             }
             out.flush();
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Invalid input data\"}");
+            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"An unexpected error occurred\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }
@@ -261,16 +261,16 @@ public class CartServlet extends HttpServlet {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
-                out.print("{\"success\": true, \"message\": \"All items removed from cart\"}");
+                out.print("{\"success\": true, \"message\": \"All items removed from cart.\"}");
             } else {
-                out.print("{\"success\": false, \"message\": \"Error occurred while clearing cart\"}");
+                out.print("{\"success\": false, \"message\": \"Error occurred while clearing cart.\"}");
             }
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"An unexpected error occurred\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }

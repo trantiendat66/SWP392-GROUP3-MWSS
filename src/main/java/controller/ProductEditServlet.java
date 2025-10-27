@@ -75,7 +75,7 @@ public class ProductEditServlet extends HttpServlet {
             Product p = dao.getById(id);
 
             if (p == null) {
-                request.getSession().setAttribute("errorMessage", "Không tìm thấy sản phẩm #" + id);
+                request.getSession().setAttribute("errorMessage", "Product #" + id + " not found"); // Không tìm thấy sản phẩm
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 return;
             }
@@ -86,7 +86,7 @@ public class ProductEditServlet extends HttpServlet {
 
         } catch (NumberFormatException | SQLException ex) {
             ex.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Lỗi khi tải sản phẩm: " + ex.getMessage());
+            request.getSession().setAttribute("errorMessage", "Error loading product: " + ex.getMessage()); // Lỗi khi tải sản phẩm:
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         }
     }
@@ -128,55 +128,55 @@ public class ProductEditServlet extends HttpServlet {
 
         // Kiểm tra rỗng
         if (productName.isEmpty()) {
-            errors.put("productNameError", "Không được bỏ trống tên sản phẩm");
+            errors.put("productNameError", "Product name cannot be left blank"); // Không được bỏ trống tên sản phẩm
         }
         if (brand.isEmpty()) {
-            errors.put("brandError", "Không được bỏ trống thương hiệu");
+            errors.put("brandError", "Brand cannot be left blank"); // Không được bỏ trống thương hiệu
         }
         if (origin.isEmpty()) {
-            errors.put("originError", "Không được bỏ trống xuất xứ");
+            errors.put("originError", "Origin cannot be left blank"); // Không được bỏ trống xuất xứ
         }
         if (priceStr.isEmpty()) {
-            errors.put("priceError", "Không được bỏ trống giá");
+            errors.put("priceError", "Price cannot be left blank"); // Không được bỏ trống giá
         }
         if (quantityStr.isEmpty()) {
-            errors.put("quantityError", "Không được bỏ trống số lượng");
+            errors.put("quantityError", "Quantity cannot be left blank"); // Không được bỏ trống số lượng
         }
         if (categoryStr.isEmpty()) {
-            errors.put("categoryError", "Không được bỏ trống mã danh mục");
+            errors.put("categoryError", "Category ID cannot be left blank"); // Không được bỏ trống mã danh mục
         }
         if (accountStr.isEmpty()) {
-            errors.put("accountError", "Không được bỏ trống mã tài khoản");
+            errors.put("accountError", "Account ID cannot be left blank"); // Không được bỏ trống mã tài khoản
         }
-        if (image == null || image.trim().isEmpty()) {
-            errors.put("imageError", "Vui lòng nhập tên hoặc đường dẫn hình ảnh.");
+        if (image.isEmpty()) {
+            errors.put("imageError", "Please enter the image name or path."); // Vui lòng nhập tên hoặc đường dẫn hình ảnh.
         }
-        if (description == null || description.trim().isEmpty()) {
-            errors.put("descriptionError", "Mô tả không được để trống.");
+        if (description.isEmpty()) {
+            errors.put("descriptionError", "Description cannot be left blank."); // Mô tả không được để trống.
         }
-        if (warranty == null || warranty.trim().isEmpty()) {
-            errors.put("warrantyError", "Vui lòng nhập thông tin bảo hành.");
+        if (warranty.isEmpty()) {
+            errors.put("warrantyError", "Please enter warranty information."); // Vui lòng nhập thông tin bảo hành.
         }
-        if (machine == null || machine.trim().isEmpty()) {
-            errors.put("machineError", "Vui lòng nhập thông tin bộ máy.");
+        if (machine.isEmpty()) {
+            errors.put("machineError", "Please enter machine information."); // Vui lòng nhập thông tin bộ máy.
         }
-        if (glass == null || glass.trim().isEmpty()) {
-            errors.put("glassError", "Vui lòng nhập loại kính.");
+        if (glass.isEmpty()) {
+            errors.put("glassError", "Please enter the glass type."); // Vui lòng nhập loại kính.
         }
-        if (dialDiameter == null || dialDiameter.trim().isEmpty()) {
-            errors.put("dialDiameterError", "Vui lòng nhập đường kính mặt đồng hồ.");
+        if (dialDiameter.isEmpty()) {
+            errors.put("dialDiameterError", "Please enter the dial diameter."); // Vui lòng nhập đường kính mặt đồng hồ.
         }
-        if (bezel == null || bezel.trim().isEmpty()) {
-            errors.put("bezelError", "Vui lòng nhập chất liệu viền.");
+        if (bezel.isEmpty()) {
+            errors.put("bezelError", "Please enter the bezel material."); // Vui lòng nhập chất liệu viền.
         }
-        if (strap == null || strap.trim().isEmpty()) {
-            errors.put("strapError", "Vui lòng nhập loại dây đeo.");
+        if (strap.isEmpty()) {
+            errors.put("strapError", "Please enter the strap type."); // Vui lòng nhập loại dây đeo.
         }
-        if (dialColor == null || dialColor.trim().isEmpty()) {
-            errors.put("dialColorError", "Vui lòng nhập màu mặt đồng hồ.");
+        if (dialColor.isEmpty()) {
+            errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
         }
-        if (function == null || function.trim().isEmpty()) {
-            errors.put("functionError", "Vui lòng nhập chức năng của sản phẩm.");
+        if (function.isEmpty()) {
+            errors.put("functionError", "Please enter the product function."); // Vui lòng nhập chức năng của sản phẩm.
         }
 
         int price = 0, quantity = 0, categoryId = 0, accountId = 0, productId = 0;
@@ -190,28 +190,28 @@ public class ProductEditServlet extends HttpServlet {
             price = Integer.parseInt(priceStr);
         } catch (Exception e) {
             if (!priceStr.isEmpty()) {
-                errors.put("priceError", "Giá phải là số hợp lệ");
+                errors.put("priceError", "Price must be a valid number"); // Giá phải là số hợp lệ
             }
         }
         try {
             quantity = Integer.parseInt(quantityStr);
         } catch (Exception e) {
             if (!quantityStr.isEmpty()) {
-                errors.put("quantityError", "Số lượng phải là số hợp lệ");
+                errors.put("quantityError", "Quantity must be a valid number"); // Số lượng phải là số hợp lệ
             }
         }
         try {
             categoryId = Integer.parseInt(categoryStr);
         } catch (Exception e) {
             if (!categoryStr.isEmpty()) {
-                errors.put("categoryError", "Mã danh mục phải là số hợp lệ");
+                errors.put("categoryError", "Category ID must be a valid number"); // Mã danh mục phải là số hợp lệ
             }
         }
         try {
             accountId = Integer.parseInt(accountStr);
         } catch (Exception e) {
             if (!accountStr.isEmpty()) {
-                errors.put("accountError", "Mã tài khoản phải là số hợp lệ");
+                errors.put("accountError", "Account ID must be a valid number"); // Mã tài khoản phải là số hợp lệ
             }
         }
 
@@ -272,12 +272,12 @@ public class ProductEditServlet extends HttpServlet {
             ProductDAO dao = new ProductDAO();
             dao.updateProduct(p);
 
-            request.getSession().setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
+            request.getSession().setAttribute("successMessage", "Product updated successfully!"); // Cập nhật sản phẩm thành công!
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            request.setAttribute("error", "Lỗi cơ sở dữ liệu: " + ex.getMessage());
+            request.setAttribute("error", "Database error: " + ex.getMessage()); // Lỗi cơ sở dữ liệu:
             RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
             rd.forward(request, response);
         }

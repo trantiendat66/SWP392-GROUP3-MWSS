@@ -17,7 +17,7 @@ import model.Customer;
  *
  * @author Oanh Nguyen
  */
-@WebServlet(name="PaymentCancelBuyNowServlet", urlPatterns={"/payment/cancel-buynow"})
+@WebServlet(name = "PaymentCancelBuyNowServlet", urlPatterns = {"/payment/cancel-buynow"})
 public class PaymentCancelBuyNowServlet extends HttpServlet {
 
     @Override
@@ -40,9 +40,9 @@ public class PaymentCancelBuyNowServlet extends HttpServlet {
             try {
                 int price = new ProductDAO().getCurrentPrice(pid);
                 new CartDAO().addToCart(cus.getCustomer_id(), pid, price, qty);
-                session.setAttribute("flash_success", "Đã thêm sản phẩm vào giỏ hàng.");
+                session.setAttribute("flash_success", "Product has been added to your cart.");
             } catch (SQLException e) {
-                session.setAttribute("error", "Không thể thêm vào giỏ: " + e.getMessage());
+                session.setAttribute("error", "Unable to add to cart: " + e.getMessage());
             }
         }
         resp.sendRedirect(req.getContextPath() + "/cart");

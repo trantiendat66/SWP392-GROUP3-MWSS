@@ -1,12 +1,12 @@
 <%-- 
     Document   : order-list
-    Created on : Oct 18, 2025, 12:35:00 PM
+    Created on : Oct 18, 2025, 12:35:00 PM
     Author     : Oanh Nguyen
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -58,8 +58,55 @@
     </div>
 </div>
 
-<!-- ... Kết thúc tab-content ... -->
+<!-- ============ Toggle accordion: bấm lần 2 sẽ đóng item đang mở ============ -->
+<script>
+    (function () {
+        // Toggle: click mở/đóng chính item, KHÔNG đụng đến item khác (cho phép mở nhiều item cùng lúc)
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-acc-btn, .accordion .accordion-button');
+            if (!btn)
+                return;
 
+            const sel = btn.getAttribute('data-target') || btn.getAttribute('data-bs-target');
+            if (!sel)
+                return;
+            const pane = document.querySelector(sel);
+            if (!pane)
+                return;
+
+            // Ngăn Bootstrap Data-API xử lý mặc định để mình điều khiển hoàn toàn
+            e.preventDefault();
+            if (typeof e.stopImmediatePropagation === 'function')
+                e.stopImmediatePropagation();
+            e.stopPropagation();
+
+            const isOpen = pane.classList.contains('show');
+
+            if (window.bootstrap?.Collapse) {
+                const inst = window.bootstrap.Collapse.getOrCreateInstance(pane);
+                if (isOpen) {
+                    inst.hide();
+                    btn.classList.add('collapsed');
+                    btn.setAttribute('aria-expanded', 'false');
+                } else {
+                    inst.show();
+                    btn.classList.remove('collapsed');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            } else {
+                // Fallback nếu thiếu bootstrap.bundle
+                pane.classList.toggle('show', !isOpen);
+                btn.classList.toggle('collapsed', isOpen);
+                btn.setAttribute('aria-expanded', String(!isOpen));
+            }
+        }, true); // capture để chạy trước handler khác
+    })();
+</script>
+
+
+<!-- ======================================================================= -->
+
+<!-- Validate form đánh giá (giữ nguyên logic hiện có) -->
 <script>
     // Bắt submit của mọi form đánh giá (kể cả nằm trong partial include)
     document.addEventListener('submit', function (e) {
@@ -90,7 +137,6 @@
         const form = e.target.closest('.feedback-form');
         const need = parseInt(e.target.value, 10) < 5;
         form.querySelector('.comment-req')?.classList.toggle('d-none', !need);
-
         // reset cảnh báo khi đổi sao
         form.querySelector('.comment-help')?.classList.add('d-none');
     });

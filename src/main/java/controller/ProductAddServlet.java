@@ -107,53 +107,55 @@ public class ProductAddServlet extends HttpServlet {
             String strap = request.getParameter("strap");
             String dialColor = request.getParameter("dial_color");
             String function = request.getParameter("function");
+            
+            // Translation for validation messages
             if (productName == null || productName.trim().isEmpty()) {
-                errors.put("productNameError", "Tên sản phẩm không được để trống.");
+                errors.put("productNameError", "Product name cannot be left blank."); // Tên sản phẩm không được để trống.
             }
             if (brand == null || brand.trim().isEmpty()) {
-                errors.put("brandError", "Thương hiệu không được để trống.");
+                errors.put("brandError", "Brand cannot be left blank."); // Thương hiệu không được để trống.
             }
             if (origin == null || origin.trim().isEmpty()) {
-                errors.put("originError", "Xuất xứ không được để trống.");
+                errors.put("originError", "Origin cannot be left blank."); // Xuất xứ không được để trống.
             }
             if (priceStr == null || priceStr.trim().isEmpty()) {
-                errors.put("priceError", "Giá sản phẩm không được để trống.");
+                errors.put("priceError", "Product price cannot be left blank."); // Giá sản phẩm không được để trống.
             }
             if (quantityStr == null || quantityStr.trim().isEmpty()) {
-                errors.put("quantityError", "Số lượng không được để trống.");
+                errors.put("quantityError", "Quantity cannot be left blank."); // Số lượng không được để trống.
             }
             if (categoryStr == null || categoryStr.trim().isEmpty()) {
-                errors.put("categoryError", "Danh mục không được để trống.");
+                errors.put("categoryError", "Category cannot be left blank."); // Danh mục không được để trống.
             }
             if (image == null || image.trim().isEmpty()) {
-                errors.put("imageError", "Vui lòng nhập tên hoặc đường dẫn hình ảnh.");
+                errors.put("imageError", "Please enter the image name or path."); // Vui lòng nhập tên hoặc đường dẫn hình ảnh.
             }
             if (description == null || description.trim().isEmpty()) {
-                errors.put("descriptionError", "Mô tả không được để trống.");
+                errors.put("descriptionError", "Description cannot be left blank."); // Mô tả không được để trống.
             }
             if (warranty == null || warranty.trim().isEmpty()) {
-                errors.put("warrantyError", "Vui lòng nhập thông tin bảo hành.");
+                errors.put("warrantyError", "Please enter warranty information."); // Vui lòng nhập thông tin bảo hành.
             }
             if (machine == null || machine.trim().isEmpty()) {
-                errors.put("machineError", "Vui lòng nhập thông tin bộ máy.");
+                errors.put("machineError", "Please enter machine information."); // Vui lòng nhập thông tin bộ máy.
             }
             if (glass == null || glass.trim().isEmpty()) {
-                errors.put("glassError", "Vui lòng nhập loại kính.");
+                errors.put("glassError", "Please enter the glass type."); // Vui lòng nhập loại kính.
             }
             if (dialDiameter == null || dialDiameter.trim().isEmpty()) {
-                errors.put("dialDiameterError", "Vui lòng nhập đường kính mặt đồng hồ.");
+                errors.put("dialDiameterError", "Please enter the dial diameter."); // Vui lòng nhập đường kính mặt đồng hồ.
             }
             if (bezel == null || bezel.trim().isEmpty()) {
-                errors.put("bezelError", "Vui lòng nhập chất liệu viền.");
+                errors.put("bezelError", "Please enter the bezel material."); // Vui lòng nhập chất liệu viền.
             }
             if (strap == null || strap.trim().isEmpty()) {
-                errors.put("strapError", "Vui lòng nhập loại dây đeo.");
+                errors.put("strapError", "Please enter the strap type."); // Vui lòng nhập loại dây đeo.
             }
             if (dialColor == null || dialColor.trim().isEmpty()) {
-                errors.put("dialColorError", "Vui lòng nhập màu mặt đồng hồ.");
+                errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
             }
             if (function == null || function.trim().isEmpty()) {
-                errors.put("functionError", "Vui lòng nhập chức năng của sản phẩm.");
+                errors.put("functionError", "Please enter the product function."); // Vui lòng nhập chức năng của sản phẩm.
             }
 
             // 🟥 Nếu có bất kỳ lỗi rỗng nào → quay lại form
@@ -171,7 +173,7 @@ public class ProductAddServlet extends HttpServlet {
                 quantity = Integer.parseInt(quantityStr);
                 categoryId = Integer.parseInt(categoryStr);
             } catch (NumberFormatException e) {
-                errors.put("numberError", "Giá, số lượng và danh mục phải là số hợp lệ.");
+                errors.put("numberError", "Price, quantity, and category must be valid numbers."); // Giá, số lượng và danh mục phải là số hợp lệ.
                 request.setAttribute("errors", errors);
                 RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
                 rd.forward(request, response);
@@ -180,13 +182,21 @@ public class ProductAddServlet extends HttpServlet {
 
             // 🟩 Kiểm tra logic hợp lệ
             if (price <= 0) {
-                errors.put("priceError", "Giá phải lớn hơn 0.");
+                errors.put("priceError", "Price must be greater than 0."); // Giá phải lớn hơn 0.
             }
             if (quantity < 0) {
-                errors.put("quantityError", "Số lượng không được âm.");
+                errors.put("quantityError", "Quantity cannot be negative."); // Số lượng không được âm.
             }
             if (categoryId <= 0) {
-                errors.put("categoryError", "ID danh mục phải lớn hơn 0.");
+                errors.put("categoryError", "Category ID must be greater than 0."); // ID danh mục phải lớn hơn 0.
+            }
+            
+            // If there are logic errors, return to the form
+            if (!errors.isEmpty()) {
+                request.setAttribute("errors", errors);
+                RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
+                rd.forward(request, response);
+                return;
             }
 
             Product p = new Product();
@@ -211,22 +221,27 @@ public class ProductAddServlet extends HttpServlet {
 
             ProductDAO dao = new ProductDAO();
             dao.addProduct(p);
-            request.getSession().setAttribute("successMessage", "Thêm sản phẩm \"" + productName + "\" thành công!");
+            
+            // Translation for success message
+            request.getSession().setAttribute("successMessage", "Successfully added product \"" + productName + "\"!"); // Thêm sản phẩm thành công!
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            request.setAttribute("error", "Lỗi dữ liệu đầu vào: Giá, Số lượng, hoặc ID Danh mục không hợp lệ.");
+            // Translation for error message
+            request.setAttribute("error", "Input data error: Price, Quantity, or Category ID is invalid."); // Lỗi dữ liệu đầu vào: Giá, Số lượng, hoặc ID Danh mục không hợp lệ.
             RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
             rd.forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("error", "Lỗi cơ sở dữ liệu khi thêm sản phẩm. Vui lòng kiểm tra log hoặc thử lại. Lỗi: " + e.getMessage());
+            // Translation for error message
+            request.setAttribute("error", "Database error when adding product. Please check the log or try again. Error: " + e.getMessage()); // Lỗi cơ sở dữ liệu khi thêm sản phẩm.
             RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Lỗi hệ thống không xác định: " + e.getMessage());
+            // Translation for error message
+            request.setAttribute("error", "Unknown system error: " + e.getMessage()); // Lỗi hệ thống không xác định:
             RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
             rd.forward(request, response);
         }

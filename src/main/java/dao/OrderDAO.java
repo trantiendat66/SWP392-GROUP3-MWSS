@@ -173,55 +173,60 @@ public class OrderDAO extends DBContext {
     }
 
     /**
-     * Chọn 1 staff ACTIVE có số đơn đang xử lý ít nhất. Trạng thái đang xử lý:
-     * PENDING, CONFIRMED, SHIPPING (tùy enum của bạn). Nếu chưa có staff ->
-     * seed 'seed_admin' và dùng ID đó.
+     * Chọn 1 staff ACTIVE có số đơn đang xử lý ít nhất, NHƯNG loại trừ
+     * account_id = 1 (admin). Nếu không có staff nào khác 1: - Thử lấy bất kỳ
+     * staff nào khác 1. - Nếu vẫn không có, seed 1 nhân viên mặc định (không
+     * phải admin) và dùng ID đó.
      */
     private int resolveDefaultAccountId(Connection cn) throws SQLException {
-        // Ưu tiên staff ACTIVE có ít đơn đang làm nhất
-        String pick
+        // 1) Ưu tiên staff ACTIVE (≠1) có ít đơn PENDING/CONFIRMED/SHIPPING nhất
+        final String pickActiveNotAdmin
                 = "SELECT TOP 1 s.account_id "
                 + "FROM Staff s "
-                + "WHERE s.[status] = N'ACTIVE' "
+                + "WHERE s.[status] = N'ACTIVE' AND s.account_id <> 1 "
                 + "ORDER BY ("
                 + "   SELECT COUNT(*) FROM [Order] o "
                 + "   WHERE o.account_id = s.account_id "
                 + "     AND o.order_status IN (N'PENDING',N'CONFIRMED',N'SHIPPING')"
                 + ") ASC, s.account_id ASC";
 
-        try (PreparedStatement ps = cn.prepareStatement(pick); ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = cn.prepareStatement(pickActiveNotAdmin); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
         }
 
-        // Không có staff ACTIVE -> thử lấy bất kỳ staff nào
-        try (PreparedStatement ps = cn.prepareStatement("SELECT TOP 1 account_id FROM Staff ORDER BY account_id"); ResultSet rs = ps.executeQuery()) {
+        // 2) Không có ACTIVE (≠1) -> lấy bất kỳ staff nào khác 1
+        final String pickAnyNotAdmin
+                = "SELECT TOP 1 account_id FROM Staff WHERE account_id <> 1 ORDER BY account_id";
+        try (PreparedStatement ps = cn.prepareStatement(pickAnyNotAdmin); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
         }
 
-        // Không có staff nào -> seed 1 user mặc định
-        String ins = "INSERT INTO Staff(user_name,[password],email,phone,role,[position],[address],[status]) "
+        // 3) Không có staff nào khác 1 -> seed một staff mặc định (không phải admin) và dùng ID đó
+        final String seedOperator
+                = "INSERT INTO Staff(user_name,[password],email,phone,role,[position],[address],[status]) "
                 + "VALUES (?,?,?,?,?,?,?,?)";
-        try (PreparedStatement ps = cn.prepareStatement(ins, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, "seed_admin");
-            ps.setString(2, "seed@123");
-            ps.setString(3, "admin@example.com");
+        try (PreparedStatement ps = cn.prepareStatement(seedOperator, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, "seed_operator");
+            ps.setString(2, "seed@123");                 // nhớ hash nếu hệ thống đang hash password
+            ps.setString(3, "operator@example.com");
             ps.setString(4, "0900000000");
-            ps.setString(5, "ADMIN");
-            ps.setString(6, "Product Owner");
+            ps.setString(5, "STAFF");                    // không phải ADMIN
+            ps.setString(6, "Operator");
             ps.setString(7, "-");
             ps.setString(8, "ACTIVE");
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getInt(1);
+                    return rs.getInt(1);                 // ID mới (≠1 nếu bảng trống trước đó)
                 }
             }
         }
-        throw new SQLException("Không thể xác định account_id cho đơn hàng.");
+
+        throw new SQLException("Không thể xác định account_id (đã loại trừ admin=1).");
     }
 
     public List<Order> getOrderByIdStaff(int accountId) {

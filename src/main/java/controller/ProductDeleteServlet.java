@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Product;
 
 /**
@@ -76,7 +78,7 @@ public class ProductDeleteServlet extends HttpServlet {
 
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
-            request.getSession().setAttribute("errorMessage", "ID không được để trống.");
+            request.getSession().setAttribute("errorMessage", "ID cannot be left blank.");
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
@@ -100,15 +102,12 @@ public class ProductDeleteServlet extends HttpServlet {
             }
             dao.deleteProduct(id);
             request.getSession().setAttribute("successMessage", "Xóa sản phẩm \"" + p.getProductName() + "\" thành công!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Lỗi DB khi xóa: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Lỗi hệ thống: " + e.getMessage());
+            request.getSession().setAttribute("errorMessage", "Invalid ID.");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            return;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDeleteServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 
     /**

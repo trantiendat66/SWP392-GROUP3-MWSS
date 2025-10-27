@@ -105,7 +105,7 @@ public class OrderListServlet extends HttpServlet {
 
             req.getRequestDispatcher("/order-list.jsp").forward(req, resp);
         } catch (SQLException e) {
-            req.setAttribute("error", "Không tải được danh sách đơn hàng: " + e.getMessage());
+            req.setAttribute("error", "Failed to load order list: " + e.getMessage());
             req.getRequestDispatcher("/order-list.jsp").forward(req, resp);
         }
     }

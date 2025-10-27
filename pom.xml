@@ -86,6 +86,19 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
             </plugin>
+
+             <plugin>
+      <groupId>com.appland</groupId>
+      <artifactId>appmap-maven-plugin</artifactId>
+      <version>1.0.0</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>prepare-agent</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
         </plugins>
     </build>
 </project>
