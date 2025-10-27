@@ -93,55 +93,85 @@
                     <div class="display-4 fw-bold mb-1">
                         <fmt:formatNumber value="${ratingAvg}" minFractionDigits="1" maxFractionDigits="1"/>
                     </div>
-                    <div class="rating-stars mb-2">
-                        <c:forEach begin="1" end="5" var="s">
-                            <c:choose>
-                                <c:when test="${s <= roundedAvg}">&#9733;</c:when>
-                                <c:otherwise>&#9734;</c:otherwise>
-                            </c:choose>
-                        </c:forEach>
+                    <div class="stars-avg mb-2">
+                        <span class="bg"></span>
+                        <!-- chiều rộng sao cam = ratingAvg * 20 (%) -->
+                        <span class="fg" style="width:${ratingAvg * 20}%"></span>
+                        <c:set var="roundedAvg" value="${(ratingAvg + 0.5) div 1}" />
                     </div>
+
+
                     <div class="text-muted">Trung bình</div>
                 </div>
 
-                <!-- Cột phải: phân bố sao -->
+                <!-- Cột phải: phân bố sao (REPLACED) -->
                 <div class="col-12 col-md-8">
+                    <!-- 5 sao -->
                     <div class="rating-row">
-                        <span class="label">5&#9733;</span>
+                        <div class="stars">
+                            <c:forEach begin="1" end="5" var="s">
+                                <span class="star on">&#9733;</span>
+                            </c:forEach>
+                        </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width: ${pct5}%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:${pct5}%"></div>
                         </div>
                         <span class="count">${star5}</span>
                     </div>
+
+                    <!-- 4 sao -->
                     <div class="rating-row">
-                        <span class="label">4&#9733;</span>
+                        <div class="stars">
+                            <c:forEach begin="1" end="5" var="s">
+                                <span class="star ${s <= 4 ? 'on' : ''}">&#9733;</span>
+                            </c:forEach>
+                        </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width: ${pct4}%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:${pct4}%"></div>
                         </div>
                         <span class="count">${star4}</span>
                     </div>
+
+                    <!-- 3 sao -->
                     <div class="rating-row">
-                        <span class="label">3&#9733;</span>
+                        <div class="stars">
+                            <c:forEach begin="1" end="5" var="s">
+                                <span class="star ${s <= 3 ? 'on' : ''}">&#9733;</span>
+                            </c:forEach>
+                        </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width: ${pct3}%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:${pct3}%"></div>
                         </div>
                         <span class="count">${star3}</span>
                     </div>
+
+                    <!-- 2 sao -->
                     <div class="rating-row">
-                        <span class="label">2&#9733;</span>
+                        <div class="stars">
+                            <c:forEach begin="1" end="5" var="s">
+                                <span class="star ${s <= 2 ? 'on' : ''}">&#9733;</span>
+                            </c:forEach>
+                        </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width: ${pct2}%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:${pct2}%"></div>
                         </div>
                         <span class="count">${star2}</span>
                     </div>
+
+                    <!-- 1 sao -->
                     <div class="rating-row">
-                        <span class="label">1&#9733;</span>
+                        <div class="stars">
+                            <c:forEach begin="1" end="5" var="s">
+                                <span class="star ${s <= 1 ? 'on' : ''}">&#9733;</span>
+                            </c:forEach>
+                        </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width: ${pct1}%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:${pct1}%"></div>
                         </div>
                         <span class="count">${star1}</span>
                     </div>
                 </div>
+
             </div>
 
             <!-- Danh sách từng đánh giá -->
@@ -213,6 +243,61 @@
                 color: #f59f00;
                 letter-spacing:2px;
             }
+
+            /* --- Sao trung bình đổ màu (overlay) --- */
+            .stars-avg{
+                position:relative;
+                display:inline-block;
+                font-size:32px;
+                line-height:1;
+                letter-spacing:2px;
+            }
+            .stars-avg .bg::before{
+                content:"★★★★★";
+                color:#e5e7eb;
+            }   /* nền xám */
+            .stars-avg .fg{
+                position:absolute;
+                inset:0 auto 0 0;
+                overflow:hidden;
+                white-space:nowrap;
+                color:#f59f00;                      /* vàng cam */
+            }
+            .stars-avg .fg::before{
+                content:"★★★★★";
+            }
+            @media (max-width:576px){
+                .stars-avg{
+                    font-size:28px
+                }
+            }
+            .rating-row{
+                display:flex;
+                align-items:center;
+                gap:.75rem;
+                margin-bottom:.5rem;
+            }
+            .rating-row .stars{
+                width:110px;
+                display:flex;
+                gap:2px;
+                justify-content:flex-start;
+            }
+            .star{
+                color:#c0c7d1;
+                font-size:18px;
+                line-height:1;
+            }
+            .star.on{
+                color:#f59f00;
+            }          /* sao vàng */
+            .rating-row .count{
+                width:28px;
+                text-align:right;
+                color:#6c757d;
+                font-weight:600;
+            }
+
         </style>
 
     </c:otherwise>

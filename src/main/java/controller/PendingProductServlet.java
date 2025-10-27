@@ -81,7 +81,7 @@ public class PendingProductServlet extends HttpServlet {
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Số lượng sản phẩm trong kho không đủ. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                    out.print("{\"success\": false, \"message\": \"Insufficient stock. Only " + product.getQuantityProduct() + " items left.\"}");
                     out.flush();
                     return;
                 }
@@ -93,7 +93,7 @@ public class PendingProductServlet extends HttpServlet {
                     if (totalQuantity > product.getQuantityProduct()) {
                         response.setContentType("application/json");
                         PrintWriter out = response.getWriter();
-                        out.print("{\"success\": false, \"message\": \"Tổng số lượng vượt quá số lượng trong kho. Chỉ còn " + product.getQuantityProduct() + " sản phẩm\"}");
+                        out.print("{\"success\": false, \"message\": \"Total quantity exceeds available stock. Only " + product.getQuantityProduct() + " items left.\"}");
                         out.flush();
                         return;
                     }
@@ -104,27 +104,27 @@ public class PendingProductServlet extends HttpServlet {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 if (success) {
-                    out.print("{\"success\": true, \"message\": \"Sản phẩm đã được thêm vào giỏ hàng thành công!\"}");
+                    out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\"}");
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng\"}");
+                    out.print("{\"success\": false, \"message\": \"An error occurred while adding the product to the cart.\"}");
                 }
                 out.flush();
             } else {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                out.print("{\"success\": false, \"message\": \"Sản phẩm không tồn tại\"}");
+                out.print("{\"success\": false, \"message\": \"Product not found.\"}");
                 out.flush();
             }
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Dữ liệu đầu vào không hợp lệ\"}");
+            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }
@@ -133,7 +133,7 @@ public class PendingProductServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print("{\"success\": true, \"message\": \"Kiểm tra sản phẩm tạm thời thành công\"}");
+        out.print("{\"success\": true, \"message\": \"Pending product check successful.\"}");
         out.flush();
     }
 }

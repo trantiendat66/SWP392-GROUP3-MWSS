@@ -88,7 +88,7 @@ public class OrderCreateFromCartServlet extends HttpServlet {
                 cartDAO.clearCart(cus.getCustomer_id());
             }
 
-            session.setAttribute("flash_success", "Tạo đơn hàng #" + orderId + " thành công!");
+            session.setAttribute("flash_success", "Order #" + orderId + " created successfully!");
             resp.sendRedirect(req.getContextPath() + "/order-success.jsp?orderId=" + orderId);
 
         } catch (SQLException e) {
@@ -101,7 +101,7 @@ public class OrderCreateFromCartServlet extends HttpServlet {
                     cartDAO.addToCart(cus.getCustomer_id(), pid, price, qty);
                     session.removeAttribute("bn_pid");
                     session.removeAttribute("bn_qty");
-                    session.setAttribute("error", "Thanh toán thất bại, sản phẩm đã được đưa vào giỏ.");
+                    session.setAttribute("error", "Payment failed, the product has been added to your cart.");
                     resp.sendRedirect(req.getContextPath() + "/cart");
                     return;
                 } catch (SQLException ex) {

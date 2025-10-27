@@ -208,4 +208,34 @@ public class FeedbackDAO extends DBContext {
             }
         }
     }
+
+    // Đếm phân bố sao cho 1 sản phẩm
+    public int[] getStarDistribution(int productId) throws SQLException {
+        String sql = """
+        SELECT
+           SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) AS s5,
+           SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) AS s4,
+           SUM(CASE WHEN rating = 3 THEN 1 ELSE 0 END) AS s3,
+           SUM(CASE WHEN rating = 2 THEN 1 ELSE 0 END) AS s2,
+           SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) AS s1,
+           COUNT(*) AS total
+        FROM Feedback
+        WHERE product_id = ?
+    """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                int[] dist = new int[6]; // [0]=total, [1]=s1..[5]=s5
+                if (rs.next()) {
+                    dist[5] = rs.getInt("s5");
+                    dist[4] = rs.getInt("s4");
+                    dist[3] = rs.getInt("s3");
+                    dist[2] = rs.getInt("s2");
+                    dist[1] = rs.getInt("s1");
+                    dist[0] = rs.getInt("total");
+                }
+                return dist;
+            }
+        }
+    }
 }

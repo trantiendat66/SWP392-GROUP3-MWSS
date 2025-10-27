@@ -24,9 +24,8 @@
             <c:forEach var="o" items="${orders}">
                 <div class="accordion-item mb-2">
                     <h2 class="accordion-header" id="h-${listAttr}-${o.order_id}">
-                        <button class="accordion-button collapsed" type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#c-${listAttr}-${o.order_id}">
+                        <button class="accordion-button collapsed js-acc-btn" type="button"
+                                data-target="#c-${listAttr}-${o.order_id}">
                             <div class="w-100">
                                 <div class="d-flex justify-content-between">
                                     <span>
@@ -55,7 +54,7 @@
                     </h2>
 
                     <div id="c-${listAttr}-${o.order_id}" class="accordion-collapse collapse"
-                         data-bs-parent="#acc-${listAttr}">
+                         >
                         <div class="accordion-body p-0">
                             <table class="table mb-0">
                                 <thead class="table-light">
@@ -89,6 +88,7 @@
 
                                                 <c:choose>
                                                     <c:when test="${not empty eligibleKeys && eligibleKeys.contains(__key)}">
+                                                        <!-- Nút mở modal -->
                                                         <button type="button"
                                                                 class="btn btn-sm btn-outline-primary"
                                                                 data-bs-toggle="modal"
@@ -104,41 +104,53 @@
                                                                         <h5 class="modal-title">Đánh giá sản phẩm</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                     </div>
+
                                                                     <div class="modal-body">
                                                                         <form action="${ctx}/feedback/create" method="post" class="feedback-form">
                                                                             <input type="hidden" name="order_id" value="${o.order_id}">
                                                                             <input type="hidden" name="product_id" value="${__pid}">
 
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Đánh giá</label>
-                                                                                <div class="d-flex gap-2">
-                                                                                    <label><input type="radio" name="rating" value="5" checked> 5★</label>
-                                                                                    <label><input type="radio" name="rating" value="4"> 4★</label>
-                                                                                    <label><input type="radio" name="rating" value="3"> 3★</label>
-                                                                                    <label><input type="radio" name="rating" value="2"> 2★</label>
-                                                                                    <label><input type="radio" name="rating" value="1"> 1★</label>
+                                                                            <!-- Đánh giá -->
+                                                                            <div class="mb-3 text-start">
+                                                                                <label class="form-label mb-2">Đánh giá</label>
+
+                                                                                <%-- star picker: 1 hàng ngôi sao, click để chọn số sao --%>
+                                                                                <div class="momo-stars" dir="rtl">
+                                                                                    <c:set var="__suf" value="${o.order_id}-${__pid}" />
+                                                                                    <input type="radio" name="rating" id="s5-${__suf}" value="5" checked>
+                                                                                    <label for="s5-${__suf}" title="5 sao">★</label>
+
+                                                                                    <input type="radio" name="rating" id="s4-${__suf}" value="4">
+                                                                                    <label for="s4-${__suf}" title="4 sao">★</label>
+
+                                                                                    <input type="radio" name="rating" id="s3-${__suf}" value="3">
+                                                                                    <label for="s3-${__suf}" title="3 sao">★</label>
+
+                                                                                    <input type="radio" name="rating" id="s2-${__suf}" value="2">
+                                                                                    <label for="s2-${__suf}" title="2 sao">★</label>
+
+                                                                                    <input type="radio" name="rating" id="s1-${__suf}" value="1">
+                                                                                    <label for="s1-${__suf}" title="1 sao">★</label>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Nhận xét
-                                                                                    <small class="text-muted comment-req d-none">(bắt buộc nếu &lt; 5★)</small>
-                                                                                </label>
-                                                                                <textarea name="comment" class="form-control" rows="3"></textarea>
+                                                                            <div class="mb-2 text-start">
+                                                                                <label class="form-label fw-semibold d-block text-start mb-2">Nhận xét</label>
+                                                                                <textarea name="comment" class="form-control fb-comment" rows="4"
+                                                                                          placeholder="Nhập nội dung đánh giá (không bắt buộc – vui lòng gõ tiếng Việt có dấu)…"></textarea>
                                                                                 <div class="form-text text-danger d-none comment-help"></div>
                                                                             </div>
+
+
 
                                                                             <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
                                                                         </form>
                                                                     </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                                        <button type="submit" class="btn btn-primary"
-                                                                                onclick="submitFeedback('${o.order_id}', '${__pid}')">Gửi đánh giá</button>
-                                                                    </div>
+
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </c:when>
                                                     <c:otherwise>
                                                         <span class="text-muted">—</span>
@@ -155,5 +167,54 @@
                 </div>
             </c:forEach>
         </div>
+
+        <style>
+            /* star row */
+            .momo-stars {
+                display:inline-flex;
+                gap:6px;
+                font-size: 28px;
+                line-height:1;
+                user-select:none;
+            }
+            .momo-stars input {
+                display:none;
+            }
+            .momo-stars label {
+                color:#d6d9dd;        /* xám nhạt (sao rỗng) */
+                cursor:pointer;
+                transition: transform .05s ease-in;
+            }
+            /* tô màu tất cả sao bên trái sao được chọn (dùng dir=rtl + ~ selector) */
+            .momo-stars input:checked ~ label,
+            .momo-stars label:hover,
+            .momo-stars label:hover ~ label {
+                color:#f59f00;        /* vàng cam */
+            }
+            .momo-stars label:active {
+                transform: scale(.95);
+            }
+        </style>
+
     </c:otherwise>
 </c:choose>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.feedback-form').forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                const rating = parseInt(form.querySelector('input[name="rating"]:checked')?.value || '5', 10);
+                const cmt = form.querySelector('.fb-comment');
+                const help = form.querySelector('.fb-help');
+
+                if (rating < 5 && (!cmt.value || cmt.value.trim().length === 0)) {
+                    e.preventDefault();
+                    help.classList.remove('d-none');
+                    cmt.focus();
+                } else {
+                    help?.classList.add('d-none');
+                }
+            });
+        });
+    });
+</script>

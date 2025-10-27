@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import model.Product;
 
 /**
  *
@@ -75,24 +76,36 @@ public class ProductDeleteServlet extends HttpServlet {
 
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.trim().isEmpty()) {
-            request.getSession().setAttribute("errorMessage", "ID không được để trống.");
+            request.getSession().setAttribute("errorMessage", "ID cannot be left blank.");
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
 
+        int id;
         try {
-            int id = Integer.parseInt(idStr.trim());
-            ProductDAO dao = new ProductDAO();
-            dao.deleteProduct(id); // giả sử phương thức này ném SQLException khi lỗi
-            request.getSession().setAttribute("successMessage", "Xóa sản phẩm thành công!");
+            id = Integer.parseInt(idStr.trim());
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("errorMessage", "ID không hợp lệ.");
+            request.getSession().setAttribute("errorMessage", "Invalid ID.");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            return;
+        }
+
+        ProductDAO dao = new ProductDAO();
+        try {
+            Product p = dao.getById(id);
+            if (p == null) {
+                request.getSession().setAttribute("errorMessage", "Product with ID = " + id + " not found.");
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                return;
+            }
+            dao.deleteProduct(id);
+            request.getSession().setAttribute("successMessage", "Successfully deleted product \"" + p.getProductName() + "\"!");
         } catch (SQLException e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Lỗi DB khi xóa: " + e.getMessage());
+            request.getSession().setAttribute("errorMessage", "DB error during deletion: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Lỗi hệ thống: " + e.getMessage());
+            request.getSession().setAttribute("errorMessage", "System error: " + e.getMessage());
         }
 
         response.sendRedirect(request.getContextPath() + "/admin/dashboard");

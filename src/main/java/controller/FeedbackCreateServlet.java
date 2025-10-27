@@ -39,18 +39,18 @@ public class FeedbackCreateServlet extends HttpServlet {
             productId = Integer.parseInt(req.getParameter("product_id"));
             rating = Integer.parseInt(req.getParameter("rating"));
         } catch (Exception ex) {
-            session.setAttribute("error", "Dữ liệu không hợp lệ.");
+            session.setAttribute("error", "Invalid data.");
             resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
             return;
         }
         if (rating < 1 || rating > 5) {
-            session.setAttribute("error", "Điểm đánh giá không hợp lệ.");
+            session.setAttribute("error", "Invalid rating score.");
             resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
             return;
         }
         if (rating < 5) {
             if (comment == null || comment.trim().isEmpty()) {
-                session.setAttribute("error", "Vui lòng nhập lý do khi đánh giá dưới 5★.");
+                session.setAttribute("error", "Please provide a reason when rating below 5★.");
                 resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
                 return;
             }
@@ -68,14 +68,14 @@ public class FeedbackCreateServlet extends HttpServlet {
             boolean allowed = orderDAO.canReview(cus.getCustomer_id(), orderId, productId);
             if (!allowed) {
                 session.setAttribute("error",
-                        "Đơn hàng không đủ điều kiện để đánh giá (không thuộc bạn, chưa giao, hoặc đã quá 3 ngày).");
+                        "The order does not meet the conditions for review (not yours, not yet delivered, or more than 3 days old).");
                 resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
                 return;
             }
 
             // 2) Không cho đánh giá trùng
             if (fbDAO.hasFeedback(cus.getCustomer_id(), orderId, productId)) {
-                session.setAttribute("error", "Bạn đã đánh giá sản phẩm này cho đơn hàng này rồi.");
+                session.setAttribute("error", "You have already reviewed this product for this order.");
                 resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
                 return;
             }
@@ -83,13 +83,13 @@ public class FeedbackCreateServlet extends HttpServlet {
             // 3) Lưu feedback
             fbDAO.createFeedback(cus.getCustomer_id(), orderId, productId, rating, comment);
 
-            session.setAttribute("flash_success", "Cảm ơn bạn! Đánh giá đã được ghi nhận.");
+            session.setAttribute("flash_success", "Thank you! Your feedback has been recorded.");
             // quay về tab ĐÃ GIAO
             resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
 
         } catch (SQLException e) {
             e.printStackTrace();
-            session.setAttribute("error", "Có lỗi khi lưu đánh giá: " + e.getMessage());
+            session.setAttribute("error", "An error occurred while saving feedback: " + e.getMessage());
             resp.sendRedirect(req.getContextPath() + "/orders?tab=delivered");
         }
     }

@@ -9,26 +9,34 @@ package model;
  * @author Thuong
  */
 public class Staff {
+
     private int accountId;
     private String userName;
     private String password; // Mật khẩu đã băm từ DB
     private String email;
     private String phone;
-    private String role;     
-    private String position; 
+    private String role;
+    private String position;
     private String address;
-    private String status;   
+    private String status;
 
     // Constructor
     public Staff() {
     }
 
-    // Constructor đầy đủ (Tùy chọn)
-    // public Staff(int accountId, String userName, String password, String email, String phone, String role, String position, String address, String status) { ... }
-
+    public Staff(int accountId, String userName, String password, String email, String phone, String role, String position, String address, String status) {
+        this.accountId = accountId;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.role = role;
+        this.position = position;
+        this.address = address;
+        this.status = status;
+    }
 
     // Getters và Setters 
-
     public int getAccountId() {
         return accountId;
     }

@@ -70,22 +70,51 @@ public class ProductDetailServlet extends HttpServlet {
             return;
         }
 
-        // === BỔ SUNG: nạp feedback để hiển thị ở productdetail.jsp ===
         try {
-            // === Feedback: nạp dữ liệu hiển thị ở productdetail.jsp ===
             FeedbackDAO fbDAO = new FeedbackDAO();
 
-            // 1) Danh sách đánh giá để render
+            // Lấy list review để render
             List<FeedbackView> productReviews = fbDAO.getFeedbackByProduct(id);
             request.setAttribute("productReviews", productReviews);
 
-            // 2) Tổng số đánh giá & điểm trung bình
-            int ratingCount = fbDAO.getRatingCount(id);
-            double ratingAvg = fbDAO.getAverageRating(id);
+            // Tính phân bố sao + trung bình từ list trên
+            int s1 = 0, s2 = 0, s3 = 0, s4 = 0, s5 = 0;
+            int ratingCount = (productReviews != null) ? productReviews.size() : 0;
+            double sum = 0.0;
+
+            if (productReviews != null) {
+                for (FeedbackView v : productReviews) {
+                    int r = v.getRating();
+                    sum += r;
+                    switch (r) {
+                        case 1 ->
+                            s1++;
+                        case 2 ->
+                            s2++;
+                        case 3 ->
+                            s3++;
+                        case 4 ->
+                            s4++;
+                        case 5 ->
+                            s5++;
+                    }
+                }
+            }
+
+            double ratingAvg = ratingCount > 0 ? (sum / ratingCount) : 0.0;
+
+            // Gửi sang JSP
             request.setAttribute("ratingCount", ratingCount);
             request.setAttribute("ratingAvg", ratingAvg);
+            request.setAttribute("roundedAvg", Math.round(ratingAvg)); // để vẽ sao trung bình
 
-            // 3) Khách hiện tại đã review sản phẩm này chưa? (để khoá nút nếu cần)
+            request.setAttribute("star1", s1);
+            request.setAttribute("star2", s2);
+            request.setAttribute("star3", s3);
+            request.setAttribute("star4", s4);
+            request.setAttribute("star5", s5);
+
+            // Kiểm tra người dùng đã đánh giá sản phẩm này chưa (khóa nút nếu cần)
             HttpSession session = request.getSession(false);
             Customer cus = (session != null) ? (Customer) session.getAttribute("customer") : null;
             boolean hasReviewed = false;
@@ -97,13 +126,12 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("hasReviewed", hasReviewed);
 
         } catch (Exception ex) {
-            // không làm gián đoạn trang chi tiết nếu lỗi feedback
             request.setAttribute("feedbackError", ex.getMessage());
         }
-        // === END BỔ SUNG ===
 
         request.setAttribute("product", product);
         request.getRequestDispatcher("/WEB-INF/productdetail.jsp").forward(request, response);
+
     }
 
     @Override
