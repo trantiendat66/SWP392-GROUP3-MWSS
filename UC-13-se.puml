@@ -1,0 +1,86 @@
+@startuml
+autonumber
+autoactivate on
+hide footbox
+
+actor User
+boundary "forgot-password.jsp" as JSP
+control "ForgotPasswordRequestServlet#doPost" as REQ
+control "ForgotPasswordResetServlet#doPost" as RST
+entity "CustomerDAO" as CDAO
+entity "PasswordResetDAO" as PRDAO
+entity "EmailService" as EMAIL
+control "DBContext" as DBC
+database "Database" as DB
+
+' --- Pha 1: Gửi OTP ---
+User -> JSP : 1. Submit email to request reset
+JSP -> REQ : 2. POST /password/forgot (email)
+
+REQ -> CDAO : 3. existsByEmail(email)
+CDAO -> DBC : 3.1 open connection
+DBC -> DB : 3.2 SELECT 1 FROM Customer WHERE email=?
+DB --> DBC : 3.3 true/false
+DBC --> CDAO : 3.4 true/false
+CDAO --> REQ : 3.5 true/false
+
+REQ -> PRDAO : 4. expireOld(email)
+PRDAO -> DBC : 4.1 open connection
+DBC -> DB : 4.2 UPDATE PasswordResetToken SET status='EXPIRED' WHERE email=? AND status='NEW'
+DB --> DBC : 4.3 n rows
+DBC --> PRDAO : 4.4 n rows
+PRDAO --> REQ : 4.5 ok
+
+REQ -> REQ : 5. Generate OTP (6 digits), ttl=15 minutes
+REQ -> PRDAO : 6. createOrReplace(email, otp, 15)
+PRDAO -> DBC : 6.1 open connection
+DBC -> DB : 6.2 INSERT PasswordResetToken(email, otp, expires_at, status='NEW', retry_cnt=0)
+DB --> DBC : 6.3 result
+DBC --> PRDAO : 6.4 result
+PRDAO --> REQ : 6.5 result
+
+REQ -> EMAIL : 7. sendResetOTP(email, otp)
+EMAIL --> REQ : 7.1 sent/failed
+
+REQ --> JSP : 8. Show generic message "If the email exists, we sent an OTP."
+
+' --- Pha 2: Đặt lại mật khẩu bằng OTP ---
+User -> JSP : 9. Submit OTP & new password
+JSP -> RST : 10. POST /password/reset (email, otp, new_password, confirm_password)
+
+opt [Invalid data]
+  RST --> JSP : 10.1 Show validation error
+end
+
+RST -> PRDAO : 11. findValid(email, otp)
+PRDAO -> DBC : 11.1 open connection
+DBC -> DB : 11.2 SELECT token WHERE email=? AND otp=? AND status='NEW' AND expires_at > NOW()
+DB --> DBC : 11.3 row/null
+DBC --> PRDAO : 11.4 token/null
+PRDAO --> RST : 11.5 token/null
+
+alt [token invalid or expired]
+  RST --> JSP : 12. Show error "Invalid or expired OTP"
+else [token valid]
+  RST -> RST : 13. newHash = MD5(new_password)
+  RST -> CDAO : 14. updatePasswordByEmail(email, newHash)
+  CDAO -> DBC : 14.1 open connection
+  DBC -> DB : 14.2 UPDATE Customer SET password=? WHERE email=?
+  DB --> DBC : 14.3 result
+  DBC --> CDAO : 14.4 result
+  CDAO --> RST : 14.5 result
+
+  RST -> PRDAO : 15. markUsed(token_id)
+  PRDAO -> DBC : 15.1 open connection
+  DBC -> DB : 15.2 UPDATE PasswordResetToken SET status='USED' WHERE token_id=?
+  DB --> DBC : 15.3 result
+  DBC --> PRDAO : 15.4 result
+  PRDAO --> RST : 15.5 result
+
+  alt [success]
+    RST --> JSP : 16. Redirect to login.jsp with success message
+  else [fail]
+    RST --> JSP : 17. Show error "Reset failed"
+  end
+end
+@enduml

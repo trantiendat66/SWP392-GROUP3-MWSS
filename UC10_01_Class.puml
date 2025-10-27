@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "model" {
+  class Rating <<entity>> {
+    - rating_id   : int
+    - customer_id : int
+    - product_id  : int
+    - stars       : int
+    - comment     : String
+    - created_at  : Timestamp
+    + getters/setters()
+  }
+}
+
+package "db" {
+  class DBContext {
+    - conn : Connection
+    + getConnection() : Connection
+  }
+}
+
+package "dao" {
+  class RatingDAO <<dao>> {
+    + existsByCustomerAndProduct(customer_id:int, product_id:int) : boolean
+    + update(r: Rating) : boolean
+    + getByCustomerAndProduct(customer_id:int, product_id:int) : Rating
+  }
+  class OrderDAO <<dao>> {
+    + hasPurchased(customer_id:int, product_id:int) : boolean
+  }
+}
+
+package "controller" {
+  class RatingUpdateServlet <<controller>> {
+    - ratingDAO : RatingDAO
+    - orderDAO  : OrderDAO
+    + doPost(req: HttpServletRequest, resp: HttpServletResponse) : void
+  }
+}
+
+RatingDAO --|> DBContext
+OrderDAO  --|> DBContext
+RatingUpdateServlet ..> RatingDAO
+RatingUpdateServlet ..> OrderDAO
+RatingDAO ..> Rating
+@enduml

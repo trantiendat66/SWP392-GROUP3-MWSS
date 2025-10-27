@@ -1,0 +1,43 @@
+@startuml
+autonumber
+autoactivate on
+hide footbox
+
+actor Guest
+boundary "product-detail.jsp" as JSP
+control "FeedbackListServlet#doGet" as CTRL
+entity "FeedbackDAO" as FDAO
+entity "CustomerDAO" as CDAO
+control "DBContext" as DBC
+database "Database" as DB
+
+Guest -> JSP : 1. Click tab Feedback
+JSP -> CTRL : 2. GET /feedback/list?productId&page&size
+
+CTRL -> FDAO : 3. findByProduct(productId, page, size)
+FDAO -> DBC : 3.1 open connection
+DBC -> DB : 3.2 SELECT feedback Approved with paging
+DB --> DBC : 3.3 List<Feedback>
+DBC --> FDAO : 3.4 List<Feedback>
+FDAO --> CTRL : 3.5 List<Feedback>
+
+opt [UI cần tên/ảnh người viết]
+  loop 4. for each feedback
+    CTRL -> CDAO : 4.1 getCustomerById(feedback.customer_id)
+    CDAO -> DBC : 4.1.1 open connection
+    DBC -> DB : 4.1.2 SELECT customer
+    DB --> DBC : 4.1.3 Customer
+    DBC --> CDAO : 4.1.4 Customer
+    CDAO --> CTRL : 4.1.5 Customer
+  end
+end
+
+CTRL -> FDAO : 5. countByProduct(productId)
+FDAO -> DBC : 5.1 open connection
+DBC -> DB : 5.2 SELECT COUNT(*)
+DB --> DBC : 5.3 total
+DBC --> FDAO : 5.4 total
+FDAO --> CTRL : 5.5 total
+
+CTRL --> JSP : 6. Forward product-feedback.jsp (list, paging)
+@enduml

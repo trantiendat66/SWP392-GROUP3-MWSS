@@ -1,0 +1,5222 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<VisioDocument xml:space='preserve' xmlns='http://schemas.microsoft.com/visio/2003/core' xmlns:vx='http://schemas.microsoft.com/visio/2006/extension' xmlns:v14='http://schemas.microsoft.com/office/visio/2010/extension'>
+<DocumentProperties>
+<Creator>PlantUML</Creator>
+</DocumentProperties>
+<DocumentSheet NameU='TheDoc' LineStyle='0' FillStyle='0' TextStyle='0'>
+</DocumentSheet>
+<Masters/>
+<Pages>
+<Page ID='0' NameU='Page-1' Name='Page 1' ViewScale='1' ViewCenterX='8.82986111111111' ViewCenterY='5.701497395833333'>
+<PageSheet LineStyle='0' FillStyle='0' TextStyle='0'>
+<PageProps>
+<PageWidth Unit='IN_F'>17.65972222222222</PageWidth>
+<PageHeight Unit='IN_F'>11.402994791666666</PageHeight>
+<PageScale Unit='IN_F'>1</PageScale>
+<DrawingScale Unit='IN_F'>2</DrawingScale>
+<DrawingSizeType>3</DrawingSizeType>
+<DrawingScaleType>0</DrawingScaleType>
+<InhibitSnap>0</InhibitSnap>
+</PageProps>
+</PageSheet>
+<Shapes>
+<Shape ID='1' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>2.0694444444444446</PinX>
+<PinY>4.965657552083333</PinY>
+<Width>0.1388888888888889</Width>
+<Height>9.681315104166666</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>9.681315104166666</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>9.681315104166666</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='2' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>8.458333333333334</PinX>
+<PinY>8.997938368055555</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.7736545138888888</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.7736545138888888</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.7736545138888888</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='3' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>8.458333333333334</PinX>
+<PinY>3.1936848958333317</PinY>
+<Width>0.1388888888888889</Width>
+<Height>4.215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>4.215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>4.215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='4' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>11.402777777777779</PinX>
+<PinY>7.460015190972221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>1.2646484375</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='5' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>11.402777777777779</PinX>
+<PinY>2.9134657118055545</PinY>
+<Width>0.1388888888888889</Width>
+<Height>2.1077473958333335</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>2.1077473958333335</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>2.1077473958333335</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='6' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>12.680555555555555</PinX>
+<PinY>4.599663628472221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='7' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>13.791666666666666</PinX>
+<PinY>2.9134657118055554</PinY>
+<Width>0.1388888888888889</Width>
+<Height>1.2646484375</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='8' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>17.055555555555554</PinX>
+<PinY>7.460015190972221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='9' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>17.055555555555554</PinX>
+<PinY>2.913465711805555</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='10' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>5.600694444444445</PinX>
+<PinY>8.838216145833334</PinY>
+<Width>8.395833333333334</Width>
+<Height>0.6764322916666666</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*1'>0.6764322916666666</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.6764322916666666</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='11' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>9.461805555555555</PinX>
+<PinY>3.4277343749999996</PinY>
+<Width>16.395833333333332</Width>
+<Height>6.383246527777778</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>16.395833333333332</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>16.395833333333332</X>
+<Y F='Height*1'>6.383246527777778</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>6.383246527777778</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='12' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>5.600694444444445</PinX>
+<PinY>0.9922960069444451</PinY>
+<Width>8.395833333333334</Width>
+<Height>1.3179253472222223</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*1'>1.3179253472222223</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.3179253472222223</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='13' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>0.375</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.375</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>0.375</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='14' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.0694444444444446</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.0694444444444446</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>2.0694444444444446</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='15' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.45138888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.45138888888889</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>8.45138888888889</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='16' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.395833333333334</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.395833333333334</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>11.395833333333334</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='17' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.67361111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>12.67361111111111</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>12.67361111111111</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='18' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.784722222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.784722222222221</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>13.784722222222221</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='19' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>17.04861111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>5.127821180555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>10.25564236111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>5.127821180555555</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.04861111111111</BeginX>
+<BeginY>10.25564236111111</BeginY>
+<EndX>17.04861111111111</EndX>
+<EndY>0.0</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>10.25564236111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='20' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>0.375</PinX>
+<PinY F='(BeginY+EndY)/2'>10.916883680555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.375</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.1875</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.375</BeginX>
+<BeginY>11.104383680555555</BeginY>
+<EndX>0.375</EndX>
+<EndY>10.729383680555555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.375</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='21' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>0.375</PinX>
+<PinY F='(BeginY+EndY)/2'>10.993272569444445</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.36111111111111116</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.18055555555555558</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.19444444444444445</BeginX>
+<BeginY>10.993272569444445</BeginY>
+<EndX>0.5555555555555556</EndX>
+<EndY>10.993272569444445</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.36111111111111116</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='22' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>0.2847222222222222</PinX>
+<PinY F='(BeginY+EndY)/2'>10.62521701388889</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.27568657279554504</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.13784328639777252</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.2848870254070532</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.375</BeginX>
+<BeginY>10.729383680555555</BeginY>
+<EndX>0.19444444444444445</EndX>
+<EndY>10.521050347222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.27568657279554504</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='23' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>0.4652777777777778</PinX>
+<PinY F='(BeginY+EndY)/2'>10.62521701388889</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.27568657279554504</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.13784328639777252</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.85670562818274</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.375</BeginX>
+<BeginY>10.729383680555555</BeginY>
+<EndX>0.5555555555555556</EndX>
+<EndY>10.521050347222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.27568657279554504</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='24' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.7847222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>10.72243923611111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.33333333333333215</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.16666666666666607</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.7847222222222223</BeginX>
+<BeginY>10.889105902777777</BeginY>
+<EndX>1.7847222222222223</EndX>
+<EndY>10.555772569444445</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.33333333333333215</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='25' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.902777777777778</PinX>
+<PinY F='(BeginY+EndY)/2'>10.72243923611111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.23611111111111116</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.11805555555555558</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.7847222222222223</BeginX>
+<BeginY>10.72243923611111</BeginY>
+<EndX>2.0208333333333335</EndX>
+<EndY>10.72243923611111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.23611111111111116</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='26' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.444444444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>10.923828125</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.1084756899431472</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0542378449715736</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.6947382761967116</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.402777777777779</BeginX>
+<BeginY>10.889105902777777</BeginY>
+<EndX>8.48611111111111</EndX>
+<EndY>10.958550347222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1084756899431472</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='27' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.472222222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>10.923828125</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07479395565464571</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.037396977827322854</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.9513027039072484</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.48611111111111</BeginX>
+<BeginY>10.958550347222221</BeginY>
+<EndX>8.458333333333334</EndX>
+<EndY>10.889105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07479395565464571</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='28' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.472222222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>10.854383680555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07479395565464571</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.037396977827322854</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.190289949682545</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.458333333333334</BeginX>
+<BeginY>10.889105902777777</BeginY>
+<EndX>8.48611111111111</EndX>
+<EndY>10.819661458333332</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07479395565464571</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='29' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.444444444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>10.854383680555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.1084756899431472</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0542378449715736</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.4468543773930818</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.48611111111111</BeginX>
+<BeginY>10.819661458333332</BeginY>
+<EndX>8.402777777777779</EndX>
+<EndY>10.889105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1084756899431472</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='30' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.402777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>10.527994791666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.3333333333333339</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.16666666666666696</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.23611111111111</BeginX>
+<BeginY>10.527994791666666</BeginY>
+<EndX>11.569444444444445</EndX>
+<EndY>10.527994791666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.3333333333333339</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='31' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.680555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>10.527994791666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.33333333333333215</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.16666666666666607</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>12.51388888888889</BeginX>
+<BeginY>10.527994791666666</BeginY>
+<EndX>12.847222222222221</EndX>
+<EndY>10.527994791666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.33333333333333215</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='32' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.777777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>10.923828125</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.10847568994314856</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.05423784497157428</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.6947382761967011</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.73611111111111</BeginX>
+<BeginY>10.889105902777777</BeginY>
+<EndX>13.819444444444445</EndX>
+<EndY>10.958550347222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.10847568994314856</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='33' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.805555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>10.923828125</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07479395565464637</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.03739697782732319</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.9513027039072706</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.819444444444445</BeginX>
+<BeginY>10.958550347222221</BeginY>
+<EndX>13.791666666666666</EndX>
+<EndY>10.889105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07479395565464637</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='34' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.805555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>10.854383680555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07479395565464637</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.03739697782732319</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.1902899496825228</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.791666666666666</BeginX>
+<BeginY>10.889105902777777</BeginY>
+<EndX>13.819444444444445</EndX>
+<EndY>10.819661458333332</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07479395565464637</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='35' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.777777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>10.854383680555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.10847568994314856</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.05423784497157428</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.446854377393092</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.819444444444445</BeginX>
+<BeginY>10.819661458333332</BeginY>
+<EndX>13.73611111111111</EndX>
+<EndY>10.889105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.10847568994314856</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='36' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.930555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>11.069661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852797</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926398</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.5070985043923382</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.805555555555557</BeginX>
+<BeginY>11.000217013888888</BeginY>
+<EndX>17.055555555555557</EndX>
+<EndY>11.139105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852797</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='37' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>17.180555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>11.069661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852797</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926398</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.5070985043923382</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.055555555555557</BeginX>
+<BeginY>11.139105902777777</BeginY>
+<EndX>17.305555555555557</EndX>
+<EndY>11.000217013888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852797</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='38' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>17.305555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.819661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.3611111111111107</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.18055555555555536</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.305555555555557</BeginX>
+<BeginY>11.000217013888888</BeginY>
+<EndX>17.305555555555557</EndX>
+<EndY>10.639105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.3611111111111107</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='39' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>17.180555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.569661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852797</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926398</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.634494149197455</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.305555555555557</BeginX>
+<BeginY>10.639105902777777</BeginY>
+<EndX>17.055555555555557</EndX>
+<EndY>10.500217013888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852797</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='40' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.930555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.569661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852797</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926398</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.634494149197455</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.055555555555557</BeginX>
+<BeginY>10.500217013888888</BeginY>
+<EndX>16.805555555555557</EndX>
+<EndY>10.639105902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852797</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='41' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.805555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.819661458333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.3611111111111107</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.18055555555555536</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.805555555555557</BeginX>
+<BeginY>10.639105902777777</BeginY>
+<EndX>16.805555555555557</EndX>
+<EndY>11.000217013888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.3611111111111107</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='42' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.930555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.930772569444443</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852713</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926357</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.5070985043923327</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.805555555555557</BeginX>
+<BeginY>11.000217013888888</BeginY>
+<EndX>17.055555555555557</EndX>
+<EndY>10.861328125</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852713</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='43' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>17.180555555555557</PinX>
+<PinY F='(BeginY+EndY)/2'>10.930772569444443</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.28598972613852713</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.14299486306926357</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.5070985043923327</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>17.055555555555557</BeginX>
+<BeginY>10.861328125</BeginY>
+<EndX>17.305555555555557</EndX>
+<EndY>11.000217013888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.28598972613852713</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='44' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>2.0694444444444446</PinX>
+<PinY>4.965657552083333</PinY>
+<Width>0.1388888888888889</Width>
+<Height>9.681315104166666</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>9.681315104166666</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>9.681315104166666</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='45' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>8.458333333333334</PinX>
+<PinY>8.997938368055555</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.7736545138888888</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.7736545138888888</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.7736545138888888</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='46' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>8.458333333333334</PinX>
+<PinY>3.1936848958333317</PinY>
+<Width>0.1388888888888889</Width>
+<Height>4.215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>4.215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>4.215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='47' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>11.402777777777779</PinX>
+<PinY>7.460015190972221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>1.2646484375</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='48' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>11.402777777777779</PinX>
+<PinY>2.9134657118055545</PinY>
+<Width>0.1388888888888889</Width>
+<Height>2.1077473958333335</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>2.1077473958333335</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>2.1077473958333335</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='49' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>12.680555555555555</PinX>
+<PinY>4.599663628472221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='50' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>13.791666666666666</PinX>
+<PinY>2.9134657118055554</PinY>
+<Width>0.1388888888888889</Width>
+<Height>1.2646484375</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.2646484375</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='51' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>17.055555555555554</PinX>
+<PinY>7.460015190972221</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='52' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>17.055555555555554</PinX>
+<PinY>2.913465711805555</PinY>
+<Width>0.1388888888888889</Width>
+<Height>0.4215494791666667</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>0.1388888888888889</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.4215494791666667</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='53' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.9027777777777777</PinX>
+<PinY F='(BeginY+EndY)/2'>9.834092881944443</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929186</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464593</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.38050637711236324</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.8333333333333333</BeginX>
+<BeginY>9.861870659722221</BeginY>
+<EndX>1.9722222222222223</EndX>
+<EndY>9.806315104166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929186</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='54' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.9027777777777777</PinX>
+<PinY F='(BeginY+EndY)/2'>9.77853732638889</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929186</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464593</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.76108627647743</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.9722222222222223</BeginX>
+<BeginY>9.806315104166666</BeginY>
+<EndX>1.8333333333333333</EndX>
+<EndY>9.75075954861111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929186</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='55' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.8611111111111112</PinX>
+<PinY F='(BeginY+EndY)/2'>9.77853732638889</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183848</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.03928371006591924</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974463</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.8333333333333333</BeginX>
+<BeginY>9.75075954861111</BeginY>
+<EndX>1.8888888888888888</EndX>
+<EndY>9.806315104166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183848</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='56' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.1458333333333335</PinX>
+<PinY F='(BeginY+EndY)/2'>9.806315104166666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>1.5416666666666667</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.7708333333333334</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>0.375</BeginX>
+<BeginY>9.806315104166666</BeginY>
+<EndX>1.9166666666666667</EndX>
+<EndY>9.806315104166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>1.5416666666666667</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='57' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.291666666666666</PinX>
+<PinY F='(BeginY+EndY)/2'>9.412543402777779</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.222222222222221</BeginX>
+<BeginY>9.440321180555555</BeginY>
+<EndX>8.36111111111111</EndX>
+<EndY>9.384765625</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='58' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.291666666666666</PinX>
+<PinY F='(BeginY+EndY)/2'>9.356987847222221</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929275</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464637</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774193</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.36111111111111</BeginX>
+<BeginY>9.384765625</BeginY>
+<EndX>8.222222222222221</EndX>
+<EndY>9.329210069444443</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929275</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='59' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.25</PinX>
+<PinY F='(BeginY+EndY)/2'>9.356987847222221</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013184084</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.03928371006592042</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974483</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.222222222222221</BeginX>
+<BeginY>9.329210069444443</BeginY>
+<EndX>8.277777777777779</EndX>
+<EndY>9.384765625</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013184084</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='60' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.222222222222222</PinX>
+<PinY F='(BeginY+EndY)/2'>9.384765625</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>6.166666666666666</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>3.083333333333333</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.138888888888889</BeginX>
+<BeginY>9.384765625</BeginY>
+<EndX>8.305555555555555</EndX>
+<EndY>9.384765625</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>6.166666666666666</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='61' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.8541666666666665</PinX>
+<PinY F='(BeginY+EndY)/2'>9.176432291666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.9027777777777777</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.45138888888888884</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.4027777777777777</BeginX>
+<BeginY>9.176432291666666</BeginY>
+<EndX>2.3055555555555554</EndX>
+<EndY>9.176432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.9027777777777777</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='62' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.3055555555555554</PinX>
+<PinY F='(BeginY+EndY)/2'>9.11843532986111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.11599392361111072</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.05799696180555536</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.3055555555555554</BeginX>
+<BeginY>9.176432291666666</BeginY>
+<EndX>2.3055555555555554</EndX>
+<EndY>9.060438368055555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.11599392361111072</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='63' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2361111111111107</PinX>
+<PinY F='(BeginY+EndY)/2'>8.99099392361111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.19641855032959676</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.09820927516479838</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.3561944901923435</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.3055555555555554</BeginX>
+<BeginY>9.060438368055555</BeginY>
+<EndX>2.1666666666666665</EndX>
+<EndY>8.921549479166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.19641855032959676</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='64' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.784722222222222</PinX>
+<PinY F='(BeginY+EndY)/2'>8.921549479166666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.7638888888888888</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.3819444444444444</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>3.141592653589793</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.1666666666666665</BeginX>
+<BeginY>8.921549479166666</BeginY>
+<EndX>1.4027777777777777</EndX>
+<EndY>8.921549479166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.7638888888888888</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='65' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.4027777777777777</PinX>
+<PinY F='(BeginY+EndY)/2'>9.048990885416666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.2548828125</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.12744140625</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.4027777777777777</BeginX>
+<BeginY>8.921549479166666</BeginY>
+<EndX>1.4027777777777777</EndX>
+<EndY>9.176432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.2548828125</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='66' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>5.600694444444445</PinX>
+<PinY>8.838216145833334</PinY>
+<Width>8.395833333333334</Width>
+<Height>0.6764322916666666</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*1'>0.6764322916666666</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>0.6764322916666666</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='67' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>8.63888888888889</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774295</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>8.666666666666666</BeginY>
+<EndX>2.1527777777777777</EndX>
+<EndY>8.61111111111111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='68' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>8.583333333333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123638</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.1527777777777777</BeginX>
+<BeginY>8.61111111111111</BeginY>
+<EndX>2.2916666666666665</EndX>
+<EndY>8.555555555555555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='69' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.263888888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>8.583333333333332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>8.555555555555555</BeginY>
+<EndX>2.236111111111111</EndX>
+<EndY>8.61111111111111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='70' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.326388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>8.61111111111111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>6.236111111111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>3.1180555555555554</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2083333333333335</BeginX>
+<BeginY>8.61111111111111</BeginY>
+<EndX>8.444444444444445</EndX>
+<EndY>8.61111111111111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>6.236111111111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='71' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.23611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>8.1201171875</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.166666666666666</BeginX>
+<BeginY>8.147894965277777</BeginY>
+<EndX>11.305555555555555</EndX>
+<EndY>8.092339409722221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='72' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.23611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>8.064561631944443</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.305555555555555</BeginX>
+<BeginY>8.092339409722221</BeginY>
+<EndX>11.166666666666666</EndX>
+<EndY>8.036783854166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='73' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.194444444444443</PinX>
+<PinY F='(BeginY+EndY)/2'>8.064561631944443</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974483</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.166666666666666</BeginX>
+<BeginY>8.036783854166666</BeginY>
+<EndX>11.222222222222221</EndX>
+<EndY>8.092339409722221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='74' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.854166666666668</PinX>
+<PinY F='(BeginY+EndY)/2'>8.092339409722221</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.791666666666666</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.395833333333333</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.458333333333334</BeginX>
+<BeginY>8.092339409722221</BeginY>
+<EndX>11.25</EndX>
+<EndY>8.092339409722221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.791666666666666</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='75' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.888888888888886</PinX>
+<PinY F='(BeginY+EndY)/2'>7.698567708333333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.819444444444443</BeginX>
+<BeginY>7.726345486111111</BeginY>
+<EndX>16.958333333333332</EndX>
+<EndY>7.670789930555555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='76' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.888888888888886</PinX>
+<PinY F='(BeginY+EndY)/2'>7.643012152777778</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.958333333333332</BeginX>
+<BeginY>7.670789930555555</BeginY>
+<EndX>16.819444444444443</EndX>
+<EndY>7.615234375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='77' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.84722222222222</PinX>
+<PinY F='(BeginY+EndY)/2'>7.643012152777778</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.0785674201318396</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0392837100659198</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974323</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.819444444444443</BeginX>
+<BeginY>7.615234375</BeginY>
+<EndX>16.875</EndX>
+<EndY>7.670789930555555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.0785674201318396</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='78' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>14.1875</PinX>
+<PinY F='(BeginY+EndY)/2'>7.670789930555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>5.430555555555557</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>2.7152777777777786</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.472222222222221</BeginX>
+<BeginY>7.670789930555555</BeginY>
+<EndX>16.90277777777778</EndX>
+<EndY>7.670789930555555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>5.430555555555557</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='79' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.555555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>7.277018229166666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.625</BeginX>
+<BeginY>7.304796006944444</BeginY>
+<EndX>11.48611111111111</EndX>
+<EndY>7.249240451388888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='80' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.555555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>7.221462673611111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.48611111111111</BeginX>
+<BeginY>7.249240451388888</BeginY>
+<EndX>11.625</EndX>
+<EndY>7.193684895833333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='81' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.597222222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>7.221462673611111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.625</BeginX>
+<BeginY>7.193684895833333</BeginY>
+<EndX>11.569444444444445</EndX>
+<EndY>7.249240451388888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='82' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>14.291666666666668</PinX>
+<PinY F='(BeginY+EndY)/2'>7.249240451388888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>5.500000000000002</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>2.750000000000001</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.541666666666666</BeginX>
+<BeginY>7.249240451388888</BeginY>
+<EndX>17.041666666666668</EndX>
+<EndY>7.249240451388888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>5.500000000000002</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='83' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.541666666666666</PinX>
+<PinY F='(BeginY+EndY)/2'>6.855468749999999</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.61111111111111</BeginX>
+<BeginY>6.883246527777777</BeginY>
+<EndX>8.472222222222221</EndX>
+<EndY>6.827690972222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='84' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.541666666666666</PinX>
+<PinY F='(BeginY+EndY)/2'>6.799913194444444</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.472222222222221</BeginX>
+<BeginY>6.827690972222221</BeginY>
+<EndX>8.61111111111111</EndX>
+<EndY>6.772135416666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='85' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.583333333333332</PinX>
+<PinY F='(BeginY+EndY)/2'>6.799913194444444</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.61111111111111</BeginX>
+<BeginY>6.772135416666666</BeginY>
+<EndX>8.555555555555555</EndX>
+<EndY>6.827690972222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='86' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.958333333333334</PinX>
+<PinY F='(BeginY+EndY)/2'>6.827690972222221</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.8611111111111107</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.4305555555555554</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.527777777777779</BeginX>
+<BeginY>6.827690972222221</BeginY>
+<EndX>11.38888888888889</EndX>
+<EndY>6.827690972222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.8611111111111107</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='87' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.6875</PinX>
+<PinY F='(BeginY+EndY)/2'>6.619357638888888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.8472222222222223</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.42361111111111116</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.2638888888888888</BeginX>
+<BeginY>6.619357638888888</BeginY>
+<EndX>2.111111111111111</EndX>
+<EndY>6.619357638888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.8472222222222223</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='88' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.111111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>6.561360677083332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.1159939236111116</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0579969618055558</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.111111111111111</BeginX>
+<BeginY>6.619357638888888</BeginY>
+<EndX>2.111111111111111</EndX>
+<EndY>6.503363715277777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1159939236111116</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='89' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.041666666666667</PinX>
+<PinY F='(BeginY+EndY)/2'>6.433919270833332</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.19641855032959615</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.09820927516479808</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.3561944901923466</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.111111111111111</BeginX>
+<BeginY>6.503363715277777</BeginY>
+<EndX>1.9722222222222223</EndX>
+<EndY>6.364474826388888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.19641855032959615</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='90' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.6180555555555556</PinX>
+<PinY F='(BeginY+EndY)/2'>6.364474826388888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.7083333333333335</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.35416666666666674</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>3.141592653589793</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.9722222222222223</BeginX>
+<BeginY>6.364474826388888</BeginY>
+<EndX>1.2638888888888888</EndX>
+<EndY>6.364474826388888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.7083333333333335</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='91' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.2638888888888888</PinX>
+<PinY F='(BeginY+EndY)/2'>6.491916232638888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.2548828125</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.12744140625</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.2638888888888888</BeginX>
+<BeginY>6.364474826388888</BeginY>
+<EndX>1.2638888888888888</EndX>
+<EndY>6.619357638888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.2548828125</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='92' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>9.461805555555555</PinX>
+<PinY>3.4277343749999996</PinY>
+<Width>16.395833333333332</Width>
+<Height>6.383246527777778</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>16.395833333333332</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>16.395833333333332</X>
+<Y F='Height*1'>6.383246527777778</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>6.383246527777778</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='93' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>6.081814236111111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774295</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>6.109592013888888</BeginY>
+<EndX>2.1527777777777777</EndX>
+<EndY>6.054036458333333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='94' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>6.026258680555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929197</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464599</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123693</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.1527777777777777</BeginX>
+<BeginY>6.054036458333333</BeginY>
+<EndX>2.2916666666666665</EndX>
+<EndY>5.998480902777777</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929197</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='95' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.263888888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>6.026258680555555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183897</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919485</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192337</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>5.998480902777777</BeginY>
+<EndX>2.236111111111111</EndX>
+<EndY>6.054036458333333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183897</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='96' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.326388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>6.054036458333333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>6.236111111111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>3.1180555555555554</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2083333333333335</BeginX>
+<BeginY>6.054036458333333</BeginY>
+<EndX>8.444444444444445</EndX>
+<EndY>6.054036458333333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>6.236111111111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='97' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.461805555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>5.929036458333333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>16.395833333333332</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>8.197916666666666</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.2638888888888888</BeginX>
+<BeginY>5.929036458333333</BeginY>
+<EndX>17.65972222222222</EndX>
+<EndY>5.929036458333333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>16.395833333333332</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='98' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.784722222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>5.481987847222221</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.6527777777777768</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.3263888888888884</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.458333333333334</BeginX>
+<BeginY>5.481987847222221</BeginY>
+<EndX>9.11111111111111</EndX>
+<EndY>5.481987847222221</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.6527777777777768</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='99' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.11111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>5.391710069444444</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.18055555555555536</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.09027777777777768</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>9.11111111111111</BeginX>
+<BeginY>5.481987847222221</BeginY>
+<EndX>9.11111111111111</EndX>
+<EndY>5.301432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.18055555555555536</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='100' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.82638888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>5.301432291666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.5694444444444446</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.2847222222222223</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.541666666666666</BeginX>
+<BeginY>5.301432291666666</BeginY>
+<EndX>9.11111111111111</EndX>
+<EndY>5.301432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.5694444444444446</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='101' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>5.329210069444444</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>5.356987847222221</BeginY>
+<EndX>8.541666666666666</EndX>
+<EndY>5.301432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='102' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>5.273654513888888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.541666666666666</BeginX>
+<BeginY>5.301432291666666</BeginY>
+<EndX>8.680555555555555</EndX>
+<EndY>5.245876736111111</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='103' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.652777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>5.273654513888888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>5.245876736111111</BeginY>
+<EndX>8.625</EndX>
+<EndY>5.301432291666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='104' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.51388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>4.838216145833333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>12.444444444444445</BeginX>
+<BeginY>4.865993923611111</BeginY>
+<EndX>12.583333333333334</EndX>
+<EndY>4.810438368055555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='105' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.51388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>4.782660590277777</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.1495879113092924</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0747939556546462</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.761086276477425</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>12.583333333333334</BeginX>
+<BeginY>4.810438368055555</BeginY>
+<EndX>12.444444444444445</EndX>
+<EndY>4.754882812499999</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1495879113092924</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='106' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.472222222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>4.782660590277777</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183897</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919485</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974563</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>12.444444444444445</BeginX>
+<BeginY>4.754882812499999</BeginY>
+<EndX>12.5</EndX>
+<EndY>4.810438368055555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183897</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='107' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>10.527777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>4.810438368055555</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>4.0</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>2.0</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.527777777777779</BeginX>
+<BeginY>4.810438368055555</BeginY>
+<EndX>12.527777777777779</EndX>
+<EndY>4.810438368055555</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>4.0</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='108' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>4.416666666666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>4.444444444444444</BeginY>
+<EndX>8.541666666666666</EndX>
+<EndY>4.388888888888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='109' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>4.361111111111111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.541666666666666</BeginX>
+<BeginY>4.388888888888888</BeginY>
+<EndX>8.680555555555555</EndX>
+<EndY>4.333333333333333</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='110' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.652777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>4.361111111111111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>4.333333333333333</BeginY>
+<EndX>8.625</EndX>
+<EndY>4.388888888888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='111' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>10.631944444444443</PinX>
+<PinY F='(BeginY+EndY)/2'>4.388888888888888</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>4.069444444444445</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>2.0347222222222223</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.597222222222221</BeginX>
+<BeginY>4.388888888888888</BeginY>
+<EndX>12.666666666666666</EndX>
+<EndY>4.388888888888888</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>4.069444444444445</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='112' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.23611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>3.995117187499999</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.166666666666666</BeginX>
+<BeginY>4.022894965277777</BeginY>
+<EndX>11.305555555555555</EndX>
+<EndY>3.9673394097222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='113' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.23611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>3.9395616319444438</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.305555555555555</BeginX>
+<BeginY>3.9673394097222214</BeginY>
+<EndX>11.166666666666666</EndX>
+<EndY>3.911783854166666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='114' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.194444444444443</PinX>
+<PinY F='(BeginY+EndY)/2'>3.9395616319444438</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974483</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.166666666666666</BeginX>
+<BeginY>3.911783854166666</BeginY>
+<EndX>11.222222222222221</EndX>
+<EndY>3.9673394097222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='115' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.88888888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>3.9673394097222214</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.7222222222222214</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.3611111111111107</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.527777777777779</BeginX>
+<BeginY>3.9673394097222214</BeginY>
+<EndX>11.25</EndX>
+<EndY>3.9673394097222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.7222222222222214</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='116' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.625</PinX>
+<PinY F='(BeginY+EndY)/2'>3.573567708333333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.555555555555555</BeginX>
+<BeginY>3.6013454861111107</BeginY>
+<EndX>13.694444444444445</EndX>
+<EndY>3.5457899305555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='117' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.625</PinX>
+<PinY F='(BeginY+EndY)/2'>3.5180121527777772</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.1495879113092924</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0747939556546462</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.761086276477425</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.694444444444445</BeginX>
+<BeginY>3.5457899305555554</BeginY>
+<EndX>13.555555555555555</EndX>
+<EndY>3.490234374999999</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.1495879113092924</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='118' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.583333333333332</PinX>
+<PinY F='(BeginY+EndY)/2'>3.5180121527777772</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183897</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919485</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974563</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.555555555555555</BeginX>
+<BeginY>3.490234374999999</BeginY>
+<EndX>13.61111111111111</EndX>
+<EndY>3.5457899305555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183897</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='119' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.555555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>3.5457899305555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.166666666666668</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.083333333333334</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.472222222222221</BeginX>
+<BeginY>3.5457899305555554</BeginY>
+<EndX>13.63888888888889</EndX>
+<EndY>3.5457899305555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.166666666666668</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='120' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.888888888888886</PinX>
+<PinY F='(BeginY+EndY)/2'>3.152018229166666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929275</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464637</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.38050637711237373</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.819444444444443</BeginX>
+<BeginY>3.1797960069444446</BeginY>
+<EndX>16.958333333333332</EndX>
+<EndY>3.1242404513888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929275</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='121' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.888888888888886</PinX>
+<PinY F='(BeginY+EndY)/2'>3.09646267361111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.958333333333332</BeginX>
+<BeginY>3.1242404513888875</BeginY>
+<EndX>16.819444444444443</EndX>
+<EndY>3.068684895833332</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='122' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>16.84722222222222</PinX>
+<PinY F='(BeginY+EndY)/2'>3.09646267361111</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.0785674201318396</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0392837100659198</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.7853981633974323</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>16.819444444444443</BeginX>
+<BeginY>3.068684895833332</BeginY>
+<EndX>16.875</EndX>
+<EndY>3.1242404513888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.0785674201318396</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='123' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>15.381944444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>3.1242404513888875</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>3.041666666666668</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.520833333333334</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.86111111111111</BeginX>
+<BeginY>3.1242404513888875</BeginY>
+<EndX>16.90277777777778</EndX>
+<EndY>3.1242404513888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>3.041666666666668</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='124' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.944444444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>2.730468749999999</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>14.01388888888889</BeginX>
+<BeginY>2.758246527777777</BeginY>
+<EndX>13.875</EndX>
+<EndY>2.7026909722222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='125' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.944444444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>2.6749131944444438</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.875</BeginX>
+<BeginY>2.7026909722222214</BeginY>
+<EndX>14.01388888888889</EndX>
+<EndY>2.647135416666666</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='126' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>13.98611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>2.6749131944444438</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>14.01388888888889</BeginX>
+<BeginY>2.647135416666666</BeginY>
+<EndX>13.958333333333334</EndX>
+<EndY>2.7026909722222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='127' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>15.48611111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>2.7026909722222214</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>3.1111111111111125</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.5555555555555562</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>13.930555555555555</BeginX>
+<BeginY>2.7026909722222214</BeginY>
+<EndX>17.041666666666668</EndX>
+<EndY>2.7026909722222214</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>3.1111111111111125</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='128' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.555555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>2.308919270833333</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774304</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.625</BeginX>
+<BeginY>2.3366970486111107</BeginY>
+<EndX>11.48611111111111</EndX>
+<EndY>2.2811414930555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='129' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.555555555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>2.2533637152777777</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.48611111111111</BeginX>
+<BeginY>2.2811414930555554</BeginY>
+<EndX>11.625</EndX>
+<EndY>2.2255859375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='130' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>11.597222222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>2.2533637152777777</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.625</BeginX>
+<BeginY>2.2255859375</BeginY>
+<EndX>11.569444444444445</EndX>
+<EndY>2.2811414930555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='131' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>12.659722222222221</PinX>
+<PinY F='(BeginY+EndY)/2'>2.2811414930555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.2361111111111125</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.1180555555555562</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>11.541666666666666</BeginX>
+<BeginY>2.2811414930555554</BeginY>
+<EndX>13.777777777777779</EndX>
+<EndY>2.2811414930555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.2361111111111125</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='132' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>1.887369791666666</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929275</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464637</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774193</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>1.9151475694444446</BeginY>
+<EndX>8.541666666666666</EndX>
+<EndY>1.8595920138888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929275</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='133' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.61111111111111</PinX>
+<PinY F='(BeginY+EndY)/2'>1.8318142361111098</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929208</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464604</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123627</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.541666666666666</BeginX>
+<BeginY>1.8595920138888875</BeginY>
+<EndX>8.680555555555555</EndX>
+<EndY>1.8040364583333321</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929208</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='134' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>8.652777777777779</PinX>
+<PinY F='(BeginY+EndY)/2'>1.8318142361111098</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.680555555555555</BeginX>
+<BeginY>1.8040364583333321</BeginY>
+<EndX>8.625</EndX>
+<EndY>1.8595920138888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='135' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>9.993055555555555</PinX>
+<PinY F='(BeginY+EndY)/2'>1.8595920138888875</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>2.791666666666668</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>1.395833333333334</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>8.597222222222221</BeginX>
+<BeginY>1.8595920138888875</BeginY>
+<EndX>11.38888888888889</EndX>
+<EndY>1.8595920138888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>2.791666666666668</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='136' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.8263888888888888</PinX>
+<PinY F='(BeginY+EndY)/2'>1.6512586805555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.8472222222222223</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.42361111111111116</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.4027777777777777</BeginX>
+<BeginY>1.6512586805555554</BeginY>
+<EndX>2.25</EndX>
+<EndY>1.6512586805555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.8472222222222223</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='137' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.25</PinX>
+<PinY F='(BeginY+EndY)/2'>1.59326171875</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.11599392361111072</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.05799696180555536</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.25</BeginX>
+<BeginY>1.6512586805555554</BeginY>
+<EndX>2.25</EndX>
+<EndY>1.5352647569444446</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.11599392361111072</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='138' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.1805555555555554</PinX>
+<PinY F='(BeginY+EndY)/2'>1.4658203125</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.19641855032959676</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.09820927516479838</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.3561944901923435</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.25</BeginX>
+<BeginY>1.5352647569444446</BeginY>
+<EndX>2.111111111111111</EndX>
+<EndY>1.3963758680555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.19641855032959676</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='139' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.7569444444444444</PinX>
+<PinY F='(BeginY+EndY)/2'>1.3963758680555554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.7083333333333335</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.35416666666666674</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>3.141592653589793</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.111111111111111</BeginX>
+<BeginY>1.3963758680555554</BeginY>
+<EndX>1.4027777777777777</EndX>
+<EndY>1.3963758680555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.7083333333333335</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='140' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>1.4027777777777777</PinX>
+<PinY F='(BeginY+EndY)/2'>1.5238172743055554</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.2548828125</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.12744140625</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>1.5707963267948966</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.4027777777777777</BeginX>
+<BeginY>1.3963758680555554</BeginY>
+<EndX>1.4027777777777777</EndX>
+<EndY>1.6512586805555554</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.2548828125</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='141' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX>5.600694444444445</PinX>
+<PinY>0.9922960069444451</PinY>
+<Width>8.395833333333334</Width>
+<Height>1.3179253472222223</Height>
+<Angle>0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<Geom IX='0'>
+<NoFill>0</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y F='Height*0'>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*0'>0</Y>
+</LineTo>
+<LineTo IX='3'>
+<X F='Width*1'>8.395833333333334</X>
+<Y F='Height*1'>1.3179253472222223</Y>
+</LineTo>
+<LineTo IX='4'>
+<X F='Width*0'>0</X>
+<Y F='Height*1'>1.3179253472222223</Y>
+</LineTo>
+<LineTo IX='5'>
+<X F='Geometry1.X1'>0</X>
+<Y F='Geometry1.Y1'>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='142' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>1.1137152777777777</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774295</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>1.1414930555555554</BeginY>
+<EndX>2.1527777777777777</EndX>
+<EndY>1.0859375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='143' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>1.0581597222222223</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.3805063771123638</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.1527777777777777</BeginX>
+<BeginY>1.0859375</BeginY>
+<EndX>2.2916666666666665</EndX>
+<EndY>1.0303819444444446</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='144' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.263888888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>1.0581597222222223</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.07856742013183833</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.039283710065919165</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192345</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>1.0303819444444446</BeginY>
+<EndX>2.236111111111111</EndX>
+<EndY>1.0859375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.07856742013183833</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='145' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.326388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>1.0859375</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>6.236111111111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>3.1180555555555554</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2083333333333335</BeginX>
+<BeginY>1.0859375</BeginY>
+<EndX>8.444444444444445</EndX>
+<EndY>1.0859375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>6.236111111111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='146' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.600694444444445</PinX>
+<PinY F='(BeginY+EndY)/2'>0.9609375</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>8.395833333333332</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>4.197916666666666</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>1.4027777777777777</BeginX>
+<BeginY>0.9609375</BeginY>
+<EndX>9.79861111111111</EndX>
+<EndY>0.9609375</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>8.395833333333332</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='147' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>0.4722222222222223</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929167</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464583</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-2.7610862764774295</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>0.5</BeginY>
+<EndX>2.1527777777777777</EndX>
+<EndY>0.44444444444444464</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929167</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='148' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.2222222222222223</PinX>
+<PinY F='(BeginY+EndY)/2'>0.4166666666666661</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.14958791130929233</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.07479395565464617</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>-0.38050637711237484</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.1527777777777777</BeginX>
+<BeginY>0.44444444444444464</BeginY>
+<EndX>2.2916666666666665</EndX>
+<EndY>0.3888888888888875</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.14958791130929233</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='149' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>2.263888888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>0.4166666666666661</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>0.0785674201318396</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>0.0392837100659198</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>2.356194490192329</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2916666666666665</BeginX>
+<BeginY>0.3888888888888875</BeginY>
+<EndX>2.236111111111111</EndX>
+<EndY>0.44444444444444464</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>0.0785674201318396</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+<Shape ID='150' Type='Shape' LineStyle='3' FillStyle='3' TextStyle='3'>
+<XForm>
+<PinX F='(BeginX+EndX)/2'>5.326388888888889</PinX>
+<PinY F='(BeginY+EndY)/2'>0.44444444444444464</PinY>
+<Width F='Sqrt((EndX-BeginX)^2+(EndY-BeginY)^2)'>6.236111111111111</Width>
+<Height>0</Height>
+<LocPinX F='Width*0.5'>3.1180555555555554</LocPinX>
+<LocPinY F='Height*0.5'>0</LocPinY>
+<Angle F='ATan2(EndY-BeginY,EndX-BeginX)'>0.0</Angle>
+<FlipX>0</FlipX>
+<FlipY>0</FlipY>
+<ResizeMode>0</ResizeMode>
+</XForm>
+<XForm1D>
+<BeginX>2.2083333333333335</BeginX>
+<BeginY>0.44444444444444464</BeginY>
+<EndX>8.444444444444445</EndX>
+<EndY>0.44444444444444464</EndY>
+</XForm1D>
+<Geom IX='0'>
+<NoFill>1</NoFill>
+<NoLine>0</NoLine>
+<NoShow>0</NoShow>
+<NoSnap>0</NoSnap>
+<MoveTo IX='1'>
+<X F='Width*0'>0</X>
+<Y>0</Y>
+</MoveTo>
+<LineTo IX='2'>
+<X F='Width*1'>6.236111111111111</X>
+<Y>0</Y>
+</LineTo>
+</Geom>
+</Shape>
+</Shapes>
+</Page>
+</Pages>
+</VisioDocument>

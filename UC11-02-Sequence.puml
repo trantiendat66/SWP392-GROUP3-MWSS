@@ -1,0 +1,46 @@
+@startuml
+autonumber
+autoactivate on
+hide footbox
+
+actor Customer
+boundary "product-detail.jsp" as JSP
+control "FeedbackController#doPost" as CTRL
+entity "OrderDAO" as ODAO
+entity "FeedbackDAO" as FDAO
+entity "Feedback" as DTO
+control "DBContext" as DBC
+database "Database" as DB
+
+Customer -> JSP : 1. Click Submit Feedback
+JSP -> CTRL : 2. POST /feedback (productId, content, image?)
+
+opt [Invalid data]
+  CTRL --> JSP : 2.1 Show validation error
+end
+
+CTRL -> ODAO : 3. hasPurchased(customerId, productId)
+ODAO -> DB : 3.1 SELECT purchase check (Delivered/Completed)
+DB --> ODAO : 3.2 true/false
+ODAO --> CTRL : 3.3 true/false
+
+alt [not purchased]
+  CTRL --> JSP : 4. Show error "Purchase required"
+else [purchased]
+  CTRL -> CTRL : 5. Handle image upload (optional)
+  CTRL -> DTO : 6. Build Feedback(status=Pending, content, image_url?)
+  DTO  --> CTRL : 6.1 Feedback
+  CTRL -> FDAO : 7. insert(Feedback)
+  FDAO -> DBC  : 7.1 open connection
+  DBC  -> DB   : 7.2 INSERT Feedback
+  DB   --> DBC : 7.3 insert result (new id / rowcount)
+  DBC  --> FDAO: 7.4 result
+  FDAO --> CTRL : 7.5 result
+
+  alt [success]
+    CTRL --> JSP : 8. Show success and redirect feedback list
+  else [fail]
+    CTRL --> JSP : 9. Show error
+  end
+end
+@enduml

@@ -1,0 +1,76 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "model" {
+  class Order <<entity>> {
+    - order_id       : int
+    - customer_id    : int
+    - total_amount   : decimal
+    - status         : String
+    - payment_method : String
+    - created_at     : Timestamp
+    + getters/setters()
+  }
+
+  class OrderDetail <<entity>> {
+    - order_id   : int
+    - product_id : int
+    - quantity   : int
+    - unit_price : decimal
+    + getters/setters()
+  }
+
+  class CartItem <<entity>> {
+    - product_id : int
+    - quantity   : int
+    + getters/setters()
+  }
+}
+
+package "db" {
+  class DBContext {
+    - conn : Connection
+    + getConnection() : Connection
+  }
+}
+
+package "dao" {
+  class CartDAO <<dao>> {
+    + getItemsByCustomer(customer_id:int) : List<CartItem>
+    + clearCart(customer_id:int) : boolean
+  }
+
+  class ProductDAO <<dao>> {
+    + checkStock(product_id:int, qty:int) : boolean
+    + getUnitPrice(product_id:int) : decimal
+    + decreaseStock(product_id:int, qty:int) : boolean
+  }
+
+  class OrderDAO <<dao>> {
+    + createOrder(o:Order, items:List<OrderDetail>) : int
+    + getById(order_id:int) : Order
+  }
+}
+
+package "controller" {
+  class OrderCreateFromCartServlet <<controller>> {
+    - cartDAO    : CartDAO
+    - productDAO : ProductDAO
+    - orderDAO   : OrderDAO
+    + doPost(req:HttpServletRequest, resp:HttpServletResponse) : void
+  }
+}
+
+CartDAO --|> DBContext
+ProductDAO --|> DBContext
+OrderDAO --|> DBContext
+
+OrderCreateFromCartServlet ..> CartDAO
+OrderCreateFromCartServlet ..> ProductDAO
+OrderCreateFromCartServlet ..> OrderDAO
+
+OrderDAO ..> Order
+OrderDAO ..> OrderDetail
+@enduml
