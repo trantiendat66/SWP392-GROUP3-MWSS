@@ -7,7 +7,7 @@
 </head>
 <c:choose>
     <c:when test="${empty product}">
-        <div class="container"><div class="alert alert-warning">Sản phẩm không tồn tại.</div></div>
+        <div class="container"><div class="alert alert-warning">Product does not exist.</div></div>
     </c:when>
     <c:otherwise>
         <div class="container product-details py-4">
@@ -19,7 +19,7 @@
 
                 <div class="col-md-6">
                     <h2>${product.productName}</h2>
-                    <p class="text-muted">Thương hiệu: ${product.brand} — Xuất xứ: ${product.origin}</p>
+                    <p class="text-muted">Brand: ${product.brand} — Origin: ${product.origin}</p>
 
                     <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</h3>
 
@@ -45,20 +45,20 @@
 
                     <hr>
 
-                    <h5>Mô tả</h5>
+                    <h5>Description</h5>
                     <p><c:out value="${product.description}" /></p>
 
-                    <h5>Thông số kỹ thuật</h5>
+                    <h5>Specifications</h5>
                     <ul>
-                        <li><strong>Bảo hành:</strong> ${product.warranty}</li>
-                        <li><strong>Máy:</strong> ${product.machine}</li>
-                        <li><strong>Kính:</strong> ${product.glass}</li>
-                        <li><strong>Đường kính mặt:</strong> ${product.dialDiameter}</li>
-                        <li><strong>Vành bezel:</strong> ${product.bezel}</li>
-                        <li><strong>Dây:</strong> ${product.strap}</li>
-                        <li><strong>Màu mặt:</strong> ${product.dialColor}</li>
-                        <li><strong>Chức năng:</strong> ${product.function}</li>
-                        <li><strong>Giới tính:</strong> <c:out value="${product.gender ? 'Nam' : 'Nữ'}" /></li>
+                        <li><strong>Warranty:</strong> ${product.warranty}</li>
+                        <li><strong>Movement:</strong> ${product.machine}</li>
+                        <li><strong>Glass:</strong> ${product.glass}</li>
+                        <li><strong>Dial diameter:</strong> ${product.dialDiameter}</li>
+                        <li><strong>Bezel:</strong> ${product.bezel}</li>
+                        <li><strong>Strap:</strong> ${product.strap}</li>
+                        <li><strong>Dial color:</strong> ${product.dialColor}</li>
+                        <li><strong>Functions:</strong> ${product.function}</li>
+                        <li><strong>Gender:</strong> <c:out value="${product.gender ? 'Nam' : 'Nữ'}" /></li>
                     </ul>
                 </div>
             </div>
@@ -83,8 +83,8 @@
             <c:set var="pct2" value="${ratingCount > 0 ? (star2 * 100.0) / ratingCount : 0}" />
             <c:set var="pct1" value="${ratingCount > 0 ? (star1 * 100.0) / ratingCount : 0}" />
 
-            <h3 class="mb-3">Đánh giá sản phẩm
-                <small class="text-muted">(${ratingCount} đánh giá)</small>
+            <h3 class="mb-3">Product Ratings
+                <small class="text-muted">(${ratingCount} reviews)</small>
             </h3>
 
             <div class="row g-4 align-items-center rating-summary-card">
@@ -101,7 +101,7 @@
                     </div>
 
 
-                    <div class="text-muted">Trung bình</div>
+                    <div class="text-muted">Average</div>
                 </div>
 
                 <!-- Cột phải: phân bố sao (REPLACED) -->
@@ -178,7 +178,7 @@
             <div class="mt-4">
                 <c:choose>
                     <c:when test="${empty productReviews}">
-                        <div class="alert alert-info mb-0">Chưa có đánh giá nào cho sản phẩm này.</div>
+                        <div class="alert alert-info mb-0">There are no reviews for this product.</div>
                     </c:when>
                     <c:otherwise>
                         <c:forEach var="rv" items="${productReviews}">
@@ -307,7 +307,7 @@
 
     function addToCart(productId) {
         if (!isLoggedIn()) {
-            showLoginRequired('Để thêm sản phẩm vào giỏ hàng, bạn cần đăng nhập trước');
+            showLoginRequired('To add a product to the cart, you must log in first');
             return;
         }
 
@@ -315,12 +315,12 @@
         const maxQuantity = parseInt('${product.quantityProduct}');
 
         if (quantity < 1) {
-            alert('Số lượng phải lớn hơn 0');
+            alert('Quantity must be greater than 0');
             return;
         }
 
         if (quantity > maxQuantity) {
-            alert('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn lại trong kho');
+            alert('Quantity cannot exceed ' + maxQuantity + ' items left in stock');
             return;
         }
 
@@ -344,7 +344,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
+                    showMessage('An error occurred while adding the product to the cart', 'error');
                 });
     }
 
@@ -423,16 +423,16 @@
                 <div class="d-flex align-items-center">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     <div>
-                        <strong>Yêu cầu đăng nhập!</strong><br>
+                        <strong>Login required!</strong><br>
                         <small>${message}</small>
                     </div>
                 </div>
                 <div class="mt-2">
                     <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-primary btn-sm me-2">
-                        <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+                        <i class="bi bi-box-arrow-in-right"></i> Login
                     </a>
                     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.closest('.alert').remove()">
-                        <i class="bi bi-x"></i> Đóng
+                        <i class="bi bi-x"></i> Close
                     </button>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -454,7 +454,7 @@
     function buyNow(productId) {
         // Kiểm tra đăng nhập trước
         if (!isLoggedIn()) {
-            showLoginRequired('Để mua sản phẩm, bạn cần đăng nhập trước');
+            showLoginRequired('To purchase a product, you must log in first');
             return;
         }
 
