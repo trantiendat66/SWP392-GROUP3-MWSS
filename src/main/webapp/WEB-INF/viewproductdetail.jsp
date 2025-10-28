@@ -132,7 +132,7 @@
                         <div class="detail-title">Technical Specifications</div>
                         <div class="row">
                             <div class="col-md-4 detail-item">
-                                <span class="label">Movement</span>
+                                <span class="label">Machine</span>
                                 <div class="value">${p.machine}</div>
                             </div>
                             <div class="col-md-4 detail-item">

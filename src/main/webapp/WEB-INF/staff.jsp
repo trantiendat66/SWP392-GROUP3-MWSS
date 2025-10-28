@@ -288,8 +288,8 @@
                                                         <label class="form-label fw-bold">Gender</label>
                                                         <select name="gender" class="form-select">
                                                             <option value="">All Genders</option>
-                                                            <option value="1" ${param.gender == '1' ? 'selected' : ''}>Nam</option>
-                                                            <option value="0" ${param.gender == '0' ? 'selected' : ''}>Nữ</option>
+                                                            <option value="1" ${param.gender == '1' ? 'selected' : ''}>Male</option>
+                                                            <option value="0" ${param.gender == '0' ? 'selected' : ''}>Female</option>
                                                         </select>
                                                     </div>
 
@@ -298,12 +298,15 @@
                                                         <label class="form-label fw-bold">Price Range</label>
                                                         <select name="priceRange" class="form-select">
                                                             <option value="">All Prices</option>
-                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 triệu</option>
-                                                            <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 triệu</option>
-                                                            <option value="4000000-10000000" ${param.priceRange == '4000000-10000000' ? 'selected' : ''}>4 - 10 triệu</option>
-                                                            <option value="10000000-40000000" ${param.priceRange == '10000000-40000000' ? 'selected' : ''}>10 - 40 triệu</option>
-                                                            <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 triệu</option>
-                                                            <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Trên 100 triệu</option>
+                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 million</option>
+                                                            <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 million</option>
+                                                            <option value="4000000-6000000" ${param.priceRange == '4000000-6000000' ? 'selected' : ''}>4 - 6 million</option>
+                                                            <option value="6000000-8000000" ${param.priceRange == '6000000-8000000' ? 'selected' : ''}>6 - 8 million</option>
+                                                            <option value="8000000-10000000" ${param.priceRange == '8000000-10000000' ? 'selected' : ''}>8 - 10 million</option>
+                                                            <option value="10000000-20000000" ${param.priceRange == '10000000-20000000' ? 'selected' : ''}>10 - 20 million</option>
+                                                            <option value="20000000-40000000" ${param.priceRange == '20000000-40000000' ? 'selected' : ''}>20 - 40 million</option>
+                                                            <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 million</option>
+                                                            <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Above 100 million</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -331,7 +334,7 @@
                                         <th>Product ID</th>
                                         <th>Product Name</th>
                                         <th>Machine</th>
-                                        <th>Price (VNĐ)</th>
+                                        <th>Price (VND)</th>
                                         <th>Quantity</th>
                                         <th style="text-align:center">Action</th>
                                     </tr>
@@ -400,7 +403,7 @@
                                         <th>Customer Name</th>
                                         <th>Order Date</th>
                                         <th>Status</th>
-                                        <th>Total (VNĐ)</th>
+                                        <th>Total (VND)</th>
                                         <th style="text-align:center">Action</th>
                                     </tr>
                                 </thead>

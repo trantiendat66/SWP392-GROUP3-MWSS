@@ -21,7 +21,7 @@
                     <h2>${product.productName}</h2>
                     <p class="text-muted">Brand: ${product.brand} — Origin: ${product.origin}</p>
 
-                    <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</h3>
+                    <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VND</h3>
 
                     <div class="d-flex align-items-center mb-3">
                         <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
@@ -51,7 +51,7 @@
                     <h5>Specifications</h5>
                     <ul>
                         <li><strong>Warranty:</strong> ${product.warranty}</li>
-                        <li><strong>Movement:</strong> ${product.machine}</li>
+                        <li><strong>Machine:</strong> ${product.machine}</li>
                         <li><strong>Glass:</strong> ${product.glass}</li>
                         <li><strong>Dial diameter:</strong> ${product.dialDiameter}</li>
                         <li><strong>Bezel:</strong> ${product.bezel}</li>

@@ -396,7 +396,7 @@
                                 <%
                                     Long totalRevenue = (Long) request.getAttribute("totalRevenue");
                                     if (totalRevenue != null) {
-                                        out.print(String.format("%,d", totalRevenue) + " VNĐ");
+                                        out.print(String.format("%,d", totalRevenue) + " VND");
                                     } else {
                                         out.print("0 VNĐ");
                                     }
@@ -466,7 +466,7 @@
                                     <th>Product Name</th>
                                     <th>Brand</th>
                                     <th>Category</th>
-                                    <th>Price(VNĐ)</th>
+                                    <th>Price(VND)</th>
                                     <th>Quantity</th>
                                     <th style="text-align:center; min-width:160px;">Actions</th>
                                 </tr>

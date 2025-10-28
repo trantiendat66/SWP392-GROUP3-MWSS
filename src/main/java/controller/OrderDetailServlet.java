@@ -88,7 +88,7 @@ public class OrderDetailServlet extends HttpServlet {
             out.println("<p><strong>Address:</strong> " + escapeHtml(order.getShipping_address()) + "</p>");
             out.println("<p><strong>Status:</strong> " + escapeHtml(order.getOrder_status()) + "</p>");
             String formattedTotal = nf.format(order.getTotal_amount());
-            out.println("<p><strong>Total:</strong><span style='color:green;font-weight:bold;'> " + formattedTotal + " VNĐ</p>");
+            out.println("<p><strong>Total:</strong><span style='color:green;font-weight:bold;'> " + formattedTotal + " VND</p>");
             out.println("</div>");
             out.println("</div>");
             out.println("<div class='col-md-4' style='border-left: 2px solid #eee;'>");
@@ -102,8 +102,8 @@ public class OrderDetailServlet extends HttpServlet {
                 out.println("<div><strong>Quantity: </strong>" + od.getQuantity() + "</div>");
                 String formattedUnit = nf.format(od.getUnit_price());
                 String formattedLineTotal = nf.format(od.getTotal_price());
-                out.println("<div><strong>Price: </strong>" + formattedUnit + " VNĐ</div>");
-                out.println("<div><strong>Total: </strong><span style='color:#007bff;'>" + formattedLineTotal + " VNĐ</div>");
+                out.println("<div><strong>Price: </strong>" + formattedUnit + " VND</div>");
+                out.println("<div><strong>Total: </strong><span style='color:#007bff;'>" + formattedLineTotal + " VND</div>");
                 out.println("</div>");
             }
             out.println("</div>");
