@@ -4,7 +4,7 @@
     Author     : Oanh Nguyen
 --%>
 
-<%-- payment.jsp: Xác nhận thanh toán --%>
+<%-- payment.jsp: Payment confirmation --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
@@ -23,40 +23,40 @@
         <c:remove var="flash_success" scope="session"/>
     </c:if>
 
-    <h3 class="mb-3">Xác nhận thanh toán</h3>
+    <h3 class="mb-3">Payment Confirmation</h3>
 
-    <!-- Banner buy-now: đang mua nhanh, chưa thêm vào giỏ -->
+    <!-- Buy-now banner: currently buying quickly, not added to cart yet -->
     <c:if test="${not empty sessionScope.bn_pid}">
         <div class="alert alert-warning d-flex justify-content-between align-items-center">
             <div>
-                <strong>Buy now:</strong> Bạn đang mua nhanh 1 sản phẩm (chưa thêm vào giỏ).
-                Nếu bạn quay lại hoặc hủy, sản phẩm sẽ được thêm vào giỏ hàng của bạn.
+                <strong>Buy now:</strong> You are buying one product quickly (not yet added to the cart).
+                If you go back or cancel, the product will be added to your shopping cart.
             </div>
             <form action="${ctx}/payment/cancel-buynow" method="post" class="ms-3">
-                <button type="submit" class="btn btn-sm btn-outline-dark">Hủy mua nhanh</button>
+                <button type="submit" class="btn btn-sm btn-outline-dark">Cancel Buy Now</button>
             </form>
         </div>
     </c:if>
 
     <c:choose>
         <c:when test="${empty cartItems}">
-            <div class="alert alert-info">Giỏ hàng trống. Vui lòng thêm sản phẩm trước khi thanh toán.</div>
-            <a href="${ctx}/home" class="btn btn-primary">Tiếp tục mua sắm</a>
+            <div class="alert alert-info">Your cart is empty. Please add products before checkout.</div>
+            <a href="${ctx}/home" class="btn btn-primary">Continue Shopping</a>
         </c:when>
 
         <c:otherwise>
             <div class="row g-4">
-                <!-- Tóm tắt giỏ / buy-now -->
+                <!-- Cart / Buy-now summary -->
                 <div class="col-lg-8">
                     <div class="table-responsive">
                         <table class="table align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width:70px;">Ảnh</th>
-                                    <th>Sản phẩm</th>
-                                    <th class="text-center" style="width:120px;">Số lượng</th>
-                                    <th class="text-end">Đơn giá</th>
-                                    <th class="text-end">Thành tiền</th>
+                                    <th style="width:70px;">Image</th>
+                                    <th>Product</th>
+                                    <th class="text-center" style="width:120px;">Quantity</th>
+                                    <th class="text-end">Unit Price</th>
+                                    <th class="text-end">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,75 +71,75 @@
                                             <small class="text-muted">Brand: ${item.brand}</small>
                                         </td>
                                         <td class="text-center">${item.quantity}</td>
-                                        <td class="text-end text-muted"><fmt:formatNumber value="${item.price}" type="number"/> VNĐ</td>
-                                        <td class="text-end fw-semibold"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VNĐ</td>
+                                        <td class="text-end text-muted"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
+                                        <td class="text-end fw-semibold"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VND</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Tổng cộng:</th>
+                                    <th colspan="4" class="text-end">Total:</th>
                                     <th class="text-end text-danger fs-5">
-                                        <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
+                                        <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
 
-                    <!-- Nút quay lại:
-                         - Nếu đang buy-now (sessionScope.bn_pid có) => POST /payment/cancel-buynow để add vào giỏ rồi về /cart
-                         - Ngược lại => chỉ link về /cart -->
+                    <!-- Back button:
+                         - If currently in buy-now (sessionScope.bn_pid exists) => POST /payment/cancel-buynow to add to cart and return to /cart
+                         - Otherwise => just link back to /cart -->
                     <c:choose>
                         <c:when test="${not empty sessionScope.bn_pid}">
                             <form action="${ctx}/payment/cancel-buynow" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-outline-secondary">← Quay lại giỏ hàng</button>
+                                <button type="submit" class="btn btn-outline-secondary">← Back to Cart</button>
                             </form>
                         </c:when>
                         <c:otherwise>
-                            <a href="${ctx}/cart" class="btn btn-outline-secondary">← Quay lại giỏ hàng</a>
+                            <a href="${ctx}/cart" class="btn btn-outline-secondary">← Back to Cart</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
 
-                <!-- Form giao hàng & thanh toán -->
+                <!-- Shipping & Payment form -->
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">Thông tin giao hàng</h5>
+                            <h5 class="card-title mb-3">Shipping Information</h5>
 
                             <form action="${ctx}/order/create-from-cart" method="post">
                                 <div class="mb-2">
-                                    <label class="form-label">Số điện thoại</label>
+                                    <label class="form-label">Phone Number</label>
                                     <input type="text" name="phone" value="${sessionScope.customer.phone}"
-                                           class="form-control" placeholder="Số điện thoại">
+                                           class="form-control" placeholder="Phone number">
                                 </div>
 
                                 <div class="mb-2">
-                                    <label class="form-label">Địa chỉ nhận hàng</label>
+                                    <label class="form-label">Shipping Address</label>
                                     <input type="text" name="shipping_address" class="form-control"
-                                           placeholder="Địa chỉ nhận hàng" required>
+                                           placeholder="Shipping address" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Thanh toán</label>
+                                    <label class="form-label">Payment Method</label>
                                     <select name="payment_method" class="form-select">
-                                        <option value="0">COD (chưa thanh toán)</option>
-                                        <option value="1">Đã thanh toán online</option>
+                                        <option value="0">COD (Cash on Delivery)</option>
+                                        <option value="1">Paid Online</option>
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
+                                <button type="submit" class="btn btn-primary w-100">Confirm Order</button>
                             </form>
 
                             <hr>
                             <div class="d-flex justify-content-between">
-                                <span>Tổng tiền hàng</span>
+                                <span>Subtotal</span>
                                 <strong class="text-danger">
-                                    <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
+                                    <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                 </strong>
                             </div>
-                            <small class="text-muted d-block mt-2">Phí vận chuyển sẽ tính ở bước sau (nếu áp dụng).</small>
+                            <small class="text-muted d-block mt-2">Shipping fee will be calculated in the next step (if applicable).</small>
                         </div>
                     </div>
                 </div>
