@@ -1,6 +1,6 @@
 <%-- 
     Document   : staff_detail
-    Created on : Oct 21, 2025, 2:23:01 PM
+    Created on : Oct 21, 2025, 2:23:01 PM
     Author     : Tran Tien Dat - CE190362
 --%>
 
@@ -117,12 +117,12 @@
         Staff s = (Staff) request.getAttribute("staff");
         if (s == null) {
     %>
-    <div style="padding:12px;background:#fff3cd;border:1px solid #ffeeba;border-radius:8px;">Không tìm thấy staff.</div>
+    <div style="padding:12px;background:#fff3cd;border:1px solid #ffeeba;border-radius:8px;">Staff not found.</div>
     <%
     } else {
     %>
 
-    <div class="detail-card" role="region" aria-label="Thông tin staff">
+    <div class="detail-card" role="region" aria-label="Staff Information">
         <td style="text-align:center; vertical-align:middle;">
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
                 <div style="font-size:42px; line-height:1; margin-bottom:6px;">👤</div>
