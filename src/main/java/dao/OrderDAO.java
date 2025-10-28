@@ -51,49 +51,24 @@ public class OrderDAO extends DBContext {
             cn.setAutoCommit(false);
             cn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
-//            int orderId;
-//
-//            // 1) Tạo Order
-//            String sqlOrder = "INSERT INTO [Order](account_id, customer_id, phone, order_date, "
-//                    + "order_status, shipping_address, payment_method, total_amount) "
-//                    + "VALUES (NULL, ?, ?, GETDATE(), N'PENDING', ?, ?, ?)";
-//            try (PreparedStatement ps = cn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
-//                ps.setInt(1, customerId);
-//                ps.setString(2, phone);
-//                ps.setString(3, shippingAddress);
-//                ps.setString(4, paymentMethod);
-//                ps.setLong(5, total);
-//                ps.executeUpdate();
-//                try (ResultSet rs = ps.getGeneratedKeys()) {
-//                    if (!rs.next()) {
-//                        throw new SQLException("Không lấy được order_id.");
-//                    }
-//                    orderId = rs.getInt(1);
-//                }
-//            }
-            // --- THAY thế toàn bộ block tạo Order cũ ---
+            //Lấy staffId đã loại trừ admin=1 + có fallback
+            int staffId = resolveDefaultAccountId(cn);
+
             int orderId;
 
-            // Chèn Order: account_id lấy trực tiếp từ Staff ACTIVE
+            // Dùng VALUES + param thay vì subquery
             String sqlOrder
                     = "INSERT INTO [Order](account_id, customer_id, phone, order_date, "
                     + "                    order_status, shipping_address, payment_method, total_amount) "
-                    + "SELECT (SELECT TOP 1 s.account_id\n"
-                    + "   FROM Staff s\n"
-                    + "  WHERE s.[status]=N'ACTIVE'\n"
-                    + "  ORDER BY (SELECT COUNT(*) \n"
-                    + "              FROM [Order] o\n"
-                    + "             WHERE o.account_id = s.account_id\n"
-                    + "               AND o.order_status IN (N'PENDING',N'CONFIRMED',N'SHIPPING')) ASC,\n"
-                    + "           s.account_id ASC), "
-                    + "       ?, ?, GETDATE(), N'PENDING', ?, ?, ?";
+                    + "VALUES (?, ?, ?, GETDATE(), N'PENDING', ?, ?, ?)";
 
             try (PreparedStatement ps = cn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, customerId);
-                ps.setString(2, phone);
-                ps.setString(3, shippingAddress);
-                ps.setInt(4, paymentStatusBit);   // <-- BIT: 0 hoặc 1
-                ps.setLong(5, total);
+                ps.setInt(1, staffId);
+                ps.setInt(2, customerId);
+                ps.setString(3, phone);
+                ps.setString(4, shippingAddress);
+                ps.setInt(5, paymentStatusBit);  // BIT 0/1
+                ps.setLong(6, total);
                 ps.executeUpdate();
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (!rs.next()) {
@@ -330,7 +305,7 @@ public class OrderDAO extends DBContext {
     }
 
     public boolean updateOrderStatus(int order_id, String order_status) {
-        
+
         boolean success = false;
         String sql;
         if (order_status.equals("DELIVERED")) {
