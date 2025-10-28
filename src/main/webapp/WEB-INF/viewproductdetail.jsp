@@ -14,7 +14,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Chi Tiết Sản Phẩm</title>
+        <title>Product Details</title>
         <style>
             body {
                 background-color: #f4f6f9;
@@ -119,72 +119,72 @@
 
                         <div class="info-header">
                             <h2>${p.productName}</h2>
-                            <p>Mã sản phẩm: ${p.productId}</p>
-                            <p class="text-muted">Thương hiệu: ${p.brand} | Xuất xứ: ${p.origin}</p>
+                            <p>Product ID: ${p.productId}</p>
+                            <p class="text-muted">Brand: ${p.brand} | Origin: ${p.origin}</p>
                             <div class="price-tag">
-                                <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
+                                <fmt:formatNumber value="${p.price}" pattern="#,###"/> VND
                             </div>
                         </div>
                     </div>
 
-                    <%-- Thông số kỹ thuật --%>
+                    <%-- Technical Specifications --%>
                     <div class="detail-section">
-                        <div class="detail-title">Thông Số Kỹ Thuật</div>
+                        <div class="detail-title">Technical Specifications</div>
                         <div class="row">
                             <div class="col-md-4 detail-item">
-                                <span class="label">Bộ máy</span>
+                                <span class="label">Movement</span>
                                 <div class="value">${p.machine}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Mặt kính</span>
+                                <span class="label">Glass</span>
                                 <div class="value">${p.glass}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Đường kính mặt</span>
+                                <span class="label">Dial Diameter</span>
                                 <div class="value">${p.dialDiameter}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Vành bezel</span>
+                                <span class="label">Bezel</span>
                                 <div class="value">${p.bezel}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Dây đeo</span>
+                                <span class="label">Strap</span>
                                 <div class="value">${p.strap}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Màu mặt số</span>
+                                <span class="label">Dial Color</span>
                                 <div class="value">${p.dialColor}</div>
                             </div>
                         </div>
                     </div>
 
-                    <%-- Thông tin bán hàng & tình trạng --%>
+                    <%-- Sales Information & Condition --%>
                     <div class="detail-section">
-                        <div class="detail-title">Thông tin Bán hàng & Tình trạng</div>
+                        <div class="detail-title">Sales Information & Condition</div>
                         <div class="row">
                             <div class="col-md-4 detail-item">
-                                <span class="label">Giới tính</span>
+                                <span class="label">Gender</span>
                                 <div class="value">
                                     <c:choose>
-                                        <c:when test="${p.gender == true}">Nam</c:when>
-                                        <c:when test="${p.gender == false}">Nữ</c:when>
+                                        <c:when test="${p.gender == true}">Male</c:when>
+                                        <c:when test="${p.gender == false}">Female</c:when>
                                         <c:otherwise>Unisex</c:otherwise>
                                     </c:choose>
                                 </div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Bảo hành</span>
+                                <span class="label">Warranty</span>
                                 <div class="value">${p.warranty}</div>
                             </div>
                             <div class="col-md-4 detail-item">
-                                <span class="label">Số lượng tồn kho</span>
+                                <span class="label">Stock Quantity</span>
                                 <div class="value">
                                     <c:choose>
                                         <c:when test="${p.quantityProduct > 0}">
                                             <span class="badge bg-success">${p.quantityProduct}</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="badge bg-danger">Hết hàng</span>
+                                            <span class="badge bg-danger">Out of Stock</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -192,17 +192,17 @@
                         </div>
                     </div>
 
-                    <%-- Mô tả sản phẩm --%>
+                    <%-- Product Description --%>
                     <div class="detail-section">
-                        <div class="detail-title">Mô Tả Sản Phẩm</div>
+                        <div class="detail-title">Product Description</div>
                         <p style="padding: 0 10px;">${p.description}</p>
                     </div>
 
-                    <%-- Nút quay lại phù hợp với nguồn truy cập --%>
+                    <%-- Back button depending on access source --%>
                     <div class="d-flex justify-content-end mt-4">
                         <c:choose>
                             <c:when test="${param.fromAdmin eq 'true'}">
-                                <a href="${ctx}/admin/dashboard" class="btn btn-danger">⬅️ Quay lại Trang Admin</a>
+                                <a href="${ctx}/admin/dashboard" class="btn btn-danger">⬅️ Back to Admin Page</a>
                             </c:when>
                         </c:choose>
                     </div>
@@ -211,11 +211,11 @@
 
                 <c:otherwise>
                     <div class="not-found">
-                        <h3>Không tìm thấy thông tin sản phẩm này trong cơ sở dữ liệu.</h3>
+                        <h3>Product information not found in the database.</h3>
                         <c:choose>
                             <c:when test="${param.fromAdmin eq 'true'}">
-                                <p>Vui lòng kiểm tra lại ID sản phẩm hoặc 
-                                    <a href="${ctx}/admin/dashboard">quay lại trang admin</a>.
+                                <p>Please check the product ID again or 
+                                    <a href="${ctx}/admin/dashboard">go back to the admin page</a>.
                                 </p>
                             </c:when>
                         </c:choose>
