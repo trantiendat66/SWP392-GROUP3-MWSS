@@ -183,36 +183,39 @@ public class ProductEditServlet extends HttpServlet {
         boolean gender = "true".equalsIgnoreCase(genderParam);
 
         try {
-            productId = Integer.parseInt(productIdStr);
-        } catch (Exception e) {
-        }
-        try {
             price = Integer.parseInt(priceStr);
-        } catch (Exception e) {
-            if (!priceStr.isEmpty()) {
-                errors.put("priceError", "Price must be a valid number"); // Giá phải là số hợp lệ
+            if (price <= 0) {
+                errors.put("priceError", "Price cannot be negative");
             }
+        } catch (NumberFormatException e) {
+            errors.put("priceError", "Price must be a valid number");
         }
+
         try {
             quantity = Integer.parseInt(quantityStr);
-        } catch (Exception e) {
-            if (!quantityStr.isEmpty()) {
-                errors.put("quantityError", "Quantity must be a valid number"); // Số lượng phải là số hợp lệ
+            if (quantity < 0) {
+                errors.put("quantityError", "Quantity cannot be negative");
             }
+        } catch (NumberFormatException e) {
+            errors.put("quantityError", "Quantity must be a valid number");
         }
+
         try {
             categoryId = Integer.parseInt(categoryStr);
-        } catch (Exception e) {
-            if (!categoryStr.isEmpty()) {
-                errors.put("categoryError", "Category ID must be a valid number"); // Mã danh mục phải là số hợp lệ
+            if (categoryId <= 0) {
+                errors.put("categoryError", "Category ID cannot be negative");
             }
+        } catch (NumberFormatException e) {
+            errors.put("categoryError", "Category ID must be a valid number");
         }
+
         try {
             accountId = Integer.parseInt(accountStr);
-        } catch (Exception e) {
-            if (!accountStr.isEmpty()) {
-                errors.put("accountError", "Account ID must be a valid number"); // Mã tài khoản phải là số hợp lệ
+            if (accountId <= 0) {
+                errors.put("accountError", "Account ID cannot be negative");
             }
+        } catch (NumberFormatException e) {
+            errors.put("accountError", "Account ID must be a valid number");
         }
 
         // Nếu có lỗi → quay lại trang edit_product.jsp
