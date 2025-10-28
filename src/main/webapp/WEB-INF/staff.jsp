@@ -52,6 +52,8 @@
             .avatar {
                 width:160px;
                 height:160px;
+                margin-bottom:16px;
+                margin-top:16px;
                 border-radius:50%;
                 object-fit:cover;
                 border:6px solid #fff;
@@ -223,8 +225,7 @@
         <div class="d-flex align-items-start">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <div class="card">
-                    <img src="./assert/image/trikhue.jpg" alt="Avatar" class="avatar" />
-                    <div class="name"><%= (t != null ? t.getUserName() : "Hỏng Cóa Tên")%></div>
+                    <img src="./assert/image/account.jpg" alt="Avatar" class="avatar" />
                     <div class="status small"><%= (t != null ? t.getRole() : "None")%></div>
                 </div>
                 <button class="nav-link active" id="pill-product" data-bs-toggle="pill" data-bs-target="#v-pills-product" type="button" role="tab" aria-controls="v-pills-products" aria-selected="true">Product Management</button>

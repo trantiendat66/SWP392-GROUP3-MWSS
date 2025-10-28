@@ -41,9 +41,8 @@
         flex-shrink: 0;
         position: relative;
     }
-    /* Profile card */
     .profile-card {
-        text-align: center;
+        text-align: center;    /* căn giữa toàn bộ bên trong */
         margin-bottom: 18px;
     }
     .profile-avatar {
@@ -61,10 +60,19 @@
         margin-top: 8px;
     }
     .profile-role {
-        font-size: 13px;
-        color: #6c757d;
-        margin-top: 4px;
+        display: block;         /* bắt buộc xuống dòng, nằm dưới avatar */
+        background-color: #000; /* khung màu đen */
+        color: #fff;            /* chữ trắng */
+        font-size: 18px;        /* chữ to */
+        font-weight: 700;
+        padding: 8px 16px;      /* giãn đều bên trong */
+        border-radius: 6px;     /* bo nhẹ góc */
+        margin-top: 10px;       /* cách avatar một chút */
+        width: fit-content;     /* khung vừa chữ */
+        margin-left: auto;      /* căn giữa theo chiều ngang */
+        margin-right: auto;
     }
+
     /* Nav */
     .nav-menu {
         list-style: none;
@@ -226,12 +234,11 @@
         <aside class="sidebar" aria-label="Admin sidebar">
             <div class="profile-card">
                 <img class="profile-avatar"
-                     src="${pageContext.request.contextPath}/assert/image/trikhue.jpg"
+                     src="${pageContext.request.contextPath}/assert/image/account.jpg"
                      alt="avatar"
                      onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
                 <c:choose>
                     <c:when test="${not empty sessionScope.staff}">
-                        <div class="profile-name">${sessionScope.staff.userName}</div>
                         <div class="profile-role">${sessionScope.staff.role}</div>
                     </c:when>
                     <c:otherwise>
