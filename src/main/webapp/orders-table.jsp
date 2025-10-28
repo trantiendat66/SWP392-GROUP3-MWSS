@@ -17,7 +17,7 @@
 
 <c:choose>
     <c:when test="${empty orders}">
-        <div class="alert alert-info">Không có đơn hàng.</div>
+        <div class="alert alert-info">No orders.</div>
     </c:when>
     <c:otherwise>
         <div class="accordion" id="acc-${listAttr}">
@@ -30,7 +30,7 @@
                                 <div class="d-flex justify-content-between">
                                     <span>
                                         <strong>#${o.order_id}</strong> •
-                                        <%-- HIỂN THỊ NGÀY: nếu DELIVERED và có delivered_at thì dùng delivered_at, ngược lại dùng order_date (String) --%>
+                                        <%-- DISPLAY DATE: if DELIVERED and has delivered_at then use delivered_at, otherwise use order_date (String) --%>
                                         <c:choose>
                                             <c:when test="${o.order_status eq 'DELIVERED' and o.delivered_at ne null}">
                                                 <fmt:formatDate value="${o.delivered_at}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -42,30 +42,29 @@
                                         <span class="badge bg-secondary ms-2">${o.order_status}</span>
                                     </span>
                                     <span class="text-danger">
-                                        <fmt:formatNumber value="${o.total_amount}" type="number"/> VNĐ
+                                        <fmt:formatNumber value="${o.total_amount}" type="number"/> VND
                                     </span>
                                 </div>
                                 <small class="text-muted">
                                     ${o.shipping_address} | ${o.phone} |
-                                    Thanh toán: <c:out value="${o.payment_method == 1 ? 'Đã thanh toán' : 'COD'}"/>
+                                    Payment: <c:out value="${o.payment_method == 1 ? 'Paid' : 'COD'}"/>
                                 </small>
                             </div>
                         </button>
                     </h2>
 
-                    <div id="c-${listAttr}-${o.order_id}" class="accordion-collapse collapse"
-                         >
+                    <div id="c-${listAttr}-${o.order_id}" class="accordion-collapse collapse">
                         <div class="accordion-body p-0">
                             <table class="table mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width:70px;">Ảnh</th>
-                                        <th>Sản phẩm</th>
-                                        <th class="text-center" style="width:100px;">SL</th>
-                                        <th class="text-end">Đơn giá</th>
-                                        <th class="text-end">Thành tiền</th>
-                                            <%-- FEEDBACK: thêm cột "Đánh giá" --%>
-                                        <th class="text-end" style="width:140px;">Đánh giá</th>
+                                        <th style="width:70px;">Image</th>
+                                        <th>Product</th>
+                                        <th class="text-center" style="width:100px;">Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Total</th>
+                                        <%-- FEEDBACK: add "Review" column --%>
+                                        <th class="text-end" style="width:140px;">Review</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,8 +78,8 @@
                                             </td>
                                             <td>${it.productName}</td>
                                             <td class="text-center">${it.quantity}</td>
-                                            <td class="text-end"><fmt:formatNumber value="${it.unitPrice}" type="number"/> VNĐ</td>
-                                            <td class="text-end"><fmt:formatNumber value="${it.totalPrice}" type="number"/> VNĐ</td>
+                                            <td class="text-end"><fmt:formatNumber value="${it.unitPrice}" type="number"/> VND</td>
+                                            <td class="text-end"><fmt:formatNumber value="${it.totalPrice}" type="number"/> VND</td>
 
                                             <td class="text-end">
                                                 <c:set var="__pid" value="${it.productId}" />
@@ -88,12 +87,12 @@
 
                                                 <c:choose>
                                                     <c:when test="${not empty eligibleKeys && eligibleKeys.contains(__key)}">
-                                                        <!-- Nút mở modal -->
+                                                        <!-- Button to open modal -->
                                                         <button type="button"
                                                                 class="btn btn-sm btn-outline-primary"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#fbModal-${o.order_id}-${__pid}">
-                                                            Đánh giá
+                                                            Review
                                                         </button>
 
                                                         <!-- Modal -->
@@ -101,7 +100,7 @@
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title">Đánh giá sản phẩm</h5>
+                                                                        <h5 class="modal-title">Product Review</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                     </div>
 
@@ -110,40 +109,38 @@
                                                                             <input type="hidden" name="order_id" value="${o.order_id}">
                                                                             <input type="hidden" name="product_id" value="${__pid}">
 
-                                                                            <!-- Đánh giá -->
+                                                                            <!-- Rating -->
                                                                             <div class="mb-3 text-start">
-                                                                                <label class="form-label mb-2">Đánh giá</label>
+                                                                                <label class="form-label mb-2">Rating</label>
 
-                                                                                <%-- star picker: 1 hàng ngôi sao, click để chọn số sao --%>
+                                                                                <%-- star picker: 1 row of stars, click to select rating --%>
                                                                                 <div class="momo-stars" dir="rtl">
                                                                                     <c:set var="__suf" value="${o.order_id}-${__pid}" />
                                                                                     <input type="radio" name="rating" id="s5-${__suf}" value="5" checked>
-                                                                                    <label for="s5-${__suf}" title="5 sao">★</label>
+                                                                                    <label for="s5-${__suf}" title="5 stars">★</label>
 
                                                                                     <input type="radio" name="rating" id="s4-${__suf}" value="4">
-                                                                                    <label for="s4-${__suf}" title="4 sao">★</label>
+                                                                                    <label for="s4-${__suf}" title="4 stars">★</label>
 
                                                                                     <input type="radio" name="rating" id="s3-${__suf}" value="3">
-                                                                                    <label for="s3-${__suf}" title="3 sao">★</label>
+                                                                                    <label for="s3-${__suf}" title="3 stars">★</label>
 
                                                                                     <input type="radio" name="rating" id="s2-${__suf}" value="2">
-                                                                                    <label for="s2-${__suf}" title="2 sao">★</label>
+                                                                                    <label for="s2-${__suf}" title="2 stars">★</label>
 
                                                                                     <input type="radio" name="rating" id="s1-${__suf}" value="1">
-                                                                                    <label for="s1-${__suf}" title="1 sao">★</label>
+                                                                                    <label for="s1-${__suf}" title="1 star">★</label>
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="mb-2 text-start">
-                                                                                <label class="form-label fw-semibold d-block text-start mb-2">Nhận xét</label>
+                                                                                <label class="form-label fw-semibold d-block text-start mb-2">Comment</label>
                                                                                 <textarea name="comment" class="form-control fb-comment" rows="4"
-                                                                                          placeholder="Nhập nội dung đánh giá (không bắt buộc – vui lòng gõ tiếng Việt có dấu)…"></textarea>
+                                                                                          placeholder="Enter your review (optional – please type in Vietnamese with diacritics)…"></textarea>
                                                                                 <div class="form-text text-danger d-none comment-help"></div>
                                                                             </div>
 
-
-
-                                                                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                                            <button type="submit" class="btn btn-primary">Submit Review</button>
                                                                         </form>
                                                                     </div>
 
@@ -181,15 +178,15 @@
                 display:none;
             }
             .momo-stars label {
-                color:#d6d9dd;        /* xám nhạt (sao rỗng) */
+                color:#d6d9dd;        /* light gray (empty star) */
                 cursor:pointer;
                 transition: transform .05s ease-in;
             }
-            /* tô màu tất cả sao bên trái sao được chọn (dùng dir=rtl + ~ selector) */
+            /* color all stars to the left of the selected star (use dir=rtl + ~ selector) */
             .momo-stars input:checked ~ label,
             .momo-stars label:hover,
             .momo-stars label:hover ~ label {
-                color:#f59f00;        /* vàng cam */
+                color:#f59f00;        /* orange-yellow */
             }
             .momo-stars label:active {
                 transform: scale(.95);
