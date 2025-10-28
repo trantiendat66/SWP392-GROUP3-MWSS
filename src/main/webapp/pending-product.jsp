@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Xử lý sản phẩm tạm thời</title>
+    <title>Temporary Product Handling</title>
     <style>
         .pending-product-container {
             max-width: 600px;
@@ -71,7 +71,7 @@
 <body>
     <div class="pending-product-container">
         <h3 class="text-center mb-4">
-            <i class="bi bi-cart-plus"></i> Sản phẩm chờ xử lý
+            <i class="bi bi-cart-plus"></i> Pending Product
         </h3>
         
         <div id="product-info" class="product-info" style="display: none;">
@@ -79,25 +79,25 @@
             <div class="product-details">
                 <h5 id="product-name"></h5>
                 <p id="product-price"></p>
-                <p>Số lượng: <span id="product-quantity"></span></p>
+                <p>Quantity: <span id="product-quantity"></span></p>
             </div>
         </div>
         
         <div id="no-product" class="text-center" style="display: none;">
             <i class="bi bi-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
-            <h5 class="mt-3">Không có sản phẩm chờ xử lý</h5>
-            <p class="text-muted">Bạn có thể tiếp tục mua sắm</p>
+            <h5 class="mt-3">No pending product</h5>
+            <p class="text-muted">You can continue shopping</p>
         </div>
         
         <div class="action-buttons">
             <button id="add-to-cart-btn" class="btn btn-success" style="display: none;">
-                <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                <i class="bi bi-cart-plus"></i> Add to cart
             </button>
             <button id="buy-now-btn" class="btn btn-primary" style="display: none;">
-                <i class="bi bi-bag"></i> Mua ngay
+                <i class="bi bi-bag"></i> Buy now
             </button>
             <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary">
-                <i class="bi bi-house"></i> Về trang chủ
+                <i class="bi bi-house"></i> Back to home
             </a>
         </div>
     </div>
@@ -146,7 +146,7 @@
             return new Intl.NumberFormat('vi-VN').format(price);
         }
 
-        // Xử lý thêm vào giỏ hàng
+        // Handle add to cart
         document.getElementById('add-to-cart-btn').addEventListener('click', function() {
             const pendingProduct = JSON.parse(localStorage.getItem('pendingProduct'));
             
@@ -156,7 +156,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showMessage('Sản phẩm đã được thêm vào giỏ hàng thành công!', 'success');
+                    showMessage('Product successfully added to cart!', 'success');
                     localStorage.removeItem('pendingProduct');
                     setTimeout(() => {
                         window.location.href = '${pageContext.request.contextPath}/cart';
@@ -167,15 +167,15 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
+                showMessage('An error occurred while adding the product to the cart', 'error');
             });
         });
 
-        // Xử lý mua ngay
+        // Handle buy now
         document.getElementById('buy-now-btn').addEventListener('click', function() {
             const pendingProduct = JSON.parse(localStorage.getItem('pendingProduct'));
             
-            // Tạo form ẩn để submit
+            // Create a hidden form to submit
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '${pageContext.request.contextPath}/order/buy-now';
