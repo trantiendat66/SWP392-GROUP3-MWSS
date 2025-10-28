@@ -1,18 +1,18 @@
 <%-- 
     Document   : order-success
-    Created on : Oct 15, 2025, 5:31:51 PM
+    Created on : Oct 15, 2025, 5:31:51 PM
     Author     : Oanh Nguyen
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Đặt hàng thành công</title>
+        <title>Order Successful</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
-            /* ---- Chỉ scope trong trang này để tránh đụng CSS ở header/footer ---- */
+            /* ---- Scoped only within this page to avoid conflict with header/footer CSS ---- */
             .order-success{
                 background:#f5f6fa;
                 padding:32px 16px;
@@ -153,13 +153,13 @@
                         <svg viewBox="0 0 52 52"><path d="M14 27 L23 36 L38 17"></path></svg>
                     </div>
 
-                    <h1>Đặt hàng thành công 🎉</h1>
+                    <h1>Order Successful 🎉</h1>
                     <p class="desc">
-                        Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được ghi nhận và đang xử lý.<br>
-                        Chúng tôi sẽ liên hệ sớm để xác nhận giao hàng.
+                        Thank you for your purchase. Your order has been recorded and is being processed.<br>
+                        We will contact you soon to confirm the delivery.
                     </p>
 
-                    <div class="label">Mã đơn hàng</div>
+                    <div class="label">Order ID</div>
                     <div class="code">#${param.orderId}</div>
 
                     <div class="actions">
@@ -168,18 +168,18 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M3 7h18M3 12h18M3 17h18"></path>
                             </svg>
-                            Xem đơn hàng
+                            View Orders
                         </a>
                         <a class="btn btn-secondary" href="${pageContext.request.contextPath}/index.jsp">
                             <!-- icon cart -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M6 6h15l-1.5 9h-12zM9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"></path>
                             </svg>
-                            Tiếp tục mua sắm
+                            Continue Shopping
                         </a>
                     </div>
 
-                    <div class="note">Bạn có thể xem chi tiết đơn trong mục “Đơn hàng của tôi”.</div>
+                    <div class="note">You can view your order details in the “My Orders” section.</div>
                 </div>
             </div>
         </main>
