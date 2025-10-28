@@ -263,7 +263,7 @@
                         <hr>
 
                         <button class="btn-checkout" onclick="checkout()">
-                            <i class="bi bi-credit-card"></i> Thanh toán
+                            <i class="bi bi-credit-card"></i> Payment
                         </button>
 
                         <div class="mt-3">
