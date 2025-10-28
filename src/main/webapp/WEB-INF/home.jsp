@@ -68,7 +68,8 @@
         <a href="#featured-products" class="btn btn-primary btn-lg">Shop Now</a>
     </div>
 </section>
-<!-- *** KẾT QUẢ TÌM KIẾM HOẶC FEATURED PRODUCTS - HIỂN THỊ NGAY DƯỚI NÚT SHOP NOW *** -->
+
+<!-- *** SEARCH RESULTS OR FEATURED PRODUCTS - DISPLAYED RIGHT BELOW SHOP NOW BUTTON *** -->
 <c:if test="${not empty param.keyword}">
     <section id="featured-products" class="container mb-5 mt-4">
         <h2 class="section-title text-center mb-4">
@@ -103,25 +104,23 @@
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title text-center">${fn:escapeXml(p.productName)}</h5>
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
-                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VNĐ</p>
+                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VND</p>
                                     <div class="mt-auto text-center">
                                         <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                            class="btn btn-outline-primary btn-sm me-2">Details</a>
 
-                                        <!-- BUY NOW: thêm vào cart rồi chuyển đến trang giỏ -->
+                                        <!-- BUY NOW: add to cart then go to cart page -->
                                         <form action="${pageContext.request.contextPath}/order/buy-now" method="post" class="d-inline">
                                             <input type="hidden" name="product_id" value="${p.productId}">
                                             <input type="hidden" name="quantity" value="1">
                                             <button type="submit" class="btn btn-danger btn-sm me-2">Buy now</button>
                                         </form>
 
-                                        <!-- Add to cart (giữ nguyên nếu bạn dùng AJAX) -->
+                                        <!-- Add to cart (keep if using AJAX) -->
                                         <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})" title="Add to cart">
                                             <i class="bi bi-cart-plus"></i>
                                         </button>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -164,7 +163,7 @@
     </div>
 </section>
 
-<!-- Featured Products cuối trang: luôn hiển thị toàn bộ sản phẩm (id khác để không trùng) -->
+<!-- Featured Products at bottom: always show all products (different ID to avoid duplication) -->
 <section id="featured-products-default" class="container mb-5">
     <h2 class="section-title text-center mb-4">Featured Products</h2>
 
@@ -178,6 +177,7 @@
             <span style="color: black; margin-left: 5px;">Filter</span>
         </div>
     </form>
+
     <!-- Popup filter -->
     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -192,15 +192,15 @@
                         <label for="priceRange" class="form-label">Price Range</label>
                         <select class="form-select" id="priceRange" name="priceRange">
                             <option value="">-- Select range --</option>
-                            <option value="0-2000000">0 - 2 triệu</option>
-                            <option value="2000000-4000000">2 - 4 triệu</option>
-                            <option value="4000000-6000000">4 - 6 triệu</option>
-                            <option value="6000000-8000000">6 - 8 triệu</option>
-                            <option value="8000000-10000000">8 - 10 triệu</option>
-                            <option value="10000000-20000000">10 - 20 triệu</option>
-                            <option value="20000000-40000000">20 - 40 triệu</option>
-                            <option value="40000000-100000000">40 - 100 triệu</option>
-                            <option value="40000000-100000000">Trên 100 triệu</option>
+                            <option value="0-2000000">0 - 2 million</option>
+                            <option value="2000000-4000000">2 - 4 million</option>
+                            <option value="4000000-6000000">4 - 6 million</option>
+                            <option value="6000000-8000000">6 - 8 million</option>
+                            <option value="8000000-10000000">8 - 10 million</option>
+                            <option value="10000000-20000000">10 - 20 million</option>
+                            <option value="20000000-40000000">20 - 40 million</option>
+                            <option value="40000000-100000000">40 - 100 million</option>
+                            <option value="40000000-100000000">Above 100 million</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -234,6 +234,7 @@
             </div>
         </div>
     </div>
+
     <div id="productList">
         <jsp:include page="/partials/product-list.jsp" />
     </div>
@@ -250,44 +251,39 @@
             const params = new URLSearchParams(window.location.search);
             const hasKeyword = params.has('keyword') && params.get('keyword').trim() !== '';
             const bottomSection = document.getElementById('featured-products-default');
-            // If there's no bottom section, nothing to do
-            if (!bottomSection)
-                return;
-            // If no keyword => store the current bottom HTML as "all products"
+            if (!bottomSection) return;
             if (!hasKeyword) {
-                // store innerHTML (including cards)
                 localStorage.setItem('ws_all_products_html', bottomSection.innerHTML);
             } else {
-                // has keyword => try to restore stored full products list
                 const stored = localStorage.getItem('ws_all_products_html');
                 if (stored) {
                     bottomSection.innerHTML = stored;
                 }
-                // else: nothing stored (first request is a search) -> do nothing (falls back to server render)
             }
         } catch (e) {
-            // fail quietly, don't break page
             console.error('Error preserving featured products HTML:', e);
         }
     });
+
     function addToCartFromHome(productId) {
         fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=1', {
             method: 'GET'
         })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showMessage(data.message, 'success');
-                        updateCartCount();
-                    } else {
-                        showMessage(data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showMessage('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng', 'error');
-                });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage(data.message, 'success');
+                updateCartCount();
+            } else {
+                showMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('An error occurred while adding the product to cart', 'error');
+        });
     }
+
     function showMessage(message, type) {
         const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
         const alertHtml = `
@@ -300,13 +296,12 @@
         document.body.insertAdjacentHTML('beforeend', alertHtml);
         setTimeout(() => {
             const alert = document.querySelector('.alert');
-            if (alert)
-                alert.remove();
+            if (alert) alert.remove();
         }, 3000);
     }
 </script>
+
 <script>
-    // guard for filterButton existence (avoid JS error)
     const filterBtn = document.getElementById("filterButton");
     if (filterBtn) {
         filterBtn.addEventListener("click", function () {
@@ -314,6 +309,7 @@
             modal.show();
         });
     }
+
     const applyFilterBtn = document.getElementById("applyFilter");
     if (applyFilterBtn) {
         applyFilterBtn.addEventListener("click", function (e) {
@@ -322,22 +318,19 @@
             const brand = document.getElementById("brand").value;
             const gender = document.getElementById("gender").value;
             const baseUrl = "${pageContext.request.contextPath}/filterServlet";
-            const params = new URLSearchParams({
-                brand,
-                gender,
-                priceRange
-            });
+            const params = new URLSearchParams({ brand, gender, priceRange });
             fetch(baseUrl + "?" + params.toString())
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById("productList").innerHTML = html;
-                    })
-                    .catch(err => console.error("Lỗi khi lọc:", err));
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("productList").innerHTML = html;
+                })
+                .catch(err => console.error("Error filtering:", err));
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
             modal.hide();
         });
     }
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <jsp:include page="/WEB-INF/include/footer.jsp" />
