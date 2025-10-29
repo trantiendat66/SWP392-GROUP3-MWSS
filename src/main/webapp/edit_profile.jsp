@@ -9,6 +9,7 @@
 <%
     Customer c = (Customer) request.getAttribute("customer");
     String ctx = request.getContextPath();
+    String source = (String) request.getAttribute("source");
 %>
 <!DOCTYPE html>
 <html>
@@ -90,7 +91,7 @@
         <div class="container">
             <h2>Edit Profile</h2>
             <form method="post" action="<%=ctx%>/edit_profile" enctype="multipart/form-data">
-                <input type="hidden" name="customerID" value="<%= (c != null ? c.getCustomer_id() : "")%>" />
+                <input type="hidden" name="" value="<%= (c != null ? c.getCustomer_id() : "")%>" /> <!-- customerID -->
                 <label>User Name</label>
                 <input type="name" name="customer_name" value="<%= (c != null ? c.getCustomer_name() : "")%>" />
                 <% if (request.getAttribute("nameError") != null) {%>
@@ -166,7 +167,13 @@
                 </script>
                 <div>
                     <button type="submit" class="btn btn-save">Save</button>
-                    <a href="<%=ctx%>/profile" class="btn btn-cancel" style="text-decoration:none; display:inline-block; padding:10px 14px; border-radius:6px;">Cancel</a>
+                    <% if ("admin".equals(source)) {%> <!-- * -->
+                    <a href="<%=ctx%>/admin/customerlist" class="btn btn-cancel" 
+                       style="text-decoration:none; display:inline-block; padding:10px 14px; border-radius:6px;">Cancel</a>
+                    <% } else {%>
+                    <a href="<%=ctx%>/profile" class="btn btn-cancel" 
+                       style="text-decoration:none; display:inline-block; padding:10px 14px; border-radius:6px;">Cancel</a>
+                    <% }%>
                 </div>
             </form>
         </div>
