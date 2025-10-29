@@ -143,17 +143,18 @@
 
                         if (c.getImage().startsWith("http")) {
                             avatarPath = c.getImage();
-                        } 
+                        }
                         else {
                             avatarPath = ctx + "/" + c.getImage();
                         }
                     } else {
-                        avatarPath = ctx + "/image/2.jpg";
+                        avatarPath = ctx + "/assert/avatar/avatar_md.jpg";
                     }
+                    String avatarWithVersion = avatarPath + "?v=" + System.currentTimeMillis();
                 %>
                 <label>Avatar (Upload)</label>
                 <input type="file" name="image" accept="image/*" onchange="previewImage(event)">
-                <img id="preview" class="avatar-preview" src="<%=avatarPath%>">
+                <img id="preview" class="avatar-preview" src="<%=avatarWithVersion%>">
                 <script>
                     function previewImage(event) {
                         const reader = new FileReader();

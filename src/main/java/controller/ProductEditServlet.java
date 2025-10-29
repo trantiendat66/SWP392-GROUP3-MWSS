@@ -106,7 +106,7 @@ public class ProductEditServlet extends HttpServlet {
         Map<String, String> errors = new HashMap<>();
 
         // Lấy dữ liệu
-        String productIdStr = request.getParameter("product_id");
+        int productId = Integer.parseInt(request.getParameter("product_id"));
         String productName = trim(request.getParameter("product_name"));
         String brand = trim(request.getParameter("brand"));
         String origin = trim(request.getParameter("origin"));
@@ -179,7 +179,7 @@ public class ProductEditServlet extends HttpServlet {
             errors.put("functionError", "Please enter the product function."); // Vui lòng nhập chức năng của sản phẩm.
         }
 
-        int price = 0, quantity = 0, categoryId = 0, accountId = 0, productId = 0;
+        int price = 0, quantity = 0, categoryId = 0, accountId = 0;
         boolean gender = "true".equalsIgnoreCase(genderParam);
 
         try {

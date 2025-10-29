@@ -10,7 +10,7 @@
 <%
     Product product = (Product) request.getAttribute("product");
     if (product == null) {
-        response.sendRedirect(request.getContextPath() + "/home");
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         return;
     }
 %>
