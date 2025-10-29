@@ -17,7 +17,16 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM Product ORDER BY product_id DESC";
+        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+                + "p.product_name, p.price, b.brand_name, p.origin,\n"
+                + "p.gender, p.description, p.warranty, p.machine,\n"
+                + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
+                + "p.[function], s.quantity\n"
+                + "FROM [Product] p\n"
+                + "JOIN Category c ON c.category_id = p.category_id\n"
+                + "JOIN Brand b ON b.brand_id = p.brand_id\n"
+                + "JOIN Stock s ON s.product_id = p.product_id\n"
+                + "ORDER BY p.product_id DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Product p = new Product();
@@ -27,7 +36,7 @@ public class ProductDAO extends DBContext {
                 p.setImage(rs.getString("image"));
                 p.setProductName(rs.getString("product_name"));
                 p.setPrice(rs.getInt("price"));
-                p.setBrand(rs.getString("brand"));
+                p.setBrand(rs.getString("brand_name"));
                 p.setOrigin(rs.getString("origin"));
                 p.setGender(rs.getBoolean("gender"));
                 p.setDescription(rs.getString("description"));
@@ -39,7 +48,7 @@ public class ProductDAO extends DBContext {
                 p.setStrap(rs.getString("strap"));
                 p.setDialColor(rs.getString("dial_color"));
                 p.setFunction(rs.getString("function"));
-                p.setQuantityProduct(rs.getInt("quantity_product"));
+                p.setQuantityProduct(rs.getInt("quantity"));
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -49,7 +58,16 @@ public class ProductDAO extends DBContext {
     }
 
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM Product p WHERE p.product_id = ?";
+        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+                + "p.product_name, p.price, b.brand_name, p.origin,\n"
+                + "p.gender, p.description, p.warranty, p.machine,\n"
+                + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
+                + "p.[function], s.quantity\n"
+                + "FROM [Product] p\n"
+                + "JOIN Category c ON c.category_id = p.category_id\n"
+                + "JOIN Brand b ON b.brand_id = p.brand_id\n"
+                + "JOIN Stock s ON s.product_id = p.product_id\n"
+                + "WHERE p.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -61,7 +79,7 @@ public class ProductDAO extends DBContext {
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
-                    p.setBrand(rs.getString("brand"));
+                    p.setBrand(rs.getString("brand_name"));
                     p.setOrigin(rs.getString("origin"));
                     p.setGender(rs.getBoolean("gender"));
                     p.setDescription(rs.getString("description"));
@@ -73,7 +91,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    p.setQuantityProduct(rs.getInt("quantity_product"));
+                    p.setQuantityProduct(rs.getInt("quantity"));
                     return p;
                 }
             }
@@ -123,25 +141,34 @@ public class ProductDAO extends DBContext {
 
     public List<Product> filterProducts(String brand, String gender, int minPrice, int maxPrice) {
         List<Product> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+                + "p.product_name, p.price, b.brand_name, p.origin,\n"
+                + "p.gender, p.description, p.warranty, p.machine,\n"
+                + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
+                + "p.[function], s.quantity\n"
+                + "FROM [Product] p\n"
+                + "JOIN Category c ON c.category_id = p.category_id\n"
+                + "JOIN Brand b ON b.brand_id = p.brand_id\n"
+                + "JOIN Stock s ON s.product_id = p.product_id\n"
+                + "WHERE 1=1");
         List<Object> params = new ArrayList<>();
         if (brand != null && !brand.trim().isEmpty()) {
-            sql.append(" AND brand = ?");
+            sql.append(" AND b.brand_name = ?");
             params.add(brand);
         }
         if (gender != null && !gender.trim().isEmpty()) {
-            sql.append(" AND gender = ?");
+            sql.append(" AND p.gender = ?");
             params.add(gender);
         }
         if (minPrice >= 0 && maxPrice != 0) {
-            sql.append(" AND price BETWEEN ? AND ?");
+            sql.append(" AND p.price BETWEEN ? AND ?");
             params.add(minPrice);
             params.add(maxPrice);
         } else if (minPrice != 0) { // trên 100 triệu
-            sql.append(" AND price >= ?");
+            sql.append(" AND p.price >= ?");
             params.add(minPrice);
         }
-        sql.append(" ORDER BY price ASC");
+        sql.append(" ORDER BY p.price ASC");
         try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
@@ -155,7 +182,7 @@ public class ProductDAO extends DBContext {
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
-                    p.setBrand(rs.getString("brand"));
+                    p.setBrand(rs.getString("brand_name"));
                     p.setOrigin(rs.getString("origin"));
                     p.setGender(rs.getBoolean("gender"));
                     p.setDescription(rs.getString("description"));
@@ -167,7 +194,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    p.setQuantityProduct(rs.getInt("quantity_product"));
+                    p.setQuantityProduct(rs.getInt("quantity"));
                     list.add(p);
                 }
             }
@@ -190,9 +217,16 @@ public class ProductDAO extends DBContext {
     }
 
     public Product getById(int productId) throws SQLException {
-        String sql = "SELECT product_id, category_id, account_id, image, product_name, price, brand, origin, gender, "
-                + "description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quantity_product "
-                + "FROM Product WHERE product_id = ?";
+        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+                + "p.product_name, p.price, b.brand_name, p.origin,\n"
+                + "p.gender, p.description, p.warranty, p.machine,\n"
+                + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
+                + "p.[function], s.quantity\n"
+                + "FROM [Product] p\n"
+                + "JOIN Category c ON c.category_id = p.category_id\n"
+                + "JOIN Brand b ON b.brand_id = p.brand_id\n"
+                + "JOIN Stock s ON s.product_id = p.product_id\n"
+                + "WHERE p.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
             try (ResultSet rs = ps.executeQuery()) {
