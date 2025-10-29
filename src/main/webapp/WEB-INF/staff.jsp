@@ -118,7 +118,8 @@
             tbody tr:hover td{
                 background: rgba(139,92,246,0.04)
             }
-            .order-id{
+            .order-id,
+            .feedbackId{
                 font-weight:700;
                 color:#333
             }
@@ -155,6 +156,7 @@
             }
 
             .right-actions{
+                min-width: 80px;
                 display:flex;
                 gap:10px;
                 justify-content:center
@@ -172,7 +174,8 @@
                 cursor:pointer;
                 border:1px solid rgba(0,0,0,0.08);
             }
-            .icon.view{
+            .icon.view,
+            .icon.viewf{
                 background:#fff;
                 color:#111;
                 border:1px solid #111
@@ -182,7 +185,8 @@
                 color:#111;
                 border:1px solid #111
             }
-            .icon.edit{
+            .icon.edit,
+            .icon.reply{
                 background:#fff;
                 color:#111;
                 border:1px solid #111
@@ -206,6 +210,42 @@
             .right {
                 flex: 1;
                 margin-left: 20px;
+            }
+            .listOrders,
+            .listProducts,
+            .listFeedbacks{
+                max-height: 400px;
+                overflow-y: auto;
+                overflow-y: auto;
+                overflow-x: hidden;
+                display: inline-block;
+                border: 1px solid #ddd;
+            }
+
+            .listOrders table,
+            .listProducts table,
+            .listFeedbacks table{
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .listOrders thead th,
+            .listProducts thead th,
+            .listFeedbacks thead th{
+                position: sticky;
+                top: 0;
+                background-color: #f8f9fa;
+                z-index: 2;
+                text-align: left;
+                padding: 8px;
+            }
+
+            .listOrders td,
+            .listProducts td,
+            .listFeedbacks td{
+                padding: 8px;
+                border-top: 1px solid #eee;
+                border-left: 1px solid #eee;
             }
 
             @media (max-width:980px){
@@ -392,7 +432,7 @@
 
                 <!--ở dưới đây làm order List cấm tk nào ko phận sự vào(ㆆ_ㆆ)-->
 
-                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="-1">
+                <div class="tab-pane fade " id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="-1">
                     <section class="main" aria-label="Order management">
                         <h4 id="title">Order List</h4>
                         <div class="listOrders" role="region" aria-labelledby="orders-title">
@@ -412,11 +452,11 @@
                                         <c:when test="${not empty requestScope.listOrders}">
                                             <c:forEach var="o" items="${requestScope.listOrders}">
                                                 <tr data-id="${o.order_id}">
-                                                    <td class="order-id">${o.order_id}</td>
+                                                    <td class="order-id"style="text-align: center">${o.order_id}</td>
                                                     <td>${o.customer_name}</td>
                                                     <td><span class="date-pill">${o.order_date}</span></td>
                                                     <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
-                                                    <td class="text-end text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
+                                                    <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
                                                     <td><div class="right-actions">
                                                             <form action="orderdetail">
                                                                 <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
@@ -482,7 +522,72 @@
                     </section>
 
                 </div>
-                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="v-pills-rate-feedback" role="tabpanel" aria-labelledby="v-pills-feedback-tab" tabindex="-1">
+                    <section class="main" aria-label="feedback management">
+                        <h4 id="title">Rate And Feedback Management</h4>
+                        <div class="listFeedbacks" role="region" aria-labelledby="feedbacks-title">
+                            <table aria-describedby="orders-desc">
+                                <thead>
+                                    <tr>
+                                        <th>Feedback ID</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Rating</th>
+                                        <th>Feedback</th>
+                                        <th>Date</th>
+                                        <th style="text-align:center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${not empty requestScope.listFeedbacks}">
+                                            <c:forEach var="o" items="${requestScope.listFeedbacks}">
+                                                <tr data-id="${o.feedbackId}">
+                                                    <td class="feedbackId" style="text-align: center">${o.feedbackId}</td>
+                                                    <td>${o.customerName}</td>
+                                                    <td>${o.product}</td>
+                                                    <td class="text-center" style="color: tomato; font-weight:700;">${o.rating}/5</td>
+                                                    <td>${o.comment}</td>
+                                                    <td><span class="date-pill">${o.createAt}</span></td>
+                                                    <td><div class="right-actions">
+                                                            <form action="orderdetail">
+                                                                <button class="icon viewf" type="button" name="feedbackIdV" value="${o.feedbackId}" title="Viewf" aria-label="Hide">👁</button>
+                                                                <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
+                                                            </form>
+                                                        </div></td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="6" style="text-align: center;">No orders found in the database.</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Popup View -->
+                        <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                                <div class="modal-content bg-light text-black" >
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="feedabckDetailLabel">Reply Feedback</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!--chứa popup từ servlet-->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        <button id="applyReply" class="btn btn-primary btn-sm">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
             </div>
         </div>
@@ -556,6 +661,25 @@
                             })
                             .catch(err => {
                                 console.error('Error loading order detail:', err);
+                                alert('Không thể tải chi tiết đơn hàng.');
+                            });
+                });
+            });
+            //button mở popup feedbackDetail
+            document.querySelectorAll('.icon.reply').forEach(fbBtn => {
+                fbBtn.addEventListener('click', (e) => {
+                    const feedbackId = fbBtn.value;
+                    console.log("Fetching order detail for ID:", feedbackId);
+
+                    fetch('staff/feedback/management?feedbackId=' + feedbackId, {method: 'GET'})
+                            .then(response => response.text())
+                            .then(html => {
+                                document.querySelector('#feedbackDetailModal .modal-body').innerHTML = html;
+                                const modal = new bootstrap.Modal(document.getElementById('feedbackDetailModal'));
+                                modal.show();
+                            })
+                            .catch(err => {
+                                console.error('Error loading feedback detail:', err);
                                 alert('Không thể tải chi tiết đơn hàng.');
                             });
                 });

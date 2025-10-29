@@ -19,6 +19,8 @@ public class FeedbackView {
     private String comment;
     private Date createAt;
     private String customerName;
+    private String product;
+    private int feedbackId;
 
     public FeedbackView() {
     }
@@ -30,6 +32,32 @@ public class FeedbackView {
         this.customerName = customerName;
     }
 
+    public FeedbackView(int rating, String comment, Date createAt, String customerName, String product, int feedbackId) {
+        this.rating = rating;
+        this.comment = comment;
+        this.createAt = createAt;
+        this.customerName = customerName;
+        this.product = product;
+        this.feedbackId = feedbackId;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public int getFeedbackId() {
+        return feedbackId;
+    }
+
+    public void setFeedbackId(int feedbackId) {
+        this.feedbackId = feedbackId;
+    }
+
+    
     public int getRating() {
         return rating;
     }

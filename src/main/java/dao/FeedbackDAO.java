@@ -13,9 +13,11 @@ import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.FeedbackInfo;
 import model.FeedbackView;
 
 /**
@@ -238,4 +240,60 @@ public class FeedbackDAO extends DBContext {
             }
         }
     }
+    public List<FeedbackView> getFeedbackByStaffId(int account_id) {
+        List<FeedbackView> list = new ArrayList<>();
+        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at\n"
+                + "FROM Feedback f\n"
+                + "JOIN Customer c ON c.customer_id = f.customer_id\n"
+                + "JOIN [Product] p ON p.product_id = f.product_id\n"
+                + "Where f.account_id = ?"
+                + "ORDER BY f.create_at DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, account_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String customerName = rs.getString("customer_name");
+                    String productName = rs.getString("product_name");
+                    int rating = rs.getInt("rating");
+                    String feedback = rs.getString("comment");
+                    Timestamp date = rs.getTimestamp("create_at");
+                    int feedbackId = rs.getInt("feedback_id");
+                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public FeedbackInfo getFeedbackByFeedbackId(int feedback_id) {
+        FeedbackInfo fi = new FeedbackInfo();
+        String sql = "SELECT f.account_id, c.customer_id, p.image, p.product_name, f.order_id, c.customer_name, f.rating, f.create_at, f.comment\n"
+                + "FROM Feedback f\n"
+                + "JOIN Customer c ON c.customer_id = f.customer_id\n"
+                + "JOIN [Product] p ON p.product_id = f.product_id\n"
+                + "WHERE f.feedback_id = ?;";
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, feedback_id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    fi.setFeedbackId(feedback_id);
+                    fi.setAccountId(rs.getInt("account_id"));
+                    fi.setCustomerId(rs.getInt("customer_id"));
+                    fi.setImage(rs.getString("image"));
+                    fi.setProductName(rs.getString("product_name"));
+                    fi.setOrderId(rs.getInt("order_id"));
+                    fi.setCustomerName("customer_name");
+                    fi.setRating(rs.getInt("rating"));
+                    fi.setCreateAt(rs.getTimestamp("create_at"));
+                    fi.setComment(rs.getString("comment"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return fi;
+    }   
+
 }

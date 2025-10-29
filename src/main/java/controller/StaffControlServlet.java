@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.FeedbackDAO;
 import dao.OrderDAO;
 import dao.StaffDAO;
 import dao.ProductDAO;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import model.Staff;
 import model.Product;
 import java.util.List;
+import model.FeedbackView;
 import model.Order;
 import model.OrderDetail;
 
@@ -136,6 +138,14 @@ public class StaffControlServlet extends HttpServlet {
             OrderDAO orderDao = new OrderDAO();
             List<Order> listOrders = orderDao.getOrderByIdStaff(staff.getAccountId());
             request.setAttribute("listOrders", listOrders);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        //        Khu này là ListFeedback cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
+        try {
+            FeedbackDAO feedbackDao = new FeedbackDAO();
+            List<FeedbackView> listFeedbacks = feedbackDao.getFeedbackByStaffId(staff.getAccountId());
+            request.setAttribute("listFeedbacks", listFeedbacks);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
