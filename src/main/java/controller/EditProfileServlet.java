@@ -19,7 +19,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Date;
 import model.Customer;
-import model.Staff; //* thêm để xử lý admin
+
 /**
  *
  * @author hau
@@ -32,6 +32,15 @@ import model.Staff; //* thêm để xử lý admin
 @WebServlet(name = "EditProfileServlet", urlPatterns = {"/edit_profile"})
 public class EditProfileServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -50,63 +59,50 @@ public class EditProfileServlet extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute("customer") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        CustomerDAO dao = new CustomerDAO();
-        Customer customer = null; //* thêm
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
 
-        Staff staff = (Staff) session.getAttribute("staff"); //* nếu admin đăng nhập
-        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) { //* nếu là admin
-            String id = request.getParameter("id"); //* lấy id customer
-            if (id != null) {
-                customer = dao.getCustomerById(Integer.parseInt(id)); //* lấy thông tin khách hàng cần edit
-                request.setAttribute("source", "admin"); //* để JSP biết đang là admin
-            } else {
-                response.sendRedirect(request.getContextPath() + "/admin/customerlist"); //* không có id thì quay lại danh sách khách hàng
-                return;
-            }
-        } else { //* nếu không phải admin (là customer)
-            Customer loggedInCustomer = (Customer) session.getAttribute("customer");
-            if (loggedInCustomer == null) {
-                response.sendRedirect(request.getContextPath() + "/login");
-                return;
-            }
-            // Load lại dữ liệu từ DB để có dữ liệu mới nhất
-            customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
-            request.setAttribute("source", "customer"); //* để JSP biết đang là customer
-        }
+        // Load lại dữ liệu từ DB để có dữ liệu mới nhất
+        CustomerDAO dao = new CustomerDAO();
+        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
 
         request.setAttribute("customer", customer);
         request.getRequestDispatcher("/edit_profile.jsp").forward(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         CustomerDAO dao = new CustomerDAO();
         HttpSession session = request.getSession(false);
-
-        // Customer loggedInCustomer = (Customer) session.getAttribute("customer");
-        // Customer c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
-        Staff staff = (Staff) session.getAttribute("staff"); //* thêm
-        Customer c; //* thay vì cố định là customer
-
-        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) { //* nếu là admin thì lấy id từ form
-            String id = request.getParameter("id");
-            c = dao.getCustomerById(Integer.parseInt(id));
-        } else { //* ngược lại là customer
-            Customer loggedInCustomer = (Customer) session.getAttribute("customer");
-            c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
-        }
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        Customer c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
 
         String customer_name = request.getParameter("customer_name");
         if (customer_name == null || !customer_name.matches("[a-zA-Z\\s]+")) {
@@ -160,7 +156,7 @@ public class EditProfileServlet extends HttpServlet {
                 dob = null;
             }
         } else {
-            request.setAttribute("dobError", "Date of birth cannot be blank."); //* sửa thông báo lỗi cho đúng
+            request.setAttribute("dobError", "Address cannot be blank.");
             request.setAttribute("customer", c);
             request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
             return;
@@ -199,17 +195,15 @@ public class EditProfileServlet extends HttpServlet {
         } else {
             request.getSession().setAttribute("updateStatus", "error");
         }
-
-        // session.setAttribute("customer", c);
-        // response.sendRedirect(request.getContextPath() + "/profile");
-        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) { //* nếu là admin
-            response.sendRedirect(request.getContextPath() + "/admin/customerlist"); //* quay về danh sách khách hàng
-        } else { //* nếu là customer
-            session.setAttribute("customer", c);
-            response.sendRedirect(request.getContextPath() + "/profile");
-        }
+        session.setAttribute("customer", c);
+        response.sendRedirect(request.getContextPath() + "/profile");
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";
