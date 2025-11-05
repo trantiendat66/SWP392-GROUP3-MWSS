@@ -142,7 +142,7 @@ public class EditProfileServlet extends HttpServlet {
         if (filePart != null && filePart.getSize() > 0) {
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         }
-        String uploadPath = getServletContext().getRealPath("/") + "assert/image";
+        String uploadPath = "C:\\Users\\hau\\SWP392-GROUP3-MWSS\\src\\main\\webapp\\assert\\avatar";
 
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
@@ -178,13 +178,19 @@ public class EditProfileServlet extends HttpServlet {
                 genderValue = "1";
             }
             c.setGender(genderValue);
-            // Nếu có upload ảnh mới
             if (fileName != null && !fileName.isEmpty()) {
+                // Có upload ảnh mới
                 filePart.write(uploadPath + File.separator + fileName);
-                c.setImage("assert/image/" + fileName); // Cập nhật ảnh mới
+                c.setImage("assert/avatar/" + fileName);
             } else {
-                // Không upload ảnh mới → giữ ảnh cũ
-                c.setImage(c.getImage());
+                // Không upload ảnh mới
+                if (c.getImage() == null || c.getImage().trim().isEmpty()) {
+                    // Nếu chưa có ảnh trong DB → gán ảnh mặc định
+                    c.setImage("assert/avatar/avatar_md.jpg");
+                } else {
+                    // Nếu đã có ảnh cũ → giữ nguyên
+                    c.setImage(c.getImage());
+                }
             }
             boolean ok = dao.updateCustomer(c);
             if (ok) {
