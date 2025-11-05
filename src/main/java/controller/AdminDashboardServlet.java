@@ -48,41 +48,12 @@ public class AdminDashboardServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         String keyword = request.getParameter("keyword");
         List<Product> products;
-               
         
-        // * Thêm các tham số lọc sản phẩm
-        String brand = request.getParameter("brand"); // *
-        String gender = request.getParameter("gender"); // *
-        String priceRange = request.getParameter("priceRange"); // *
-
-        int minPrice = 0; // *
-        int maxPrice = 0; // *
-
-        // * Xử lý chuỗi priceRange -> tách min - max
-        if (priceRange != null && !priceRange.isEmpty()) { // *
-            if (priceRange.contains("-")) { // *
-                String[] parts = priceRange.split("-"); // *
-                minPrice = Integer.parseInt(parts[0]); // *
-                maxPrice = Integer.parseInt(parts[1]); // *
-            } else if (priceRange.endsWith("+")) { // *
-                minPrice = Integer.parseInt(priceRange.replace("+", "")); // *
-                maxPrice = 0; // *
-            }
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            products = productDAO.searchProducts(keyword.trim());
+        } else {
+            products = productDAO.getAllProducts();
         }
-
-        // * Áp dụng logic tìm kiếm + lọc giống StaffControlServlet
-        if ((brand != null && !brand.isEmpty()) // *
-                || (gender != null && !gender.isEmpty()) // *
-                || (priceRange != null && !priceRange.isEmpty())) { // *
-            products = productDAO.filterProducts(brand, gender, minPrice, maxPrice); // *
-            request.setAttribute("brand", brand); // *
-            request.setAttribute("gender", gender); // *
-            request.setAttribute("priceRange", priceRange); // *
-        } else if (keyword != null && !keyword.trim().isEmpty()) { // *
-            products = productDAO.searchProducts(keyword.trim()); // *
-        } else { // *
-            products = productDAO.getAllProducts(); // *
-        }}
         
         AnalyticsDAO analyticsDAO = new AnalyticsDAO(); 
         long totalRevenue = analyticsDAO.getTotalRevenue();
