@@ -21,11 +21,10 @@ public class ProductDAO extends DBContext {
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], s.quantity\n"
+                + "p.[function], p.quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
-                + "LEFT JOIN Stock s ON s.product_id = p.product_id\n"
                 + "ORDER BY p.product_id DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -63,11 +62,10 @@ public class ProductDAO extends DBContext {
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], s.quantity\n"
+                + "p.[function], p.quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
-                + "LEFT JOIN Stock s ON s.product_id = p.product_id\n"
                 + "WHERE p.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -109,11 +107,10 @@ public class ProductDAO extends DBContext {
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], s.quantity\n"
+                + "p.[function], p.quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
-                + "LEFT JOIN Stock s ON s.product_id = p.product_id\n"
                 + "WHERE p.product_name LIKE ? OR p.description LIKE ? ORDER BY p.product_id DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             String patt = "%" + (keyword == null ? "" : keyword.trim()) + "%";
@@ -157,11 +154,10 @@ public class ProductDAO extends DBContext {
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], s.quantity\n"
+                + "p.[function], p.quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
-                + "LEFT JOIN Stock s ON s.product_id = p.product_id\n"
                 + "WHERE 1=1");
         List<Object> params = new ArrayList<>();
         if (brand != null && !brand.trim().isEmpty()) {
@@ -234,11 +230,10 @@ public class ProductDAO extends DBContext {
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], s.quantity\n"
+                + "p.[function], p.quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
-                + "LEFT JOIN Stock s ON s.product_id = p.product_id\n"
                 + "WHERE p.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
@@ -290,7 +285,7 @@ public class ProductDAO extends DBContext {
     }
 
     public void addProduct(Product p) throws SQLException {
-        String sql = "INSERT INTO Product (category_id, account_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function])\n"
+        String sql = "INSERT INTO Product (category_id, account_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quanity)\n"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, p.getCategoryId());
@@ -310,7 +305,7 @@ public class ProductDAO extends DBContext {
             ps.setString(15, p.getStrap());
             ps.setString(16, p.getDialColor());
             ps.setString(17, p.getFunction());
-
+            ps.setInt(18, p.getQuantityProduct());
             int rowAffected = ps.executeUpdate();
             if (rowAffected == 0) {
                 throw new SQLException("Thêm sản phẩm thất bại, không có hàng nào được thêm.");
@@ -320,14 +315,13 @@ public class ProductDAO extends DBContext {
 
     public void updateProduct(Product p) throws SQLException {
         String sqlProduct = "UPDATE Product SET category_id = ?, account_id = ?, brand_id = ?, image = ?, product_name = ?, price = ?, origin = ?, gender = ?, "
-                + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ? "
+                + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ? , quantity = ? "
                 + "WHERE product_id = ?";
-        String sqlStock = "UPDATE Stock SET quantity = ? WHERE product_id = ?";
 
         try (Connection cn = getConnection()) {
             cn.setAutoCommit(false); // bắt đầu transaction
 
-            try (PreparedStatement ps1 = cn.prepareStatement(sqlProduct); PreparedStatement ps2 = cn.prepareStatement(sqlStock)) {
+            try (PreparedStatement ps1 = cn.prepareStatement(sqlProduct)) {
 
                 // --- Update Product ---
                 ps1.setInt(1, p.getCategoryId());
@@ -353,17 +347,8 @@ public class ProductDAO extends DBContext {
                 if (rows1 == 0) {
                     throw new SQLException("Không tìm thấy product_id = " + p.getProductId());
                 }
-
-                // --- Update Stock ---
-                ps2.setInt(1, p.getQuantityProduct());
-                ps2.setInt(2, p.getProductId());
-
-                int rows2 = ps2.executeUpdate();
-                if (rows2 == 0) {
-                    throw new SQLException("Không tìm thấy stock cho product_id = " + p.getProductId());
-                }
-
                 cn.commit(); // nếu cả 2 thành công → commit
+                System.out.println("Transaction commit successfully.");
             } catch (Exception e) {
                 cn.rollback(); // lỗi → rollback
                 throw e;

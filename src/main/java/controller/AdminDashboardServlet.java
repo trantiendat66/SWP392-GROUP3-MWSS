@@ -65,21 +65,21 @@ public class AdminDashboardServlet extends HttpServlet {
         int totalCompletedOrders = analyticsDAO.getTotalCompletedOrders();
         int totalActiveCustomers = analyticsDAO.getTotalActiveCustomers();
         
-        request.setAttribute("products", products);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("totalRevenue", totalRevenue);
-        request.setAttribute("topProducts", topProducts);
-        request.setAttribute("monthlyRevenue", monthlyRevenue);
-        request.setAttribute("currentMonthRevenue", currentMonthRevenue);
-        request.setAttribute("currentYearRevenue", currentYearRevenue);
-        request.setAttribute("totalCompletedOrders", totalCompletedOrders);
-        request.setAttribute("totalActiveCustomers", totalActiveCustomers);
-        
-        System.out.println("AdminDashboardServlet: keyword=" + keyword + ", products found=" + (products == null ? 0 : products.size()));
-        request.setAttribute("products", products);
-        request.setAttribute("keyword", keyword);
-        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
-    }
+//        request.setAttribute("products", products);
+//        request.setAttribute("keyword", keyword);
+//        request.setAttribute("totalRevenue", totalRevenue);
+//        request.setAttribute("topProducts", topProducts);
+//        request.setAttribute("monthlyRevenue", monthlyRevenue);
+//        request.setAttribute("currentMonthRevenue", currentMonthRevenue);
+//        request.setAttribute("currentYearRevenue", currentYearRevenue);
+//        request.setAttribute("totalCompletedOrders", totalCompletedOrders);
+//        request.setAttribute("totalActiveCustomers", totalActiveCustomers);
+//        
+//        System.out.println("AdminDashboardServlet: keyword=" + keyword + ", products found=" + (products == null ? 0 : products.size()));
+//        request.setAttribute("products", products);
+//        request.setAttribute("keyword", keyword);
+//        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+//    }
 }
 
 
