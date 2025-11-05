@@ -95,8 +95,8 @@ public class OrderDAO extends DBContext {
 
             // 3) Trừ kho có điều kiện
             List<Integer> failed = new ArrayList<>();
-            String sqlStock = "UPDATE Product SET quantity_product = quantity_product - ? "
-                    + "WHERE product_id=? AND quantity_product >= ?";
+            String sqlStock = "UPDATE Product SET quantity = quantity - ? "
+                    + "WHERE product_id=? AND quantity >= ?";
             try (PreparedStatement ps = cn.prepareStatement(sqlStock)) {
                 for (Cart it : byProduct.values()) {
                     ps.setInt(1, it.getQuantity());

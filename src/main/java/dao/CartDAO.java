@@ -29,7 +29,7 @@ public class CartDAO extends DBContext {
     public List<Cart> getCartByCustomerId(int customerId) {
         List<Cart> list = new ArrayList<>();
         String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity, "
-                + "p.product_name, p.image, p.brand, p.quantity_product "
+                + "p.product_name, p.image, p.brand, p.quantity "
                 + "FROM Cart c "
                 + "INNER JOIN Product p ON c.product_id = p.product_id "
                 + "WHERE c.customer_id = ? "
@@ -48,7 +48,7 @@ public class CartDAO extends DBContext {
                     cart.setProductName(rs.getString("product_name"));
                     cart.setProductImage(rs.getString("image"));
                     cart.setBrand(rs.getString("brand"));
-                    cart.setAvailableQuantity(rs.getInt("quantity_product"));
+                    cart.setAvailableQuantity(rs.getInt("quantity"));
                     list.add(cart);
                 }
             }
