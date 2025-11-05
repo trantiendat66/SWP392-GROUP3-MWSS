@@ -41,9 +41,8 @@
         flex-shrink: 0;
         position: relative;
     }
-    /* Profile card */
     .profile-card {
-        text-align: center;
+        text-align: center;    /* căn giữa toàn bộ bên trong */
         margin-bottom: 18px;
     }
     .profile-avatar {
@@ -73,6 +72,7 @@
         margin-left: auto;      /* căn giữa theo chiều ngang */
         margin-right: auto;
     }
+
     /* Nav */
     .nav-menu {
         list-style: none;
@@ -239,7 +239,6 @@
                      onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
                 <c:choose>
                     <c:when test="${not empty sessionScope.staff}">
-                        <div class="profile-name">${sessionScope.staff.userName}</div>
                         <div class="profile-role">${sessionScope.staff.role}</div>
                     </c:when>
                     <c:otherwise>
@@ -290,13 +289,11 @@
                                                         <i class="fa fa-eye"></i> View
                                                     </a>
 
-                                                    <%-- EDIT--%>                                                   
-                                                    <a href="${pageContext.request.contextPath}/edit_profile?id=${c.customer_id}"
-                                                       class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
+                                                    <%-- EDIT--%>
+                                                    <%--Thêm địa chỉ để edit trong admin Customer Management --%>
+                                                    <a href="?id=${c.customer_id}&action=edit" class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
-
-
 
                                                     <%--DELETE--%>
                                                     <a href="deletecustomer?id=${c.customer_id}" 
@@ -399,7 +396,7 @@
                                 <%
                                     Long totalRevenue = (Long) request.getAttribute("totalRevenue");
                                     if (totalRevenue != null) {
-                                        out.print(String.format("%,d", totalRevenue) + " VNĐ");
+                                        out.print(String.format("%,d", totalRevenue) + " VND");
                                     } else {
                                         out.print("0 VNĐ");
                                     }
@@ -426,7 +423,6 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-3">
-                        <!-- Search Form -->
                         <form action="${pageContext.request.contextPath}/admin/dashboard" method="GET" class="d-flex flex-grow-1 me-2">
                             <input type="text" 
                                    name="keyword" 
@@ -435,82 +431,9 @@
                                    value="${param.keyword != null ? param.keyword : ''}"
                                    aria-label="Search">
                             <button type="submit" class="btn btn-primary me-2">Search</button>
-
-                            <!-- Filter Button -->
-                            <button id="toggleFilterBtn" type="button" 
-                                    class="btn btn-outline-secondary d-inline-flex align-items-center me-2"
-                                    data-bs-toggle="modal" data-bs-target="#filterModal">
-                                <i class="bi bi-funnel"></i> Filter
-                            </button>
                         </form>
-
-                        <!-- Add Product Button -->
                         <button class="btn btn-success" id="addProductBtn">Add New Product</button>
                     </div>
-
-                    <!-- Filter Modal -->
-                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <form action="${pageContext.request.contextPath}/admin/dashboard" method="GET">
-                                    <div class="modal-body">
-                                        <!-- Brand -->
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Brand</label>
-                                            <select name="brand" class="form-select">
-                                                <option value="">All Brands</option>
-                                                <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
-                                                <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
-                                                <option value="Seiko" ${param.brand == 'Seiko' ? 'selected' : ''}>Seiko</option>
-                                                <option value="Tissot" ${param.brand == 'Tissot' ? 'selected' : ''}>Tissot</option>
-                                                <option value="Doxa" ${param.brand == 'Doxa' ? 'selected' : ''}>Doxa</option>
-                                                <option value="KOI" ${param.brand == 'KOI' ? 'selected' : ''}>KOI</option>
-                                                <option value="Saga" ${param.brand == 'Saga' ? 'selected' : ''}>Saga</option>
-                                                <option value="Orient" ${param.brand == 'Orient' ? 'selected' : ''}>Orient</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Gender -->
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Gender</label>
-                                            <select name="gender" class="form-select">
-                                                <option value="">All Genders</option>
-                                                <option value="1" ${param.gender == '1' ? 'selected' : ''}>Male</option>
-                                                <option value="0" ${param.gender == '0' ? 'selected' : ''}>Female</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Price Range -->
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Price Range</label>
-                                            <select name="priceRange" class="form-select">
-                                                <option value="">All Prices</option>
-                                                <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 million</option>
-                                                <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 million</option>
-                                                <option value="4000000-10000000" ${param.priceRange == '4000000-10000000' ? 'selected' : ''}>4 - 10 million</option>
-                                                <option value="10000000-40000000" ${param.priceRange == '10000000-40000000' ? 'selected' : ''}>10 - 40 million</option>
-                                                <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 million</option>
-                                                <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Over 100 million</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success">Apply Filter</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
 
                     <%-- Simple flash (no hide, no JS) --%>
                     <%
@@ -543,7 +466,7 @@
                                     <th>Product Name</th>
                                     <th>Brand</th>
                                     <th>Category</th>
-                                    <th>Price(VNĐ)</th>
+                                    <th>Price(VND)</th>
                                     <th>Quantity</th>
                                     <th style="text-align:center; min-width:160px;">Actions</th>
                                 </tr>
