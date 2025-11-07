@@ -49,9 +49,11 @@ public class PaymentPageServlet extends HttpServlet {
                 int price = pdao.getCurrentPrice(bnPid);
 
                 List<Cart> view = new ArrayList<>();
-                view.add(new Cart(0, ((Customer) session.getAttribute("customer")).getCustomer_id(),
+                Cart buyNowCart = new Cart(0, ((Customer) session.getAttribute("customer")).getCustomer_id(),
                         bnPid, price, bnQty,
-                        p.getProductName(), p.getImage(), p.getBrand()));
+                        p.getProductName(), p.getImage(), p.getBrand());
+                buyNowCart.setAvailableQuantity(p.getQuantityProduct());
+                view.add(buyNowCart);
 
                 int total = price * bnQty;
 
