@@ -136,9 +136,11 @@
     }
 
     .total-price {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         font-weight: bold;
         color: #28a745;
+        margin-right: 8px;
+        word-break: break-word;
     }
 
     @media (max-width: 768px) {
@@ -249,20 +251,21 @@
                                                min="1" 
                                                max="${item.availableQuantity}"
                                                data-cart-id="${item.cartId}"
-                                               data-max-quantity="${item.availableQuantity}">
+                                               data-max-quantity="${item.availableQuantity}"
+                                               data-unit-price="${item.price}">
                                         <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                             <i class="bi bi-plus"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 col-3 text-end">
+                                <div class="col-md-2 col-3 text-end pe-2">
                                     <p class="total-price mb-1" id="total-${item.cartId}">
                                         <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
                                     </p>
                                 </div>
 
-                                <div class="col-md-1 col-3 text-end">
+                                <div class="col-md-1 col-3 text-end ps-0">
                                     <button class="btn-cart-action btn-remove" 
                                             data-cart-id="${item.cartId}"
                                             title="Remove item">
@@ -340,9 +343,28 @@
             // Lưu giá trị ban đầu
             input.setAttribute('data-old-value', input.value);
             
+            // Cập nhật ngay khi người dùng nhập (real-time)
+            input.addEventListener('input', function () {
+                const cartId = this.getAttribute('data-cart-id');
+                const newQuantity = parseInt(this.value) || 0;
+                const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
+                const unitPrice = parseInt(this.getAttribute('data-unit-price'));
+                
+                // Cập nhật UI ngay lập tức
+                if (newQuantity >= 1 && newQuantity <= maxQuantity) {
+                    const itemTotal = unitPrice * newQuantity;
+                    const totalElement = document.getElementById('total-' + cartId);
+                    if (totalElement) {
+                        totalElement.textContent = new Intl.NumberFormat('en-US').format(itemTotal) + ' VND';
+                    }
+                    updateCartTotal();
+                }
+            });
+            
+            // Xử lý khi người dùng rời khỏi input (blur) hoặc nhấn Enter (change)
             input.addEventListener('change', function () {
                 const cartId = this.getAttribute('data-cart-id');
-                const newQuantity = parseInt(this.value);
+                const newQuantity = parseInt(this.value) || 1;
                 updateQuantity(cartId, newQuantity);
             });
         });
@@ -365,6 +387,7 @@
         // Kiểm tra số lượng tối đa
         const quantityInput = document.getElementById('quantity-' + cartId);
         const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
+        const unitPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
         
         if (newQuantity > maxQuantity) {
             showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn lại trong kho', 'error');
@@ -373,26 +396,27 @@
             return;
         }
 
+        // Cập nhật UI ngay lập tức (optimistic update)
+        quantityInput.value = newQuantity;
+        quantityInput.setAttribute('data-old-value', newQuantity);
+        
+        // Tính toán và cập nhật tổng tiền cho item này
+        const itemTotal = unitPrice * newQuantity;
+        const totalElement = document.getElementById('total-' + cartId);
+        if (totalElement) {
+            totalElement.textContent = new Intl.NumberFormat('en-US').format(itemTotal) + ' VND';
+        }
+        
+        // Cập nhật tổng tiền chung
+        updateCartTotal();
+
+        // Gọi API để cập nhật trong database
         fetch('${pageContext.request.contextPath}/cart?action=update&cartId=' + cartId + '&quantity=' + newQuantity, {
             method: 'GET'
         })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('quantity-' + cartId).value = newQuantity;
-                        // Lưu giá trị cũ để có thể reset nếu cần
-                        quantityInput.setAttribute('data-old-value', newQuantity);
-                        
-                        const priceElement = document.querySelector('#total-' + cartId);
-                        const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
-                        const currentTotal = parseInt(currentTotalText);
-                        const currentQuantity = parseInt(document.getElementById('quantity-' + cartId).value);
-                        const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
-                        const total = price * newQuantity;
-                        document.getElementById('total-' + cartId).textContent =
-                                new Intl.NumberFormat('en-US').format(total) + ' VND';
-
-                        updateCartTotal();
                         showMessage(data.message, 'success');
                         // Cập nhật số lượng giỏ hàng trong header
                         if (typeof updateCartCount === 'function') {
@@ -400,15 +424,15 @@
                         }
                     } else {
                         showMessage(data.message, 'error');
-                        // Reset về giá trị cũ nếu có lỗi
-                        quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
+                        // Reload để lấy giá trị đúng từ server
+                        location.reload();
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     showMessage('An error occurred while updating.', 'error');
-                    // Reset về giá trị cũ nếu có lỗi
-                    quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
+                    // Reload để lấy giá trị đúng từ server
+                    location.reload();
                 });
     }
 
@@ -472,13 +496,21 @@
     // Update total cart amount
     function updateCartTotal() {
         let total = 0;
+        // Chỉ tính tổng của các cart items (có id bắt đầu bằng "total-" và là số cartId)
         document.querySelectorAll('[id^="total-"]').forEach(element => {
-            const priceText = element.textContent.replace(/[^\d]/g, '');
-            total += parseInt(priceText);
+            // Kiểm tra xem có phải là total của cart item không (id có dạng "total-{cartId}")
+            const id = element.id;
+            if (id.startsWith('total-') && id !== 'cart-total' && id !== 'total-items') {
+                const priceText = element.textContent.replace(/[^\d]/g, '');
+                const price = parseInt(priceText) || 0;
+                total += price;
+            }
         });
 
-        document.getElementById('cart-total').textContent =
-                new Intl.NumberFormat('en-US').format(total) + ' VND';
+        const cartTotalElement = document.getElementById('cart-total');
+        if (cartTotalElement) {
+            cartTotalElement.textContent = new Intl.NumberFormat('en-US').format(total) + ' VND';
+        }
     }
 
     // Checkout
