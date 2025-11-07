@@ -72,19 +72,41 @@ public class EditProfileServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("customer") == null) {
+        if (session == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
-
-        // Load lại dữ liệu từ DB để có dữ liệu mới nhất
         CustomerDAO dao = new CustomerDAO();
-        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
 
+//Nhánh Admin: cho phép mở sửa theo id từ Customer Management
+        model.Staff staff = (model.Staff) session.getAttribute("staff");
+        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {
+            String idParam = request.getParameter("id"); // ?id=...
+            if (idParam == null || idParam.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/admin/customerlist");
+                return;
+            }
+            Customer customer = dao.getCustomerById(Integer.parseInt(idParam));
+            if (customer == null) {
+                response.sendRedirect(request.getContextPath() + "/admin/customerlist");
+                return;
+            }
+            request.setAttribute("customer", customer);
+            request.getRequestDispatcher("/edit_profile.jsp").forward(request, response);
+            return;
+        }
+
+// ✅ Nhánh Customer: giữ nguyên luồng cũ
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        if (loggedInCustomer == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+        Customer customer = dao.getCustomerById(loggedInCustomer.getCustomer_id());
         request.setAttribute("customer", customer);
         request.getRequestDispatcher("/edit_profile.jsp").forward(request, response);
+
     }
 
     /**
@@ -101,8 +123,18 @@ public class EditProfileServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         CustomerDAO dao = new CustomerDAO();
         HttpSession session = request.getSession(false);
-        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
-        Customer c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
+
+// Nếu Admin: cập nhật theo customerID từ form
+        model.Staff staff = (model.Staff) session.getAttribute("staff");
+        Customer c;
+        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {
+            String idFromForm = request.getParameter("customerID");
+            c = dao.getCustomerById(Integer.parseInt(idFromForm));
+        } else {
+            //  Customer tự cập nhật chính mình (giữ nguyên)
+            Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+            c = dao.getCustomerById(loggedInCustomer.getCustomer_id());
+        }
 
         String customer_name = request.getParameter("customer_name");
         if (customer_name == null || !customer_name.matches("[a-zA-Z\\s]+")) {
@@ -192,6 +224,14 @@ public class EditProfileServlet extends HttpServlet {
                     c.setImage(c.getImage());
                 }
             }
+            // Chỉ Admin mới được đổi trạng thái tài khoản
+            if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {
+                String accountStatus = request.getParameter("account_status"); // từ <select name="account_status">
+                if (accountStatus != null && !accountStatus.trim().isEmpty()) {
+                    c.setAccount_status(accountStatus.trim()); // "Active" | "Inactive"
+                }
+            }
+
             boolean ok = dao.updateCustomer(c);
             if (ok) {
                 request.getSession().setAttribute("updateStatus", "success");
@@ -201,8 +241,14 @@ public class EditProfileServlet extends HttpServlet {
         } else {
             request.getSession().setAttribute("updateStatus", "error");
         }
-        session.setAttribute("customer", c);
-        response.sendRedirect(request.getContextPath() + "/profile");
+        if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {
+            //  Admin cập nhật xong quay về danh sách khách hàng
+            response.sendRedirect(request.getContextPath() + "/admin/customerlist");
+        } else {
+            //  Customer: giữ lại session và về profile của mình
+            session.setAttribute("customer", c);
+            response.sendRedirect(request.getContextPath() + "/profile");
+        }
     }
 
     /**
