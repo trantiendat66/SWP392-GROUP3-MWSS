@@ -27,6 +27,11 @@
         background: white;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    
+    .cart-item.border-warning {
+        border: 2px solid #ffc107;
+        background-color: #fffbf0;
+    }
 
     .cart-item-image {
         width: 100px;
@@ -179,11 +184,27 @@
         </c:when>
 
         <c:otherwise>
+            <c:set var="hasStockIssue" value="false" />
+            <c:forEach var="item" items="${cartItems}">
+                <c:if test="${item.quantity > item.availableQuantity}">
+                    <c:set var="hasStockIssue" value="true" />
+                </c:if>
+            </c:forEach>
+            
+            <c:if test="${hasStockIssue}">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Cảnh báo:</strong> Một số sản phẩm trong giỏ hàng có số lượng vượt quá số lượng còn trong kho. 
+                    Vui lòng điều chỉnh số lượng trước khi thanh toán.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            
             <div class="row">
                 <!-- Cart Items -->
                 <div class="col-lg-8">
                     <c:forEach var="item" items="${cartItems}">
-                        <div class="cart-item" id="cart-item-${item.cartId}">
+                        <div class="cart-item ${item.quantity > item.availableQuantity ? 'border-warning' : ''}" id="cart-item-${item.cartId}">
                             <div class="row align-items-center">
                                 <div class="col-md-2 col-3">
                                     <img src="${pageContext.request.contextPath}/assert/image/${item.productImage}" 
@@ -196,7 +217,24 @@
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="price-display mb-1">
                                         <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                    </p>                                
+                                    </p>
+                                    <div class="mb-1">
+                                        <strong>Stock:</strong> 
+                                        <c:choose>
+                                            <c:when test="${item.availableQuantity > 0}">
+                                                <span class="badge bg-success">${item.availableQuantity} items available</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge bg-danger">Out of Stock</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <c:if test="${item.quantity > item.availableQuantity}">
+                                        <div class="alert alert-warning py-1 px-2 mb-0 mt-1" style="font-size: 0.85rem;">
+                                            <i class="bi bi-exclamation-triangle"></i> 
+                                            Số lượng đặt (${item.quantity}) vượt quá số lượng còn trong kho (${item.availableQuantity})
+                                        </div>
+                                    </c:if>
                                 </div>
 
                                 <div class="col-md-3 col-6">
