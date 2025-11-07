@@ -28,8 +28,8 @@ public class CartDAO extends DBContext {
     // Lấy tất cả sản phẩm trong giỏ hàng của customer
     public List<Cart> getCartByCustomerId(int customerId) {
         List<Cart> list = new ArrayList<>();
-        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity, "
-                + "p.product_name, p.image, b.brand_name, p.quantity "
+        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity AS cart_quantity, "
+                + "p.product_name, p.image, b.brand_name, p.quantity AS product_quantity "
                 + "FROM Cart c "
                 + "INNER JOIN Product p ON c.product_id = p.product_id "
                 + "JOIN Brand b ON b.brand_id = p.brand_id "
@@ -45,11 +45,11 @@ public class CartDAO extends DBContext {
                     cart.setCustomerId(rs.getInt("customer_id"));
                     cart.setProductId(rs.getInt("product_id"));
                     cart.setPrice(rs.getInt("price"));
-                    cart.setQuantity(rs.getInt("quantity"));
+                    cart.setQuantity(rs.getInt("cart_quantity"));
                     cart.setProductName(rs.getString("product_name"));
                     cart.setProductImage(rs.getString("image"));
                     cart.setBrand(rs.getString("brand_name"));
-                    cart.setAvailableQuantity(rs.getInt("quantity"));
+                    cart.setAvailableQuantity(rs.getInt("product_quantity"));
                     list.add(cart);
                 }
             }
@@ -204,8 +204,10 @@ public class CartDAO extends DBContext {
     
     public List<Cart> findItemsForCheckout(int customerId) throws SQLException {
         String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.quantity, " +
-                     "       p.product_name, p.image, p.brand " +
-                     "FROM Cart c JOIN Product p ON p.product_id = c.product_id " +
+                     "       p.product_name, p.image, b.brand_name, p.quantity AS product_quantity " +
+                     "FROM Cart c " +
+                     "JOIN Product p ON p.product_id = c.product_id " +
+                     "JOIN Brand b ON b.brand_id = p.brand_id " +
                      "WHERE c.customer_id = ?";
         try (Connection cn = new DBContext().getConnection();
              PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -221,8 +223,9 @@ public class CartDAO extends DBContext {
                         rs.getInt("quantity"),
                         rs.getString("product_name"),
                         rs.getString("image"),
-                        rs.getString("brand")
+                        rs.getString("brand_name")
                     );
+                    x.setAvailableQuantity(rs.getInt("product_quantity"));
                     list.add(x);
                 }
                 return list;
