@@ -118,10 +118,14 @@ public class CustomerDAO extends DBContext {
             ps.setString(3, c.getEmail());
             ps.setNString(4, c.getAddress());
             ps.setString(5, c.getPassword());
+
+            // DOB bắt buộc vì cột NOT NULL
             if (c.getDob() == null) {
                 throw new SQLException("Date of Birth is required");
             }
             ps.setDate(6, new java.sql.Date(c.getDob().getTime()));
+
+            // gender = bit NOT NULL
             boolean genderBit = "Male".equalsIgnoreCase(c.getGender());
             ps.setBoolean(7, genderBit);
 
@@ -185,7 +189,7 @@ public class CustomerDAO extends DBContext {
     }
 
     public boolean updateCustomer(Customer c) {
-        String sql = "UPDATE Customer SET Customer_name = ?, Phone = ?, Email = ?, Address = ?, Password = ?, Dob = ?, Gender = ?, Image = ? WHERE Customer_id = ?";
+        String sql = "UPDATE Customer SET Customer_name = ?, Phone = ?, Email = ?, Address = ?, Password = ?, Dob = ?, Gender = ?, Image = ?, Account_status = ? WHERE Customer_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, c.getCustomer_name());
             ps.setString(2, c.getPhone());
@@ -202,7 +206,8 @@ public class CustomerDAO extends DBContext {
             ps.setInt(7, genderValue);
             ps.setString(7, c.getGender());
             ps.setString(8, c.getImage());
-            ps.setInt(9, c.getCustomer_id());
+            ps.setString(9, c.getAccount_status());
+            ps.setInt(10, c.getCustomer_id());
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
@@ -223,9 +228,12 @@ public class CustomerDAO extends DBContext {
                 c.setCustomer_name(rs.getString("customer_name"));
                 c.setEmail(rs.getString("email"));
                 c.setPhone(rs.getString("phone"));
-                c.setPassword(rs.getString("password"));
+                c.setPassword(rs.getString("password")); // Lấy mật khẩu đã băm (MD5)
+
+                // Xử lý Gender (Giả định: 0 là Male, 1 là Female)
                 boolean genderBit = rs.getBoolean("gender");
                 c.setGender(genderBit ? "Female" : "Male");
+
                 c.setDob(rs.getDate("dob"));
                 c.setAddress(rs.getString("address"));
                 c.setAccount_status(rs.getString("account_status"));
@@ -237,6 +245,31 @@ public class CustomerDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Customer> searchByEmail(String keyword) {
+        List<Customer> list = new ArrayList<>();
+        String sql = "SELECT * FROM Customer WHERE email LIKE ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Customer c = new Customer();
+                    c.setCustomer_id(rs.getInt("customer_id"));
+                    c.setCustomer_name(rs.getString("customer_name"));
+                    c.setEmail(rs.getString("email"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setPassword(rs.getString("password"));
+                    c.setAccount_status(rs.getString("account_status"));
+                    c.setImage(rs.getString("image"));
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
