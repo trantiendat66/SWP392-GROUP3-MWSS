@@ -181,24 +181,30 @@
                                 <div class="mb-2">
                                     <label class="form-label">Phone Number</label>
                                     <input type="text" name="phone" value="${sessionScope.customer.phone}"
-                                           class="form-control" placeholder="Phone number">
+                                           class="form-control" placeholder="Phone number" id="phone-input">
                                 </div>
 
                                 <div class="mb-2">
                                     <label class="form-label">Shipping Address</label>
                                     <input type="text" name="shipping_address" class="form-control"
-                                           placeholder="Shipping address" required>
+                                           placeholder="Shipping address" required id="address-input">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Payment Method</label>
-                                    <select name="payment_method" class="form-select">
+                                    <select name="payment_method" class="form-select" id="payment-method-select">
                                         <option value="0">COD (Cash on Delivery)</option>
-                                        <option value="1">Paid Online</option>
+                                        <option value="2">MoMo Wallet</option>
                                     </select>
+                                    <small class="text-muted">
+                                        <i class="bi bi-info-circle"></i> 
+                                        Select MoMo to pay instantly with MoMo e-wallet
+                                    </small>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100" id="btnConfirmOrder" ${hasStockIssue ? 'disabled' : ''}>Confirm Order</button>
+                                <button type="submit" class="btn btn-primary w-100" id="btnConfirmOrder" ${hasStockIssue ? 'disabled' : ''}>
+                                    <span id="btn-text">Confirm Order</span>
+                                </button>
                             </form>
                             
                             <c:if test="${hasStockIssue}">
@@ -227,12 +233,41 @@
     // Ngăn submit form nếu có vấn đề về stock
     document.addEventListener('DOMContentLoaded', function() {
         const orderForm = document.getElementById('orderForm');
+        const paymentMethodSelect = document.getElementById('payment-method-select');
+        const btnText = document.getElementById('btn-text');
+        
+        // Xử lý khi thay đổi payment method
+        if (paymentMethodSelect) {
+            paymentMethodSelect.addEventListener('change', function() {
+                const selectedMethod = this.value;
+                if (selectedMethod === '2') {
+                    // MoMo payment
+                    btnText.textContent = 'Pay with MoMo';
+                    orderForm.action = '${ctx}/momo/payment';
+                } else {
+                    // COD
+                    btnText.textContent = 'Confirm Order';
+                    orderForm.action = '${ctx}/order/create-from-cart';
+                }
+            });
+        }
+        
         if (orderForm) {
             orderForm.addEventListener('submit', function(e) {
                 const btnConfirmOrder = document.getElementById('btnConfirmOrder');
                 if (btnConfirmOrder && btnConfirmOrder.disabled) {
                     e.preventDefault();
                     alert('Vui lòng quay lại giỏ hàng để điều chỉnh số lượng sản phẩm trước khi đặt hàng.');
+                    return false;
+                }
+                
+                // Validate shipping address and phone
+                const phone = document.getElementById('phone-input').value.trim();
+                const address = document.getElementById('address-input').value.trim();
+                
+                if (!phone || !address) {
+                    e.preventDefault();
+                    alert('Vui lòng nhập đầy đủ số điện thoại và địa chỉ giao hàng.');
                     return false;
                 }
             });
