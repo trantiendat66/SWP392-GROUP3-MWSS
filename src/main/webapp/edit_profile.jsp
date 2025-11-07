@@ -178,7 +178,12 @@
                 </script>
                 <div>
                     <button type="submit" class="btn btn-save">Save</button>
-                    <a href="<%=ctx%>/profile" class="btn btn-cancel" style="text-decoration:none; display:inline-block; padding:10px 14px; border-radius:6px;">Cancel</a>
+
+                    <% if (isAdmin) {%>
+                    <a href="<%= ctx%>/admin/customerlist" class="btn btn-cancel">Cancel</a>
+                    <% } else {%>
+                    <a href="<%= ctx%>/profile" class="btn btn-cancel">Cancel</a>
+                    <% }%>
                 </div>
             </form>
         </div>
