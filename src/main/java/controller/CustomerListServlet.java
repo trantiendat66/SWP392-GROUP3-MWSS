@@ -62,11 +62,26 @@ public class CustomerListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         CustomerDAO customerDAO = new CustomerDAO();
+
         try {
-            List<Customer> listCustomers = customerDAO.getAllCustomers();
+            String keyword = request.getParameter("keyword");
+
+            List<Customer> listCustomers;
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                listCustomers = customerDAO.searchByEmail(keyword.trim());
+            } else {
+                // Nếu không search → lấy toàn bộ
+                listCustomers = customerDAO.getAllCustomers();
+            }
+
+            //  Trả dữ liệu ra JSP
             request.setAttribute("listCustomers", listCustomers);
             request.setAttribute("activeTab", "customer");
+            request.setAttribute("keyword", keyword); // Giữ text trong ô search
+
             request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+
         } catch (Exception e) {
             System.err.println("Error in CustomerListServlet: " + e.getMessage());
             e.printStackTrace();
@@ -98,4 +113,3 @@ public class CustomerListServlet extends HttpServlet {
         return "Servlet to list all customers for admin.";
     }
 }
-
