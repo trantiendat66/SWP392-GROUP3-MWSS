@@ -138,13 +138,25 @@
                     </div>
                 </div>
                 <%
+                    model.Staff staffUser = (model.Staff) session.getAttribute("staff");
+                    boolean isAdmin = (staffUser != null && "Admin".equalsIgnoreCase(staffUser.getRole()));
+                %>
+
+                <% if (isAdmin) {%>
+                <label>Account Status</label>
+                <select name="account_status" style="width:95%; padding:8px 10px; border:1px solid #ddd; border-radius:6px;">
+                    <option value="Active"   <%= ("Active".equalsIgnoreCase(c.getAccount_status()) ? "selected" : "")%>>Active</option>
+                    <option value="Inactive" <%= ("Inactive".equalsIgnoreCase(c.getAccount_status()) ? "selected" : "")%>>Inactive</option>
+                </select>
+                <% } %>
+
+                <%
                     String avatarPath;
                     if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
 
                         if (c.getImage().startsWith("http")) {
                             avatarPath = c.getImage();
-                        }
-                        else {
+                        } else {
                             avatarPath = ctx + "/" + c.getImage();
                         }
                     } else {
