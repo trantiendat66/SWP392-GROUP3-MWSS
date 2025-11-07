@@ -94,7 +94,7 @@
                                             <li class="nav-item">
                                                 <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/cart">
                                                     <i class="bi bi-cart"></i> Cart
-                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count" style="display: none;">
                                                         0
                                                     </span>
                                                 </a>
@@ -111,9 +111,6 @@
                                 <li class="nav-item">
                                     <a class="btn btn-outline-light btn-sm position-relative" href="${pageContext.request.contextPath}/login.jsp">
                                         <i class="bi bi-cart"></i> Cart
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" id="cart-count">
-                                            0
-                                        </span>
                                     </a>
                                 </li>
                             </c:otherwise>
@@ -131,24 +128,39 @@
             });
 
             function updateCartCount() {
+                const cartBadge = document.getElementById('cart-count');
+                // Chỉ cập nhật nếu có badge (tức là user đã đăng nhập)
+                if (!cartBadge) {
+                    return; // User chưa đăng nhập, không có badge
+                }
+                
                 fetch('${pageContext.request.contextPath}/cart?action=count', {
                     method: 'GET'
                 })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
-                            const cartBadge = document.getElementById('cart-count');
-                            if (cartBadge) {
-                                cartBadge.textContent = data.count;
-                                // Thay đổi màu sắc dựa trên số lượng
-                                if (data.count > 0) {
-                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
-                                } else {
-                                    cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary cart-badge';
-                                }
+                            const count = data.count || 0;
+                            cartBadge.textContent = count;
+                            
+                            // Hiển thị badge khi có sản phẩm, ẩn khi không có
+                            if (count > 0) {
+                                cartBadge.style.display = 'block';
+                                cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
+                            } else {
+                                cartBadge.style.display = 'none';
                             }
                         })
                         .catch(error => {
                             console.error('Error updating cart count:', error);
+                            // Ẩn badge nếu có lỗi
+                            if (cartBadge) {
+                                cartBadge.style.display = 'none';
+                            }
                         });
             }
 
