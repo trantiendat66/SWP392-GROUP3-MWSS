@@ -115,6 +115,14 @@ public class LoginServlet extends HttpServlet {
         Customer customer = customerDao.getCustomerByEmail(email);
 
         if (customer != null) {
+
+            // ✅ NEW: kiểm tra trạng thái tài khoản trước khi xác thực mật khẩu
+            if ("Inactive".equalsIgnoreCase(customer.getAccount_status())) {
+                request.setAttribute("error", "Your account has been locked.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+                return;
+            }
+
             String storedHashedPassword = customer.getPassword();
             isAuthenticated = MD5PasswordHasher.checkPassword(password, storedHashedPassword);
 
