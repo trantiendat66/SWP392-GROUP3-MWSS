@@ -285,8 +285,8 @@ public class ProductDAO extends DBContext {
     }
 
     public void addProduct(Product p) throws SQLException {
-        String sql = "INSERT INTO Product (category_id, account_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quanity)\n"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO Product (category_id, account_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quantity)\n"
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, p.getCategoryId());
             ps.setInt(2, p.getAccountId());
@@ -341,7 +341,10 @@ public class ProductDAO extends DBContext {
                 ps1.setString(15, p.getStrap());
                 ps1.setString(16, p.getDialColor());
                 ps1.setString(17, p.getFunction());
-                ps1.setInt(18, p.getProductId());
+                // set quantity (parameter 18)
+                ps1.setInt(18, p.getQuantityProduct());
+                // set product_id for WHERE clause (parameter 19)
+                ps1.setInt(19, p.getProductId());
 
                 int rows1 = ps1.executeUpdate();
                 if (rows1 == 0) {

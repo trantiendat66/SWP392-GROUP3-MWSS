@@ -16,7 +16,6 @@ import java.util.*;
 
 import model.Customer;
 import model.Order;
-import model.OrderDetail;
 import model.OrderItemRow;
 
 /**
@@ -91,11 +90,18 @@ public class OrderListServlet extends HttpServlet {
                     Map<Integer, Boolean> reviewedMap
                             = fbDAO.findReviewedProductIds(cus.getCustomer_id(), allProductIds);
                     req.setAttribute("reviewedMap", reviewedMap);
+                    
+                    // Get feedback details and edit permissions
+                    Map<String, Map<String, Object>> feedbackMap 
+                            = fbDAO.getFeedbackByCustomerAndOrders(cus.getCustomer_id(), orderIds);
+                    req.setAttribute("feedbackMap", feedbackMap);
                 } else {
                     req.setAttribute("reviewedMap", Collections.emptyMap());
+                    req.setAttribute("feedbackMap", Collections.emptyMap());
                 }
             } else {
                 req.setAttribute("reviewedMap", Collections.emptyMap());
+                req.setAttribute("feedbackMap", Collections.emptyMap());
             }
             // === END FEEDBACK (NEW) ===
 

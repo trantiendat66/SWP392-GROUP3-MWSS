@@ -76,7 +76,13 @@
                                                      style="width:60px;height:60px;object-fit:cover"
                                                      alt="${it.productName}">
                                             </td>
-                                            <td>${it.productName}</td>
+                                            <td>
+                                                <a href="${ctx}/productdetail?id=${it.productId}" 
+                                                   class="text-decoration-none text-primary"
+                                                   title="View product details">
+                                                    ${it.productName}
+                                                </a>
+                                            </td>
                                             <td class="text-center">${it.quantity}</td>
                                             <td class="text-end"><fmt:formatNumber value="${it.unitPrice}" type="number"/> VND</td>
                                             <td class="text-end"><fmt:formatNumber value="${it.totalPrice}" type="number"/> VND</td>
@@ -86,6 +92,38 @@
                                                 <c:set var="__key" value="${o.order_id}:${__pid}" />
 
                                                 <c:choose>
+                                                    <%-- Check if already has feedback --%>
+                                                    <c:when test="${not empty feedbackMap && feedbackMap.containsKey(__key)}">
+                                                        <c:set var="fb" value="${feedbackMap[__key]}" />
+                                                        <c:choose>
+                                                            <c:when test="${fb.can_edit}">
+                                                                <%-- Show Edit and Delete buttons --%>
+                                                                <div class="btn-group-vertical btn-group-sm" role="group">
+                                                                    <a href="${ctx}/feedback/edit?id=${fb.feedback_id}" 
+                                                                       class="btn btn-sm btn-outline-warning" 
+                                                                       title="Edit your review">
+                                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                                    </a>
+                                                                    <form action="${ctx}/feedback/delete" method="post" 
+                                                                          style="display:inline;"
+                                                                          onsubmit="return confirm('Are you sure you want to delete this review?');">
+                                                                        <input type="hidden" name="feedback_id" value="${fb.feedback_id}">
+                                                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                                                            <i class="bi bi-trash"></i> Delete
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <%-- Already reviewed but can't edit anymore --%>
+                                                                <span class="badge bg-success">
+                                                                    <i class="bi bi-check-circle"></i> Reviewed
+                                                                </span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    
+                                                    <%-- Not reviewed yet, show Review button if eligible --%>
                                                     <c:when test="${not empty eligibleKeys && eligibleKeys.contains(__key)}">
                                                         <!-- Button to open modal -->
                                                         <button type="button"
