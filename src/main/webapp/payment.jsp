@@ -55,13 +55,14 @@
                                     <th style="width:70px;">Image</th>
                                     <th>Product</th>
                                     <th class="text-center" style="width:120px;">Quantity</th>
+                                    <th class="text-center" style="width:120px;">Stock</th>
                                     <th class="text-end">Unit Price</th>
                                     <th class="text-end">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="item" items="${cartItems}">
-                                    <tr>
+                                    <tr class="${item.quantity > item.availableQuantity ? 'table-warning' : ''}">
                                         <td>
                                             <img src="${ctx}/assert/image/${item.productImage}" class="img-thumbnail"
                                                  style="width:64px;height:64px;object-fit:cover" alt="${item.productName}">
@@ -69,8 +70,29 @@
                                         <td>
                                             <div class="fw-semibold">${item.productName}</div>
                                             <small class="text-muted">Brand: ${item.brand}</small>
+                                            <c:if test="${item.quantity > item.availableQuantity}">
+                                                <div class="text-danger small mt-1">
+                                                    <i class="bi bi-exclamation-triangle"></i> 
+                                                    Số lượng đặt (${item.quantity}) vượt quá số lượng còn trong kho (${item.availableQuantity})
+                                                </div>
+                                            </c:if>
                                         </td>
-                                        <td class="text-center">${item.quantity}</td>
+                                        <td class="text-center">
+                                            ${item.quantity}
+                                            <c:if test="${item.quantity > item.availableQuantity}">
+                                                <span class="badge bg-danger ms-1">!</span>
+                                            </c:if>
+                                        </td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${item.availableQuantity > 0}">
+                                                    <span class="badge bg-success">${item.availableQuantity}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge bg-danger">Out of Stock</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td class="text-end text-muted"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
                                         <td class="text-end fw-semibold"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VND</td>
                                     </tr>
@@ -78,7 +100,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Total:</th>
+                                    <th colspan="5" class="text-end">Total:</th>
                                     <th class="text-end text-danger fs-5">
                                         <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>
@@ -107,8 +129,23 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title mb-3">Shipping Information</h5>
+                            
+                            <c:set var="hasStockIssue" value="false" />
+                            <c:forEach var="item" items="${cartItems}">
+                                <c:if test="${item.quantity > item.availableQuantity}">
+                                    <c:set var="hasStockIssue" value="true" />
+                                </c:if>
+                            </c:forEach>
+                            
+                            <c:if test="${hasStockIssue}">
+                                <div class="alert alert-warning mb-3">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    <strong>Cảnh báo:</strong> Một số sản phẩm trong giỏ hàng có số lượng vượt quá số lượng còn trong kho. 
+                                    Vui lòng quay lại giỏ hàng để điều chỉnh số lượng trước khi đặt hàng.
+                                </div>
+                            </c:if>
 
-                            <form action="${ctx}/order/create-from-cart" method="post">
+                            <form action="${ctx}/order/create-from-cart" method="post" id="orderForm">
                                 <div class="mb-2">
                                     <label class="form-label">Phone Number</label>
                                     <input type="text" name="phone" value="${sessionScope.customer.phone}"
@@ -129,8 +166,14 @@
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">Confirm Order</button>
+                                <button type="submit" class="btn btn-primary w-100" id="btnConfirmOrder" ${hasStockIssue ? 'disabled' : ''}>Confirm Order</button>
                             </form>
+                            
+                            <c:if test="${hasStockIssue}">
+                                <div class="alert alert-info mt-2 mb-0">
+                                    <small>Vui lòng quay lại <a href="${ctx}/cart">giỏ hàng</a> để cập nhật số lượng sản phẩm.</small>
+                                </div>
+                            </c:if>
 
                             <hr>
                             <div class="d-flex justify-content-between">
@@ -147,5 +190,22 @@
         </c:otherwise>
     </c:choose>
 </div>
+
+<script>
+    // Ngăn submit form nếu có vấn đề về stock
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderForm = document.getElementById('orderForm');
+        if (orderForm) {
+            orderForm.addEventListener('submit', function(e) {
+                const btnConfirmOrder = document.getElementById('btnConfirmOrder');
+                if (btnConfirmOrder && btnConfirmOrder.disabled) {
+                    e.preventDefault();
+                    alert('Vui lòng quay lại giỏ hàng để điều chỉnh số lượng sản phẩm trước khi đặt hàng.');
+                    return false;
+                }
+            });
+        }
+    });
+</script>
 
 <%@ include file="/WEB-INF/include/footer.jsp" %>
