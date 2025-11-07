@@ -62,7 +62,8 @@
                             </thead>
                             <tbody>
                                 <c:forEach var="item" items="${cartItems}">
-                                    <tr class="${item.quantity > item.availableQuantity ? 'table-warning' : ''}">
+                                    <tr class="${item.quantity > item.availableQuantity ? 'table-warning' : ''}" 
+                                        id="row-${item.cartId > 0 ? item.cartId : item.productId}">
                                         <td>
                                             <img src="${ctx}/assert/image/${item.productImage}" class="img-thumbnail"
                                                  style="width:64px;height:64px;object-fit:cover" alt="${item.productName}">
@@ -70,18 +71,47 @@
                                         <td>
                                             <div class="fw-semibold">${item.productName}</div>
                                             <small class="text-muted">Brand: ${item.brand}</small>
-                                            <c:if test="${item.quantity > item.availableQuantity}">
-                                                <div class="text-danger small mt-1">
-                                                    <i class="bi bi-exclamation-triangle"></i> 
+                                            <div class="text-danger small mt-1" 
+                                                 id="stock-warning-${item.cartId > 0 ? item.cartId : item.productId}"
+                                                 style="display: ${item.quantity > item.availableQuantity ? 'block' : 'none'};">
+                                                <i class="bi bi-exclamation-triangle"></i> 
+                                                <span id="stock-warning-text-${item.cartId > 0 ? item.cartId : item.productId}">
                                                     Số lượng đặt (${item.quantity}) vượt quá số lượng còn trong kho (${item.availableQuantity})
-                                                </div>
-                                            </c:if>
+                                                </span>
+                                            </div>
                                         </td>
                                         <td class="text-center">
-                                            ${item.quantity}
-                                            <c:if test="${item.quantity > item.availableQuantity}">
-                                                <span class="badge bg-danger ms-1">!</span>
-                                            </c:if>
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                                <button class="btn btn-sm btn-outline-secondary quantity-btn-decrease" 
+                                                        data-item-id="${item.cartId > 0 ? item.cartId : item.productId}"
+                                                        data-product-id="${item.productId}"
+                                                        data-mode="${paymentMode}"
+                                                        style="width: 30px; height: 30px; padding: 0;">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <input type="number" 
+                                                       class="form-control form-control-sm quantity-input-payment text-center" 
+                                                       value="${item.quantity}" 
+                                                       min="1" 
+                                                       max="${item.availableQuantity}"
+                                                       data-item-id="${item.cartId > 0 ? item.cartId : item.productId}"
+                                                       data-product-id="${item.productId}"
+                                                       data-price="${item.price}"
+                                                       data-available="${item.availableQuantity}"
+                                                       data-mode="${paymentMode}"
+                                                       style="width: 60px;"
+                                                       id="qty-${item.cartId > 0 ? item.cartId : item.productId}">
+                                                <button class="btn btn-sm btn-outline-secondary quantity-btn-increase" 
+                                                        data-item-id="${item.cartId > 0 ? item.cartId : item.productId}"
+                                                        data-product-id="${item.productId}"
+                                                        data-mode="${paymentMode}"
+                                                        style="width: 30px; height: 30px; padding: 0;">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                            <small class="text-danger d-block mt-1" 
+                                                   id="qty-error-${item.cartId > 0 ? item.cartId : item.productId}" 
+                                                   style="display: none; font-size: 0.75rem;"></small>
                                         </td>
                                         <td class="text-center">
                                             <c:choose>
@@ -94,14 +124,16 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-end text-muted"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
-                                        <td class="text-end fw-semibold"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VND</td>
+                                        <td class="text-end fw-semibold" id="total-${item.cartId > 0 ? item.cartId : item.productId}">
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="5" class="text-end">Total:</th>
-                                    <th class="text-end text-danger fs-5">
+                                    <th class="text-end text-danger fs-5" id="grand-total">
                                         <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>
                                 </tr>
@@ -178,7 +210,7 @@
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <span>Subtotal</span>
-                                <strong class="text-danger">
+                                <strong class="text-danger" id="subtotal-amount">
                                     <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                 </strong>
                             </div>
@@ -205,7 +237,228 @@
                 }
             });
         }
+        
+        // Xử lý nút tăng/giảm số lượng
+        document.querySelectorAll('.quantity-btn-increase, .quantity-btn-decrease').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                const productId = this.getAttribute('data-product-id');
+                const mode = this.getAttribute('data-mode');
+                const input = document.getElementById('qty-' + itemId);
+                let currentQty = parseInt(input.value) || 1;
+                
+                if (this.classList.contains('quantity-btn-increase')) {
+                    currentQty += 1;
+                } else if (this.classList.contains('quantity-btn-decrease')) {
+                    currentQty -= 1;
+                }
+                
+                if (currentQty < 1) currentQty = 1;
+                
+                updateQuantity(itemId, productId, currentQty, mode);
+            });
+        });
+        
+        // Xử lý khi người dùng nhập trực tiếp
+        document.querySelectorAll('.quantity-input-payment').forEach(input => {
+            input.addEventListener('change', function() {
+                const itemId = this.getAttribute('data-item-id');
+                const productId = this.getAttribute('data-product-id');
+                const mode = this.getAttribute('data-mode');
+                const newQty = parseInt(this.value) || 1;
+                updateQuantity(itemId, productId, newQty, mode);
+            });
+            
+            input.addEventListener('input', function() {
+                const itemId = this.getAttribute('data-item-id');
+                const available = parseInt(this.getAttribute('data-available'));
+                const currentQty = parseInt(this.value) || 0;
+                const errorMsg = document.getElementById('qty-error-' + itemId);
+                
+                if (currentQty > available) {
+                    errorMsg.textContent = 'Tối đa ' + available;
+                    errorMsg.style.display = 'block';
+                    this.classList.add('is-invalid');
+                } else {
+                    errorMsg.style.display = 'none';
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
     });
+    
+    function updateQuantity(itemId, productId, newQty, mode) {
+        const input = document.getElementById('qty-' + itemId);
+        const available = parseInt(input.getAttribute('data-available'));
+        const price = parseInt(input.getAttribute('data-price'));
+        const errorMsg = document.getElementById('qty-error-' + itemId);
+        
+        // Validate
+        if (newQty < 1) {
+            newQty = 1;
+        }
+        
+        if (newQty > available) {
+            showMessage('Số lượng không được vượt quá ' + available + ' sản phẩm còn trong kho', 'error');
+            input.value = available;
+            newQty = available;
+            errorMsg.style.display = 'none';
+            input.classList.remove('is-invalid');
+        } else {
+            errorMsg.style.display = 'none';
+            input.classList.remove('is-invalid');
+        }
+        
+        input.value = newQty;
+        
+        // Cập nhật cảnh báo stock
+        const warningDiv = document.getElementById('stock-warning-' + itemId);
+        const warningText = document.getElementById('stock-warning-text-' + itemId);
+        const row = document.getElementById('row-' + itemId);
+        
+        if (newQty > available) {
+            if (warningDiv) {
+                warningDiv.style.display = 'block';
+                if (warningText) {
+                    warningText.textContent = 'Số lượng đặt (' + newQty + ') vượt quá số lượng còn trong kho (' + available + ')';
+                }
+            }
+            if (row) {
+                row.classList.add('table-warning');
+            }
+        } else {
+            if (warningDiv) {
+                warningDiv.style.display = 'none';
+            }
+            if (row) {
+                row.classList.remove('table-warning');
+            }
+        }
+        
+        // Cập nhật tổng tiền cho item
+        const total = price * newQty;
+        const totalElement = document.getElementById('total-' + itemId);
+        if (totalElement) {
+            totalElement.textContent = new Intl.NumberFormat('en-US').format(total) + ' VND';
+        }
+        
+        // Cập nhật tổng tiền chung
+        updateGrandTotal();
+        
+        // Cập nhật trong cart hoặc session
+        if (mode === 'CART') {
+            // Cập nhật trong cart
+            fetch('${ctx}/cart?action=update&cartId=' + itemId + '&quantity=' + newQty, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    showMessage(data.message || 'Có lỗi xảy ra khi cập nhật số lượng', 'error');
+                    // Reload để lấy giá trị đúng
+                    location.reload();
+                } else {
+                    // Cập nhật lại hasStockIssue check và reload để cập nhật UI
+                    checkStockIssues();
+                    // Reload sau 500ms để cập nhật cảnh báo và UI
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Có lỗi xảy ra khi cập nhật số lượng', 'error');
+            });
+        } else if (mode === 'BUY_NOW') {
+            // Cập nhật session bn_qty thông qua PaymentPageServlet
+            const formData = new URLSearchParams();
+            formData.append('action', 'update-buynow-qty');
+            formData.append('qty', newQty);
+            
+            fetch('${ctx}/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    checkStockIssues();
+                    // Reload sau 500ms để cập nhật cảnh báo và UI
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    showMessage(data.message || 'Có lỗi xảy ra khi cập nhật số lượng', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Có lỗi xảy ra khi cập nhật số lượng', 'error');
+            });
+        }
+    }
+    
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        document.querySelectorAll('[id^="total-"]').forEach(element => {
+            if (element.id !== 'grand-total' && element.id !== 'subtotal-amount') {
+                const priceText = element.textContent.replace(/[^\d]/g, '');
+                grandTotal += parseInt(priceText) || 0;
+            }
+        });
+        
+        const grandTotalElement = document.getElementById('grand-total');
+        const subtotalElement = document.getElementById('subtotal-amount');
+        
+        if (grandTotalElement) {
+            grandTotalElement.textContent = new Intl.NumberFormat('en-US').format(grandTotal) + ' VND';
+        }
+        if (subtotalElement) {
+            subtotalElement.textContent = new Intl.NumberFormat('en-US').format(grandTotal) + ' VND';
+        }
+    }
+    
+    function checkStockIssues() {
+        let hasIssue = false;
+        document.querySelectorAll('.quantity-input-payment').forEach(input => {
+            const qty = parseInt(input.value) || 0;
+            const available = parseInt(input.getAttribute('data-available'));
+            if (qty > available) {
+                hasIssue = true;
+            }
+        });
+        
+        const btnConfirmOrder = document.getElementById('btnConfirmOrder');
+        if (btnConfirmOrder) {
+            if (hasIssue) {
+                btnConfirmOrder.disabled = true;
+            } else {
+                btnConfirmOrder.disabled = false;
+            }
+        }
+    }
+    
+    function showMessage(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const alertHtml = `
+            <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999; max-width: 400px;">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.remove();
+            }
+        }, 3000);
+    }
 </script>
 
 <%@ include file="/WEB-INF/include/footer.jsp" %>
