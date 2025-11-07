@@ -164,7 +164,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Description</label>
-                    <textarea name="description" class="form-control" rows="3">${param.description}"</textarea>
+                    <textarea name="description" class="form-control" rows="3">${param.description}</textarea>
                     <c:if test="${not empty errors.descriptionError}">
                         <div class="text-danger small mt-1">${errors.descriptionError}</div>
                     </c:if>

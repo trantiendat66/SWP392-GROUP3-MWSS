@@ -198,32 +198,12 @@
                         <p style="padding: 0 10px;">${p.description}</p>
                     </div>
 
-                    <%-- Back button depending on access source --%>
-                    <div class="d-flex justify-content-end mt-4">
-                        <c:choose>
-                            <c:when test="${param.fromAdmin eq 'true'}">
-                                <a href="${ctx}/admin/dashboard" class="btn btn-danger">⬅️ Back to Admin Page</a>
-                            </c:when>
-                        </c:choose>
-                    </div>
-
                 </c:when>
-
-                <c:otherwise>
-                    <div class="not-found">
-                        <h3>Product information not found in the database.</h3>
-                        <c:choose>
-                            <c:when test="${param.fromAdmin eq 'true'}">
-                                <p>Please check the product ID again or 
-                                    <a href="${ctx}/admin/dashboard">go back to the admin page</a>.
-                                </p>
-                            </c:when>
-                        </c:choose>
-                    </div>
-                </c:otherwise>
             </c:choose>
         </div>
-
+        <div class="detail-section text-center mt-4 mb-4">
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-secondary px-4">Back</a>
+        </div>
         <%@ include file="/WEB-INF/include/footer.jsp" %>
     </body>
 </html>
