@@ -82,4 +82,59 @@ public class PaymentPageServlet extends HttpServlet {
             req.getRequestDispatcher("/cart.jsp").forward(req, resp);
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        
+        // Xử lý cập nhật buy-now quantity
+        String action = req.getParameter("action");
+        if ("update-buynow-qty".equals(action)) {
+            HttpSession session = req.getSession(false);
+            if (session == null || session.getAttribute("customer") == null) {
+                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                resp.setContentType("application/json");
+                resp.getWriter().write("{\"success\": false, \"message\": \"Unauthorized\"}");
+                return;
+            }
+
+            Integer bnPid = (Integer) session.getAttribute("bn_pid");
+            if (bnPid == null) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.setContentType("application/json");
+                resp.getWriter().write("{\"success\": false, \"message\": \"No buy-now product\"}");
+                return;
+            }
+
+            try {
+                int newQty = Integer.parseInt(req.getParameter("qty"));
+                if (newQty < 1) {
+                    newQty = 1;
+                }
+
+                // Kiểm tra số lượng sản phẩm trong kho
+                ProductDAO productDAO = new ProductDAO();
+                Product product = productDAO.getProductById(bnPid);
+                if (product != null && newQty > product.getQuantityProduct()) {
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("{\"success\": false, \"message\": \"Quantity exceeds available stock\"}");
+                    return;
+                }
+
+                // Cập nhật số lượng trong session
+                session.setAttribute("bn_qty", newQty);
+                resp.setContentType("application/json");
+                resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\"}");
+            } catch (NumberFormatException e) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.setContentType("application/json");
+                resp.getWriter().write("{\"success\": false, \"message\": \"Invalid quantity\"}");
+            }
+            return;
+        }
+        
+        // Nếu không phải action update-buynow-qty, redirect về GET
+        doGet(req, resp);
+    }
 }
