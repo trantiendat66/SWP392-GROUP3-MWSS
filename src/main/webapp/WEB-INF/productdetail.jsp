@@ -50,16 +50,15 @@
                                    class="form-control" style="width:100px;">
                             <small id="quantity-error" class="text-danger" style="display:none;"></small>
                         </div>
-                        <button type="button" id="btn-add-cart" class="btn btn-danger btn-lg me-2" 
+                        <button type="button" id="btn-add-cart" class="btn btn-danger me-2 custom-btn"
                                 onclick="addToCart('${product.productId}')">
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
 
-                        <button type="button" id="btn-buy-now" class="btn btn-primary btn-lg" 
+                        <button type="button" id="btn-buy-now" class="btn btn-primary custom-btn"
                                 onclick="buyNow('${product.productId}')">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
-
                     </div>
 
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
@@ -245,17 +244,17 @@
                 font-size: 0.875rem;
                 font-weight: 500;
             }
-            
+
             #quantity-input:invalid {
                 border-color: #dc3545;
             }
-            
+
             #btn-add-cart:disabled,
             #btn-buy-now:disabled {
                 opacity: 0.6;
                 cursor: not-allowed;
             }
-            
+
             .rating-summary-card .progress {
                 height: 10px;
                 background: #e9ecef;
@@ -346,19 +345,19 @@
 
 <script>
     // Validation real-time cho quantity input
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const quantityInput = document.getElementById('quantity-input');
         const quantityError = document.getElementById('quantity-error');
         const btnAddCart = document.getElementById('btn-add-cart');
         const btnBuyNow = document.getElementById('btn-buy-now');
         const maxQuantity = parseInt('${product.quantityProduct}');
-        
+
         function validateQuantity(autoFix) {
             const quantity = parseInt(quantityInput.value) || 0;
             let isValid = true;
             let errorMessage = '';
             let shouldFix = false;
-            
+
             if (maxQuantity === 0) {
                 isValid = false;
                 errorMessage = 'Sản phẩm đã hết hàng';
@@ -377,12 +376,12 @@
                     shouldFix = true;
                 }
             }
-            
+
             if (shouldFix) {
                 // Nếu đã tự động sửa, validate lại với giá trị mới
                 return validateQuantity(false);
             }
-            
+
             if (isValid) {
                 quantityError.style.display = 'none';
                 quantityError.textContent = '';
@@ -394,24 +393,24 @@
                 btnAddCart.disabled = true;
                 btnBuyNow.disabled = true;
             }
-            
+
             return isValid;
         }
-        
+
         // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
-        quantityInput.addEventListener('input', function() {
+        quantityInput.addEventListener('input', function () {
             validateQuantity(false);
         });
-        
+
         // Validate khi người dùng thay đổi và blur (tự động sửa nếu cần)
-        quantityInput.addEventListener('change', function() {
+        quantityInput.addEventListener('change', function () {
             validateQuantity(true);
         });
-        
-        quantityInput.addEventListener('blur', function() {
+
+        quantityInput.addEventListener('blur', function () {
             validateQuantity(true);
         });
-        
+
         // Validate lần đầu khi trang load
         validateQuantity(false);
     });
@@ -438,7 +437,7 @@
             quantityInput.focus();
             return;
         }
-        
+
         if (maxQuantity === 0) {
             showMessage('Sản phẩm đã hết hàng', 'error');
             return;
@@ -594,7 +593,7 @@
             quantityInput.focus();
             return;
         }
-        
+
         if (maxQuantity === 0) {
             showMessage('Sản phẩm đã hết hàng', 'error');
             return;
