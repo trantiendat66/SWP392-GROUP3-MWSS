@@ -5,6 +5,15 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+<c:if test="${not empty sessionScope.error}">
+    <div class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ${sessionScope.error}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <c:remove var="error" scope="session"/>
+</c:if>
 <c:choose>
     <c:when test="${empty product}">
         <div class="container"><div class="alert alert-warning">Product does not exist.</div></div>
@@ -23,15 +32,30 @@
 
                     <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VND</h3>
 
+                    <div class="mb-3">
+                        <strong>Stock:</strong> 
+                        <c:choose>
+                            <c:when test="${product.quantityProduct > 0}">
+                                <span class="badge bg-success">${product.quantityProduct} items available</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="badge bg-danger">Out of Stock</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
                     <div class="d-flex align-items-center mb-3">
-                        <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
-                               class="form-control me-2" style="width:100px;">
-                        <button type="button" class="btn btn-danger btn-lg me-2" 
+                        <div class="me-2">
+                            <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
+                                   class="form-control" style="width:100px;">
+                            <small id="quantity-error" class="text-danger" style="display:none;"></small>
+                        </div>
+                        <button type="button" id="btn-add-cart" class="btn btn-danger btn-lg me-2" 
                                 onclick="addToCart('${product.productId}')">
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
 
-                        <button type="button" class="btn btn-primary btn-lg" 
+                        <button type="button" id="btn-buy-now" class="btn btn-primary btn-lg" 
                                 onclick="buyNow('${product.productId}')">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
@@ -215,6 +239,23 @@
         </div>
 
         <style>
+            #quantity-error {
+                display: block;
+                margin-top: 5px;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+            
+            #quantity-input:invalid {
+                border-color: #dc3545;
+            }
+            
+            #btn-add-cart:disabled,
+            #btn-buy-now:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+            
             .rating-summary-card .progress {
                 height: 10px;
                 background: #e9ecef;
@@ -304,6 +345,76 @@
 </c:choose>
 
 <script>
+    // Validation real-time cho quantity input
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity-input');
+        const quantityError = document.getElementById('quantity-error');
+        const btnAddCart = document.getElementById('btn-add-cart');
+        const btnBuyNow = document.getElementById('btn-buy-now');
+        const maxQuantity = parseInt('${product.quantityProduct}');
+        
+        function validateQuantity(autoFix) {
+            const quantity = parseInt(quantityInput.value) || 0;
+            let isValid = true;
+            let errorMessage = '';
+            let shouldFix = false;
+            
+            if (maxQuantity === 0) {
+                isValid = false;
+                errorMessage = 'Sản phẩm đã hết hàng';
+            } else if (quantity < 1) {
+                isValid = false;
+                errorMessage = 'Số lượng phải lớn hơn 0';
+                if (autoFix) {
+                    quantityInput.value = 1;
+                    shouldFix = true;
+                }
+            } else if (quantity > maxQuantity) {
+                isValid = false;
+                errorMessage = 'Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho';
+                if (autoFix) {
+                    quantityInput.value = maxQuantity;
+                    shouldFix = true;
+                }
+            }
+            
+            if (shouldFix) {
+                // Nếu đã tự động sửa, validate lại với giá trị mới
+                return validateQuantity(false);
+            }
+            
+            if (isValid) {
+                quantityError.style.display = 'none';
+                quantityError.textContent = '';
+                btnAddCart.disabled = false;
+                btnBuyNow.disabled = false;
+            } else {
+                quantityError.style.display = 'block';
+                quantityError.textContent = errorMessage;
+                btnAddCart.disabled = true;
+                btnBuyNow.disabled = true;
+            }
+            
+            return isValid;
+        }
+        
+        // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
+        quantityInput.addEventListener('input', function() {
+            validateQuantity(false);
+        });
+        
+        // Validate khi người dùng thay đổi và blur (tự động sửa nếu cần)
+        quantityInput.addEventListener('change', function() {
+            validateQuantity(true);
+        });
+        
+        quantityInput.addEventListener('blur', function() {
+            validateQuantity(true);
+        });
+        
+        // Validate lần đầu khi trang load
+        validateQuantity(false);
+    });
 
     function addToCart(productId) {
         if (!isLoggedIn()) {
@@ -311,16 +422,25 @@
             return;
         }
 
-        const quantity = document.getElementById('quantity-input').value;
+        const quantityInput = document.getElementById('quantity-input');
+        const quantity = parseInt(quantityInput.value) || 0;
         const maxQuantity = parseInt('${product.quantityProduct}');
 
         if (quantity < 1) {
-            alert('Quantity must be greater than 0');
+            showMessage('Số lượng phải lớn hơn 0', 'error');
+            quantityInput.focus();
             return;
         }
 
         if (quantity > maxQuantity) {
-            alert('Quantity cannot exceed ' + maxQuantity + ' items left in stock');
+            showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho. Vui lòng chọn lại số lượng.', 'error');
+            quantityInput.value = maxQuantity;
+            quantityInput.focus();
+            return;
+        }
+        
+        if (maxQuantity === 0) {
+            showMessage('Sản phẩm đã hết hàng', 'error');
             return;
         }
 
@@ -459,10 +579,26 @@
         }
 
         // lấy số lượng hiện trên trang
-        var qtyEl = document.getElementById('quantity-input');
-        var qty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
-        if (!qty || qty < 1)
+        const quantityInput = document.getElementById('quantity-input');
+        let qty = parseInt(quantityInput.value) || 1;
+        if (qty < 1) {
             qty = 1;
+            quantityInput.value = 1;
+        }
+
+        // Kiểm tra số lượng không vượt quá stock
+        const maxQuantity = parseInt('${product.quantityProduct}');
+        if (qty > maxQuantity) {
+            showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho. Vui lòng chọn lại số lượng.', 'error');
+            quantityInput.value = maxQuantity;
+            quantityInput.focus();
+            return;
+        }
+        
+        if (maxQuantity === 0) {
+            showMessage('Sản phẩm đã hết hàng', 'error');
+            return;
+        }
 
         // set vào input hidden và submit form ẩn tới /order/buy-now
         document.getElementById('buyNowQty').value = qty;
