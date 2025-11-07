@@ -262,6 +262,19 @@
                 <c:when test="${requestScope.activeTab == 'customer'}">
                     <div class="controls">
                         <div class="page-title">Customer Management</div>
+
+                        <!--  Search Form -->
+                        <form action="${pageContext.request.contextPath}/admin/customerlist" method="get" style="display:flex; gap:10px; align-items:center;">
+                            <input type="text" name="keyword" placeholder="Search by email..." 
+                                   value="${param.keyword}"
+                                   style="padding:6px 10px; border-radius:6px; border:1px solid #bbb;">
+                            <button type="submit" class="btn btn-primary">Search</button>
+
+                            <!-- Clear search -->
+                            <a href="${pageContext.request.contextPath}/admin/customerlist" class="btn btn-secondary" style="text-decoration:none;">
+                                Reset
+                            </a>
+                        </form>
                     </div>
 
                     <div class="table-container">
@@ -289,9 +302,9 @@
                                                         <i class="fa fa-eye"></i> View
                                                     </a>
 
-                                                    <%-- EDIT--%>
-                                                    <%--Thêm địa chỉ để edit trong admin Customer Management --%>
-                                                    <a href="?id=${c.customer_id}&action=edit" class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
+                                                    <%-- EDIT--%>                                                   
+                                                    <a href="${pageContext.request.contextPath}/edit_profile?id=${c.customer_id}"
+                                                       class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
 
@@ -348,6 +361,18 @@
 
                                     <h5 style="margin: 0; padding: 0;">${c.customer_name}</h5>
                                     <p class="text-muted">Customer #${c.customer_id}</p>
+                                    <c:choose>
+                                        <c:when test="${c.account_status == 'Active'}">
+                                            <span style="display:inline-block; padding:6px 14px; background:#28a745; color:white; border-radius:6px; font-weight:600;">
+                                                Active
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span style="display:inline-block; padding:6px 14px; background:#dc3545; color:white; border-radius:6px; font-weight:600;">
+                                                Inactive
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                                 <div class="col-md-8 detail-info">
                                     <h4 class="mb-4" style="border-bottom: 1px solid #eee; padding-bottom: 10px;">General Information</h4>
