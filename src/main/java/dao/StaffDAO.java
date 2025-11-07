@@ -90,22 +90,6 @@ public class StaffDAO extends DBContext {
         return staff;
     }
 
-    public boolean updateStaff(Staff s) {
-        String sql = "UPDATE Staff SET user_name = ?, phone = ?, email = ?, address = ? WHERE account_id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, s.getUserName());
-            ps.setString(2, s.getPhone());
-            ps.setString(3, s.getEmail());
-            ps.setString(4, s.getAddress());
-            ps.setInt(5, s.getAccountId());
-            int rows = ps.executeUpdate();
-            return rows > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public boolean updatePasswordById(int accountId, String newHash) {
         final String sql = "UPDATE Staff SET password = ? WHERE account_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -145,6 +129,59 @@ public class StaffDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public boolean addStaff(Staff s) {
+        String sql = "INSERT INTO Staff (user_name, password, email, phone, role, position, address, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getUserName());
+            ps.setString(2, s.getPassword());
+            ps.setString(3, s.getEmail());
+            ps.setString(4, s.getPhone());
+            ps.setString(5, s.getRole());
+            ps.setString(6, s.getPosition());
+            ps.setString(7, s.getAddress());
+            ps.setString(8, s.getStatus());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("addStaff error: SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateStaff(Staff s) {
+        String sql = "UPDATE Staff SET email=?, phone=?, role=?, position=?, address=?, status=? WHERE account_id=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getEmail());
+            ps.setString(2, s.getPhone());
+            ps.setString(3, s.getRole());
+            ps.setString(4, s.getPosition());
+            ps.setString(5, s.getAddress());
+            ps.setString(6, s.getStatus());
+            ps.setInt(7, s.getAccountId());
+
+            int row = ps.executeUpdate();
+            System.out.println("Rows updated: " + row);
+            return row > 0;
+        } catch (Exception e) {
+            System.out.println("updateStaff error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean deleteStaff(int id) {
+        String sql = "DELETE FROM Staff WHERE account_id=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("deleteStaff error: " + e.getMessage());
+        }
+        return false;
     }
 
 }

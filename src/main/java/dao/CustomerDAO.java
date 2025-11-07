@@ -19,7 +19,7 @@ public class CustomerDAO extends DBContext {
     public CustomerDAO() {
         super();
     }
-    
+
     public List<Customer> getAllCustomers() {
         List<Customer> list = new ArrayList<>();
         String sql = "SELECT customer_id, customer_name, phone, email, address, dob, gender, account_status, image, password "
@@ -53,7 +53,7 @@ public class CustomerDAO extends DBContext {
         }
         return list;
     }
-    
+
     public boolean existsByEmail(String email) {
         String sql = "SELECT 1 FROM Customer WHERE email = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -118,14 +118,10 @@ public class CustomerDAO extends DBContext {
             ps.setString(3, c.getEmail());
             ps.setNString(4, c.getAddress());
             ps.setString(5, c.getPassword());
-
-            // DOB bắt buộc vì cột NOT NULL
             if (c.getDob() == null) {
                 throw new SQLException("Date of Birth is required");
             }
             ps.setDate(6, new java.sql.Date(c.getDob().getTime()));
-
-            // gender = bit NOT NULL
             boolean genderBit = "Male".equalsIgnoreCase(c.getGender());
             ps.setBoolean(7, genderBit);
 
@@ -227,12 +223,9 @@ public class CustomerDAO extends DBContext {
                 c.setCustomer_name(rs.getString("customer_name"));
                 c.setEmail(rs.getString("email"));
                 c.setPhone(rs.getString("phone"));
-                c.setPassword(rs.getString("password")); // Lấy mật khẩu đã băm (MD5)
-
-                // Xử lý Gender (Giả định: 0 là Male, 1 là Female)
+                c.setPassword(rs.getString("password"));
                 boolean genderBit = rs.getBoolean("gender");
                 c.setGender(genderBit ? "Female" : "Male");
-
                 c.setDob(rs.getDate("dob"));
                 c.setAddress(rs.getString("address"));
                 c.setAccount_status(rs.getString("account_status"));

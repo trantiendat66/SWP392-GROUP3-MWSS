@@ -12,7 +12,7 @@ public class Staff {
 
     private int accountId;
     private String userName;
-    private String password; // Mật khẩu đã băm từ DB
+    private String password; 
     private String email;
     private String phone;
     private String role;
@@ -20,7 +20,6 @@ public class Staff {
     private String address;
     private String status;
 
-    // Constructor
     public Staff() {
     }
 
@@ -36,7 +35,6 @@ public class Staff {
         this.status = status;
     }
 
-    // Getters và Setters 
     public int getAccountId() {
         return accountId;
     }

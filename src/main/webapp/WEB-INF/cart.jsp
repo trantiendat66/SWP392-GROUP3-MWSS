@@ -166,7 +166,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-cart"></i> Your Cart
                 <c:if test="${not empty cartItems}">
-                    <span class="badge bg-primary ms-2">${cartItemCount} Product(s)</span>
+                    <span class="badge bg-primary ms-2">${cartItemCount} Product</span>
                 </c:if>
             </h2>
         </div>

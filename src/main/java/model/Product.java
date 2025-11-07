@@ -9,6 +9,7 @@ package model;
  * @author Tran Tien Dat - CE190362
  */
 public class Product {
+
     private int productId;
     private int categoryId;
     private int accountId;
@@ -210,5 +211,5 @@ public class Product {
     public String toString() {
         return "Product{" + "productId=" + productId + ", categoryId=" + categoryId + ", accountId=" + accountId + ", image=" + image + ", productName=" + productName + ", price=" + price + ", brand=" + brand + ", origin=" + origin + ", gender=" + gender + ", description=" + description + ", warranty=" + warranty + ", machine=" + machine + ", glass=" + glass + ", dialDiameter=" + dialDiameter + ", bezel=" + bezel + ", strap=" + strap + ", dialColor=" + dialColor + ", function=" + function + ", quantityProduct=" + quantityProduct + '}';
     }
-    
+
 }

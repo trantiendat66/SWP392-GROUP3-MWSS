@@ -277,7 +277,6 @@ public class ProductEditServlet extends HttpServlet {
 
             request.getSession().setAttribute("successMessage", "Product updated successfully!"); // Cập nhật sản phẩm thành công!
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-
         } catch (SQLException ex) {
             ex.printStackTrace();
             request.setAttribute("error", "Database error: " + ex.getMessage()); // Lỗi cơ sở dữ liệu:

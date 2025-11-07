@@ -1,16 +1,14 @@
 <%-- 
     Document   : staff_list
-    Created on : Oct 21, 2025, 2:22:46 PM
+    Created on : Oct 21, 2025, 2:22:46 PM
     Author     : Tran Tien Dat - CE190362
 --%>
-
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Staff" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
 
 <style>
-    /* Staff list styles (self-contained, nhẹ) */
     .staff-page {
         padding: 22px;
         max-width:1200px;
@@ -24,11 +22,11 @@
         margin-bottom:18px;
     }
     .staff-hero h2 {
-        font-size: 30px;
-        font-weight: 700;
-        color: #dc3545;
-        margin-bottom: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size:30px;
+        font-weight:700;
+        color:#dc3545;
+        margin-bottom:20px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .btn-primary {
         background:#28a745;
@@ -38,6 +36,16 @@
         text-decoration:none;
         font-weight:700;
         box-shadow:0 4px 12px rgba(40,167,69,0.12);
+    }
+    .btn-ghost {
+        background-color:#dc3545;
+        color:white;
+        border:1px solid #dc3545;
+        padding:8px 16px;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:600;
+        cursor:pointer;
     }
     .flash {
         padding:10px 12px;
@@ -83,70 +91,56 @@
         background:#fbfbfb;
     }
 
-    /* Avatar */
-    .staff-avatar {
-        width:66px;
-        height:66px;
-        border-radius:6px;
-        object-fit:cover;
-        border:1px solid #e6e9ee;
-    }
-
     /* Actions */
     .action-links {
         display:flex;
-        gap:8px;
+        gap:6px;
         justify-content:center;
-        align-items:center;
     }
 
-    .btn-ghost {
-        background-color: #dc3545;
-        color: white;
-        border: 1px solid #dc3545;
-        padding: 8px 16px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        cursor: pointer;
+    .action-links a,
+    .action-links button {
+        padding:6px 10px;
+        border-radius:6px;
+        font-size:13px;
+        border:none;
+        cursor:pointer;
+        font-weight:600;
+        min-width:50px;
+        text-decoration:none;
+        color:white;
     }
-    .action-links a, .action-links button {
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        border: none;
-        min-width: 60px;
-        text-align: center;
-        transition: none;
-    }
-
 
     .action-view {
-        background-color: #0d6efd;
-        color: white;
+        background:#0d6efd;
     }
+    .action-view:hover {
+        background:#0b59d4;
+    }
+
     .action-edit {
-        background-color: #e0a800;
-        color: white;
+        background:#ffc107;
+        color:#333;
     }
+    .action-edit:hover {
+        background:#e0a800;
+    }
+
     .action-delete {
-        background-color: #dc3545;
-        color: white;
+        background:#dc3545;
+    }
+    .action-delete:hover {
+        background:#c82333;
     }
 
-
-    /* Responsive */
-    @media (max-width: 880px) {
+    @media (max-width:880px) {
         .staff-hero {
             flex-direction:column;
             align-items:stretch;
-            gap:8px;
         }
-        .staff-table th:nth-child(3), .staff-table td:nth-child(3) {
+        .staff-table th:nth-child(2), .staff-table td:nth-child(2) {
             display:none;
-        } /* hide email on small */
+        }
     }
 </style>
 
@@ -159,7 +153,7 @@
         </div>
     </div>
 
-    <%-- flash simple --%>
+    <%-- Flash messages --%>
     <%
         String successMessage = (String) session.getAttribute("successMessage");
         String errorMessage = (String) session.getAttribute("errorMessage");
@@ -180,13 +174,12 @@
         <table class="staff-table" role="table" aria-label="Staff list">
             <thead>
                 <tr>
-                    <th style="width:72px;"></th>
-                    <th style="width:80px">ID</th>
+                    <th style="width:80px;">ID</th>
                     <th>Email</th>
                     <th>Username</th>
-                    <th style="width:120px">Role</th>
-                    <th style="width:90px">Status</th>
-                    <th style="width:140px; text-align:center">Actions</th>
+                    <th style="width:120px;">Role</th>
+                    <th style="width:90px;">Status</th>
+                    <th style="width:140px; text-align:center;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -196,35 +189,28 @@
                         for (Staff s : staffList) {
                 %>
                 <tr>
-                    <td>
-                        <!-- Placeholder thay cho ảnh -->
-                        <div style="width:66px; height:66px; border-radius:6px; display:flex; align-items:center; justify-content:center; background:#f0f2f5; border:1px solid #e6e9ee; color:#6c757d; font-weight:700;">
-                            <div style="text-align:center; font-size:18px; line-height:1;">
-                                👤
-                                <div style="font-size:10px; margin-top:4px;"><%= s.getUserName() != null ? (s.getUserName().length() > 10 ? s.getUserName().substring(0, 10) + "…" : s.getUserName()) : "Staff"%></div>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td><%= s.getAccountId()%></td>
-                    <td><%= s.getEmail() == null || s.getEmail().isEmpty() ? "-" : s.getEmail()%></td>
-                    <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>
-                    <td><%= s.getRole() == null ? "-" : s.getRole()%></td>
-                    <td><%= s.getStatus() == null ? "-" : s.getStatus()%></td>
-                    <td style="text-align:center">
-                        <div class="action-links" role="group" aria-label="actions for staff <%= s.getAccountId()%>">
-                            <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId()%>">View</a>
+                    <td><%= s.getAccountId() %></td>
+                    <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail() %></td>
+                    <td><%= s.getUserName() == null ? "-" : s.getUserName() %></td>
+                    <td><%= s.getRole() == null ? "-" : s.getRole() %></td>
+                    <td><%= s.getStatus() == null ? "-" : s.getStatus() %></td>
+                    <td style="text-align:center;">
+                        <div class="action-links">
+                            <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId() %>">View</a>
+                            <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId() %>">Edit</a>
                             <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
-                                <input type="hidden" name="id" value="<%= s.getAccountId()%>"/>
-                                <button class="action-delete" type="submit" onclick="return confirm('Delete staff #<%= s.getAccountId()%> ?');">Delete</button>
+                                <input type="hidden" name="id" value="<%= s.getAccountId() %>"/>
+                                <button class="action-delete" type="submit" onclick="return confirm('Delete staff #<%= s.getAccountId() %>?');">Delete</button>
                             </form>
                         </div>
                     </td>
                 </tr>
-                <%      }
-                } else { %>
-                <tr><td colspan="7" style="text-align:center;padding:18px;">No staff found.</td></tr>
-                <% }%>
+                <% 
+                        }
+                    } else {
+                %>
+                <tr><td colspan="6" style="text-align:center; padding:18px;">No staff found.</td></tr>
+                <% } %>
             </tbody>
         </table>
     </div>
