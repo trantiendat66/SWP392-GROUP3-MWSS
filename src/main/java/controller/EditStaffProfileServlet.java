@@ -95,13 +95,6 @@ public class EditStaffProfileServlet extends HttpServlet {
         Staff s = dao.getStaffById(loggedInStaff.getAccountId());
 
         // ===== VALIDATE INPUT =====
-        String username = request.getParameter("username");
-        if (username == null || !username.matches("[a-zA-Z\\s]+")) {
-            request.setAttribute("nameError", "Name can only contain letters.");
-            request.setAttribute("staff", s);
-            request.getRequestDispatcher("edit_staff_profile.jsp").forward(request, response);
-            return;
-        }
 
         String phone = request.getParameter("phone");
         if (phone == null || !phone.matches("^0\\d{9}$")) {
@@ -128,7 +121,6 @@ public class EditStaffProfileServlet extends HttpServlet {
         }
 
         // ====== UPDATE DATA ======
-        s.setUserName(username);
         s.setPhone(phone);
         s.setEmail(email);
         s.setAddress(address);

@@ -74,10 +74,7 @@
             <h2>Edit Staff Profile</h2>
             <form method="post" action="<%=ctx%>/edit_staff_profile">
                 <label>Username</label>
-                <input type="text" name="username" value="<%= (s != null ? s.getUserName() : "")%>"/>
-                <% if (request.getAttribute("nameError") != null) {%>
-                <p class="error"><%= request.getAttribute("nameError")%></p>
-                <% }%>
+                <input type="text" name="username" value="<%= (s != null ? s.getUserName() : "")%>" readonly/>
 
                 <label>Phone</label>
                 <input type="text" name="phone" value="<%= (s != null ? s.getPhone() : "")%>"/>
