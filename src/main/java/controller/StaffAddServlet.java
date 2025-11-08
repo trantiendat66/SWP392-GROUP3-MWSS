@@ -74,20 +74,60 @@ public class StaffAddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("userName");
+        String username = request.getParameter("userName").trim();
         String password = request.getParameter("password");
-        String hashedPassword = MD5PasswordHasher.hashPassword(password);
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String role = request.getParameter("role");
-        String position = request.getParameter("position");
-        String address = request.getParameter("address");
-        String status = request.getParameter("status");
+        String email = request.getParameter("email").trim();
+        String phone = request.getParameter("phone").trim();
+        String role = request.getParameter("role").trim();
+        String position = request.getParameter("position").trim();
+        String address = request.getParameter("address").trim();
+        String status = request.getParameter("status").trim();
 
+        // Server-side validation
+        String errorMessage = null;
+        if (username.isEmpty() || username.length() < 2) {
+            errorMessage = "Username must have at least 2 characters.";
+        } else if (password == null || password.length() < 6) {
+            errorMessage = "Password must have at least 6 characters.";
+        } else if (email.isEmpty() || !email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            errorMessage = "Please enter a valid email.";
+        } else if (phone.isEmpty() || !phone.matches("^\\d{10,11}$")) {
+            errorMessage = "Please enter a valid phone number (10-11 digits).";
+        } else if (position.isEmpty()) {
+            errorMessage = "Position cannot be empty.";
+        } else if (address.isEmpty()) {
+            errorMessage = "Address cannot be empty.";
+        }
+
+        if (errorMessage != null) {
+            Staff staff = new Staff(0, username, "", email, phone, role, position, address, status);
+            request.setAttribute("staff", staff);
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
+            return;
+        }
+
+        // Nếu hợp lệ
+        String hashedPassword = MD5PasswordHasher.hashPassword(password);
         Staff staff = new Staff(0, username, hashedPassword, email, phone, role, position, address, status);
+
         StaffDAO dao = new StaffDAO();
-        dao.addStaff(staff);
-        response.sendRedirect(request.getContextPath() + "/admin/staff");
+        try {
+            boolean success = dao.addStaff(staff);
+            if (success) {
+                request.getSession().setAttribute("successMessage", "Staff added successfully!");
+                response.sendRedirect(request.getContextPath() + "/admin/staff");
+            } else {
+                request.setAttribute("staff", staff);
+                request.setAttribute("errorMessage", "Failed to add staff. Please check input or try again.");
+                request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("staff", staff);
+            request.setAttribute("errorMessage", "Error: " + e.getMessage());
+            request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
+        }
     }
 
     /**

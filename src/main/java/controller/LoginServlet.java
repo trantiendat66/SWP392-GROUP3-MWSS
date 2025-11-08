@@ -65,28 +65,22 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Kiểm tra đã có session hoạt động chưa
         if (session != null) {
-            // Nếu là Customer đã đăng nhập
             if (session.getAttribute("customer") != null) {
                 response.sendRedirect(request.getContextPath() + "/home");
                 return;
             }
-            // Nếu là Staff đã đăng nhập
+
             if (session.getAttribute("staff") != null) {
-                // Chuyển hướng Staff đến trang quản trị chung
                 Staff staff = (Staff) session.getAttribute("staff");
                 if ("Admin".equalsIgnoreCase(staff.getRole())) {
-                    // Admin được chuyển đến trang admin dashboard
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 } else {
-                    // Staff thông thường được chuyển đến trang staff control
                     response.sendRedirect(request.getContextPath() + "/staff/orders");
                 }
                 return;
             }
         }
-        // Nếu chưa đăng nhập, chuyển hướng đến trang login.jsp
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
@@ -115,8 +109,6 @@ public class LoginServlet extends HttpServlet {
         Customer customer = customerDao.getCustomerByEmail(email);
 
         if (customer != null) {
-
-            // ✅ NEW: kiểm tra trạng thái tài khoản trước khi xác thực mật khẩu
             if ("Inactive".equalsIgnoreCase(customer.getAccount_status())) {
                 request.setAttribute("error", "Your account has been locked.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -129,7 +121,6 @@ public class LoginServlet extends HttpServlet {
             if (isAuthenticated) {
                 user = customer;
                 sessionKey = "customer";
-                // Kiểm tra có sản phẩm tạm thời không (thông qua parameter hoặc session)
                 String hasPendingProduct = request.getParameter("hasPendingProduct");
                 if ("true".equals(hasPendingProduct)) {
                     redirectPath = request.getContextPath() + "/pending-product";
@@ -144,19 +135,21 @@ public class LoginServlet extends HttpServlet {
             Staff staff = staffDao.getStaffByEmail(email);
 
             if (staff != null) {
+                if ("Inactive".equalsIgnoreCase(staff.getStatus())) {
+                    request.setAttribute("error", "Staff account is inactive!");
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    return;
+                }
                 String storedHashedPassword = staff.getPassword();
                 isAuthenticated = MD5PasswordHasher.checkPassword(password, storedHashedPassword);
 
                 if (isAuthenticated) {
                     user = staff;
-                    sessionKey = "staff"; // Key session cho Staff
+                    sessionKey = "staff";
 
-                    // PHÂN QUYỀN CHUYỂN HƯỚNG DỰA TRÊN ROLE
                     if ("Admin".equalsIgnoreCase(staff.getRole())) {
-                        // Admin được chuyển đến trang admin dashboard (có đầy đủ quyền quản lý sản phẩm)
                         redirectPath = request.getContextPath() + "/admin/dashboard";
                     } else {
-                        // Staff thông thường được chuyển đến trang staff control (quyền hạn chế)
                         redirectPath = request.getContextPath() + "/staffcontrol";
                     }
                 }
@@ -166,13 +159,9 @@ public class LoginServlet extends HttpServlet {
         // --- BƯỚC 3: XỬ LÝ KẾT QUẢ ĐĂNG NHẬP ---
         if (isAuthenticated) {
             HttpSession session = request.getSession();
-
-            // Đặt đối tượng (Customer HOẶC Staff) vào session
             session.setAttribute(sessionKey, user);
-
             response.sendRedirect(redirectPath);
         } else {
-            // Đăng nhập thất bại (sai email hoặc mật khẩu)
             request.setAttribute("error", "Invalid email or password!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }

@@ -141,8 +141,11 @@
                            readonly />
                 </div>
                 <div class="form-group">
-                    <label>Password (not editable)</label>
-                    <input type="text" value="********" disabled />
+                    <label for="password">Password</label>
+                    <input id="password" type="text"
+                           value="<%= s.getPassword() != null ? s.getPassword() : ""%>"
+                           readonly
+                           style="background:#f1f5f9; color:#475569;" />
                 </div>
             </div>
 
@@ -177,15 +180,15 @@
                     <textarea id="address" name="address"><%= s.getAddress()%></textarea>
                 </div>
             </div>
-                <div class="form-row">
-    <div class="form-group">
-        <label for="status">Status</label>
-        <select id="status" name="status">
-            <option value="Active" <%= "Active".equals(s.getStatus()) ? "selected" : "" %>>Active</option>
-            <option value="Inactive" <%= "Inactive".equals(s.getStatus()) ? "selected" : "" %>>Inactive</option>
-        </select>
-    </div>
-</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="Active" <%= "Active".equals(s.getStatus()) ? "selected" : ""%>>Active</option>
+                        <option value="Inactive" <%= "Inactive".equals(s.getStatus()) ? "selected" : ""%>>Inactive</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="btn-actions">
                 <a class="btn-ghost" href="${pageContext.request.contextPath}/admin/staff">Cancel</a>

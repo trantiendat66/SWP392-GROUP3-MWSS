@@ -245,17 +245,43 @@
 
 <script>
     function validateForm(form) {
-        // Simple client-side validation example
-        var userName = form.userName.value.trim();
-        var pwd = form.password.value;
-        if (userName.length < 2) {
+        const username = form.userName.value.trim();
+        const password = form.password.value;
+        const email = form.email.value.trim();
+        const phone = form.phone.value.trim();
+        const role = form.role.value.trim();
+        const position = form.position.value.trim();
+        const address = form.address.value.trim();
+        const status = form.status.value.trim();
+
+        if (username.length < 2) {
             alert("Username must have at least 2 characters.");
             form.userName.focus();
             return false;
         }
-        if (pwd.length < 6) {
+        if (password.length < 6) {
             alert("Password must have at least 6 characters.");
             form.password.focus();
+            return false;
+        }
+        if (email === "" || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+            alert("Please enter a valid email.");
+            form.email.focus();
+            return false;
+        }
+        if (phone === "" || !/^\d{10,11}$/.test(phone)) {
+            alert("Please enter a valid phone number (10-11 digits).");
+            form.phone.focus();
+            return false;
+        }
+        if (position === "") {
+            alert("Position cannot be empty.");
+            form.position.focus();
+            return false;
+        }
+        if (address === "") {
+            alert("Address cannot be empty.");
+            form.address.focus();
             return false;
         }
         return true;

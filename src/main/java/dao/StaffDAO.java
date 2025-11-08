@@ -30,7 +30,6 @@ public class StaffDAO extends DBContext {
 
     public Staff getStaffByEmail(String email) {
         Staff staff = null;
-        // Tên bảng Staff
         String sql = "SELECT * FROM Staff WHERE email = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -46,14 +45,9 @@ public class StaffDAO extends DBContext {
                     staff.setPosition(rs.getString("position"));
                     staff.setAddress(rs.getString("address"));
                     staff.setStatus(rs.getString("status"));
-                    if (!"Active".equalsIgnoreCase(staff.getStatus())) {
-                        System.out.println("Staff account is not active: " + email);
-                        return null;
-                    }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("getStaffByEmail error: SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
             e.printStackTrace();
         }
         return staff;
@@ -77,10 +71,6 @@ public class StaffDAO extends DBContext {
                     staff.setPosition(rs.getString("position"));
                     staff.setAddress(rs.getString("address"));
                     staff.setStatus(rs.getString("status"));
-                    if (!"Active".equalsIgnoreCase(staff.getStatus())) {
-                        System.out.println("Staff account is not active: " + account_id);
-                        return null;
-                    }
                 }
             }
         } catch (SQLException e) {
@@ -121,7 +111,6 @@ public class StaffDAO extends DBContext {
                 staff.setPosition(rs.getString("position"));
                 staff.setAddress(rs.getString("address"));
                 staff.setStatus(rs.getString("status"));
-                // nếu chỉ lấy Active: if (!"Active".equalsIgnoreCase(staff.getStatus())) continue;
                 list.add(staff);
             }
         } catch (SQLException e) {

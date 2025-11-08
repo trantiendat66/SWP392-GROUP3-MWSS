@@ -174,7 +174,7 @@ public class EditProfileServlet extends HttpServlet {
         if (filePart != null && filePart.getSize() > 0) {
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         }
-        String uploadPath = "C:\\Users\\hau\\SWP392-GROUP3-MWSS\\src\\main\\webapp\\assert\\avatar";
+        String uploadPath = "C:\\Users\\HP\\SWP392-GROUP3-MWSS\\src\\main\\webapp\\assert\\avatar";
 
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {

@@ -200,7 +200,7 @@
                             <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId() %>">Edit</a>
                             <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
                                 <input type="hidden" name="id" value="<%= s.getAccountId() %>"/>
-                                <button class="action-delete" type="submit" onclick="return confirm('Delete staff #<%= s.getAccountId() %>?');">Delete</button>
+                                <button class="action-delete" type="submit" onclick="return confirm('Are you sure you want to delete employee <%= s.getUserName() %> ?');">Delete</button>
                             </form>
                         </div>
                     </td>
