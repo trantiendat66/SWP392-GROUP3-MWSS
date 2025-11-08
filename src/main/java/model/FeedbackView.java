@@ -21,15 +21,18 @@ public class FeedbackView {
     private String customerName;
     private String product;
     private int feedbackId;
+    private boolean hidden;
 
     public FeedbackView() {
     }
 
-    public FeedbackView(int rating, String comment, Date createAt, String customerName) {
+    public FeedbackView(int feedbackId, int rating, String comment, Date createAt, String customerName, boolean hidden) {
+        this.feedbackId = feedbackId;
         this.rating = rating;
         this.comment = comment;
         this.createAt = createAt;
         this.customerName = customerName;
+        this.hidden = hidden;
     }
 
     public FeedbackView(int rating, String comment, Date createAt, String customerName, String product, int feedbackId) {
@@ -57,7 +60,6 @@ public class FeedbackView {
         this.feedbackId = feedbackId;
     }
 
-    
     public int getRating() {
         return rating;
     }
@@ -88,5 +90,13 @@ public class FeedbackView {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }

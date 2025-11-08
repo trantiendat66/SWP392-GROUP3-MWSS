@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import model.FeedbackInfo;
 import model.FeedbackView;
+import model.Reply;
 
 /**
  *
@@ -89,7 +90,7 @@ public class FeedbackDAO extends DBContext {
 
     // (Tuỳ chọn) Lấy danh sách feedback theo product để show ở product detail
     public List<FeedbackView> listByProduct(int productId) throws SQLException {
-        String sql = "SELECT f.rating, f.comment, f.create_at, c.customer_name "
+        String sql = "SELECT f.feedback_id, f.rating, f.comment, f.create_at, c.customer_name, f.hidden "
                 + "FROM Feedback f JOIN Customer c ON c.customer_id = f.customer_id "
                 + "WHERE f.product_id = ? ORDER BY f.create_at DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -98,10 +99,12 @@ public class FeedbackDAO extends DBContext {
                 List<FeedbackView> list = new ArrayList<>();
                 while (rs.next()) {
                     FeedbackView v = new FeedbackView(
+                            rs.getInt("feedback_id"),
                             rs.getInt("rating"),
                             rs.getString("comment"),
                             rs.getTimestamp("create_at"),
-                            rs.getString("customer_name")
+                            rs.getString("customer_name"),
+                            rs.getBoolean("hidden")
                     );
                     list.add(v);
                 }
@@ -154,10 +157,12 @@ public class FeedbackDAO extends DBContext {
      */
     public List<FeedbackView> getFeedbackByProduct(int productId) throws SQLException {
         String sql = """
-            SELECT c.customer_name,
+            SELECT f.feedback_id,
+                   c.customer_name,
                    f.rating,
                    f.comment,
-                   f.create_at
+                   f.create_at,
+                   f.hidden
             FROM Feedback f
             JOIN Customer c ON c.customer_id = f.customer_id
             WHERE f.product_id = ?
@@ -170,11 +175,13 @@ public class FeedbackDAO extends DBContext {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     FeedbackView v = new FeedbackView();
+                    v.setFeedbackId(rs.getInt("feedback_id"));
                     v.setCustomerName(rs.getString("customer_name"));
                     v.setRating(rs.getInt("rating"));
                     v.setComment(rs.getString("comment"));
                     Timestamp ts = rs.getTimestamp("create_at");
                     v.setCreateAt(ts != null ? new java.util.Date(ts.getTime()) : null);
+                    v.setHidden(rs.getBoolean("hidden"));
                     list.add(v);
                 }
             }
@@ -238,6 +245,7 @@ public class FeedbackDAO extends DBContext {
             }
         }
     }
+
     public List<FeedbackView> getFeedbackByStaffId(int account_id) {
         List<FeedbackView> list = new ArrayList<>();
         String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at\n"
@@ -293,10 +301,12 @@ public class FeedbackDAO extends DBContext {
         }
         return fi;
     }
+//<<<<<<< Upstream, based on origin/master
 
     /**
-     * Lấy thông tin feedback để edit (kiểm tra quyền sở hữu)
-     * Trả về Map với key: feedback_id, customer_id, order_id, product_id, rating, comment, create_at
+     * Lấy thông tin feedback để edit (kiểm tra quyền sở hữu) Trả về Map với
+     * key: feedback_id, customer_id, order_id, product_id, rating, comment,
+     * create_at
      */
     public Map<String, Object> getFeedbackForEdit(int feedbackId, int customerId) throws SQLException {
         String sql = "SELECT f.feedback_id, f.customer_id, f.order_id, f.product_id, "
@@ -304,7 +314,7 @@ public class FeedbackDAO extends DBContext {
                 + "FROM Feedback f "
                 + "JOIN [Order] o ON o.order_id = f.order_id "
                 + "WHERE f.feedback_id = ? AND f.customer_id = ?";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, feedbackId);
             ps.setInt(2, customerId);
@@ -332,13 +342,13 @@ public class FeedbackDAO extends DBContext {
     public boolean updateFeedback(int feedbackId, int customerId, int rating, String comment) throws SQLException {
         String sql = "UPDATE Feedback SET rating = ?, comment = ? "
                 + "WHERE feedback_id = ? AND customer_id = ?";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, rating);
             ps.setString(2, comment);
             ps.setInt(3, feedbackId);
             ps.setInt(4, customerId);
-            
+
             int rows = ps.executeUpdate();
             return rows > 0;
         }
@@ -349,18 +359,19 @@ public class FeedbackDAO extends DBContext {
      */
     public boolean deleteFeedback(int feedbackId, int customerId) throws SQLException {
         String sql = "DELETE FROM Feedback WHERE feedback_id = ? AND customer_id = ?";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, feedbackId);
             ps.setInt(2, customerId);
-            
+
             int rows = ps.executeUpdate();
             return rows > 0;
         }
     }
 
     /**
-     * Kiểm tra có thể edit/delete feedback không (trong vòng 3 ngày từ delivered_at)
+     * Kiểm tra có thể edit/delete feedback không (trong vòng 3 ngày từ
+     * delivered_at)
      */
     public boolean canEditOrDeleteFeedback(int feedbackId, int customerId) throws SQLException {
         String sql = "SELECT 1 FROM Feedback f "
@@ -369,7 +380,7 @@ public class FeedbackDAO extends DBContext {
                 + "  AND o.order_status = 'DELIVERED' "
                 + "  AND o.delivered_at IS NOT NULL "
                 + "  AND DATEDIFF(DAY, o.delivered_at, GETDATE()) BETWEEN 0 AND 3";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, feedbackId);
             ps.setInt(2, customerId);
@@ -380,12 +391,13 @@ public class FeedbackDAO extends DBContext {
     }
 
     /**
-     * Lấy thông tin feedback theo customer và danh sách orderIds
-     * Trả về Map: key = "orderId:productId", value = Map{feedback_id, rating, comment, canEdit}
+     * Lấy thông tin feedback theo customer và danh sách orderIds Trả về Map:
+     * key = "orderId:productId", value = Map{feedback_id, rating, comment,
+     * canEdit}
      */
     public Map<String, Map<String, Object>> getFeedbackByCustomerAndOrders(
             int customerId, Collection<Integer> orderIds) throws SQLException {
-        
+
         Map<String, Map<String, Object>> result = new HashMap<>();
         if (orderIds == null || orderIds.isEmpty()) {
             return result;
@@ -394,7 +406,9 @@ public class FeedbackDAO extends DBContext {
         StringBuilder in = new StringBuilder();
         int n = orderIds.size();
         for (int i = 0; i < n; i++) {
-            if (i > 0) in.append(",");
+            if (i > 0) {
+                in.append(",");
+            }
             in.append("?");
         }
 
@@ -432,4 +446,81 @@ public class FeedbackDAO extends DBContext {
         return result;
     }
 
+    public boolean createReply(int feedbackId, String reply) {
+        boolean success = false;
+        String sql = "INSERT INTO Reply(feedback_id, account_id, customer_id, content_reply)\n"
+                + "SELECT f.feedback_id, f.account_id, f.customer_id, ? \n"
+                + "FROM Feedback f\n"
+                + "WHERE feedback_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, reply);
+            ps.setInt(2, feedbackId);
+            success = ps.executeUpdate() > 0;
+        } catch (SQLException s) {
+            System.out.println(s.getMessage());
+        }
+        return success;
+    }
+
+    public Reply getReplyById(int feedbackId) {
+        Reply re = new Reply();
+        String sql = "SELECT TOP 1 *\n"
+                + "FROM Reply r\n"
+                + "WHERE r.feedback_id = ? "
+                + "ORDER BY rep_id DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setInt(1, feedbackId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    re.setFeedbackId(feedbackId);
+                    re.setRepId(rs.getInt("rep_id"));
+                    re.setAccountId(rs.getInt("account_id"));
+                    re.setCustomerId(rs.getInt("customer_id"));
+                    re.setContentReply(rs.getString("content_reply"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return re;
+    }
+
+    public List<Reply> getReplyByProductId(int productId) throws SQLException {
+        String sql = """
+           SELECT r.*
+            FROM Reply r
+            JOIN Feedback f ON f.feedback_id = r.feedback_id
+            Where f.product_id = ?
+            ORDER BY rep_id DESC
+        """;
+
+        List<Reply> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Reply r = new Reply();
+                    r.setRepId(rs.getInt("rep_id"));
+                    r.setFeedbackId(rs.getInt("feedback_id"));
+                    r.setAccountId(rs.getInt("account_id"));
+                    r.setCustomerId(rs.getInt("customer_id"));
+                    r.setContentReply(rs.getString("content_reply"));
+                    list.add(r);
+                }
+            }
+        }
+        return list;
+    }
+
+    public boolean hideFeedback(int feedbackId) {
+        String sql = "UPDATE Feedback SET hidden = CASE WHEN hidden = 1 THEN 0 ELSE 1 END WHERE feedback_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, feedbackId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 }

@@ -19,6 +19,7 @@ import model.Customer;
 import model.FeedbackView;
 import java.util.Map;
 import java.util.List;
+import model.Reply;
 
 /**
  *
@@ -75,7 +76,9 @@ public class ProductDetailServlet extends HttpServlet {
 
             // Lấy list review để render
             List<FeedbackView> productReviews = fbDAO.getFeedbackByProduct(id);
+            List<Reply> rep = fbDAO.getReplyByProductId(id);
             request.setAttribute("productReviews", productReviews);
+            request.setAttribute("productReplies", rep);
 
             // Tính phân bố sao + trung bình từ list trên
             int s1 = 0, s2 = 0, s3 = 0, s4 = 0, s5 = 0;

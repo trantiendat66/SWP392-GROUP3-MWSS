@@ -225,10 +225,28 @@
                                             </c:choose>
                                         </c:forEach>
                                     </div>
-
-                                    <c:if test="${not empty rv.comment}">
-                                        <p class="mb-0">${rv.comment}</p>
+                                    <c:if test="${not empty rv.comment and not rv.hidden}">
+                                        <p class="mb-0" id="comment-${rv.feedbackId}">${rv.comment}</p>
                                     </c:if>
+                                    <c:if test="${not empty rv.comment and rv.hidden}">
+                                        <p class="mb-0 text-muted fst-italic">[This comment has been hidden]</p>
+                                    </c:if>
+                                    <div>
+                                        <c:forEach var="re" items="${productReplies}">
+                                            <c:if test="${re.feedbackId == rv.feedbackId}">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="fw-semibold">Staff</div>
+                                                        </div>
+                                                        <c:if test="${not empty re.contentReply}">
+                                                            <p class="mb-0">${re.contentReply}</p>
+                                                        </c:if>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
@@ -567,6 +585,7 @@
             }
         }, 10000);
     }
+
 </script>
 
 <script>

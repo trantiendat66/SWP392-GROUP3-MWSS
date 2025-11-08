@@ -247,6 +247,11 @@
                 border-top: 1px solid #eee;
                 border-left: 1px solid #eee;
             }
+            .comment {
+                display: block;
+                max-width: 400px;
+                overflow: hidden;       /* ẩn phần dư */
+            }
 
             @media (max-width:980px){
                 table{
@@ -551,7 +556,7 @@
                                                     <td><span class="date-pill">${o.createAt}</span></td>
                                                     <td><div class="right-actions">
                                                             <form action="orderdetail">
-                                                                <button class="icon viewf" type="button" name="feedbackIdV" value="${o.feedbackId}" title="Viewf" aria-label="Hide">👁</button>
+                                                                <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
                                                                 <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
                                                             </form>
                                                         </div></td>
@@ -576,13 +581,15 @@
                                         <h5 class="modal-title" id="feedabckDetailLabel">Reply Feedback</h5>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <!--chứa popup từ servlet-->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                        <button id="applyReply" class="btn btn-primary btn-sm">Apply</button>
-                                    </div>
+                                    <form id="replyForm">
+                                        <div class="modal-body">
+                                            <!--chứa popup từ servlet-->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" id="applyReply" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -682,6 +689,54 @@
                                 console.error('Error loading feedback detail:', err);
                                 alert('Không thể tải chi tiết đơn hàng.');
                             });
+                });
+            });
+
+            $(document).on("submit", "#replyForm", function (e) {
+                e.preventDefault(); // Ngăn reload
+
+                $.ajax({
+                    url: "staff/feedback/management",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            alert("✅ Gửi phản hồi thành công!");
+                            $("#feedbackDetailModal").modal("hide");
+                        } else {
+                            alert("❌ Lỗi: " + (response.message || "Không thể gửi phản hồi."));
+                        }
+                    },
+                    error: function () {
+                        alert("⚠️ Không thể kết nối server!");
+                    }
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const hideButtons = document.querySelectorAll(".icon.hide");
+
+                hideButtons.forEach(btn => {
+                    btn.addEventListener("click", function () {
+                        const feedbackId = this.value;
+
+                        fetch("staffcontrol", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                            body: "feedbackId=" + feedbackId
+                        })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Toggle CSS hoặc text để báo đã ẩn/hiện
+                                        this.classList.toggle("hidden-active");
+                                        this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
+                                        this.textContent = this.classList.contains("hidden-active") ? "🙈" : "👁";
+                                    } else {
+                                        alert("Failed to update feedback status!");
+                                    }
+                                });
+                    });
                 });
             });
         </script>

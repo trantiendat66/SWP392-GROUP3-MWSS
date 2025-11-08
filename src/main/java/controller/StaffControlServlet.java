@@ -161,7 +161,12 @@ public class StaffControlServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Thường gọi lại doGet nếu không có xử lý POST cụ thể
+        FeedbackDAO dao = new FeedbackDAO();
+        int feedbackId = Integer.parseInt(request.getParameter("feedbackId"));
+        boolean success = dao.hideFeedback(feedbackId);
+
+        response.setContentType("application/json");
+        response.getWriter().write("{\"success\": " + success + "}");
     }
 
     @Override

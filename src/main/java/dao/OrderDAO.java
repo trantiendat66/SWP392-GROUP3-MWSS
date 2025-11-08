@@ -278,7 +278,7 @@ public class OrderDAO extends DBContext {
     public List<OrderDetail> getOrderDetailByOrderId(int order_id) {
         List<OrderDetail> listOD = new ArrayList<>();
         String sql = "SELECT p.product_name\n"
-                + ",[quantity]\n"
+                + ",od.[quantity]\n"
                 + ",[unit_price]\n"
                 + ",[total_price]\n"
                 + ",p.[image]\n"
