@@ -347,13 +347,13 @@
                                             <c:when test="${c.image != null && c.image != ''}">
                                                 <img src="${pageContext.request.contextPath}/${c.image}" 
                                                      alt="Customer Avatar" 
-                                                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" />
+                                                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                                                     onerror="this.src='${pageContext.request.contextPath}/assert/avatar/avatar_md.jpg'"/>
                                             </c:when>
                                             <c:otherwise>
-
-                                                <div style="width: 180px; height: 180px; line-height: 180px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px;">
-                                                    <i class="fa fa-user-circle fa-5x" style="color: #ccc;"></i>
-                                                </div>
+                                                <img src="${pageContext.request.contextPath}/assert/avatar/avatar_md.jpg" 
+                                                     alt="Default Avatar"
+                                                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"/>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
