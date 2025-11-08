@@ -154,9 +154,6 @@ public class ProductAddServlet extends HttpServlet {
             if (dialColor == null || dialColor.trim().isEmpty()) {
                 errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
             }
-            if (function == null || function.trim().isEmpty()) {
-                errors.put("functionError", "Please enter the product function."); // Vui lòng nhập chức năng của sản phẩm.
-            }
 
             // 🟥 Nếu có bất kỳ lỗi rỗng nào → quay lại form
             if (!errors.isEmpty()) {

@@ -172,9 +172,6 @@
                     <div class="col-md-6">
                         <label class="form-label">Function</label>
                         <input type="text" name="function" class="form-control" value="${product.function}">
-                        <c:if test="${not empty errors.functionError}">
-                            <div class="text-danger small mt-1">${errors.functionError}</div>
-                        </c:if>
                     </div>
                 </div>
 

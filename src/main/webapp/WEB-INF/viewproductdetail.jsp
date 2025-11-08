@@ -197,12 +197,12 @@
                         <div class="detail-title">Product Description</div>
                         <p style="padding: 0 10px;">${p.description}</p>
                     </div>
-
+                     <%-- Back Button --%>
+                    <div class="text-end">
+                        <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-secondary px-4">Back</a>
+                    </div>
                 </c:when>
             </c:choose>
-        </div>
-        <div class="detail-section text-center mt-4 mb-4">
-            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-secondary px-4">Back</a>
         </div>
         <%@ include file="/WEB-INF/include/footer.jsp" %>
     </body>

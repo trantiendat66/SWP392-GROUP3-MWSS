@@ -157,9 +157,6 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Function</label>
                     <input type="text" name="function" class="form-control"value="${param.function}">
-                    <c:if test="${not empty errors.functionError}">
-                        <div class="text-danger small mt-1">${errors.functionError}</div>
-                    </c:if>
                 </div>
 
                 <div class="mb-3">

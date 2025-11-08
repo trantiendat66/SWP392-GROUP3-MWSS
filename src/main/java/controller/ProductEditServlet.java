@@ -175,9 +175,6 @@ public class ProductEditServlet extends HttpServlet {
         if (dialColor.isEmpty()) {
             errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
         }
-        if (function.isEmpty()) {
-            errors.put("functionError", "Please enter the product function."); // Vui lòng nhập chức năng của sản phẩm.
-        }
 
         int price = 0, quantity = 0, categoryId = 0, accountId = 0;
         boolean gender = "true".equalsIgnoreCase(genderParam);
