@@ -55,8 +55,26 @@
                             <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
                             <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
                         </form>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold text-white" href="#" id="productDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Menu
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="productDropdown">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Gentle</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Lady</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đồng Hồ Cơ</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đồng Hồ Pin</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đính kim Cương</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Vàng Khối</a></li>
+                            </ul>
+                        </li>
                     </c:if>
-
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <c:choose>
                             <c:when test="${not empty sessionScope.customer or not empty sessionScope.staff}">
@@ -66,7 +84,7 @@
                                 <c:choose>
                                     <c:when test="${isAdmin}">
                                         <li class="nav-item me-2"></li>
-                                    </c:when>
+                                        </c:when>
 
                                     <c:otherwise>
                                         <li class="nav-item dropdown me-2">
@@ -133,7 +151,7 @@
                 if (!cartBadge) {
                     return; // User chưa đăng nhập, không có badge
                 }
-                
+
                 fetch('${pageContext.request.contextPath}/cart?action=count', {
                     method: 'GET'
                 })
@@ -146,7 +164,7 @@
                         .then(data => {
                             const count = data.count || 0;
                             cartBadge.textContent = count;
-                            
+
                             // Hiển thị badge khi có sản phẩm, ẩn khi không có
                             if (count > 0) {
                                 cartBadge.style.display = 'block';
