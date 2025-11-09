@@ -12,10 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import model.FeedbackInfo;
+import model.FeedbackView;
 import model.Reply;
 import org.json.JSONObject;
 
@@ -67,7 +66,8 @@ public class StaffFeedbackManagementServlet extends HttpServlet {
         String feedbackIdParam = request.getParameter("feedbackId");
         FeedbackDAO fd = new FeedbackDAO();
         if (feedbackIdParam == null) {
-            response.getWriter().write("<p style='color:red'>Missing order ID</p>");
+//            response.getWriter().write("<p style='color:red'>Missing order ID</p>");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "feedbackId is required");
             return;
         }
         try {
@@ -126,14 +126,24 @@ public class StaffFeedbackManagementServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         boolean success = false;
+        String getActive = request.getParameter("active") == null ? "staff" : request.getParameter("active");
         int feedbackId = Integer.parseInt(request.getParameter("feedback_id"));
         String contentReply = request.getParameter("comment");
         FeedbackDAO fd = new FeedbackDAO();
         success = fd.createReply(feedbackId, contentReply);
-        response.setContentType("application/json");
-        JSONObject json = new JSONObject();
-        json.put("success", success);
-        response.getWriter().write(json.toString());
+        if (getActive.equals("admin")) {
+            FeedbackDAO feedbackDao = new FeedbackDAO();
+            List<FeedbackView> listFeedbacks = feedbackDao.getAllFeedback();
+            request.setAttribute("listFeedbacks", listFeedbacks);
+            request.setAttribute("activeTab", "feedback");
+            request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        } else if (getActive.equals("staff")) {
+            response.setContentType("application/json");
+            JSONObject json = new JSONObject();
+            json.put("success", success);
+            response.getWriter().write(json.toString());
+        }
+
     }
 
     /**

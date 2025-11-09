@@ -66,13 +66,21 @@ public class StaffControlServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("staff") == null) {
+        if (session == null || (session.getAttribute("staff") == null && session.getAttribute("admin") == null)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        Staff loggedInCustomer = (Staff) session.getAttribute("staff");
+        Staff loggedInCustomer = null;
 
+        // Nếu là nhân viên
+        if (session.getAttribute("staff") != null) {
+            loggedInCustomer = (Staff) session.getAttribute("staff");
+        } // Nếu là admin
+        else if (session.getAttribute("admin") != null) {
+            loggedInCustomer = (Staff) session.getAttribute("admin");
+        }
+        String getActive = request.getParameter("active") == null ? "staff" : request.getParameter("active");
         // 1. Tải lại dữ liệu Staff (đã có)
         StaffDAO staffDAO = new StaffDAO();
         Staff staff = staffDAO.getStaffByEmail(loggedInCustomer.getEmail());
@@ -150,11 +158,14 @@ public class StaffControlServlet extends HttpServlet {
             System.out.println(e.getMessage());
         }
         // 2. Forward đến JSP
-        request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
-        String activeTab = (String) request.getSession().getAttribute("activeTab");
-        if (activeTab != null) {
-            request.setAttribute("activeTab", activeTab);
-            request.getSession().removeAttribute("activeTab");
+        if (getActive.equals("admin")) {
+            FeedbackDAO feedbackDao = new FeedbackDAO();
+            List<FeedbackView> listFeedbacks = feedbackDao.getAllFeedback();
+            request.setAttribute("listFeedbacks", listFeedbacks);
+            request.setAttribute("activeTab", "feedback");
+            request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
         }
     }
 

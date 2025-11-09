@@ -523,4 +523,29 @@ public class FeedbackDAO extends DBContext {
         }
         return false;
     }
+
+    public List<FeedbackView> getAllFeedback() {
+        List<FeedbackView> list = new ArrayList<>();
+        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at\n"
+                + "FROM Feedback f\n"
+                + "JOIN Customer c ON c.customer_id = f.customer_id\n"
+                + "JOIN [Product] p ON p.product_id = f.product_id\n"
+                + "ORDER BY f.create_at DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String customerName = rs.getString("customer_name");
+                    String productName = rs.getString("product_name");
+                    int rating = rs.getInt("rating");
+                    String feedback = rs.getString("comment");
+                    Timestamp date = rs.getTimestamp("create_at");
+                    int feedbackId = rs.getInt("feedback_id");
+                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
 }

@@ -226,6 +226,113 @@
             min-width: 100%;
         }
     }
+
+    /* Table styles */
+    table{
+        width:100%;
+        border-collapse: inherit;
+        font-size:16px;
+        min-width:980px;
+        box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    thead th{
+        text-align:left;
+        padding:10px;
+        background:#fff;
+        border-bottom:2px solid #222;
+        font-weight:700;
+        font-size:13px;
+    }
+    tbody td{
+        padding:12px 10px;
+        border-bottom:1px solid rgba(0,0,0,0.08);
+        vertical-align:middle;
+    }
+    tbody tr:hover td{
+        background: rgba(139,92,246,0.04)
+    }
+    .feedbackId{
+        font-weight:700;
+        color:#333
+    }
+    .icon {
+        width:34px;
+        height:34px;
+        border-radius:50%;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        background:#111;
+        color:#fff;
+        font-size:14px;
+        cursor:pointer;
+        border:1px solid rgba(0,0,0,0.08);
+    }
+    .icon.hide,
+    .icon.reply{
+        background:#fff;
+        color:#111;
+        border:1px solid #111
+    }
+    .container-flex {
+        display: flex;
+        min-height: 100%;
+    }
+    #popupModal {
+        max-width: 880px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .left {
+        flex: 5;
+        padding:50px;
+        background:linear-gradient(180deg,#ffffff,#f7f9fb);
+    }
+    .right {
+        flex: 1;
+        margin-left: 20px;
+    }
+
+    .listFeedbacks{
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-y: auto;
+        overflow-x: auto;
+        display: inline-block;
+        border: 1px solid #ddd;
+    }
+
+    .listFeedbacks thead th{
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 2;
+        text-align: left;
+        padding: 8px;
+    }
+    .listFeedbacks td{
+        padding: 8px;
+        border-top: 1px solid #eee;
+        border-left: 1px solid #eee;
+    }
+    .comment {
+        display: block;
+        max-width: 400px;
+        overflow: hidden;       /* ẩn phần dư */
+    }
+    @media (max-width:980px){
+        table{
+            min-width:680px
+        }
+    }
+    @media (max-width:760px){
+        table{
+            min-width:0;
+            font-size:13px
+        }
+    }
 </style>
 <!-- MAIN PAGE CONTENT -->
 <div class="page-wrap">
@@ -249,7 +356,7 @@
             <ul class="nav-menu">
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">Order Management</a></li>
-                <li><a class="nav-link" href="#">Ratings & Feedback</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
             </ul>
@@ -259,6 +366,7 @@
         <!-- CONTENT -->
         <main class="main-content" aria-label="Admin main content">
             <c:choose>
+
                 <c:when test="${requestScope.activeTab == 'customer'}">
                     <div class="controls">
                         <div class="page-title">Customer Management</div>
@@ -331,6 +439,7 @@
                         </table>
                     </div>                
                 </c:when>
+
                 <c:when test="${requestScope.activeTab == 'customerDetail'}">
                     <div class="controls">
                         <div class="page-title">Customer Detail <i class="fa fa-eye" style="color:#007bff;"></i></div>
@@ -407,6 +516,75 @@
                         </div>
                     </c:if>
                 </c:when>
+                <c:when test="${requestScope.activeTab == 'feedback'}">
+                    <div class="controls">
+                        <div class="page-title">Rating And Feedback Management</div>
+                    </div>
+                    <div class="listFeedbacks" role="region" aria-labelledby="feedbacks-title">
+                        <table aria-describedby="orders-desc">
+                            <thead>
+                                <tr>
+                                    <th>Feedback ID</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Rating</th>
+                                    <th>Feedback</th>
+                                    <th>Date</th>
+                                    <th style="text-align:center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:choose>
+                                    <c:when test="${not empty requestScope.listFeedbacks}">
+                                        <c:forEach var="o" items="${requestScope.listFeedbacks}">
+                                            <tr data-id="${o.feedbackId}">
+                                                <td class="feedbackId" style="text-align: center">${o.feedbackId}</td>
+                                                <td>${o.customerName}</td>
+                                                <td>${o.product}</td>
+                                                <td class="text-center" style="color: tomato; font-weight:700;">${o.rating}/5</td>
+                                                <td>${o.comment}</td>
+                                                <td><span class="date-pill">${o.createAt}</span></td>
+                                                <td><div class="right-actions">
+                                                        <form action="orderdetail">
+                                                            <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">◉_◉</button>
+                                                            <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
+                                                        </form>
+                                                    </div></td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr>
+                                            <td colspan="6" style="text-align: center;">No orders found in the database.</td>
+                                        </tr>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Popup View -->
+                    <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                            <div class="modal-content bg-light text-black" >
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="feedabckDetailLabel">Reply Feedback</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form action="${pageContext.request.contextPath}/staff/feedback/management?active=admin" method="POST" id="replyForm">
+                                    <div class="modal-body">
+                                        <!--chứa popup từ servlet-->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" id="applyReply" class="btn btn-primary btn-sm">Apply</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </c:when>
+
                 <c:otherwise>
                     <div class="controls">
                         <div class="page-title">Product Management</div>
@@ -595,6 +773,59 @@
                 form.appendChild(input);
                 document.body.appendChild(form);
                 form.submit();
+            });
+        });
+    });
+</script>
+<script>
+    //feedback script
+    document.querySelectorAll('.icon.reply').forEach(fbBtn => {
+        fbBtn.addEventListener('click', (e) => {
+            const feedbackId = fbBtn.value;
+            console.log("Fetching order detail for ID:", feedbackId);
+
+            fetch('${pageContext.request.contextPath}/staff/feedback/management?feedbackId=' + feedbackId, {method: 'GET'})
+                    .then(response => response.text())
+                    .then(html => {
+                        document.querySelector('#feedbackDetailModal .modal-body').innerHTML = html;
+                        const modal = new bootstrap.Modal(document.getElementById('feedbackDetailModal'));
+                        modal.show();
+                        // Enable nút lại khi modal đóng
+                        const modalEl = document.getElementById('feedbackDetailModal');
+                        modalEl.addEventListener('hidden.bs.modal', () => {
+                            fbBtn.disabled = false;   // Enable nút
+                        }, {once: true});
+                    })
+                    .catch(err => {
+                        console.error('Error loading feedback detail:', err);
+                        alert('Không thể tải chi tiết đơn hàng.');
+                    });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const hideButtons = document.querySelectorAll(".icon.hide");
+
+        hideButtons.forEach(btn => {
+            btn.addEventListener("click", function () {
+                const feedbackId = this.value;
+
+                fetch("${pageContext.request.contextPath}/staffcontrol", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "feedbackId=" + feedbackId
+                })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Toggle CSS hoặc text để báo đã ẩn/hiện
+                                this.classList.toggle("hidden-active");
+                                this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
+                                this.textContent = this.classList.contains("hidden-active") ? "(•_•)" : "◉_◉";
+                            } else {
+                                alert("Failed to update feedback status!");
+                            }
+                        });
             });
         });
     });
