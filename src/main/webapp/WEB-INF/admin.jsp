@@ -7,7 +7,9 @@
 <%@ page import="model.TopProduct" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     html, body {
         margin: 0;
@@ -251,9 +253,48 @@
     tbody tr:hover td{
         background: rgba(139,92,246,0.04)
     }
+    .order-id,
     .feedbackId{
         font-weight:700;
         color:#333
+    }
+    .date-pill{
+        display:inline-block;
+        padding:6px 8px;
+        border-radius:20px;
+        background:#f0f0f0;
+        font-size:13px;
+        color:#333;
+    }
+    .status-order{
+        padding:6px 10px;
+        border-radius:16px;
+        font-weight:600;
+        font-size:13px;
+        display:inline-block;
+        min-width:84px;
+        text-align:center;
+        border-radius:20px;
+        background:#f0f0f0;
+    }
+    .status-order.pending{
+        color:black;
+        font-weight:700;
+    }
+    .status-order.shipping{
+        color:#00cc33;
+        font-weight:700;
+    }
+    .status-order.delivered{
+        color:red;
+        font-weight:700;
+    }
+
+    .right-actions{
+        min-width: 80px;
+        display:flex;
+        gap:10px;
+        justify-content:center
     }
     .icon {
         width:34px;
@@ -268,6 +309,7 @@
         cursor:pointer;
         border:1px solid rgba(0,0,0,0.08);
     }
+    .icon.view,
     .icon.hide,
     .icon.reply{
         background:#fff;
@@ -295,6 +337,7 @@
         margin-left: 20px;
     }
 
+    .listOrders,
     .listFeedbacks{
         max-height: 400px;
         overflow-y: auto;
@@ -304,6 +347,7 @@
         border: 1px solid #ddd;
     }
 
+    .listOrders thead th,
     .listFeedbacks thead th{
         position: sticky;
         top: 0;
@@ -312,6 +356,7 @@
         text-align: left;
         padding: 8px;
     }
+    .listOrders td,
     .listFeedbacks td{
         padding: 8px;
         border-top: 1px solid #eee;
@@ -355,7 +400,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders">Order Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
@@ -585,6 +630,96 @@
                     </div>
                 </c:when>
 
+                <c:when test="${requestScope.activeTab == 'order'}">
+                    <div class="controls">
+                        <div class="page-title">Order List</div>
+                    </div>
+                    <div class="listOrders" role="region" aria-labelledby="orders-title">
+                        <table aria-describedby="orders-desc">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                    <th>Total (VND)</th>
+                                    <th style="text-align:center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:choose>
+                                    <c:when test="${not empty requestScope.listOrders}">
+                                        <c:forEach var="o" items="${requestScope.listOrders}">
+                                            <tr data-id="${o.order_id}">
+                                                <td class="order-id"style="text-align: center">${o.order_id}</td>
+                                                <td>${o.customer_name}</td>
+                                                <td><span class="date-pill">${o.order_date}</span></td>
+                                                <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
+                                                <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
+                                        <td><div class="right-actions">
+                                                <form action="orderdetail">
+                                                    <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
+                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
+                                                </form>
+                                            </div></td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <tr>
+                                        <td colspan="6" style="text-align: center;">No orders found in the database.</td>
+                                    </tr>
+                                </c:otherwise>
+                            </c:choose>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Popup View -->
+                    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                            <div class="modal-content bg-light text-black" >
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderDetailLabel">Order Detail</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!--chứa popup từ servlet-->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Popup Edit -->
+                    <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
+                        <div class="modal-dialog editPopup modal-dialog-centered">
+                            <div class="modal-content bg-light text-black" id="popupEdit">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <input type="hidden" id="orderIdInput" name="orderId" />
+                                    <select class="form-select" id="order-status" name="order-status">
+                                        <option value="PENDING">PENDING</option>
+                                        <option value="SHIPPING">SHIPPING</option>
+                                        <option value="DELIVERED">DELIVERED</option>
+                                    </select> 
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                    <button id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:when>
+
                 <c:otherwise>
                     <div class="controls">
                         <div class="page-title">Product Management</div>
@@ -778,6 +913,25 @@
     });
 </script>
 <script>
+    // Example: View
+    document.querySelectorAll('.icon.view').forEach(viewBtn => {
+        viewBtn.addEventListener('click', (e) => {
+            const orderId = viewBtn.value;
+            console.log("Fetching order detail for ID:", orderId);
+
+            fetch('${pageContext.request.contextPath}/orderdetail?orderIdV=' + orderId, {method: 'GET'})
+                    .then(response => response.text())
+                    .then(html => {
+                        document.querySelector('#orderDetailModal .modal-body').innerHTML = html;
+                        const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+                        modal.show();
+                    })
+                    .catch(err => {
+                        console.error('Error loading order detail:', err);
+                        alert('Không thể tải chi tiết đơn hàng.');
+                    });
+        });
+    });
     //feedback script
     document.querySelectorAll('.icon.reply').forEach(fbBtn => {
         fbBtn.addEventListener('click', (e) => {
@@ -827,6 +981,51 @@
                             }
                         });
             });
+        });
+    });
+</script>
+<!--Script Edit Order-->
+<script>
+    let currentOrderId = null;
+    let currentRow = null;
+
+    document.querySelectorAll('.icon.edit').forEach(function (editBtn) {
+        editBtn.addEventListener('click', function (e) {
+            const orderId = this.value;
+            const status = this.getAttribute('data-status');
+            document.getElementById('orderIdInput').value = orderId;
+
+            const select = document.getElementById('order-status');
+            select.value = status;
+
+            const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+            currentRow = $(this).closest("tr");
+            currentOrderId = currentRow.data("id");
+            modal.show();
+        });
+    });
+
+    // Khi nhấn Apply → gửi AJAX để update
+    $("#applyStatus").click(function () {
+        const newStatus = $("#order-status").val();
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/orderdetail", // Servlet URL
+            method: "POST",
+            data: {id: currentOrderId, status: newStatus},
+            success: function (response) {
+                // response là JSON do Servlet trả về
+                if (response.success) {
+                    // ✅ Cập nhật UI ngay tại chỗ
+                    currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
+                    alert("Cập nhật thành công!");
+                } else {
+                    alert("Lỗi khi cập nhật!");
+                }
+            },
+            error: function () {
+                alert("Không thể kết nối server!");
+            }
         });
     });
 </script>

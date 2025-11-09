@@ -164,6 +164,12 @@ public class StaffControlServlet extends HttpServlet {
             request.setAttribute("listFeedbacks", listFeedbacks);
             request.setAttribute("activeTab", "feedback");
             request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        } else if (getActive.equals("admino")) {
+            OrderDAO orderDao = new OrderDAO();
+            List<Order> listOrders = orderDao.getAllOrder();
+            request.setAttribute("listOrders", listOrders);
+            request.setAttribute("activeTab", "order");
+            request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
         }

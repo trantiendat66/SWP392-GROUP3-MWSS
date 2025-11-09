@@ -561,4 +561,38 @@ public class OrderDAO extends DBContext {
             }
         }
     }
+
+    public List<Order> getAllOrder() {
+        List<Order> listOrders = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "	o.order_id,\n"
+                + "	c.customer_name,\n"
+                + "	o.phone,\n"
+                + "	o.order_date,\n"
+                + "	o.order_status,\n"
+                + "	o.shipping_address,\n"
+                + "	o.payment_method,\n"
+                + "	o.total_amount\n"
+                + "FROM [Order] o\n"
+                + "JOIN Customer c ON c.customer_id = o.customer_id";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int order_id = rs.getInt("order_id");
+                    String customer_name = rs.getString("customer_name");
+                    String phone = rs.getString("phone");
+                    String order_date = rs.getString("order_date");
+                    String order_status = rs.getString("order_status");
+                    String shipping_address = rs.getString("shipping_address");
+                    int payment_method = rs.getInt("payment_method");
+                    BigDecimal total_amount = rs.getBigDecimal("total_amount");
+
+                    listOrders.add(new Order(order_id, customer_name, phone, order_date, order_status, shipping_address, payment_method, total_amount));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return listOrders;
+    }
 }
