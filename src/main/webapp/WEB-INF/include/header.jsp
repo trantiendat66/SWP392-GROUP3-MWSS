@@ -61,17 +61,17 @@
                                 Menu
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="productDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Gentle</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=2">Gentleman</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Lady</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=3">Ladies</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đồng Hồ Cơ</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=4">Đồng Hồ Cơ</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đồng Hồ Pin</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=5">Đồng Hồ Pin</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Đính kim Cương</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=6">Đính kim Cương</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/partials/product-list.jsp">Vàng Khối</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=7">Vàng Khối</a></li>
                             </ul>
                         </li>
                     </c:if>
