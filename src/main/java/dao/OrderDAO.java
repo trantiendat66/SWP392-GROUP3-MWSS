@@ -79,15 +79,14 @@ public class OrderDAO extends DBContext {
             }
 
             // 2) Insert OrderDetail
-            String sqlDetail = "INSERT INTO OrderDetail(order_id, product_id, quantity, unit_price, total_price) "
-                    + "VALUES (?,?,?,?,?)";
+            String sqlDetail = "INSERT INTO OrderDetail(order_id, product_id, quantity, unit_price) "
+                    + "VALUES (?,?,?,?)";
             try (PreparedStatement ps = cn.prepareStatement(sqlDetail)) {
                 for (Cart it : byProduct.values()) {
                     ps.setInt(1, orderId);
                     ps.setInt(2, it.getProductId());
                     ps.setInt(3, it.getQuantity());
                     ps.setInt(4, it.getPrice());
-                    ps.setLong(5, (long) it.getPrice() * it.getQuantity());
                     ps.addBatch();
                 }
                 ps.executeBatch();
@@ -95,8 +94,8 @@ public class OrderDAO extends DBContext {
 
             // 3) Trừ kho có điều kiện
             List<Integer> failed = new ArrayList<>();
-            String sqlStock = "UPDATE Product SET quantity = quantity - ? "
-                    + "WHERE product_id=? AND quantity >= ?";
+            String sqlStock = "UPDATE Product SET product_quantity = product_quantity - ? "
+                    + "WHERE product_id=? AND product_quantity >= ?";
             try (PreparedStatement ps = cn.prepareStatement(sqlStock)) {
                 for (Cart it : byProduct.values()) {
                     ps.setInt(1, it.getQuantity());
@@ -280,7 +279,6 @@ public class OrderDAO extends DBContext {
         String sql = "SELECT p.product_name\n"
                 + ",od.[quantity]\n"
                 + ",[unit_price]\n"
-                + ",[total_price]\n"
                 + ",p.[image]\n"
                 + "  FROM [dbo].[OrderDetail] od\n"
                 + "  JOIN [Product] p ON p.product_id = od.product_id\n"
@@ -292,7 +290,7 @@ public class OrderDAO extends DBContext {
                     String product_name = rs.getString("product_name");
                     int quantity = rs.getInt("quantity");
                     BigDecimal unit_price = rs.getBigDecimal("unit_price");
-                    BigDecimal total_price = rs.getBigDecimal("total_price");
+                    BigDecimal total_price = unit_price.multiply(BigDecimal.valueOf(quantity));
                     String image = rs.getString("image");
 
                     listOD.add(new OrderDetail(product_name, quantity, unit_price, total_price, image));
@@ -413,7 +411,7 @@ public class OrderDAO extends DBContext {
         String sql
                 = "SELECT p.product_name, d.quantity, "
                 + "       CAST(d.unit_price AS DECIMAL(12,2)) AS unit_price, "
-                + "       CAST(d.total_price AS DECIMAL(12,2)) AS total_price, "
+                + "       quantity*unit_price AS total_price, "
                 + "       p.image "
                 + "FROM [OrderDetail] d "
                 + "JOIN Product p ON p.product_id = d.product_id "

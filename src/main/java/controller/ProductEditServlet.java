@@ -114,7 +114,8 @@ public class ProductEditServlet extends HttpServlet {
         String priceStr = trim(request.getParameter("price"));
         String quantityStr = trim(request.getParameter("quantity_product"));
         String categoryStr = trim(request.getParameter("category_id"));
-        String accountStr = trim(request.getParameter("account_id"));
+        String importStr = trim(request.getParameter("account_id"));
+        ///chưa tạo chức năng nhập hàng gán đùng đỡ, thay account_id này thành import_invetory_id
         String image = trim(request.getParameter("image"));
         String description = trim(request.getParameter("description"));
         String warranty = trim(request.getParameter("warranty"));
@@ -145,8 +146,8 @@ public class ProductEditServlet extends HttpServlet {
         if (categoryStr.isEmpty()) {
             errors.put("categoryError", "Category ID cannot be left blank"); // Không được bỏ trống mã danh mục
         }
-        if (accountStr.isEmpty()) {
-            errors.put("accountError", "Account ID cannot be left blank"); // Không được bỏ trống mã tài khoản
+        if (importStr.isEmpty()) {
+            errors.put("accountError", "Account ID cannot be left blank"); // Không được bỏ trống mã tài khoản///chưa tạo chức năng nhập hàng gán đùng đỡ
         }
         if (image.isEmpty()) {
             errors.put("imageError", "Please enter the image name or path."); // Vui lòng nhập tên hoặc đường dẫn hình ảnh.
@@ -207,7 +208,8 @@ public class ProductEditServlet extends HttpServlet {
         }
 
         try {
-            accountId = Integer.parseInt(accountStr);
+            accountId = Integer.parseInt(importStr);
+            ///chưa tạo chức năng nhập hàng gán đùng đỡ
             if (accountId <= 0) {
                 errors.put("accountError", "Account ID cannot be negative");
             }
@@ -226,7 +228,8 @@ public class ProductEditServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setAccountId(accountId);
+            p.setImportInvetoryId(accountId);
+            ///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
             p.setWarranty(warranty);
@@ -257,7 +260,7 @@ public class ProductEditServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setAccountId(accountId);
+            p.setImportInvetoryId(accountId);///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
             p.setWarranty(warranty);

@@ -12,7 +12,7 @@ public class Product {
 
     private int productId;
     private int categoryId;
-    private int accountId;
+    private int importInvetoryId;
     private String image;
     private String productName;
     private int price;
@@ -33,10 +33,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, int categoryId, int accountId, String image, String productName, int price, String brand, String origin, boolean gender, String description, String warranty, String machine, String glass, String dialDiameter, String bezel, String strap, String dialColor, String function, int quantityProduct) {
+    public Product(int productId, int categoryId, int importInvetoryId, String image, String productName, int price, String brand, String origin, boolean gender, String description, String warranty, String machine, String glass, String dialDiameter, String bezel, String strap, String dialColor, String function, int quantityProduct) {
         this.productId = productId;
         this.categoryId = categoryId;
-        this.accountId = accountId;
+        this.importInvetoryId = importInvetoryId;
         this.image = image;
         this.productName = productName;
         this.price = price;
@@ -71,12 +71,12 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public int getAccountId() {
-        return accountId;
+    public int getImportInvetoryId() {
+        return importInvetoryId;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setImportInvetoryId(int importInvetoryId) {
+        this.importInvetoryId = importInvetoryId;
     }
 
     public String getImage() {
@@ -205,11 +205,6 @@ public class Product {
 
     public void setQuantityProduct(int quantityProduct) {
         this.quantityProduct = quantityProduct;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" + "productId=" + productId + ", categoryId=" + categoryId + ", accountId=" + accountId + ", image=" + image + ", productName=" + productName + ", price=" + price + ", brand=" + brand + ", origin=" + origin + ", gender=" + gender + ", description=" + description + ", warranty=" + warranty + ", machine=" + machine + ", glass=" + glass + ", dialDiameter=" + dialDiameter + ", bezel=" + bezel + ", strap=" + strap + ", dialColor=" + dialColor + ", function=" + function + ", quantityProduct=" + quantityProduct + '}';
     }
 
 }

@@ -95,7 +95,8 @@ public class ProductAddServlet extends HttpServlet {
             String quantityStr = request.getParameter("quantity_product");
             String categoryStr = request.getParameter("category_id");
 
-            int accountId = 1;
+            int import_invetory_Id = 1;
+            ///chưa tạo chức năng nhập hàng gán đùng đỡ
 
             String image = request.getParameter("image");
             String description = request.getParameter("description");
@@ -107,7 +108,7 @@ public class ProductAddServlet extends HttpServlet {
             String strap = request.getParameter("strap");
             String dialColor = request.getParameter("dial_color");
             String function = request.getParameter("function");
-            
+
             // Translation for validation messages
             if (productName == null || productName.trim().isEmpty()) {
                 errors.put("productNameError", "Product name cannot be left blank."); // Tên sản phẩm không được để trống.
@@ -187,7 +188,7 @@ public class ProductAddServlet extends HttpServlet {
             if (categoryId <= 0) {
                 errors.put("categoryError", "Category ID must be greater than 0."); // ID danh mục phải lớn hơn 0.
             }
-            
+
             // If there are logic errors, return to the form
             if (!errors.isEmpty()) {
                 request.setAttribute("errors", errors);
@@ -204,7 +205,8 @@ public class ProductAddServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setAccountId(accountId);
+            p.setImportInvetoryId(import_invetory_Id);
+            ///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
             p.setWarranty(warranty);
@@ -218,7 +220,7 @@ public class ProductAddServlet extends HttpServlet {
 
             ProductDAO dao = new ProductDAO();
             dao.addProduct(p);
-            
+
             // Translation for success message
             request.getSession().setAttribute("successMessage", "Successfully added product \"" + productName + "\"!"); // Thêm sản phẩm thành công!
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");

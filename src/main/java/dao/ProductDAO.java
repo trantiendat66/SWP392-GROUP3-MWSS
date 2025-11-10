@@ -14,14 +14,14 @@ import model.Product;
  * @author Tran Tien Dat - CE190362
  */
 public class ProductDAO extends DBContext {
-    
+
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -31,7 +31,7 @@ public class ProductDAO extends DBContext {
                 Product p = new Product();
                 p.setProductId(rs.getInt("product_id"));
                 p.setCategoryId(rs.getInt("category_id"));
-                p.setAccountId(rs.getInt("account_id"));
+                p.setImportInvetoryId(rs.getInt("import_invetory_id"));
                 p.setImage(rs.getString("image"));
                 p.setProductName(rs.getString("product_name"));
                 p.setPrice(rs.getInt("price"));
@@ -47,7 +47,7 @@ public class ProductDAO extends DBContext {
                 p.setStrap(rs.getString("strap"));
                 p.setDialColor(rs.getString("dial_color"));
                 p.setFunction(rs.getString("function"));
-                int quantity = rs.getInt("quantity");
+                int quantity = rs.getInt("product_quantity");
                 p.setQuantityProduct(quantity != 0 ? quantity : 0);
                 list.add(p);
             }
@@ -56,13 +56,13 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-    
+
     public Product getProductById(int id) {
-        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -74,7 +74,7 @@ public class ProductDAO extends DBContext {
                     Product p = new Product();
                     p.setProductId(rs.getInt("product_id"));
                     p.setCategoryId(rs.getInt("category_id"));
-                    p.setAccountId(rs.getInt("account_id"));
+                    p.setImportInvetoryId(rs.getInt("import_invetory_id"));
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
@@ -90,7 +90,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    int quantity = rs.getInt("quantity");
+                    int quantity = rs.getInt("product_quantity");
                     p.setQuantityProduct(quantity != 0 ? quantity : 0);
                     return p;
                 }
@@ -100,14 +100,14 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-    
+
     public List<Product> searchProducts(String keyword) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -121,7 +121,7 @@ public class ProductDAO extends DBContext {
                     Product p = new Product();
                     p.setProductId(rs.getInt("product_id"));
                     p.setCategoryId(rs.getInt("category_id"));
-                    p.setAccountId(rs.getInt("account_id"));
+                    p.setImportInvetoryId(rs.getInt("import_invetory_id"));
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
@@ -137,7 +137,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    int quantity = rs.getInt("quantity");
+                    int quantity = rs.getInt("product_quantity");
                     p.setQuantityProduct(quantity != 0 ? quantity : 0);
                     list.add(p);
                 }
@@ -147,14 +147,14 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-    
+
     public List<Product> filterProducts(String brand, String gender, int minPrice, int maxPrice) {
         List<Product> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        StringBuilder sql = new StringBuilder("SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -186,7 +186,7 @@ public class ProductDAO extends DBContext {
                     Product p = new Product();
                     p.setProductId(rs.getInt("product_id"));
                     p.setCategoryId(rs.getInt("category_id"));
-                    p.setAccountId(rs.getInt("account_id"));
+                    p.setImportInvetoryId(rs.getInt("import_invetory_id"));
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
@@ -202,7 +202,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    int quantity = rs.getInt("quantity");
+                    int quantity = rs.getInt("product_quantity");
                     p.setQuantityProduct(quantity != 0 ? quantity : 0);
                     list.add(p);
                 }
@@ -212,7 +212,7 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-    
+
     public int getCurrentPrice(int productId) throws SQLException {
         try (Connection cn = new DBContext().getConnection(); PreparedStatement ps = cn.prepareStatement("SELECT price FROM Product WHERE product_id=?")) {
             ps.setInt(1, productId);
@@ -224,13 +224,13 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-    
+
     public Product getById(int productId) throws SQLException {
-        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -242,7 +242,7 @@ public class ProductDAO extends DBContext {
                     Product p = new Product();
                     p.setProductId(rs.getInt(1));
                     p.setCategoryId(rs.getInt(2));
-                    p.setAccountId(rs.getInt(3));
+                    p.setImportInvetoryId(rs.getInt(3));
                     p.setImage(rs.getString(4));
                     p.setProductName(rs.getString(5));
                     p.setPrice(rs.getInt(6));
@@ -266,7 +266,7 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-    
+
     private int getBrandIdByBrandName(String brandName) {
         String sql = "SELECT b.brand_id\n"
                 + "From Brand b\n"
@@ -283,13 +283,13 @@ public class ProductDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public void addProduct(Product p) throws SQLException {
-        String sql = "INSERT INTO Product (category_id, account_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], quantity)\n"
+        String sql = "INSERT INTO Product (category_id, import_invetory_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], product_quantity)\n"
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, p.getCategoryId());
-            ps.setInt(2, p.getAccountId());
+            ps.setInt(2, p.getImportInvetoryId());
             ps.setInt(3, getBrandIdByBrandName(p.getBrand()));
             ps.setString(4, p.getImage());
             ps.setString(5, p.getProductName());
@@ -312,12 +312,12 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-    
+
     public void updateProduct(Product p) throws SQLException {
-        String sqlProduct = "UPDATE Product SET category_id = ?, account_id = ?, brand_id = ?, image = ?, product_name = ?, price = ?, origin = ?, gender = ?, "
-                + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ? , quantity = ? "
+        String sqlProduct = "UPDATE Product SET category_id = ?, import_invetory_id = ?, brand_id = ?, image = ?, product_name = ?, price = ?, origin = ?, gender = ?, "
+                + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ? , product_quantity = ? "
                 + "WHERE product_id = ?";
-        
+
         try (Connection cn = getConnection()) {
             cn.setAutoCommit(false); // bắt đầu transaction
 
@@ -325,7 +325,7 @@ public class ProductDAO extends DBContext {
 
                 // --- Update Product ---
                 ps1.setInt(1, p.getCategoryId());
-                ps1.setInt(2, p.getAccountId());
+                ps1.setInt(2, p.getImportInvetoryId());
                 ps1.setInt(3, getBrandIdByBrandName(p.getBrand()));
                 ps1.setString(4, p.getImage());
                 ps1.setString(5, p.getProductName());
@@ -345,7 +345,7 @@ public class ProductDAO extends DBContext {
                 ps1.setInt(18, p.getQuantityProduct());
                 // set product_id for WHERE clause (parameter 19)
                 ps1.setInt(19, p.getProductId());
-                
+
                 int rows1 = ps1.executeUpdate();
                 if (rows1 == 0) {
                     throw new SQLException("Không tìm thấy product_id = " + p.getProductId());
@@ -360,7 +360,7 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-    
+
     public void deleteProduct(int productId) throws SQLException {
         String sql = "DELETE FROM Product WHERE product_id = ?";
         try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -371,14 +371,14 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-    
+
     public List<Product> getProductsByCategory(int cate) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.product_id, c.category_id, p.account_id, p.image,\n"
+        String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
                 + "p.product_name, p.price, b.brand_name, p.origin,\n"
                 + "p.gender, p.description, p.warranty, p.machine,\n"
                 + "p.glass, p.dial_diameter, p.bezel, p.strap, p.dial_color,\n"
-                + "p.[function], p.quantity\n"
+                + "p.[function], p.product_quantity\n"
                 + "FROM [Product] p\n"
                 + "JOIN Category c ON c.category_id = p.category_id\n"
                 + "JOIN Brand b ON b.brand_id = p.brand_id\n"
@@ -391,7 +391,7 @@ public class ProductDAO extends DBContext {
                     Product p = new Product();
                     p.setProductId(rs.getInt("product_id"));
                     p.setCategoryId(rs.getInt("category_id"));
-                    p.setAccountId(rs.getInt("account_id"));
+                    p.setImportInvetoryId(rs.getInt("import_invetory_id"));
                     p.setImage(rs.getString("image"));
                     p.setProductName(rs.getString("product_name"));
                     p.setPrice(rs.getInt("price"));
@@ -407,7 +407,7 @@ public class ProductDAO extends DBContext {
                     p.setStrap(rs.getString("strap"));
                     p.setDialColor(rs.getString("dial_color"));
                     p.setFunction(rs.getString("function"));
-                    int quantity = rs.getInt("quantity");
+                    int quantity = rs.getInt("product_quantity");
                     p.setQuantityProduct(quantity != 0 ? quantity : 0);
                     list.add(p);
                 }
@@ -417,5 +417,5 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-    
+
 }

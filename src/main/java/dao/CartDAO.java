@@ -15,8 +15,9 @@ import java.util.List;
 import model.Cart;
 
 /**
- * Cart DAO - Data Access Object for Cart operations
- * Handles all database operations related to shopping cart
+ * Cart DAO - Data Access Object for Cart operations Handles all database
+ * operations related to shopping cart
+ *
  * @author Dang Vi Danh - CE19687
  */
 public class CartDAO extends DBContext {
@@ -28,14 +29,14 @@ public class CartDAO extends DBContext {
     // Lấy tất cả sản phẩm trong giỏ hàng của customer
     public List<Cart> getCartByCustomerId(int customerId) {
         List<Cart> list = new ArrayList<>();
-        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, c.price, c.quantity AS cart_quantity, "
-                + "p.product_name, p.image, b.brand_name, p.quantity AS product_quantity "
+        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.cart_quantity, "
+                + "p.product_name, p.image, b.brand_name, p.product_quantity "
                 + "FROM Cart c "
                 + "INNER JOIN Product p ON c.product_id = p.product_id "
                 + "JOIN Brand b ON b.brand_id = p.brand_id "
                 + "WHERE c.customer_id = ? "
                 + "ORDER BY c.cart_id DESC";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -63,19 +64,18 @@ public class CartDAO extends DBContext {
     public boolean addToCart(int customerId, int productId, int price, int quantity) {
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         Cart existingCart = getCartItem(customerId, productId);
-        
+
         if (existingCart != null) {
             // Nếu đã có, cập nhật số lượng
             int newQuantity = existingCart.getQuantity() + quantity;
             return updateCartQuantity(existingCart.getCartId(), newQuantity);
         } else {
             // Nếu chưa có, thêm mới
-            String sql = "INSERT INTO Cart (customer_id, product_id, price, quantity) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Cart (customer_id, product_id, cart_quantity) VALUES (?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, customerId);
                 ps.setInt(2, productId);
-                ps.setInt(3, price);
-                ps.setInt(4, quantity);
+                ps.setInt(3, quantity);
                 int rows = ps.executeUpdate();
                 return rows > 0;
             } catch (SQLException e) {
@@ -87,7 +87,10 @@ public class CartDAO extends DBContext {
 
     // Lấy một item cụ thể trong giỏ hàng
     public Cart getCartItem(int customerId, int productId) {
-        String sql = "SELECT * FROM Cart WHERE customer_id = ? AND product_id = ?";
+        String sql = "SELECT  c.cart_id, c.customer_id, c.product_id, p.price, c.cart_quantity\n"
+                + "FROM Cart c\n"
+                + "JOIN [Product] p ON p.product_id = c.product_id\n"
+                + "WHERE c.customer_id = ? AND c.product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             ps.setInt(2, productId);
@@ -98,7 +101,7 @@ public class CartDAO extends DBContext {
                     cart.setCustomerId(rs.getInt("customer_id"));
                     cart.setProductId(rs.getInt("product_id"));
                     cart.setPrice(rs.getInt("price"));
-                    cart.setQuantity(rs.getInt("quantity"));
+                    cart.setQuantity(rs.getInt("cart_quantity"));
                     return cart;
                 }
             }
@@ -110,7 +113,7 @@ public class CartDAO extends DBContext {
 
     // Lấy một item trong giỏ hàng theo cartId
     public Cart getCartItemById(int cartId) {
-        String sql = "SELECT * FROM Cart WHERE cart_id = ?";
+        String sql = "SELECT c.*, p.price FROM Cart c JOIN [Product] p ON p.product_id = c.product_id WHERE cart_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, cartId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -120,7 +123,7 @@ public class CartDAO extends DBContext {
                     cart.setCustomerId(rs.getInt("customer_id"));
                     cart.setProductId(rs.getInt("product_id"));
                     cart.setPrice(rs.getInt("price"));
-                    cart.setQuantity(rs.getInt("quantity"));
+                    cart.setQuantity(rs.getInt("cart_quantity"));
                     return cart;
                 }
             }
@@ -132,7 +135,7 @@ public class CartDAO extends DBContext {
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public boolean updateCartQuantity(int cartId, int newQuantity) {
-        String sql = "UPDATE Cart SET quantity = ? WHERE cart_id = ?";
+        String sql = "UPDATE Cart SET cart_quantity = ? WHERE cart_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, newQuantity);
             ps.setInt(2, cartId);
@@ -188,7 +191,7 @@ public class CartDAO extends DBContext {
 
     // Tính tổng tiền trong giỏ hàng
     public int getCartTotal(int customerId) {
-        String sql = "SELECT SUM(price * quantity) as total FROM Cart WHERE customer_id = ?";
+        String sql = "SELECT SUM(p.price * c.cart_quantity) as total FROM Cart c JOIN [Product] p ON p.product_id = c.product_id WHERE customer_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -201,29 +204,28 @@ public class CartDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public List<Cart> findItemsForCheckout(int customerId) throws SQLException {
-        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.quantity, " +
-                     "       p.product_name, p.image, b.brand_name, p.quantity AS product_quantity " +
-                     "FROM Cart c " +
-                     "JOIN Product p ON p.product_id = c.product_id " +
-                     "JOIN Brand b ON b.brand_id = p.brand_id " +
-                     "WHERE c.customer_id = ?";
-        try (Connection cn = new DBContext().getConnection();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+        String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.cart_quantity, "
+                + "       p.product_name, p.image, b.brand_name, p.product_quantity "
+                + "FROM Cart c "
+                + "JOIN Product p ON p.product_id = c.product_id "
+                + "JOIN Brand b ON b.brand_id = p.brand_id "
+                + "WHERE c.customer_id = ?";
+        try (Connection cn = new DBContext().getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) {
                 List<Cart> list = new ArrayList<>();
                 while (rs.next()) {
                     Cart x = new Cart(
-                        rs.getInt("cart_id"),
-                        rs.getInt("customer_id"),
-                        rs.getInt("product_id"),
-                        rs.getInt("price"),
-                        rs.getInt("quantity"),
-                        rs.getString("product_name"),
-                        rs.getString("image"),
-                        rs.getString("brand_name")
+                            rs.getInt("cart_id"),
+                            rs.getInt("customer_id"),
+                            rs.getInt("product_id"),
+                            rs.getInt("price"),
+                            rs.getInt("cart_quantity"),
+                            rs.getString("product_name"),
+                            rs.getString("image"),
+                            rs.getString("brand_name")
                     );
                     x.setAvailableQuantity(rs.getInt("product_quantity"));
                     list.add(x);
