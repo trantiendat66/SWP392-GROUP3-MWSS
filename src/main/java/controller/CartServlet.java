@@ -126,14 +126,21 @@ public class CartServlet extends HttpServlet {
                 
                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, tính tổng số lượng
                 Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
+                boolean capped = false;
+                int remainingAllowable = product.getQuantityProduct();
                 if (existingCart != null) {
-                    int totalQuantity = existingCart.getQuantity() + quantity;
-                    if (totalQuantity > product.getQuantityProduct()) {
+                    int currentInCart = existingCart.getQuantity();
+                    remainingAllowable = product.getQuantityProduct() - currentInCart;
+                    if (remainingAllowable <= 0) {
                         response.setContentType("application/json");
                         PrintWriter out = response.getWriter();
-                        out.print("{\"success\": false, \"message\": \"Total quantity exceeds available stock. Only " + product.getQuantityProduct() + " items left.\"}");
+                        out.print("{\"success\": false, \"message\": \"You already have the maximum available quantity in your cart.\"}");
                         out.flush();
                         return;
+                    }
+                    if (quantity > remainingAllowable) {
+                        quantity = remainingAllowable;
+                        capped = true;
                     }
                 }
                 
@@ -146,7 +153,11 @@ public class CartServlet extends HttpServlet {
                     int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
                     
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
-                    out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\", \"cartCount\": " + newCartCount + "}");
+                    if (capped) {
+                        out.print("{\"success\": true, \"message\": \"Added limited quantity due to stock. Added " + quantity + " item(s).\", \"cartCount\": " + newCartCount + "}");
+                    } else {
+                        out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\", \"cartCount\": " + newCartCount + "}");
+                    }
                 } else {
                     out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
                 }
