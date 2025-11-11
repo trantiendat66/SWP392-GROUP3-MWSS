@@ -475,7 +475,7 @@
                                     <c:otherwise>
                                         <tr>
                                             <td colspan="4" style="text-align:center;padding:18px;">
-                                                Éo có khách hàng nào cả ok?.
+                                                No customer found in the database.
                                             </td>
                                         </tr>
                                     </c:otherwise>
@@ -544,9 +544,6 @@
                                         </div>
                                     </div>
                                     <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                                        <a href="customerprofile?id=${c.customer_id}&action=edit" class="btn btn-primary" style="margin-right: 10px;">
-                                            <i class="fa fa-edit"></i> Edit
-                                        </a>
                                         <a href="customerlist" class="btn btn-danger">
                                             <i class="fa fa-arrow-left"></i> Back to List
                                         </a>
@@ -557,7 +554,7 @@
                     </c:if>
                     <c:if test="${c == null}">
                         <div class="alert alert-danger">
-                            Éo có thằng nào cả! 
+                            No customer found in the database. 
                         </div>
                     </c:if>
                 </c:when>
@@ -761,7 +758,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-3">
-                        <form action="${pageContext.request.contextPath}/admin/dashboard" method="GET" class="d-flex flex-grow-1 me-2">
+                        <form action="${pageContext.request.contextPath}/search" method="GET" class="d-flex flex-grow-1 me-2">
                             <input type="text" 
                                    name="keyword" 
                                    class="form-control me-2 flex-grow-1"

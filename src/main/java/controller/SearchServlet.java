@@ -12,8 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Product;
+import model.Staff;
 
 /**
  *
@@ -60,28 +63,71 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        ProductDAO dao = new ProductDAO();
 
-        List<Product> allProducts = dao.getAllProducts(); 
+        HttpSession session = request.getSession(false);
+        Object sessionUser = null;
+        if (session != null) {
+            sessionUser = session.getAttribute("staff");
+            if (sessionUser == null) {
+                sessionUser = session.getAttribute("user");
+            }
+        }
+
+        String role = "CUSTOMER";
+        Staff staff = null;
+        if (sessionUser instanceof Staff) {
+            staff = (Staff) sessionUser;
+            if (staff.getRole() != null) {
+                role = staff.getRole().toUpperCase();
+            } else {
+                role = "STAFF";
+            }
+        }
+
+        String keyword = request.getParameter("keyword");
+        if (keyword != null) {
+            keyword = keyword.trim();
+        }
+        ProductDAO dao = new ProductDAO();
+        List<Product> allProducts = dao.getAllProducts();
         if (allProducts == null) {
-            allProducts = new java.util.ArrayList<>();
+            allProducts = new ArrayList<>();
         }
         request.setAttribute("listAll", allProducts);
-
         List<Product> searchResult;
-        if (keyword == null || keyword.trim().isEmpty()) {
-            searchResult = new java.util.ArrayList<>();
+        if (keyword == null || keyword.isEmpty()) {
+            searchResult = allProducts;
             request.setAttribute("keyword", "");
         } else {
-            searchResult = dao.searchProducts(keyword.trim());
+            searchResult = dao.searchProducts(keyword);
             if (searchResult == null) {
-                searchResult = new java.util.ArrayList<>();
+                searchResult = new ArrayList<>();
             }
-            request.setAttribute("keyword", keyword.trim());
+            request.setAttribute("keyword", keyword);
         }
         request.setAttribute("listP", searchResult);
+        request.setAttribute("listProducts", searchResult);
+        request.setAttribute("products", searchResult);
 
-        request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        switch (role) {
+            case "ADMIN":
+                request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                break;
+            case "STAFF":
+                if (staff != null) {
+                    request.setAttribute("staff", staff);
+                }
+                request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
+                break;
+            default:
+                request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+                break;
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 }

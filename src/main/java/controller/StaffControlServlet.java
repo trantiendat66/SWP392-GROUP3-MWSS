@@ -29,21 +29,6 @@ import model.Order;
 @WebServlet(name = "StaffControlServlet", urlPatterns = {"/staffcontrol"})
 public class StaffControlServlet extends HttpServlet {
 
-    private String generateSearchStringFromSubstrings(String input, int size) {
-        StringBuilder sb = new StringBuilder();
-        String cleanInput = input.replaceAll("\\s+", "");
-        if (cleanInput.length() < size) {
-            return "";
-        }
-        for (int i = 0; i <= cleanInput.length() - size; i++) {
-            if (i > 0) {
-                sb.append(" ");
-            }
-            sb.append(cleanInput.substring(i, i + size));
-        }
-        return sb.toString();
-    }
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

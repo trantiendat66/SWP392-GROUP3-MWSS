@@ -285,7 +285,7 @@
                         <div class="row mb-3 align-items-center">
                             <div class="col-md-8">
                                 <h3>Product List</h3>
-                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET" 
+                                <form action="${pageContext.request.contextPath}/search" method="GET" 
                                       class="d-flex align-items-center gap-2">
                                     <input type="text" 
                                            name="keyword" 
