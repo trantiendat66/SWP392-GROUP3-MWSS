@@ -147,10 +147,26 @@
 <div class="staff-page">
     <div class="staff-hero">
         <h2>Staff Management</h2>
-        <div>
-            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn-ghost">Back to dashboard</a>
-            <a href="${pageContext.request.contextPath}/admin/staff/add" class="btn-primary">Add staff</a>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <form action="${pageContext.request.contextPath}/admin/staff/search" 
+                  method="get" 
+                  style="display: flex; flex-grow: 1; gap: 8px; min-width: 250px;">
+                <input type="text" name="keyword" placeholder="Search staff by phone" 
+                       value="${param.keyword}" 
+                       style="flex-grow: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #bbb;">
+                <button type="submit" 
+                        style="padding: 8px 14px; border-radius: 6px; font-weight: 600; background-color: #007bff; color: white; border: none;">
+                    Search
+                </button>
+            </form>
+
+            <a href="${pageContext.request.contextPath}/admin/staff/add" 
+               class="btn btn-success" 
+               style="padding: 8px 14px; border-radius: 6px; font-weight: 600;"> Add Staff
+            </a>
         </div>
+
+
     </div>
 
     <%-- Flash messages --%>
@@ -189,28 +205,28 @@
                         for (Staff s : staffList) {
                 %>
                 <tr>
-                    <td><%= s.getAccountId() %></td>
-                    <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail() %></td>
-                    <td><%= s.getUserName() == null ? "-" : s.getUserName() %></td>
-                    <td><%= s.getRole() == null ? "-" : s.getRole() %></td>
-                    <td><%= s.getStatus() == null ? "-" : s.getStatus() %></td>
+                    <td><%= s.getAccountId()%></td>
+                    <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail()%></td>
+                    <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>
+                    <td><%= s.getRole() == null ? "-" : s.getRole()%></td>
+                    <td><%= s.getStatus() == null ? "-" : s.getStatus()%></td>
                     <td style="text-align:center;">
                         <div class="action-links">
-                            <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId() %>">View</a>
-                            <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId() %>">Edit</a>
+                            <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId()%>">View</a>
+                            <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId()%>">Edit</a>
                             <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
-                                <input type="hidden" name="id" value="<%= s.getAccountId() %>"/>
-                                <button class="action-delete" type="submit" onclick="return confirm('Are you sure you want to delete employee <%= s.getUserName() %> ?');">Delete</button>
+                                <input type="hidden" name="id" value="<%= s.getAccountId()%>"/>
+                                <button class="action-delete" type="submit" onclick="return confirm('Are you sure you want to delete employee <%= s.getUserName()%> ?');">Delete</button>
                             </form>
                         </div>
                     </td>
                 </tr>
-                <% 
-                        }
-                    } else {
+                <%
+                    }
+                } else {
                 %>
                 <tr><td colspan="6" style="text-align:center; padding:18px;">No staff found.</td></tr>
-                <% } %>
+                <% }%>
             </tbody>
         </table>
     </div>

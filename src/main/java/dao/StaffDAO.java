@@ -173,4 +173,29 @@ public class StaffDAO extends DBContext {
         return false;
     }
 
+    public List<Staff> searchByPhone(String keyword) {
+        List<Staff> list = new ArrayList<>();
+        String sql = "SELECT * FROM Staff WHERE phone LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff staff = new Staff();
+                    staff.setAccountId(rs.getInt("account_id"));
+                    staff.setUserName(rs.getString("user_name"));
+                    staff.setEmail(rs.getString("email"));
+                    staff.setPhone(rs.getString("phone"));
+                    staff.setPassword(rs.getString("password"));
+                    staff.setRole(rs.getString("role"));
+                    staff.setPosition(rs.getString("position"));
+                    staff.setAddress(rs.getString("address"));
+                    staff.setStatus(rs.getString("status"));
+                    list.add(staff);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

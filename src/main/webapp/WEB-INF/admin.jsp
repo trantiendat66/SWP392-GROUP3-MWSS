@@ -431,17 +431,12 @@
                 <c:when test="${requestScope.activeTab == 'customer'}">
                     <div class="controls">
                         <div class="page-title">Customer Management</div>
-
-                        <!--  Search Form -->
                         <form action="${pageContext.request.contextPath}/admin/customerlist" method="get" style="display:flex; gap:10px; align-items:center;">
-                            <input type="text" name="keyword" placeholder="Search by email..." 
+                            <input type="text" name="keyword" placeholder="Search customer by email" 
                                    value="${param.keyword}"
                                    style="padding:6px 10px; border-radius:6px; border:1px solid #bbb;">
                             <button type="submit" class="btn btn-primary">Search</button>
-
-                            <!-- Clear search -->
-                            <a href="${pageContext.request.contextPath}/admin/customerlist" class="btn btn-secondary" style="text-decoration:none;">
-                                Reset
+                            <a href="${pageContext.request.contextPath}/admin/customerlist" class="btn btn-secondary" style="text-decoration:none;">Reset
                             </a>
                         </form>
                     </div>
