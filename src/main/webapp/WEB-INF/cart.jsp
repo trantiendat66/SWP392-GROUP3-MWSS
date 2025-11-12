@@ -14,7 +14,7 @@
 </head>
 <style>
     .cart-container {
-        max-width: 1200px;
+        max-width: 1600px;
         margin: 0 auto;
         padding: 20px;
     }
@@ -26,11 +26,6 @@
         margin-bottom: 20px;
         background: white;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .cart-item.border-warning {
-        border: 2px solid #ffc107;
-        background-color: #fffbf0;
     }
 
     .cart-item-image {
@@ -133,14 +128,27 @@
         font-size: 1.2rem;
         font-weight: bold;
         color: #dc3545;
+        min-width: 200px;
+        white-space: nowrap;
     }
 
     .total-price {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #28a745;
-        margin-right: 8px;
-        word-break: break-word;
+        white-space: nowrap;
+    }
+
+    .cart-item .product-col {
+        min-width: 260px;
+    }
+
+    .cart-item .qty-col {
+        min-width: 150px;
+    }
+
+    .cart-item .total-col {
+        min-width: 220px;
     }
 
     @media (max-width: 768px) {
@@ -166,7 +174,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-cart"></i> Your Cart
                 <c:if test="${not empty cartItems}">
-                    <span class="badge bg-primary ms-2">${cartItemCount} Product</span>
+                    <span class="badge bg-primary ms-2">${cartItemCount} Product(s)</span>
                 </c:if>
             </h2>
         </div>
@@ -186,27 +194,11 @@
         </c:when>
 
         <c:otherwise>
-            <c:set var="hasStockIssue" value="false" />
-            <c:forEach var="item" items="${cartItems}">
-                <c:if test="${item.quantity > item.availableQuantity}">
-                    <c:set var="hasStockIssue" value="true" />
-                </c:if>
-            </c:forEach>
-            
-            <c:if test="${hasStockIssue}">
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    <strong>Cảnh báo:</strong> Một số sản phẩm trong giỏ hàng có số lượng vượt quá số lượng còn trong kho. 
-                    Vui lòng điều chỉnh số lượng trước khi thanh toán.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </c:if>
-            
             <div class="row">
                 <!-- Cart Items -->
                 <div class="col-lg-8">
                     <c:forEach var="item" items="${cartItems}">
-                        <div class="cart-item ${item.quantity > item.availableQuantity ? 'border-warning' : ''}" id="cart-item-${item.cartId}">
+                        <div class="cart-item" id="cart-item-${item.cartId}">
                             <div class="row align-items-center">
                                 <div class="col-md-2 col-3">
                                     <img src="${pageContext.request.contextPath}/assert/image/${item.productImage}" 
@@ -214,32 +206,15 @@
                                          class="cart-item-image">
                                 </div>
 
-                                <div class="col-md-4 col-9">
+                                <div class="col-md-3 col-9 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="price-display mb-1">
                                         <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                    </p>
-                                    <div class="mb-1">
-                                        <strong>Stock:</strong> 
-                                        <c:choose>
-                                            <c:when test="${item.availableQuantity > 0}">
-                                                <span class="badge bg-success">${item.availableQuantity} items available</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="badge bg-danger">Out of Stock</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                    <c:if test="${item.quantity > item.availableQuantity}">
-                                        <div class="alert alert-warning py-1 px-2 mb-0 mt-1" style="font-size: 0.85rem;">
-                                            <i class="bi bi-exclamation-triangle"></i> 
-                                            Số lượng đặt (${item.quantity}) vượt quá số lượng còn trong kho (${item.availableQuantity})
-                                        </div>
-                                    </c:if>
+                                    </p>                                
                                 </div>
 
-                                <div class="col-md-3 col-6">
+                                <div class="col-md-3 col-6 qty-col">
                                     <div class="quantity-controls">
                                         <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
                                             <i class="bi bi-dash"></i>
@@ -251,21 +226,20 @@
                                                min="1" 
                                                max="${item.availableQuantity}"
                                                data-cart-id="${item.cartId}"
-                                               data-max-quantity="${item.availableQuantity}"
-                                               data-unit-price="${item.price}">
+                                               data-max-quantity="${item.availableQuantity}">
                                         <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                             <i class="bi bi-plus"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 col-3 text-end pe-2">
+                                <div class="col-md-3 col-4 text-end total-col">
                                     <p class="total-price mb-1" id="total-${item.cartId}">
                                         <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
                                     </p>
                                 </div>
 
-                                <div class="col-md-1 col-3 text-end ps-0">
+                                <div class="col-md-1 col-3 text-end">
                                     <button class="btn-cart-action btn-remove" 
                                             data-cart-id="${item.cartId}"
                                             title="Remove item">
@@ -304,7 +278,7 @@
                         <hr>
 
                         <button class="btn-checkout" onclick="checkout()">
-                            <i class="bi bi-credit-card"></i> Payment
+                            <i class="bi bi-credit-card"></i> Thanh toán
                         </button>
 
                         <div class="mt-3">
@@ -343,28 +317,9 @@
             // Lưu giá trị ban đầu
             input.setAttribute('data-old-value', input.value);
             
-            // Cập nhật ngay khi người dùng nhập (real-time)
-            input.addEventListener('input', function () {
-                const cartId = this.getAttribute('data-cart-id');
-                const newQuantity = parseInt(this.value) || 0;
-                const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
-                const unitPrice = parseInt(this.getAttribute('data-unit-price'));
-                
-                // Cập nhật UI ngay lập tức
-                if (newQuantity >= 1 && newQuantity <= maxQuantity) {
-                    const itemTotal = unitPrice * newQuantity;
-                    const totalElement = document.getElementById('total-' + cartId);
-                    if (totalElement) {
-                        totalElement.textContent = new Intl.NumberFormat('en-US').format(itemTotal) + ' VND';
-                    }
-                    updateCartTotal();
-                }
-            });
-            
-            // Xử lý khi người dùng rời khỏi input (blur) hoặc nhấn Enter (change)
             input.addEventListener('change', function () {
                 const cartId = this.getAttribute('data-cart-id');
-                const newQuantity = parseInt(this.value) || 1;
+                const newQuantity = parseInt(this.value);
                 updateQuantity(cartId, newQuantity);
             });
         });
@@ -387,7 +342,6 @@
         // Kiểm tra số lượng tối đa
         const quantityInput = document.getElementById('quantity-' + cartId);
         const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
-        const unitPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
         
         if (newQuantity > maxQuantity) {
             showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn lại trong kho', 'error');
@@ -396,27 +350,26 @@
             return;
         }
 
-        // Cập nhật UI ngay lập tức (optimistic update)
-        quantityInput.value = newQuantity;
-        quantityInput.setAttribute('data-old-value', newQuantity);
-        
-        // Tính toán và cập nhật tổng tiền cho item này
-        const itemTotal = unitPrice * newQuantity;
-        const totalElement = document.getElementById('total-' + cartId);
-        if (totalElement) {
-            totalElement.textContent = new Intl.NumberFormat('en-US').format(itemTotal) + ' VND';
-        }
-        
-        // Cập nhật tổng tiền chung
-        updateCartTotal();
-
-        // Gọi API để cập nhật trong database
         fetch('${pageContext.request.contextPath}/cart?action=update&cartId=' + cartId + '&quantity=' + newQuantity, {
             method: 'GET'
         })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        document.getElementById('quantity-' + cartId).value = newQuantity;
+                        // Lưu giá trị cũ để có thể reset nếu cần
+                        quantityInput.setAttribute('data-old-value', newQuantity);
+                        
+                        const priceElement = document.querySelector('#total-' + cartId);
+                        const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
+                        const currentTotal = parseInt(currentTotalText);
+                        const currentQuantity = parseInt(document.getElementById('quantity-' + cartId).value);
+                        const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
+                        const total = price * newQuantity;
+                        document.getElementById('total-' + cartId).textContent =
+                                new Intl.NumberFormat('en-US').format(total) + ' VND';
+
+                        updateCartTotal();
                         showMessage(data.message, 'success');
                         // Cập nhật số lượng giỏ hàng trong header
                         if (typeof updateCartCount === 'function') {
@@ -424,15 +377,15 @@
                         }
                     } else {
                         showMessage(data.message, 'error');
-                        // Reload để lấy giá trị đúng từ server
-                        location.reload();
+                        // Reset về giá trị cũ nếu có lỗi
+                        quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     showMessage('An error occurred while updating.', 'error');
-                    // Reload để lấy giá trị đúng từ server
-                    location.reload();
+                    // Reset về giá trị cũ nếu có lỗi
+                    quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
                 });
     }
 
@@ -496,21 +449,13 @@
     // Update total cart amount
     function updateCartTotal() {
         let total = 0;
-        // Chỉ tính tổng của các cart items (có id bắt đầu bằng "total-" và là số cartId)
         document.querySelectorAll('[id^="total-"]').forEach(element => {
-            // Kiểm tra xem có phải là total của cart item không (id có dạng "total-{cartId}")
-            const id = element.id;
-            if (id.startsWith('total-') && id !== 'cart-total' && id !== 'total-items') {
-                const priceText = element.textContent.replace(/[^\d]/g, '');
-                const price = parseInt(priceText) || 0;
-                total += price;
-            }
+            const priceText = element.textContent.replace(/[^\d]/g, '');
+            total += parseInt(priceText);
         });
 
-        const cartTotalElement = document.getElementById('cart-total');
-        if (cartTotalElement) {
-            cartTotalElement.textContent = new Intl.NumberFormat('en-US').format(total) + ' VND';
-        }
+        document.getElementById('cart-total').textContent =
+                new Intl.NumberFormat('en-US').format(total) + ' VND';
     }
 
     // Checkout
