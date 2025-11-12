@@ -399,12 +399,28 @@
                 </c:choose>
             </div>
             <ul class="nav-menu">
-                <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
+                <li>
+                    <a class="nav-link ${requestScope.activeTab == null || requestScope.activeTab == 'product' ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a>
+                </li>
+                <li>
+                    <a class="nav-link ${requestScope.activeTab == 'order' ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a>
+                </li>
+                <li>
+                    <a class="nav-link ${requestScope.activeTab == 'feedback' ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a>
+                </li>
+                <li>
+                    <a class="nav-link ${requestScope.activeTab == 'customer' ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a>
+                </li>
+                <li>
+                    <a class="nav-link ${requestScope.activeTab == 'staff' ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/admin/staff">Staff Management</a>
+                </li>
             </ul>
+
             <button id="logoutBtn" style="margin-top:18px;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;width:100%;">Logout</button>
         </aside>
 
@@ -607,7 +623,7 @@
                     </div>
                     <!-- Popup View -->
                     <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                        <div class="modal-dialog modal-dialog-centered" id="popupModal">
                             <div class="modal-content bg-light text-black" >
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="feedabckDetailLabel">Reply Feedback</h5>
@@ -648,7 +664,7 @@
                                     <c:when test="${not empty requestScope.listOrders}">
                                         <c:forEach var="o" items="${requestScope.listOrders}">
                                             <tr data-id="${o.order_id}">
-                                                <td class="order-id"style="text-align: center">${o.order_id}</td>
+                                                <td class="order-id" style="text-align: center">${o.order_id}</td>
                                                 <td>${o.customer_name}</td>
                                                 <td><span class="date-pill">${o.order_date}</span></td>
                                                 <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
