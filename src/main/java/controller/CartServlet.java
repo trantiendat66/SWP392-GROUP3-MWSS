@@ -127,21 +127,22 @@ public class CartServlet extends HttpServlet {
                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, tính tổng số lượng
                 Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
                 boolean capped = false;
-                int remainingAllowable = product.getQuantityProduct();
-                if (existingCart != null) {
-                    int currentInCart = existingCart.getQuantity();
-                    remainingAllowable = product.getQuantityProduct() - currentInCart;
-                    if (remainingAllowable <= 0) {
-                        response.setContentType("application/json");
-                        PrintWriter out = response.getWriter();
-                        out.print("{\"success\": false, \"message\": \"You already have the maximum available quantity in your cart.\"}");
-                        out.flush();
-                        return;
-                    }
-                    if (quantity > remainingAllowable) {
-                        quantity = remainingAllowable;
-                        capped = true;
-                    }
+                int currentInCart = existingCart != null ? existingCart.getQuantity() : 0;
+                int remainingAllowable = product.getQuantityProduct() - currentInCart;
+
+                if (remainingAllowable <= 0) {
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"success\": false, \"message\": \"You already have all "
+                            + product.getQuantityProduct()
+                            + " item(s) of this product in your cart.\"}");
+                    out.flush();
+                    return;
+                }
+
+                if (quantity > remainingAllowable) {
+                    quantity = remainingAllowable;
+                    capped = true;
                 }
                 
                 boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
@@ -151,12 +152,19 @@ public class CartServlet extends HttpServlet {
                 if (success) {
                     // Lấy số lượng sản phẩm mới trong giỏ hàng
                     int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
+                    int totalForProduct = currentInCart + quantity;
                     
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     if (capped) {
-                        out.print("{\"success\": true, \"message\": \"Added limited quantity due to stock. Added " + quantity + " item(s).\", \"cartCount\": " + newCartCount + "}");
+                        String message = "You already had " + currentInCart + " item(s) of this product in your cart. "
+                                + "Only " + quantity + " more item(s) were added (stock limit "
+                                + product.getQuantityProduct() + "). "
+                                + "Current total in cart: " + totalForProduct + " item(s).";
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
                     } else {
-                        out.print("{\"success\": true, \"message\": \"Product added to cart successfully!\", \"cartCount\": " + newCartCount + "}");
+                        String message = "Product added to cart successfully! You now have "
+                                + totalForProduct + " item(s) of this product in your cart.";
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
                     }
                 } else {
                     out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
