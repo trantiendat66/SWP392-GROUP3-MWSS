@@ -593,4 +593,35 @@ public class OrderDAO extends DBContext {
         }
         return listOrders;
     }
+
+    public List<Order> getOrderBySearch(String keyword) {
+        List<Order> listOrders = new ArrayList<>();
+        String sql = "SELECT o.order_id, c.customer_name, o.phone, o.order_date,\n"
+                + "o.order_status, o.shipping_address, o.payment_method, o.total_amount\n"
+                + "FROM [Order] o\n"
+                + "JOIN Customer c ON c.customer_id = o.customer_id\n"
+                + "WHERE c.customer_name LIKE ? OR o.phone LIKE ? ORDER BY o.delivered_at DESC";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            String patt = "%" + (keyword == null ? "" : keyword.trim()) + "%";
+            ps.setString(1, patt);
+            ps.setString(2, patt);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int order_id = rs.getInt("order_id");
+                    String customer_name = rs.getString("customer_name");
+                    String phone = rs.getString("phone");
+                    String order_date = rs.getString("order_date");
+                    String order_status = rs.getString("order_status");
+                    String shipping_address = rs.getString("shipping_address");
+                    int payment_method = rs.getInt("payment_method");
+                    BigDecimal total_amount = rs.getBigDecimal("total_amount");
+
+                    listOrders.add(new Order(order_id, customer_name, phone, order_date, order_status, shipping_address, payment_method, total_amount));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return listOrders;
+    }
 }

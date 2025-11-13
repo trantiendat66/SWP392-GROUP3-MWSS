@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -43,7 +43,6 @@ public class StaffControlServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,7 +64,7 @@ public class StaffControlServlet extends HttpServlet {
             loggedInCustomer = (Staff) session.getAttribute("admin");
         }
         String getActive = request.getParameter("active") == null ? "staff" : request.getParameter("active");
-        // 1. Tải lại dữ liệu Staff (đã có)
+
         StaffDAO staffDAO = new StaffDAO();
         Staff staff = staffDAO.getStaffByEmail(loggedInCustomer.getEmail());
         request.setAttribute("staff", staff);
@@ -91,7 +90,6 @@ public class StaffControlServlet extends HttpServlet {
                 }
             }
 
-            // Nếu có filter
             if ((brand != null && !brand.isEmpty())
                     || (gender != null && !gender.isEmpty())
                     || (priceRange != null && !priceRange.isEmpty())) {
@@ -104,44 +102,47 @@ public class StaffControlServlet extends HttpServlet {
                 String trimmedKeyword = keyword.trim();
                 request.setAttribute("keyword", trimmedKeyword);
 
-                // Đảm bảo từ khóa hợp lệ (ít nhất 2 ký tự sau khi bỏ khoảng trắng)
                 if (trimmedKeyword.length() >= 2) {
-                    // KHÔNG dùng generateSearchStringFromSubstrings. 
-                    // Gửi từ khóa gốc vào DAO để nó tìm kiếm LIKE '%keyword%'
+
                     listProducts = productDAO.searchProducts(trimmedKeyword);
                 } else {
-                    // Từ khóa quá ngắn (ví dụ: "a"), trả về danh sách rỗng
+
                     listProducts = new ArrayList<>();
                 }
             } else {
-                // Không có từ khóa, tải tất cả sản phẩm
+
                 listProducts = productDAO.getAllProducts();
                 request.setAttribute("keyword", "");
             }
-
             request.setAttribute("listProducts", listProducts);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error loading product data.");
         }
 
-//        Khu này là ListOrder cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
-        try {
+        if (getActive.equals("order")) {
             OrderDAO orderDao = new OrderDAO();
             List<Order> listOrders = orderDao.getOrderByIdStaff(staff.getAccountId());
+            request.setAttribute("activeTab", "order");
             request.setAttribute("listOrders", listOrders);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        //        Khu này là ListFeedback cho thằng Staff quản lý Okela 👈(ﾟヮﾟ👈)
-        try {
+        } else if (getActive.equals("feedback")) {
             FeedbackDAO feedbackDao = new FeedbackDAO();
             List<FeedbackView> listFeedbacks = feedbackDao.getFeedbackByStaffId(staff.getAccountId());
+            request.setAttribute("activeTab", "feedback");
             request.setAttribute("listFeedbacks", listFeedbacks);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } else {
+            ProductDAO productDAO = new ProductDAO();
+            List<Product> listProducts = productDAO.getAllProducts();
+            request.setAttribute("activeTab", "product");
+            request.setAttribute("listProducts", listProducts);
         }
-        // 2. Forward đến JSP
+//        else if (getActive.equals("product")) {
+//            ProductDAO productDAO = new ProductDAO();
+//            List<Product> listProducts = productDAO.getAllProducts();
+//            request.setAttribute("activeTab", "product");
+//            request.setAttribute("listProducts", listProducts);
+//        }
+
         if (getActive.equals("admin")) {
             FeedbackDAO feedbackDao = new FeedbackDAO();
             List<FeedbackView> listFeedbacks = feedbackDao.getAllFeedback();

@@ -63,15 +63,6 @@ public class FilterServlet extends HttpServlet {
         String brand = request.getParameter("brand");
         String gender = request.getParameter("gender");
         String priceRange = request.getParameter("priceRange");
-//        String getActive = request.getParameter("active");
-//        int active = 0;
-//        if (getActive != null) {
-//            try {
-//                active = Integer.parseInt(getActive);
-//            } catch (NumberFormatException e) {
-//                active = 0; // fallback nếu người dùng nhập linh tinh
-//            }
-//        }
 
         int minPrice = 0;
         int maxPrice = 0;
@@ -96,12 +87,6 @@ public class FilterServlet extends HttpServlet {
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.filterProducts(brand, gender, minPrice, maxPrice);
 
-//        if (active != 0) {
-//            List<Product> menu = dao.getProductsByCategory(active);
-//            request.setAttribute("listP", menu);
-//            request.getRequestDispatcher("home").forward(request, response);
-//            return;
-//        }
         if (list == null || list.isEmpty()) {
             request.getRequestDispatcher("/partials/product-list.jsp").forward(request, response);
         } else {

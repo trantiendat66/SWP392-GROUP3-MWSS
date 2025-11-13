@@ -266,337 +266,347 @@
             }
         </style>
     </head>
-    <body>
+    <body>  
         <div class="d-flex align-items-start">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <div class="card">
                     <img src="./assert/image/account.jpg" alt="Avatar" class="avatar" />
                     <div class="status small"><%= (t != null ? t.getRole() : "None")%></div>
                 </div>
-                <button class="nav-link active" id="pill-product" data-bs-toggle="pill" data-bs-target="#v-pills-product" type="button" role="tab" aria-controls="v-pills-products" aria-selected="true">Product Management</button>
-                <button class="nav-link" id="pill-order" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" role="tab" aria-controls="v-pills-order" aria-selected="false">Order Management</button>
-                <button class="nav-link" id="pill-rate-feedback" data-bs-toggle="pill" data-bs-target="#v-pills-rate-feedback" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Rate And Feedback Management</button>
+
+                <a class="nav-link ${requestScope.activeTab eq 'product' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/staffcontrol?active=product">Product Management</a>
+
+                <a class="nav-link ${requestScope.activeTab eq 'order' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/staffcontrol?active=order">Order Management</a>
+
+                <a class="nav-link ${requestScope.activeTab eq 'feedback' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/staffcontrol?active=feedback">Feedback Management</a>
             </div>
+            <main class="main-content" aria-label="Admin main content">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <c:choose>
+                        <c:when test="${requestScope.activeTab == 'product'}">
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-8">
+                                    <h3>Product List</h3>
+                                    <form action="${pageContext.request.contextPath}/search" method="GET" 
+                                          class="d-flex align-items-center gap-2">
+                                        <input type="text" 
+                                               name="keyword" 
+                                               class="form-control flex-grow-1" 
+                                               placeholder="Search by name..." 
+                                               value="${param.keyword != null ? param.keyword : ''}"
+                                               aria-label="Search">
+                                        <button type="submit" class="btn btn-primary px-4">Search</button>
+                                        <button id="toggleFilterBtn" type="button" 
+                                                class="btn btn-outline-secondary d-inline-flex align-items-center px-4" 
+                                                data-bs-toggle="modal" data-bs-target="#filterModal">
+                                            <i class="bi bi-funnel"></i> Filter
+                                        </button>
+                                    </form>
 
-            <div class="tab-content" id="v-pills-tabContent">
+                                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
 
-                <div class="tab-pane fade show active" id="v-pills-product" role="tabpanel" aria-labelledby="v-pills-product-tab" tabindex="0">
-                    <section class="main" aria-label="Product management">
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-md-8">
-                                <h3>Product List</h3>
-                                <form action="${pageContext.request.contextPath}/search" method="GET" 
-                                      class="d-flex align-items-center gap-2">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET">
+                                                    <div class="modal-body">
+                                                        <!-- Brand -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Brand</label>
+                                                            <select name="brand" class="form-select">
+                                                                <option value="">All Brands</option>
+                                                                <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
+                                                                <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
+                                                                <option value="Seiko" ${param.brand == 'Seiko' ? 'selected' : ''}>Seiko</option>
+                                                                <option value="Tissot" ${param.brand == 'Tissot' ? 'selected' : ''}>Tissot</option>
+                                                                <option value="Doxa" ${param.brand == 'Doxa' ? 'selected' : ''}>Doxa</option>
+                                                                <option value="KOI" ${param.brand == 'KOI' ? 'selected' : ''}>KOI</option>
+                                                                <option value="Saga" ${param.brand == 'Saga' ? 'selected' : ''}>Saga</option>
+                                                                <option value="Orient" ${param.brand == 'Orient' ? 'selected' : ''}>Orient</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Gender</label>
+                                                            <select name="gender" class="form-select">
+                                                                <option value="">All Genders</option>
+                                                                <option value="1" ${param.gender == '1' ? 'selected' : ''}>Male</option>
+                                                                <option value="0" ${param.gender == '0' ? 'selected' : ''}>Female</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold">Price Range</label>
+                                                            <select name="priceRange" class="form-select">
+                                                                <option value="">All Prices</option>
+                                                                <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 million</option>
+                                                                <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 million</option>
+                                                                <option value="4000000-6000000" ${param.priceRange == '4000000-6000000' ? 'selected' : ''}>4 - 6 million</option>
+                                                                <option value="6000000-8000000" ${param.priceRange == '6000000-8000000' ? 'selected' : ''}>6 - 8 million</option>
+                                                                <option value="8000000-10000000" ${param.priceRange == '8000000-10000000' ? 'selected' : ''}>8 - 10 million</option>
+                                                                <option value="10000000-20000000" ${param.priceRange == '10000000-20000000' ? 'selected' : ''}>10 - 20 million</option>
+                                                                <option value="20000000-40000000" ${param.priceRange == '20000000-40000000' ? 'selected' : ''}>20 - 40 million</option>
+                                                                <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 million</option>
+                                                                <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Above 100 million</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success">Apply Filter</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                </table>
+                            </div>
+                            <div class="listProducts" role="region" aria-labelledby="products-title">
+                                <table aria-describedby="products-desc">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Image</th>
+                                            <th>Product ID</th>
+                                            <th>Product Name</th>
+                                            <th>Machine</th>
+                                            <th>Price (VND)</th>
+                                            <th>Quantity</th>
+                                            <th style="text-align:center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty requestScope.listProducts}">
+                                                <c:forEach var="p" items="${requestScope.listProducts}">
+                                                    <tr>
+                                                        <td style="width:96px;">
+                                                            <c:set var="imgPath">
+                                                                <c:choose>
+                                                                    <c:when test="${not empty p.image}">
+                                                                        ${pageContext.request.contextPath}/assert/image/${p.image}
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${pageContext.request.contextPath}/assert/image/watch1.jpg
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:set>
+
+                                                            <img class="product-image"
+                                                                 src="${imgPath}"
+                                                                 alt="${fn:escapeXml(p.productName)}"
+                                                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg';"
+                                                                 style="width:64px; height:64px; object-fit:cover; border-radius:6px;">
+                                                        </td>
+
+                                                        <td class="product-id">${p.productId}</td>
+                                                        <td>${fn:escapeXml(p.productName)}</td>
+                                                        <td>${fn:escapeXml(p.machine)}</td>
+                                                        <td class="text-end text-muted"><fmt:formatNumber value="${p.price}" type="number"/></td>
+                                                        <td>${p.quantityProduct}</td>
+                                                        <td>
+                                                            <div class="right-actions" role="group" aria-label="Actions">
+                                                                <a href="${pageContext.request.contextPath}/viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">👁</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td colspan="7" style="text-align:center;">No products found in the database.</td>
+                                                </tr>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </c:when>
+
+                        <c:when test="${requestScope.activeTab == 'order'}">
+                            <h4 id="title">Order List</h4>
+                            <div class="d-flex align-items-center mb-3">
+                                <form action="${pageContext.request.contextPath}/search" method="GET" class="d-flex flex-grow-1 me-2">
+                                    <input type="hidden" name="active" value="order">
                                     <input type="text" 
                                            name="keyword" 
-                                           class="form-control flex-grow-1" 
+                                           class="form-control me-2 flex-grow-1"
                                            placeholder="Search by name..." 
                                            value="${param.keyword != null ? param.keyword : ''}"
                                            aria-label="Search">
-                                    <button type="submit" class="btn btn-primary px-4">Search</button>
-                                    <button id="toggleFilterBtn" type="button" 
-                                            class="btn btn-outline-secondary d-inline-flex align-items-center px-4" 
-                                            data-bs-toggle="modal" data-bs-target="#filterModal">
-                                        <i class="bi bi-funnel"></i> Filter
-                                    </button>
+                                    <button type="submit" class="btn btn-primary me-2">Search</button>
                                 </form>
-                                <!-- Filter Modal -->
-                                <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-
-                                            <form action="${pageContext.request.contextPath}/staffcontrol" method="GET">
-                                                <div class="modal-body">
-                                                    <!-- Brand -->
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold">Brand</label>
-                                                        <select name="brand" class="form-select">
-                                                            <option value="">All Brands</option>
-                                                            <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
-                                                            <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
-                                                            <option value="Seiko" ${param.brand == 'Seiko' ? 'selected' : ''}>Seiko</option>
-                                                            <option value="Tissot" ${param.brand == 'Tissot' ? 'selected' : ''}>Tissot</option>
-                                                            <option value="Doxa" ${param.brand == 'Doxa' ? 'selected' : ''}>Doxa</option>
-                                                            <option value="KOI" ${param.brand == 'KOI' ? 'selected' : ''}>KOI</option>
-                                                            <option value="Saga" ${param.brand == 'Saga' ? 'selected' : ''}>Saga</option>
-                                                            <option value="Orient" ${param.brand == 'Orient' ? 'selected' : ''}>Orient</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Gender -->
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold">Gender</label>
-                                                        <select name="gender" class="form-select">
-                                                            <option value="">All Genders</option>
-                                                            <option value="1" ${param.gender == '1' ? 'selected' : ''}>Male</option>
-                                                            <option value="0" ${param.gender == '0' ? 'selected' : ''}>Female</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Price Range -->
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold">Price Range</label>
-                                                        <select name="priceRange" class="form-select">
-                                                            <option value="">All Prices</option>
-                                                            <option value="0-2000000" ${param.priceRange == '0-2000000' ? 'selected' : ''}>0 - 2 million</option>
-                                                            <option value="2000000-4000000" ${param.priceRange == '2000000-4000000' ? 'selected' : ''}>2 - 4 million</option>
-                                                            <option value="4000000-6000000" ${param.priceRange == '4000000-6000000' ? 'selected' : ''}>4 - 6 million</option>
-                                                            <option value="6000000-8000000" ${param.priceRange == '6000000-8000000' ? 'selected' : ''}>6 - 8 million</option>
-                                                            <option value="8000000-10000000" ${param.priceRange == '8000000-10000000' ? 'selected' : ''}>8 - 10 million</option>
-                                                            <option value="10000000-20000000" ${param.priceRange == '10000000-20000000' ? 'selected' : ''}>10 - 20 million</option>
-                                                            <option value="20000000-40000000" ${param.priceRange == '20000000-40000000' ? 'selected' : ''}>20 - 40 million</option>
-                                                            <option value="40000000-100000000" ${param.priceRange == '40000000-100000000' ? 'selected' : ''}>40 - 100 million</option>
-                                                            <option value="100000000+" ${param.priceRange == '100000000+' ? 'selected' : ''}>Above 100 million</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-success">Apply Filter</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                            </table>
-                        </div>
-                        <div class="listProducts" role="region" aria-labelledby="products-title">
-                            <table aria-describedby="products-desc">
-                                <thead>
-                                    <tr>
-                                        <th>Product Image</th>
-                                        <th>Product ID</th>
-                                        <th>Product Name</th>
-                                        <th>Machine</th>
-                                        <th>Price (VND)</th>
-                                        <th>Quantity</th>
-                                        <th style="text-align:center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty requestScope.listProducts}">
-                                            <c:forEach var="p" items="${requestScope.listProducts}">
+                            <div class="listOrders" role="region" aria-labelledby="orders-title">
+                                <table aria-describedby="orders-desc">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer Name</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>Total (VND)</th>
+                                            <th style="text-align:center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty requestScope.listOrders}">
+                                                <c:forEach var="o" items="${requestScope.listOrders}">
+                                                    <tr data-id="${o.order_id}">
+                                                        <td class="order-id"style="text-align: center">${o.order_id}</td>
+                                                        <td>${o.customer_name}</td>
+                                                        <td><span class="date-pill">${o.order_date}</span></td>
+                                                        <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
+                                                        <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
+                                                        <td><div class="right-actions">
+                                                                <form action="orderdetail">
+                                                                    <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
+                                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
+                                                                </form>
+                                                            </div></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
                                                 <tr>
-                                                    <td style="width:96px;">
-                                                        <c:set var="imgPath">
-                                                            <c:choose>
-                                                                <c:when test="${not empty p.image}">
-                                                                    ${pageContext.request.contextPath}/assert/image/${p.image}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    ${pageContext.request.contextPath}/assert/image/watch1.jpg
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:set>
-
-                                                        <img class="product-image"
-                                                             src="${imgPath}"
-                                                             alt="${fn:escapeXml(p.productName)}"
-                                                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg';"
-                                                             style="width:64px; height:64px; object-fit:cover; border-radius:6px;">
-                                                    </td>
-
-                                                    <td class="product-id">${p.productId}</td>
-                                                    <td>${fn:escapeXml(p.productName)}</td>
-                                                    <td>${fn:escapeXml(p.machine)}</td>
-                                                    <td class="text-end text-muted"><fmt:formatNumber value="${p.price}" type="number"/></td>
-                                                    <td>${p.quantityProduct}</td>
-                                                    <td>
-                                                        <div class="right-actions" role="group" aria-label="Actions">
-                                                            <a href="${pageContext.request.contextPath}/viewproductdetail?id=${p.productId}" class="icon view1" title="View Detail" aria-label="Xem chi tiết sản phẩm">👁</a>
-                                                        </div>
-                                                    </td>
+                                                    <td colspan="6" style="text-align: center;">No orders found in the database.</td>
                                                 </tr>
-                                            </c:forEach>
-                                        </c:when>
+                                            </c:otherwise>
+                                        </c:choose>
 
-                                        <c:otherwise>
-                                            <tr>
-                                                <td colspan="7" style="text-align:center;">No products found in the database.</td>
-                                            </tr>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </section>
-                </div>
-
-                <!--ở dưới đây làm order List cấm tk nào ko phận sự vào(ㆆ_ㆆ)-->
-
-                <div class="tab-pane fade " id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="-1">
-                    <section class="main" aria-label="Order management">
-                        <h4 id="title">Order List</h4>
-                        <div class="listOrders" role="region" aria-labelledby="orders-title">
-                            <table aria-describedby="orders-desc">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer Name</th>
-                                        <th>Order Date</th>
-                                        <th>Status</th>
-                                        <th>Total (VND)</th>
-                                        <th style="text-align:center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty requestScope.listOrders}">
-                                            <c:forEach var="o" items="${requestScope.listOrders}">
-                                                <tr data-id="${o.order_id}">
-                                                    <td class="order-id"style="text-align: center">${o.order_id}</td>
-                                                    <td>${o.customer_name}</td>
-                                                    <td><span class="date-pill">${o.order_date}</span></td>
-                                                    <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
-                                                    <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
-                                                    <td><div class="right-actions">
-                                                            <form action="orderdetail">
-                                                                <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
-                                                                <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
-                                                            </form>
-                                                        </div></td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <tr>
-                                                <td colspan="6" style="text-align: center;">No orders found in the database.</td>
-                                            </tr>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Popup View -->
-                        <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered"id="popupModal">
-                                <div class="modal-content bg-light text-black" >
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="orderDetailLabel">Order Detail</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!--chứa popup từ servlet-->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
 
-                        <!-- Popup Edit -->
-                        <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
-                            <div class="modal-dialog editPopup modal-dialog-centered">
-                                <div class="modal-content bg-light text-black" id="popupEdit">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <input type="hidden" id="orderIdInput" name="orderId" />
-                                        <select class="form-select" id="order-status" name="order-status">
-                                            <option value="PENDING">PENDING</option>
-                                            <option value="SHIPPING">SHIPPING</option>
-                                            <option value="DELIVERED">DELIVERED</option>
-                                        </select> 
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                        <button id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                </div>
-                <div class="tab-pane fade" id="v-pills-rate-feedback" role="tabpanel" aria-labelledby="v-pills-feedback-tab" tabindex="-1">
-                    <section class="main" aria-label="feedback management">
-                        <h4 id="title">Rate And Feedback Management</h4>
-                        <div class="listFeedbacks" role="region" aria-labelledby="feedbacks-title">
-                            <table aria-describedby="orders-desc">
-                                <thead>
-                                    <tr>
-                                        <th>Feedback ID</th>
-                                        <th>Customer</th>
-                                        <th>Product</th>
-                                        <th>Rating</th>
-                                        <th>Feedback</th>
-                                        <th>Date</th>
-                                        <th style="text-align:center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty requestScope.listFeedbacks}">
-                                            <c:forEach var="o" items="${requestScope.listFeedbacks}">
-                                                <tr data-id="${o.feedbackId}">
-                                                    <td class="feedbackId" style="text-align: center">${o.feedbackId}</td>
-                                                    <td>${o.customerName}</td>
-                                                    <td>${o.product}</td>
-                                                    <td class="text-center" style="color: tomato; font-weight:700;">${o.rating}/5</td>
-                                                    <td>${o.comment}</td>
-                                                    <td><span class="date-pill">${o.createAt}</span></td>
-                                                    <td><div class="right-actions">
-                                                            <form action="orderdetail">
-                                                                <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
-                                                                <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
-                                                            </form>
-                                                        </div></td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <tr>
-                                                <td colspan="6" style="text-align: center;">No orders found in the database.</td>
-                                            </tr>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Popup View -->
-                        <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered"id="popupModal">
-                                <div class="modal-content bg-light text-black" >
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="feedabckDetailLabel">Reply Feedback</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <form id="replyForm">
+                            <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                                    <div class="modal-content bg-light text-black" >
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="orderDetailLabel">Order Detail</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
                                         <div class="modal-body">
-                                            <!--chứa popup từ servlet-->
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" id="applyReply" class="btn btn-primary btn-sm">Apply</button>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
-            </div>
+
+
+                            <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
+                                <div class="modal-dialog editPopup modal-dialog-centered">
+                                    <div class="modal-content bg-light text-black" id="popupEdit">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editStatusLabel">Edit Status</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <input type="hidden" id="orderIdInput" name="orderId" />
+                                            <select class="form-select" id="order-status" name="order-status">
+                                                <option value="PENDING">PENDING</option>
+                                                <option value="SHIPPING">SHIPPING</option>
+                                                <option value="DELIVERED">DELIVERED</option>
+                                            </select> 
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            <button id="applyStatus" class="btn btn-primary btn-sm">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
+
+                        <c:when test="${requestScope.activeTab == 'feedback'}">
+                            <h4 id="title">Rate And Feedback Management</h4>
+                            <div class="listFeedbacks" role="region" aria-labelledby="feedbacks-title">
+                                <table aria-describedby="orders-desc">
+                                    <thead>
+                                        <tr>
+                                            <th>Feedback ID</th>
+                                            <th>Customer</th>
+                                            <th>Product</th>
+                                            <th>Rating</th>
+                                            <th>Feedback</th>
+                                            <th>Date</th>
+                                            <th style="text-align:center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty requestScope.listFeedbacks}">
+                                                <c:forEach var="o" items="${requestScope.listFeedbacks}">
+                                                    <tr data-id="${o.feedbackId}">
+                                                        <td class="feedbackId" style="text-align: center">${o.feedbackId}</td>
+                                                        <td>${o.customerName}</td>
+                                                        <td>${o.product}</td>
+                                                        <td class="text-center" style="color: tomato; font-weight:700;">${o.rating}/5</td>
+                                                        <td>${o.comment}</td>
+                                                        <td><span class="date-pill">${o.createAt}</span></td>
+                                                        <td><div class="right-actions">
+                                                                <form action="orderdetail">
+                                                                    <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
+                                                                    <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
+                                                                </form>
+                                                            </div></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td colspan="6" style="text-align: center;">No orders found in the database.</td>
+                                                </tr>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered"id="popupModal">
+                                    <div class="modal-content bg-light text-black" >
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="feedbackDetailLabel">Reply Feedback</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form id="replyForm">
+                                            <div class="modal-body">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" id="applyReply" class="btn btn-primary btn-sm">Apply</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
+                    </c:choose>
+            </main>
         </div>
 
         <script>
@@ -731,7 +741,7 @@
                                         // Toggle CSS hoặc text để báo đã ẩn/hiện
                                         this.classList.toggle("hidden-active");
                                         this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
-                                        this.textContent = this.classList.contains("hidden-active") ? "🙈" : "👁";
+                                        this.textContent = this.classList.contains("hidden-active") ? "👁️‍🗨️" : "👁";
                                     } else {
                                         alert("Failed to update feedback status!");
                                     }

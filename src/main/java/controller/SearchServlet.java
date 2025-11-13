@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.Order;
 import model.Product;
 import model.Staff;
 
@@ -84,30 +86,57 @@ public class SearchServlet extends HttpServlet {
             }
         }
 
+        String getAcctive = request.getParameter("active") == null ? "" : request.getParameter("active");
         String keyword = request.getParameter("keyword");
         if (keyword != null) {
             keyword = keyword.trim();
         }
-        ProductDAO dao = new ProductDAO();
-        List<Product> allProducts = dao.getAllProducts();
-        if (allProducts == null) {
-            allProducts = new ArrayList<>();
-        }
-        request.setAttribute("listAll", allProducts);
-        List<Product> searchResult;
-        if (keyword == null || keyword.isEmpty()) {
-            searchResult = allProducts;
-            request.setAttribute("keyword", "");
-        } else {
-            searchResult = dao.searchProducts(keyword);
-            if (searchResult == null) {
-                searchResult = new ArrayList<>();
+
+        ///Search for Order
+        if (getAcctive.equals("order")) {
+            OrderDAO oDao = new OrderDAO();
+            List<Order> allOrder = oDao.getAllOrder();
+            if (allOrder == null) {
+                allOrder = new ArrayList<>();
             }
-            request.setAttribute("keyword", keyword);
+            request.setAttribute("listAllOrder", allOrder);
+            List<Order> searchOrder;
+            if (keyword == null || keyword.isEmpty()) {
+                searchOrder = allOrder;
+                request.setAttribute("keyword", keyword);
+            } else {
+                searchOrder = oDao.getOrderBySearch(keyword);
+                if (searchOrder == null) {
+                    searchOrder = new ArrayList<>();
+                }
+                request.setAttribute("keyword", keyword);
+            }
+            request.setAttribute("activeTab", "order");
+            request.setAttribute("listOrders", searchOrder);
+        } else {
+            ///Search Product
+            ProductDAO dao = new ProductDAO();
+            List<Product> allProducts = dao.getAllProducts();
+            if (allProducts == null) {
+                allProducts = new ArrayList<>();
+            }
+            request.setAttribute("listAll", allProducts);
+            List<Product> searchResult;
+            if (keyword == null || keyword.isEmpty()) {
+                searchResult = allProducts;
+                request.setAttribute("keyword", "");
+            } else {
+                searchResult = dao.searchProducts(keyword);
+                if (searchResult == null) {
+                    searchResult = new ArrayList<>();
+                }
+                request.setAttribute("keyword", keyword);
+            }
+            request.setAttribute("activeTab", "product");
+            request.setAttribute("listP", searchResult);
+            request.setAttribute("listProducts", searchResult);
+            request.setAttribute("products", searchResult);
         }
-        request.setAttribute("listP", searchResult);
-        request.setAttribute("listProducts", searchResult);
-        request.setAttribute("products", searchResult);
 
         switch (role) {
             case "ADMIN":

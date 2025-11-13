@@ -338,7 +338,8 @@
     }
 
     .listOrders,
-    .listFeedbacks{
+    .listFeedbacks,
+    .table{
         max-height: 400px;
         overflow-y: auto;
         overflow-y: auto;
@@ -642,9 +643,19 @@
                     </div>
                 </c:when>
 
-                <c:when test="${requestScope.activeTab == 'order'}">
-                    <div class="controls">
-                        <div class="page-title">Order List</div>
+                <c:when test="${requestScope.activeTab eq 'order'}">
+                    <div class="page-title">Orders Management</div>
+                    <div class="d-flex align-items-center mb-3">
+                        <form action="${pageContext.request.contextPath}/search" method="GET" class="d-flex flex-grow-1 me-2">
+                            <input type="hidden" name="active" value="order">
+                            <input type="text" 
+                                   name="keyword" 
+                                   class="form-control me-2 flex-grow-1"
+                                   placeholder="Search by name..." 
+                                   value="${param.keyword != null ? param.keyword : ''}"
+                                   aria-label="Search">
+                            <button type="submit" class="btn btn-primary me-2">Search</button>
+                        </form>
                     </div>
                     <div class="listOrders" role="region" aria-labelledby="orders-title">
                         <table aria-describedby="orders-desc">
@@ -687,7 +698,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Popup View -->
+
                     <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered"id="popupModal">
                             <div class="modal-content bg-light text-black" >
@@ -705,7 +716,7 @@
                         </div>
                     </div>
 
-                    <!-- Popup Edit -->
+
                     <div class="modal fade" id="editStatusPopup" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
                         <div class="modal-dialog editPopup modal-dialog-centered">
                             <div class="modal-content bg-light text-black" id="popupEdit">
@@ -735,7 +746,6 @@
                 <c:otherwise>
                     <div class="controls">
                         <div class="page-title">Product Management</div>
-
                     </div>
 
                     <!-- stats row -->
@@ -808,6 +818,7 @@
 
                     <!-- product table -->
                     <div class="table-container">
+
                         <table class="table" aria-describedby="product-list">
                             <thead>
                                 <tr>
