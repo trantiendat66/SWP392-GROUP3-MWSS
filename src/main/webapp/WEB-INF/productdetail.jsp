@@ -44,11 +44,10 @@
                         </c:choose>
                     </div>
 
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="me-2 quantity-input-group">
+                    <div class="d-flex align-items-center mb-2 quantity-action-row">
+                        <div class="me-2">
                             <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
-                                   class="form-control" style="width:100px;">
-                            <div id="quantity-feedback" class="quantity-feedback" data-state="hidden" aria-live="polite"></div>
+                                   class="form-control quantity-input" style="width:100px;">
                         </div>
                         <button type="button" id="btn-add-cart" class="btn btn-danger me-2 custom-btn"
                                 onclick="addToCart('${product.productId}')">
@@ -60,6 +59,7 @@
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
                     </div>
+                    <div id="quantity-feedback" class="quantity-feedback" data-state="hidden" aria-live="polite"></div>
 
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
@@ -119,7 +119,7 @@
                     <div class="stars-avg mb-2">
                         <span class="bg"></span>
                         <!-- chiều rộng sao cam = ratingAvg * 20 (%) -->
-                        <span class="fg" style="width:${ratingAvg * 20}%"></span>
+                        <span class="fg" data-progress-width="${ratingAvg * 20}"></span>
                         <c:set var="roundedAvg" value="${(ratingAvg + 0.5) div 1}" />
                     </div>
 
@@ -137,7 +137,7 @@
                             </c:forEach>
                         </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width:${pct5}%"></div>
+                            <div class="progress-bar" role="progressbar" data-progress-width="${pct5}"></div>
                         </div>
                         <span class="count">${star5}</span>
                     </div>
@@ -150,7 +150,7 @@
                             </c:forEach>
                         </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width:${pct4}%"></div>
+                            <div class="progress-bar" role="progressbar" data-progress-width="${pct4}"></div>
                         </div>
                         <span class="count">${star4}</span>
                     </div>
@@ -163,7 +163,7 @@
                             </c:forEach>
                         </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width:${pct3}%"></div>
+                            <div class="progress-bar" role="progressbar" data-progress-width="${pct3}"></div>
                         </div>
                         <span class="count">${star3}</span>
                     </div>
@@ -176,7 +176,7 @@
                             </c:forEach>
                         </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width:${pct2}%"></div>
+                            <div class="progress-bar" role="progressbar" data-progress-width="${pct2}"></div>
                         </div>
                         <span class="count">${star2}</span>
                     </div>
@@ -189,7 +189,7 @@
                             </c:forEach>
                         </div>
                         <div class="progress flex-grow-1">
-                            <div class="progress-bar" role="progressbar" style="width:${pct1}%"></div>
+                            <div class="progress-bar" role="progressbar" data-progress-width="${pct1}"></div>
                         </div>
                         <span class="count">${star1}</span>
                     </div>
@@ -256,10 +256,6 @@
         </div>
 
         <style>
-            .quantity-input-group {
-                position: relative;
-            }
-
             .quantity-feedback {
                 min-height: 1.4rem;
                 margin-top: 0.35rem;
@@ -305,79 +301,79 @@
                 background: #f59f00;
             } /* màu vàng cam */
             .rating-row {
-                display:flex;
-                align-items:center;
-                gap:.75rem;
-                margin-bottom:.5rem;
+                display: flex;
+                align-items: center;
+                gap: .75rem;
+                margin-bottom: .5rem;
             }
             .rating-row .label {
                 width: 48px;
-                text-align:right;
-                font-weight:600;
+                text-align: right;
+                font-weight: 600;
             }
             .rating-row .count {
                 width: 28px;
-                text-align:right;
-                color:#6c757d;
+                text-align: right;
+                color: #6c757d;
             }
             .rating-stars {
                 font-size: 20px;
                 color: #f59f00;
-                letter-spacing:2px;
+                letter-spacing: 2px;
             }
 
             /* --- Sao trung bình đổ màu (overlay) --- */
-            .stars-avg{
-                position:relative;
-                display:inline-block;
-                font-size:32px;
-                line-height:1;
-                letter-spacing:2px;
+            .stars-avg {
+                position: relative;
+                display: inline-block;
+                font-size: 32px;
+                line-height: 1;
+                letter-spacing: 2px;
             }
-            .stars-avg .bg::before{
-                content:"★★★★★";
-                color:#e5e7eb;
+            .stars-avg .bg::before {
+                content: "★★★★★";
+                color: #e5e7eb;
             }   /* nền xám */
-            .stars-avg .fg{
-                position:absolute;
-                inset:0 auto 0 0;
-                overflow:hidden;
-                white-space:nowrap;
-                color:#f59f00;                      /* vàng cam */
+            .stars-avg .fg {
+                position: absolute;
+                inset: 0 auto 0 0;
+                overflow: hidden;
+                white-space: nowrap;
+                color: #f59f00;
             }
-            .stars-avg .fg::before{
-                content:"★★★★★";
+            .stars-avg .fg::before {
+                content: "★★★★★";
             }
-            @media (max-width:576px){
-                .stars-avg{
-                    font-size:28px
+            @media (max-width: 576px) {
+                .stars-avg {
+                    font-size: 28px;
                 }
             }
-            .rating-row{
-                display:flex;
-                align-items:center;
-                gap:.75rem;
-                margin-bottom:.5rem;
+            .rating-row {
+                display: flex;
+                align-items: center;
+                gap: .75rem;
+                margin-bottom: .5rem;
             }
-            .rating-row .stars{
-                width:110px;
-                display:flex;
-                gap:2px;
-                justify-content:flex-start;
+            .rating-row .stars {
+                width: 110px;
+                display: flex;
+                gap: 2px;
+                justify-content: flex-start;
             }
-            .star{
-                color:#c0c7d1;
-                font-size:18px;
-                line-height:1;
+            .star {
+                color: #c0c7d1;
+                font-size: 18px;
+                line-height: 1;
             }
-            .star.on{
-                color:#f59f00;
-            }          /* sao vàng */
-            .rating-row .count{
-                width:28px;
-                text-align:right;
-                color:#6c757d;
-                font-weight:600;
+            .star.on {
+                color: #f59f00;
+            }
+            .rating-row .count {
+                width: 28px;
+                text-align: right;
+                color: #6c757d;
+                font-weight: 600;
             }
 
         </style>
@@ -386,6 +382,16 @@
 </c:choose>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-progress-width]').forEach(function (el) {
+            const raw = parseFloat(el.getAttribute('data-progress-width'));
+            if (!isNaN(raw)) {
+                const width = Math.max(0, Math.min(raw, 100));
+                el.style.width = width + '%';
+            }
+        });
+    });
+
     function setQuantityMessage(message, type = 'info') {
         const feedback = document.getElementById('quantity-feedback');
         if (!feedback) {
@@ -414,28 +420,6 @@
         };
 
         window.__productDetailCartState = state;
-
-        function updateInfoMessage(force = false) {
-            if (!quantityFeedback) {
-                return;
-            }
-            const currentState = quantityFeedback.dataset.state || 'hidden';
-            if (!force && (currentState === 'error' || currentState === 'success')) {
-                return;
-            }
-
-            if (state.stockQuantity === 0) {
-                setQuantityMessage('Sản phẩm đã hết hàng.', 'info');
-                return;
-            }
-
-            const remaining = state.getRemaining();
-            if (remaining <= 0) {
-                setQuantityMessage('Bạn đã có tối đa sản phẩm này trong giỏ hàng.', 'info');
-            } else {
-                setQuantityMessage('Bạn còn có thể thêm ' + remaining + ' sản phẩm nữa.', 'info');
-            }
-        }
 
         function syncQuantityBounds(autoFix) {
             const remaining = state.getRemaining();
@@ -479,16 +463,18 @@
 
             if (state.stockQuantity === 0) {
                 isValid = false;
-                errorMessage = 'Sản phẩm đã hết hàng';
+                errorMessage = 'Product is out of stock.';
             } else if (remaining === 0) {
                 isValid = false;
-                errorMessage = 'Bạn đã có tối đa sản phẩm này trong giỏ hàng.';
+                errorMessage = 'You already have ' + state.currentCartQuantity
+                        + ' item(s) of this product in your cart.';
             } else if (quantity < 1) {
                 isValid = false;
-                errorMessage = 'Số lượng phải lớn hơn 0';
+                errorMessage = 'Quantity must be greater than 0.';
             } else if (quantity > remaining) {
                 isValid = false;
-                errorMessage = 'Bạn chỉ có thể thêm tối đa ' + remaining + ' sản phẩm nữa (đã có ' + state.currentCartQuantity + ' sản phẩm trong giỏ).';
+                errorMessage = 'You already have ' + state.currentCartQuantity
+                        + ' item(s) of this product in your cart.';
             }
 
             if (isValid) {
@@ -517,7 +503,7 @@
                     .then(data => {
                         if (data.success && typeof data.quantity === 'number') {
                             state.currentCartQuantity = data.quantity;
-                            state.notifyChange({forceInfo: true});
+                            state.notifyChange();
                         }
                     })
                     .catch(error => {
@@ -525,9 +511,8 @@
                     });
         }
 
-        state.notifyChange = ({forceInfo = false} = {}) => {
+        state.notifyChange = () => {
             validateQuantity(true);
-            updateInfoMessage(forceInfo);
         };
 
         // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
@@ -536,23 +521,19 @@
                 setQuantityMessage('', 'hidden');
             }
             validateQuantity(false);
-            updateInfoMessage();
         });
 
         // Validate khi người dùng thay đổi và blur (tự động sửa nếu cần)
         quantityInput.addEventListener('change', function () {
             validateQuantity(true);
-            updateInfoMessage();
         });
 
         quantityInput.addEventListener('blur', function () {
             validateQuantity(true);
-            updateInfoMessage();
         });
 
         // Validate lần đầu khi trang load
         validateQuantity(true);
-        updateInfoMessage(true);
         fetchCurrentQuantity();
     });
 
@@ -577,25 +558,26 @@
                 : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
 
         if (quantity < 1) {
-            setQuantityMessage('Số lượng phải lớn hơn 0', 'error');
+            setQuantityMessage('Quantity must be greater than 0.', 'error');
             quantityInput.focus();
             return;
         }
 
         if (stockQuantity === 0) {
-            setQuantityMessage('Sản phẩm đã hết hàng', 'error');
+            setQuantityMessage('Product is out of stock.', 'error');
             return;
         }
 
         if (remaining <= 0) {
-            setQuantityMessage('Bạn đã có tối đa sản phẩm này trong giỏ hàng.', 'error');
+            setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
             quantityInput.value = 0;
             quantityInput.focus();
             return;
         }
 
         if (quantity > remaining) {
-            setQuantityMessage('Bạn chỉ có thể thêm tối đa ' + remaining + ' sản phẩm nữa (đã có ' + (cartState.currentCartQuantity || 0) + ' sản phẩm trong giỏ).', 'error');
+            setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
+                    + ' item(s) of this product in your cart.', 'error');
             quantityInput.value = remaining;
             quantityInput.focus();
             return;
@@ -607,7 +589,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        setQuantityMessage(data.message, 'success');
+                        setQuantityMessage('', 'hidden');
                         if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
                             window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
                             if (typeof window.__productDetailCartState.notifyChange === 'function') {
@@ -627,7 +609,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    setQuantityMessage('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.', 'error');
+                    setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
                 });
     }
 
@@ -736,14 +718,14 @@
         // Kiểm tra số lượng không vượt quá stock
         const maxQuantity = parseInt('${product.quantityProduct}');
         if (qty > maxQuantity) {
-            setQuantityMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho. Vui lòng chọn lại số lượng.', 'error');
+            setQuantityMessage('Quantity cannot exceed stock.', 'error');
             quantityInput.value = maxQuantity;
             quantityInput.focus();
             return;
         }
 
         if (maxQuantity === 0) {
-            setQuantityMessage('Sản phẩm đã hết hàng', 'error');
+            setQuantityMessage('Product is out of stock.', 'error');
             return;
         }
 
