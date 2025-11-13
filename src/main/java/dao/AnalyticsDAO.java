@@ -20,15 +20,25 @@ public class AnalyticsDAO extends DBContext {
      * @return Tổng doanh thu (long)
      */
     public long getTotalRevenue() {
-        String sql = "SELECT ISNULL(SUM(total_amount), 0) as total_revenue " +
-                    "FROM [Order] " +
-                    "WHERE order_status = 'DELIVERED'";
+        String sql = """
+                WITH LatestImport AS (
+                    SELECT ip.product_id,
+                           CAST(ip.import_product_price AS DECIMAL(18, 2)) AS import_price,
+                           ROW_NUMBER() OVER (PARTITION BY ip.product_id ORDER BY ip.import_product_id DESC) AS rn
+                    FROM ImportProduct ip
+                )
+                SELECT ISNULL(SUM((CAST(od.unit_price AS DECIMAL(18, 2)) - ISNULL(li.import_price, 0)) * od.quantity), 0) AS total_profit
+                FROM OrderDetail od
+                JOIN [Order] o ON od.order_id = o.order_id
+                LEFT JOIN LatestImport li ON li.product_id = od.product_id AND li.rn = 1
+                WHERE o.order_status = 'DELIVERED'
+                """;
         
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             
             if (rs.next()) {
-                return rs.getLong("total_revenue");
+                return rs.getLong("total_profit");
             }
         } catch (SQLException e) {
             System.err.println("Error calculating total revenue: " + e.getMessage());
@@ -83,17 +93,27 @@ public class AnalyticsDAO extends DBContext {
      * @return Doanh thu tháng hiện tại
      */
     public long getCurrentMonthRevenue() {
-        String sql = "SELECT ISNULL(SUM(total_amount), 0) as monthly_revenue " +
-                    "FROM [Order] " +
-                    "WHERE order_status = 'DELIVERED' " +
-                    "AND YEAR(order_date) = YEAR(GETDATE()) " +
-                    "AND MONTH(order_date) = MONTH(GETDATE())";
+        String sql = """
+                WITH LatestImport AS (
+                    SELECT ip.product_id,
+                           CAST(ip.import_product_price AS DECIMAL(18, 2)) AS import_price,
+                           ROW_NUMBER() OVER (PARTITION BY ip.product_id ORDER BY ip.import_product_id DESC) AS rn
+                    FROM ImportProduct ip
+                )
+                SELECT ISNULL(SUM((CAST(od.unit_price AS DECIMAL(18, 2)) - ISNULL(li.import_price, 0)) * od.quantity), 0) AS monthly_profit
+                FROM OrderDetail od
+                JOIN [Order] o ON od.order_id = o.order_id
+                LEFT JOIN LatestImport li ON li.product_id = od.product_id AND li.rn = 1
+                WHERE o.order_status = 'DELIVERED'
+                  AND YEAR(o.order_date) = YEAR(GETDATE())
+                  AND MONTH(o.order_date) = MONTH(GETDATE())
+                """;
         
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             
             if (rs.next()) {
-                return rs.getLong("monthly_revenue");
+                return rs.getLong("monthly_profit");
             }
         } catch (SQLException e) {
             System.err.println("Error calculating monthly revenue: " + e.getMessage());
@@ -107,16 +127,26 @@ public class AnalyticsDAO extends DBContext {
      * @return Doanh thu năm hiện tại
      */
     public long getCurrentYearRevenue() {
-        String sql = "SELECT ISNULL(SUM(total_amount), 0) as yearly_revenue " +
-                    "FROM [Order] " +
-                    "WHERE order_status = 'DELIVERED' " +
-                    "AND YEAR(order_date) = YEAR(GETDATE())";
+        String sql = """
+                WITH LatestImport AS (
+                    SELECT ip.product_id,
+                           CAST(ip.import_product_price AS DECIMAL(18, 2)) AS import_price,
+                           ROW_NUMBER() OVER (PARTITION BY ip.product_id ORDER BY ip.import_product_id DESC) AS rn
+                    FROM ImportProduct ip
+                )
+                SELECT ISNULL(SUM((CAST(od.unit_price AS DECIMAL(18, 2)) - ISNULL(li.import_price, 0)) * od.quantity), 0) AS yearly_profit
+                FROM OrderDetail od
+                JOIN [Order] o ON od.order_id = o.order_id
+                LEFT JOIN LatestImport li ON li.product_id = od.product_id AND li.rn = 1
+                WHERE o.order_status = 'DELIVERED'
+                  AND YEAR(o.order_date) = YEAR(GETDATE())
+                """;
         
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             
             if (rs.next()) {
-                return rs.getLong("yearly_revenue");
+                return rs.getLong("yearly_profit");
             }
         } catch (SQLException e) {
             System.err.println("Error calculating yearly revenue: " + e.getMessage());
@@ -176,22 +206,32 @@ public class AnalyticsDAO extends DBContext {
     public Map<String, Long> getMonthlyRevenueChart() {
         Map<String, Long> monthlyData = new LinkedHashMap<>();
         
-        String sql = "SELECT " +
-                    "    MONTH(order_date) as month_num, " +
-                    "    ISNULL(SUM(total_amount), 0) as monthly_revenue " +
-                    "FROM [Order] " +
-                    "WHERE order_status = 'DELIVERED' " +
-                    "AND YEAR(order_date) = YEAR(GETDATE()) " +
-                    "GROUP BY MONTH(order_date) " +
-                    "ORDER BY month_num";
+        String sql = """
+                WITH LatestImport AS (
+                    SELECT ip.product_id,
+                           CAST(ip.import_product_price AS DECIMAL(18, 2)) AS import_price,
+                           ROW_NUMBER() OVER (PARTITION BY ip.product_id ORDER BY ip.import_product_id DESC) AS rn
+                    FROM ImportProduct ip
+                )
+                SELECT
+                    MONTH(o.order_date) AS month_num,
+                    ISNULL(SUM((CAST(od.unit_price AS DECIMAL(18, 2)) - ISNULL(li.import_price, 0)) * od.quantity), 0) AS monthly_profit
+                FROM OrderDetail od
+                JOIN [Order] o ON od.order_id = o.order_id
+                LEFT JOIN LatestImport li ON li.product_id = od.product_id AND li.rn = 1
+                WHERE o.order_status = 'DELIVERED'
+                  AND YEAR(o.order_date) = YEAR(GETDATE())
+                GROUP BY MONTH(o.order_date)
+                ORDER BY month_num
+                """;
         
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
                 int month = rs.getInt("month_num");
-                long revenue = rs.getLong("monthly_revenue");
-                monthlyData.put("Tháng " + month, revenue);
+                long profit = rs.getLong("monthly_profit");
+                monthlyData.put("Tháng " + month, profit);
             }
         } catch (SQLException e) {
             System.err.println("Error getting monthly revenue chart: " + e.getMessage());
