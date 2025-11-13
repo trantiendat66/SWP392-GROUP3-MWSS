@@ -195,9 +195,9 @@
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="mb-2">
                                         <small class="text-muted">
-                                            <strong>Trong kho:</strong> 
+                                            <strong>Stock:</strong> 
                                             <span class="badge ${item.availableQuantity > 0 ? 'bg-success' : 'bg-danger'}">
-                                                ${item.availableQuantity} sản phẩm
+                                                ${item.availableQuantity} item(s)
                                             </span>
                                         </small>
                                     </p>
