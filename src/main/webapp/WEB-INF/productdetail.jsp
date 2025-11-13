@@ -368,36 +368,71 @@
         const quantityError = document.getElementById('quantity-error');
         const btnAddCart = document.getElementById('btn-add-cart');
         const btnBuyNow = document.getElementById('btn-buy-now');
-        const maxQuantity = parseInt('${product.quantityProduct}');
+        const state = {
+            stockQuantity: parseInt('${product.quantityProduct}') || 0,
+            contextPath: '${pageContext.request.contextPath}',
+            productId: '${product.productId}',
+            currentCartQuantity: 0,
+            getRemaining() {
+                return Math.max(this.stockQuantity - this.currentCartQuantity, 0);
+            },
+            notifyChange: null
+        };
+
+        window.__productDetailCartState = state;
+
+        function syncQuantityBounds(autoFix) {
+            const remaining = state.getRemaining();
+            quantityInput.max = remaining;
+            quantityInput.min = remaining > 0 ? 1 : 0;
+
+            let quantity = parseInt(quantityInput.value) || 0;
+
+            if (state.stockQuantity === 0) {
+                if (autoFix) {
+                    quantityInput.value = 0;
+                }
+                return {quantity: 0, remaining};
+            }
+
+            if (remaining === 0) {
+                if (autoFix) {
+                    quantityInput.value = 0;
+                    quantity = 0;
+                }
+                return {quantity, remaining};
+            }
+
+            if (quantity < 1 && autoFix) {
+                quantity = 1;
+                quantityInput.value = 1;
+            }
+
+            if (quantity > remaining && autoFix) {
+                quantity = remaining;
+                quantityInput.value = remaining;
+            }
+
+            return {quantity, remaining};
+        }
 
         function validateQuantity(autoFix) {
-            const quantity = parseInt(quantityInput.value) || 0;
+            const {quantity, remaining} = syncQuantityBounds(autoFix);
             let isValid = true;
             let errorMessage = '';
-            let shouldFix = false;
 
-            if (maxQuantity === 0) {
+            if (state.stockQuantity === 0) {
                 isValid = false;
                 errorMessage = 'Sản phẩm đã hết hàng';
+            } else if (remaining === 0) {
+                isValid = false;
+                errorMessage = 'Bạn đã có tối đa sản phẩm này trong giỏ hàng.';
             } else if (quantity < 1) {
                 isValid = false;
                 errorMessage = 'Số lượng phải lớn hơn 0';
-                if (autoFix) {
-                    quantityInput.value = 1;
-                    shouldFix = true;
-                }
-            } else if (quantity > maxQuantity) {
+            } else if (quantity > remaining) {
                 isValid = false;
-                errorMessage = 'Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho';
-                if (autoFix) {
-                    quantityInput.value = maxQuantity;
-                    shouldFix = true;
-                }
-            }
-
-            if (shouldFix) {
-                // Nếu đã tự động sửa, validate lại với giá trị mới
-                return validateQuantity(false);
+                errorMessage = 'Bạn chỉ có thể thêm tối đa ' + remaining + ' sản phẩm nữa (đã có ' + state.currentCartQuantity + ' sản phẩm trong giỏ).';
             }
 
             if (isValid) {
@@ -415,6 +450,32 @@
             return isValid;
         }
 
+        function fetchCurrentQuantity() {
+            if (!isLoggedIn()) {
+                return;
+            }
+            fetch(`${state.contextPath}/cart?action=currentQuantity&productId=${state.productId}`, {
+                method: 'GET'
+            })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && typeof data.quantity === 'number') {
+                            state.currentCartQuantity = data.quantity;
+                            validateQuantity(true);
+                            if (typeof state.notifyChange === 'function') {
+                                state.notifyChange();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching current cart quantity:', error);
+                    });
+        }
+
+        state.notifyChange = () => {
+            validateQuantity(true);
+        };
+
         // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
         quantityInput.addEventListener('input', function () {
             validateQuantity(false);
@@ -430,7 +491,8 @@
         });
 
         // Validate lần đầu khi trang load
-        validateQuantity(false);
+        validateQuantity(true);
+        fetchCurrentQuantity();
     });
 
     function addToCart(productId) {
@@ -441,7 +503,17 @@
 
         const quantityInput = document.getElementById('quantity-input');
         const quantity = parseInt(quantityInput.value) || 0;
-        const maxQuantity = parseInt('${product.quantityProduct}');
+        const cartState = window.__productDetailCartState || {
+            stockQuantity: parseInt('${product.quantityProduct}') || 0,
+            currentCartQuantity: 0,
+            getRemaining() {
+                return Math.max(this.stockQuantity - this.currentCartQuantity, 0);
+            }
+        };
+        const stockQuantity = cartState.stockQuantity;
+        const remaining = typeof cartState.getRemaining === 'function'
+                ? cartState.getRemaining()
+                : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
 
         if (quantity < 1) {
             showMessage('Số lượng phải lớn hơn 0', 'error');
@@ -449,15 +521,22 @@
             return;
         }
 
-        if (quantity > maxQuantity) {
-            showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn trong kho. Vui lòng chọn lại số lượng.', 'error');
-            quantityInput.value = maxQuantity;
+        if (stockQuantity === 0) {
+            showMessage('Sản phẩm đã hết hàng', 'error');
+            return;
+        }
+
+        if (remaining <= 0) {
+            showMessage('Bạn đã có tối đa sản phẩm này trong giỏ hàng.', 'error');
+            quantityInput.value = 0;
             quantityInput.focus();
             return;
         }
 
-        if (maxQuantity === 0) {
-            showMessage('Sản phẩm đã hết hàng', 'error');
+        if (quantity > remaining) {
+            showMessage('Bạn chỉ có thể thêm tối đa ' + remaining + ' sản phẩm nữa (đã có ' + (cartState.currentCartQuantity || 0) + ' sản phẩm trong giỏ).', 'error');
+            quantityInput.value = remaining;
+            quantityInput.focus();
             return;
         }
 
@@ -468,6 +547,12 @@
                 .then(data => {
                     if (data.success) {
                         showMessage(data.message, 'success');
+                        if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
+                            window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
+                            if (typeof window.__productDetailCartState.notifyChange === 'function') {
+                                window.__productDetailCartState.notifyChange();
+                            }
+                        }
                         if (typeof updateCartCount === 'function') {
                             updateCartCount();
                         }
