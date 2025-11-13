@@ -58,6 +58,7 @@ public class CartServlet extends HttpServlet {
         }
 
         switch (action) {
+        switch (action) {
             case "view":
                 viewCart(request, response, customer);
                 break;
@@ -122,7 +123,7 @@ public class CartServlet extends HttpServlet {
                 if (product.getQuantityProduct() <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Sản phẩm đã hết hàng.\"}");
+                    out.print("{\"success\": false, \"message\": \"Product is out of stock.\"}");
                     out.flush();
                     return;
                 }
@@ -131,7 +132,7 @@ public class CartServlet extends HttpServlet {
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Số lượng bạn chọn vượt quá tồn kho. Chỉ còn " + product.getQuantityProduct() + " sản phẩm.\"}");
+                    out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " item(s) left.\"}");
                     out.flush();
                     return;
                 }
@@ -145,9 +146,9 @@ public class CartServlet extends HttpServlet {
                 if (remainingAllowable <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Bạn đã có tối đa " 
-                            + product.getQuantityProduct()
-                            + " sản phẩm này trong giỏ hàng.\"}");
+                    out.print("{\"success\": false, \"message\": \"You already have "
+                            + currentInCart
+                            + " item(s) of this product in your cart.\"}");
                     out.flush();
                     return;
                 }
@@ -171,40 +172,40 @@ public class CartServlet extends HttpServlet {
                     
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     if (capped) {
-                        String message = "Bạn đã có " + currentInCart + " sản phẩm này trong giỏ hàng. "
-                                + "Chỉ có thể thêm thêm " + quantity + " sản phẩm (giới hạn tồn kho "
+                        String message = "You already had " + currentInCart + " item(s) of this product in your cart. "
+                                + "Only " + quantity + " more item(s) were added (stock limit "
                                 + product.getQuantityProduct() + "). "
-                                + "Hiện tại bạn có tổng " + totalForProduct + " sản phẩm trong giỏ.";
+                                + "Current total in cart: " + totalForProduct + " item(s).";
                         out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
                                 + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
                                 + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     } else {
-                        String message = "Đã thêm sản phẩm vào giỏ hàng thành công! Hiện tại bạn có "
-                                + totalForProduct + " sản phẩm này trong giỏ.";
+                        String message = "Product added to cart successfully! You now have "
+                                + totalForProduct + " item(s) of this product in your cart.";
                         out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
                                 + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
                                 + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     }
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.\"}");
+                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
                 }
                 out.flush();
             } else {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                out.print("{\"success\": false, \"message\": \"Không tìm thấy sản phẩm.\"}");
+                out.print("{\"success\": false, \"message\": \"Product not found.\"}");
                 out.flush();
             }
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Dữ liệu đầu vào không hợp lệ.\"}");
+            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi không xác định.\"}");
+            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
             out.flush();
         }
     }
