@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Category;
 import model.Product;
 
 /**
@@ -59,8 +60,28 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String getActive = request.getParameter("active");
+        int active = 0;
+        if (getActive != null) {
+            try {
+                active = Integer.parseInt(getActive);
+            } catch (NumberFormatException e) {
+                active = 0; // fallback nếu người dùng nhập linh tinh
+            }
+        }
+
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.getAllProducts();
+        List<Category> listC = dao.getAllCategories();
+        if (active != 0) {
+            List<Product> menu = dao.getProductsByCategory(active);
+            request.setAttribute("listC", listC);
+            request.setAttribute("listP", menu);
+            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            return;
+        }
+        request.setAttribute("listC", listC);
         request.setAttribute("listP", list);
         request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
     }
