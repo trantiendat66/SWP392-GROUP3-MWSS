@@ -115,6 +115,15 @@ public class CartServlet extends HttpServlet {
             
             Product product = productDAO.getProductById(productId);
             if (product != null) {
+                // Kiểm tra sản phẩm đã hết hàng
+                if (product.getQuantityProduct() <= 0) {
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print("{\"success\": false, \"message\": \"Product is out of stock\"}");
+                    out.flush();
+                    return;
+                }
+                
                 // Kiểm tra số lượng sản phẩm trong kho
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
