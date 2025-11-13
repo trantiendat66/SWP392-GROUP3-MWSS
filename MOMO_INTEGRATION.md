@@ -54,6 +54,10 @@ MoMo Test Environment cung cấp các test case:
 - Số điện thoại khác
 - Hoặc nhập OTP sai
 
+**Timeout:**
+- Đơn hàng sẽ tự động hết hạn sau 20 phút
+- User cần hoàn tất thanh toán trong thời gian này
+
 ### 5. Chuyển sang Production
 
 Khi chuyển sang môi trường thật:
@@ -74,8 +78,9 @@ Khi chuyển sang môi trường thật:
 
 **Các lỗi thường gặp:**
 
-- **resultCode = 9000**: Transaction timeout (user không thanh toán trong thời gian quy định)
-- **resultCode = 1006**: Transaction denied by user
+- **resultCode = 0**: Thanh toán thành công
+- **resultCode = 9000**: Transaction timeout (đơn hàng hết hạn sau 20 phút)
+- **resultCode = 1006**: User hủy giao dịch (click nút "Quay về")
 - **resultCode = 1001**: Payment failed
 
 **Log tracking:**

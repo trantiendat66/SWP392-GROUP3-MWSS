@@ -38,6 +38,11 @@
     <c:if test="${not empty requestScope.error}">
         <div class="alert alert-danger">${requestScope.error}</div>
     </c:if>
+    <!-- Hiển thị lỗi từ session (ví dụ redirect từ MoMoReturnServlet) rồi xóa để tránh hiển thị lại -->
+    <c:if test="${not empty sessionScope.error}">
+        <div class="alert alert-danger">${sessionScope.error}</div>
+        <c:remove var="error" scope="session"/>
+    </c:if>
     <c:if test="${not empty sessionScope.flash_success}">
         <div class="alert alert-success">${sessionScope.flash_success}</div>
         <c:remove var="flash_success" scope="session"/>
@@ -168,4 +173,31 @@
     </c:choose>
 </div>
 
+<script>
+    // MoMo payment integration - change form action based on payment method
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderForm = document.getElementById('orderForm');
+        const paymentMethodSelect = document.getElementById('payment-method-select');
+        const btnText = document.getElementById('btn-text');
+        
+        // Xử lý khi thay đổi payment method
+        if (paymentMethodSelect) {
+            paymentMethodSelect.addEventListener('change', function() {
+                const selectedMethod = this.value;
+                console.log('Payment method changed to:', selectedMethod);
+                if (selectedMethod === '2') {
+                    // MoMo payment
+                    btnText.textContent = 'Pay with MoMo';
+                    orderForm.action = '${ctx}/momo/payment';
+                    console.log('Form action set to:', orderForm.action);
+                } else {
+                    // COD
+                    btnText.textContent = 'Confirm Order';
+                    orderForm.action = '${ctx}/order/create-from-cart';
+                    console.log('Form action set to:', orderForm.action);
+                }
+            });
+        }
+    });
+</script>
 <%@ include file="/WEB-INF/include/footer.jsp" %>

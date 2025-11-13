@@ -30,6 +30,9 @@ public class MoMoConfig {
     // Language
     public static final String LANG = "vi";
     
+    // Order expiration time (in minutes)
+    public static final long ORDER_EXPIRE_TIME = 20; // 20 minutes
+    
     /**
      * Tạo orderId duy nhất cho MoMo
      * Format: MOMO_{timestamp}_{customerId}

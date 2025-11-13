@@ -47,21 +47,24 @@ public class MoMoPaymentUtil {
      * @return JSONObject chứa payUrl và các thông tin khác
      */
     public static JSONObject createPaymentRequest(
-            String orderId,
-            String requestId,
-            long amount,
-            String orderInfo,
-            String extraData) throws Exception {
+        String orderId,
+        String requestId,
+        long amount,
+        String orderInfo,
+        String extraData) throws Exception {
+        
+        // Tính thời gian hết hạn: 20 phút kể từ bây giờ (timestamp in milliseconds)
+        long orderExpireTime = System.currentTimeMillis() + (20 * 60 * 1000);
         
         // Build raw signature
-        String rawSignature = "accessKey=" + MoMoConfig.ACCESS_KEY
+    String rawSignature = "accessKey=" + MoMoConfig.ACCESS_KEY
                 + "&amount=" + amount
                 + "&extraData=" + extraData
-                + "&ipnUrl=" + MoMoConfig.IPN_URL
+        + "&ipnUrl=" + MoMoConfig.IPN_URL
                 + "&orderId=" + orderId
                 + "&orderInfo=" + orderInfo
                 + "&partnerCode=" + MoMoConfig.PARTNER_CODE
-                + "&redirectUrl=" + MoMoConfig.RETURN_URL
+        + "&redirectUrl=" + MoMoConfig.RETURN_URL
                 + "&requestId=" + requestId
                 + "&requestType=" + MoMoConfig.REQUEST_TYPE;
         
@@ -79,15 +82,17 @@ public class MoMoPaymentUtil {
         requestBody.put("amount", amount);
         requestBody.put("orderId", orderId);
         requestBody.put("orderInfo", orderInfo);
-        requestBody.put("redirectUrl", MoMoConfig.RETURN_URL);
-        requestBody.put("ipnUrl", MoMoConfig.IPN_URL);
+    requestBody.put("redirectUrl", MoMoConfig.RETURN_URL);
+    requestBody.put("ipnUrl", MoMoConfig.IPN_URL);
         requestBody.put("lang", MoMoConfig.LANG);
         requestBody.put("extraData", extraData);
         requestBody.put("requestType", MoMoConfig.REQUEST_TYPE);
         requestBody.put("signature", signature);
         requestBody.put("autoCapture", MoMoConfig.AUTO_CAPTURE);
+        requestBody.put("orderExpireTime", orderExpireTime); // Thêm 20 phút timeout
         
         System.out.println("Request body: " + requestBody.toString());
+        System.out.println("Order expire time: " + orderExpireTime + " (20 minutes from now)");
         
         // Send POST request to MoMo
         URI uri = new URI(MoMoConfig.ENDPOINT);
@@ -118,6 +123,82 @@ public class MoMoPaymentUtil {
         System.out.println("MoMo Response: " + response.toString());
         
         return new JSONObject(response.toString());
+    }
+
+    /**
+     * Overload: create payment request with dynamic redirect and ipn urls.
+     * Useful when context path differs between environments (e.g., /SWP_MWSS vs /SWP_MWSS-V1.0).
+     */
+    public static JSONObject createPaymentRequest(
+            String orderId,
+            String requestId,
+            long amount,
+            String orderInfo,
+            String extraData,
+            String redirectUrl,
+            String ipnUrl) throws Exception {
+
+        // Build raw signature using provided URLs
+        String rawSignature = "accessKey=" + MoMoConfig.ACCESS_KEY
+                + "&amount=" + amount
+                + "&extraData=" + extraData
+                + "&ipnUrl=" + ipnUrl
+                + "&orderId=" + orderId
+                + "&orderInfo=" + orderInfo
+                + "&partnerCode=" + MoMoConfig.PARTNER_CODE
+                + "&redirectUrl=" + redirectUrl
+                + "&requestId=" + requestId
+                + "&requestType=" + MoMoConfig.REQUEST_TYPE;
+
+        System.out.println("Raw signature: " + rawSignature);
+
+        String signature = hmacSHA256(rawSignature, MoMoConfig.SECRET_KEY);
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("partnerCode", MoMoConfig.PARTNER_CODE);
+        requestBody.put("partnerName", "Watch Shop");
+        requestBody.put("storeId", "WatchShopStore");
+        requestBody.put("requestId", requestId);
+        requestBody.put("amount", amount);
+        requestBody.put("orderId", orderId);
+        requestBody.put("orderInfo", orderInfo);
+        requestBody.put("redirectUrl", redirectUrl);
+        requestBody.put("ipnUrl", ipnUrl);
+        requestBody.put("lang", MoMoConfig.LANG);
+        requestBody.put("extraData", extraData);
+        requestBody.put("requestType", MoMoConfig.REQUEST_TYPE);
+        requestBody.put("signature", signature);
+        requestBody.put("autoCapture", MoMoConfig.AUTO_CAPTURE);
+
+        System.out.println("Request body: " + requestBody.toString());
+
+        java.net.URI uri = new java.net.URI(MoMoConfig.ENDPOINT);
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) uri.toURL().openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        try (java.io.OutputStream os = conn.getOutputStream()) {
+            byte[] input = requestBody.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        int responseCode = conn.getResponseCode();
+        System.out.println("MoMo Response Code: " + responseCode);
+
+        java.io.BufferedReader in = new java.io.BufferedReader(
+                new java.io.InputStreamReader(conn.getInputStream(), java.nio.charset.StandardCharsets.UTF_8));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        System.out.println("MoMo Response: " + response.toString());
+
+        return new org.json.JSONObject(response.toString());
     }
     
     /**

@@ -28,21 +28,29 @@ public class PaymentPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        System.out.println("=== PaymentPageServlet: doGet called ===");
+        
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("customer") == null) {
+            System.out.println("Session null or customer not logged in");
             resp.sendRedirect(req.getContextPath() + "/login.jsp?next=payment");
             return;
         }
         Customer cus = (Customer) session.getAttribute("customer");
+        System.out.println("Customer ID: " + cus.getCustomer_id());
 
         CartDAO cartDAO = new CartDAO();
         // controller/PaymentPageServlet.java
         try {
             Integer bnPid = (Integer) session.getAttribute("bn_pid");
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
+            
+            System.out.println("bn_pid from session: " + bnPid);
+            System.out.println("bn_qty from session: " + bnQty);
 
             if (bnPid != null && bnQty != null && bnQty > 0) {
                 // ---- CHẾ ĐỘ BUY-NOW (không đụng DB cart) ----
+                System.out.println("Mode: BUY_NOW");
                 // Tạo danh sách hiển thị từ Product (1 item)
                 ProductDAO pdao = new ProductDAO();
                 Product p = pdao.getById(bnPid);                 // nếu chưa có, thêm hàm getById; hoặc tự viết query nhỏ
@@ -63,7 +71,9 @@ public class PaymentPageServlet extends HttpServlet {
                 req.setAttribute("cartItemCount", bnQty);
             } else {
                 // ---- CHẾ ĐỘ CART ----
+                System.out.println("Mode: CART");
                 List<Cart> items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
+                System.out.println("Cart items count: " + items.size());
                 int total = 0, count = 0;
                 for (Cart it : items) {
                     total += it.getTotalPrice();
@@ -74,10 +84,14 @@ public class PaymentPageServlet extends HttpServlet {
                 req.setAttribute("cartItems", items);
                 req.setAttribute("totalAmount", total);
                 req.setAttribute("cartItemCount", count);
+                System.out.println("Total amount: " + total + ", Item count: " + count);
             }
 
+            System.out.println("Forwarding to payment.jsp");
             req.getRequestDispatcher("/payment.jsp").forward(req, resp);
         } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            e.printStackTrace();
             req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("/cart.jsp").forward(req, resp);
         }

@@ -31,15 +31,21 @@ public class MoMoPaymentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        System.out.println("=== MoMoPaymentServlet: doPost called ===");
+        
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("customer") == null) {
+            System.out.println("Session null or customer not logged in");
             resp.sendRedirect(req.getContextPath() + "/login.jsp?next=cart");
             return;
         }
         Customer cus = (Customer) session.getAttribute("customer");
+        System.out.println("Customer ID: " + cus.getCustomer_id());
 
         String address = req.getParameter("shipping_address");
         String phone = req.getParameter("phone");
+        System.out.println("Address: " + address + ", Phone: " + phone);
+        
         if (phone == null || phone.isBlank()) {
             phone = cus.getPhone();
         }
@@ -70,14 +76,20 @@ public class MoMoPaymentServlet extends HttpServlet {
             }
 
             if (items.isEmpty()) {
+                System.out.println("Cart is empty");
                 session.setAttribute("error", "Your cart is empty.");
                 resp.sendRedirect(req.getContextPath() + "/cart");
                 return;
             }
 
+            System.out.println("Total amount: " + totalAmount + " VND");
+            
             // Tạo orderId và requestId cho MoMo
             String momoOrderId = MoMoConfig.generateOrderId(cus.getCustomer_id());
             String requestId = MoMoConfig.generateRequestId();
+            
+            System.out.println("MoMo OrderId: " + momoOrderId);
+            System.out.println("RequestId: " + requestId);
             
             // Tạo orderInfo
             String orderInfo = "Payment for order " + momoOrderId;
@@ -88,21 +100,37 @@ public class MoMoPaymentServlet extends HttpServlet {
             // Encode base64 để tránh ký tự đặc biệt
             extraData = Base64.getEncoder().encodeToString(extraData.getBytes());
 
-            // Gọi MoMo API
-            JSONObject momoResponse = MoMoPaymentUtil.createPaymentRequest(
-                    momoOrderId,
-                    requestId,
-                    totalAmount,
-                    orderInfo,
-                    extraData
-            );
+        System.out.println("Calling MoMo API...");
+            
+        // Build dynamic base URL to match the actual deployed context path
+        String baseUrl = req.getScheme() + "://" + req.getServerName()
+            + (req.getServerPort() == 80 || req.getServerPort() == 443 ? "" : ":" + req.getServerPort())
+            + req.getContextPath();
+        String redirectUrl = baseUrl + "/momo/return";
+        String ipnUrl = baseUrl + "/momo/callback";
+
+        System.out.println("Computed redirectUrl: " + redirectUrl);
+        System.out.println("Computed ipnUrl: " + ipnUrl);
+            
+        // Gọi MoMo API với URL động (đúng context hiện tại)
+        JSONObject momoResponse = MoMoPaymentUtil.createPaymentRequest(
+            momoOrderId,
+            requestId,
+            totalAmount,
+            orderInfo,
+            extraData,
+            redirectUrl,
+            ipnUrl
+        );
 
             // Kiểm tra response
             int resultCode = momoResponse.optInt("resultCode", -1);
+            System.out.println("MoMo API Result Code: " + resultCode);
             
             if (resultCode == 0) {
                 // Success - redirect to MoMo payment page
                 String payUrl = momoResponse.getString("payUrl");
+                System.out.println("Success! Redirecting to: " + payUrl);
                 
                 // Lưu momoOrderId vào session để tracking
                 session.setAttribute("momo_order_id", momoOrderId);
@@ -112,15 +140,18 @@ public class MoMoPaymentServlet extends HttpServlet {
             } else {
                 // Failed
                 String message = momoResponse.optString("message", "Unknown error");
+                System.out.println("MoMo API Error: " + message);
                 session.setAttribute("error", "MoMo payment error: " + message);
                 resp.sendRedirect(req.getContextPath() + "/payment");
             }
 
         } catch (SQLException e) {
+            System.out.println("SQLException in MoMoPaymentServlet:");
             e.printStackTrace();
             session.setAttribute("error", "Database error: " + e.getMessage());
             resp.sendRedirect(req.getContextPath() + "/payment");
         } catch (Exception e) {
+            System.out.println("Exception in MoMoPaymentServlet:");
             e.printStackTrace();
             session.setAttribute("error", "Payment error: " + e.getMessage());
             resp.sendRedirect(req.getContextPath() + "/payment");
