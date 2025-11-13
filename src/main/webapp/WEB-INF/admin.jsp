@@ -401,7 +401,7 @@
             <ul class="nav-menu">
                 <li>
                     <a class="nav-link ${requestScope.activeTab == null || requestScope.activeTab == 'product' ? 'active' : ''}" 
-                       href="${pageContext.request.contextPath}/admin/dashboard">Product Management</a>
+                       href="${pageContext.request.contextPath}/product">Product Management</a>
                 </li>
                 <li>
                     <a class="nav-link ${requestScope.activeTab == 'order' ? 'active' : ''}" 

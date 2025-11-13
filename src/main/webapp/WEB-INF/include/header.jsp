@@ -4,9 +4,12 @@
     Author     : Tran Tien Dat - CE190362
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import=" model.Category"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
+
 <html lang="vi">
     <head>
         <style>
@@ -52,28 +55,29 @@
                 <div class="collapse navbar-collapse" id="mainNav">          
                     <c:if test="${empty sessionScope.staff or isHome}">
                         <form class="d-flex mx-lg-3 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
-                            <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search by name..." aria-label="Search" value="${param.keyword}">
+                            <input class="form-control form-control-sm search-input me-2" type="search" name="keyword" placeholder="Search product by name..." aria-label="Search" value="${param.keyword}">
                             <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
                         </form>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle fw-semibold text-white" href="#" id="productDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                Menu
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="productDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=2">Gentleman</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=3">Ladies</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=4">Đồng Hồ Cơ</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=5">Đồng Hồ Pin</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=6">Đính kim Cương</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=7">Vàng Khối</a></li>
-                            </ul>
-                        </li>
+                        <c:choose>
+                            <c:when test="${not empty requestScope.categories}">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle fw-semibold text-white" href="#" id="productDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menu
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="productDropdown">
+                                        <c:forEach var="cat" items="${requestScope.categories}">
+                                            <li>
+                                                <a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=${cat.id}">
+                                                    ${cat.name}
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            </c:forEach>
+                                    </ul>
+                                </li>
+                            </c:when>
+                        </c:choose>
                     </c:if>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <c:choose>

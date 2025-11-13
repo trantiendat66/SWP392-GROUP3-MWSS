@@ -7,6 +7,7 @@ package dao;
 import db.DBContext;
 import java.sql.*;
 import java.util.*;
+import model.Category;
 import model.Product;
 
 /**
@@ -411,6 +412,22 @@ public class ProductDAO extends DBContext {
                     p.setQuantityProduct(quantity != 0 ? quantity : 0);
                     list.add(p);
                 }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> list = new ArrayList<>();
+        String sql = "SELECT category_id, category_name FROM Category ORDER BY category_name";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Category c = new Category();
+                c.setId(rs.getInt("category_id"));
+                c.setName(rs.getString("category_name"));
+                list.add(c);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -148,25 +148,14 @@
     <div class="staff-hero">
         <h2>Staff Management</h2>
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <form action="${pageContext.request.contextPath}/admin/staff/search" 
-                  method="get" 
-                  style="display: flex; flex-grow: 1; gap: 8px; min-width: 250px;">
-                <input type="text" name="keyword" placeholder="Search staff by phone" 
-                       value="${param.keyword}" 
-                       style="flex-grow: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #bbb;">
-                <button type="submit" 
-                        style="padding: 8px 14px; border-radius: 6px; font-weight: 600; background-color: #007bff; color: white; border: none;">
-                    Search
+            <form action="${pageContext.request.contextPath}/admin/staff/search" method="get" style="display: flex; flex-grow: 1; gap: 8px; min-width: 250px;">
+                <input type="text" name="keyword" placeholder="Search staff by phone" value="${param.keyword}" style="flex-grow: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #bbb;">
+                <button type="submit" style="padding: 8px 14px; border-radius: 6px; background-color: #007bff; color: white; font-weight: 600; border: none; cursor: pointer;"> Search
                 </button>
             </form>
-
-            <a href="${pageContext.request.contextPath}/admin/staff/add" 
-               class="btn btn-success" 
-               style="padding: 8px 14px; border-radius: 6px; font-weight: 600;"> Add Staff
+            <a href="${pageContext.request.contextPath}/admin/staff/add" style="padding: 8px 14px; border-radius: 6px; font-weight: 600;background-color: #28a745; color: white; text-decoration: none; border: none; cursor: pointer;">Add Staff
             </a>
         </div>
-
-
     </div>
 
     <%-- Flash messages --%>
@@ -229,6 +218,12 @@
                 <% }%>
             </tbody>
         </table>
+    </div>
+    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+        <a href="${pageContext.request.contextPath}/admin/dashboard" 
+           style="padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; background-color: #f0f0f0; color: #333; border: 1px solid #ccc;">
+            ← Back
+        </a>
     </div>
 </div>
 
