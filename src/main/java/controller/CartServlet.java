@@ -20,8 +20,9 @@ import model.Customer;
 import model.Product;
 
 /**
- * Cart Servlet - Controller for Cart operations
- * Handles all cart-related HTTP requests and responses
+ * Cart Servlet - Controller for Cart operations Handles all cart-related HTTP
+ * requests and responses
+ *
  * @author Dang Vi Danh
  */
 @WebServlet(name = "CartServlet", urlPatterns = {"/cart"})
@@ -40,7 +41,7 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
+
         if (action == null) {
             action = "view";
         }
@@ -57,7 +58,6 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        switch (action) {
         switch (action) {
             case "view":
                 viewCart(request, response, customer);
@@ -98,11 +98,11 @@ public class CartServlet extends HttpServlet {
         try {
             var cartItems = cartDAO.getCartByCustomerId(customer.getCustomer_id());
             int totalAmount = cartDAO.getCartTotal(customer.getCustomer_id());
-            
+
             request.setAttribute("cartItems", cartItems);
             request.setAttribute("totalAmount", totalAmount);
             request.setAttribute("cartItemCount", cartItems.size());
-            
+
             request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class CartServlet extends HttpServlet {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            
+
             Product product = productDAO.getProductById(productId);
             if (product != null) {
                 // Kiểm tra sản phẩm đã hết hàng
@@ -127,7 +127,7 @@ public class CartServlet extends HttpServlet {
                     out.flush();
                     return;
                 }
-                
+
                 // Kiểm tra số lượng sản phẩm trong kho
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
@@ -136,7 +136,7 @@ public class CartServlet extends HttpServlet {
                     out.flush();
                     return;
                 }
-                
+
                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, tính tổng số lượng
                 Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
                 boolean capped = false;
@@ -159,9 +159,9 @@ public class CartServlet extends HttpServlet {
                 }
 
                 int addedQuantity = quantity;
-                
+
                 boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
-                
+
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 if (success) {
@@ -169,7 +169,7 @@ public class CartServlet extends HttpServlet {
                     int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
                     int totalForProduct = currentInCart + quantity;
                     int remainingAfterAdd = Math.max(product.getQuantityProduct() - totalForProduct, 0);
-                    
+
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     if (capped) {
                         String message = "You already had " + currentInCart + " item(s) of this product in your cart. "
@@ -216,7 +216,7 @@ public class CartServlet extends HttpServlet {
         try {
             int cartId = Integer.parseInt(request.getParameter("cartId"));
             int newQuantity = Integer.parseInt(request.getParameter("quantity"));
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
 
@@ -239,7 +239,7 @@ public class CartServlet extends HttpServlet {
                         return;
                     }
                 }
-                
+
                 boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
                 if (success) {
                     out.print("{\"success\": true, \"message\": \"Quantity updated successfully.\"}");
@@ -268,7 +268,7 @@ public class CartServlet extends HttpServlet {
         try {
             int cartId = Integer.parseInt(request.getParameter("cartId"));
             boolean success = cartDAO.removeFromCart(cartId);
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
@@ -296,7 +296,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             boolean success = cartDAO.clearCart(customer.getCustomer_id());
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
@@ -319,7 +319,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             int count = cartDAO.getCartItemCount(customer.getCustomer_id());
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.print("{\"count\": " + count + "}");
