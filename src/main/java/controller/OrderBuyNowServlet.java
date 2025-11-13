@@ -4,12 +4,20 @@
  */
 package controller;
 
+import dao.CartDAO;
+import dao.OrderDAO;
 import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Cart;
+import model.Customer;
 
 /**
  *
@@ -27,22 +35,24 @@ public class OrderBuyNowServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login.jsp?next=" + req.getHeader("Referer"));
             return;
         }
+        Customer cus = (Customer) session.getAttribute("customer");
 
         int productId = Integer.parseInt(req.getParameter("product_id"));
         int qty = Math.max(1, Integer.parseInt(req.getParameter("quantity")));
 
-        // Kiểm tra số lượng sản phẩm trong kho
+        // Kiểm tra sản phẩm có tồn tại và còn hàng không
         ProductDAO productDAO = new ProductDAO();
         model.Product product = productDAO.getProductById(productId);
+        
         if (product == null) {
-            session.setAttribute("error", "Product not found.");
-            resp.sendRedirect(req.getContextPath() + "/productdetail?id=" + productId);
+            session.setAttribute("errorMessage", "Product not found");
+            resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
         
-        if (qty > product.getQuantityProduct()) {
-            session.setAttribute("error", "Not enough stock available. Only " + product.getQuantityProduct() + " items left.");
-            resp.sendRedirect(req.getContextPath() + "/productdetail?id=" + productId);
+        if (product.getQuantityProduct() <= 0) {
+            session.setAttribute("errorMessage", "Product is out of stock");
+            resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
 
