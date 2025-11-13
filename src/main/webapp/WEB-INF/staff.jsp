@@ -315,21 +315,17 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
-                                                <form action="${pageContext.request.contextPath}/staffcontrol" method="GET">
+                                                <form action="${pageContext.request.contextPath}/filterServlet" method="GET">
+                                                    <input type="hidden" name="active" value="staff">
                                                     <div class="modal-body">
                                                         <!-- Brand -->
                                                         <div class="mb-3">
                                                             <label class="form-label fw-bold">Brand</label>
                                                             <select name="brand" class="form-select">
                                                                 <option value="">All Brands</option>
-                                                                <option value="Casio" ${param.brand == 'Casio' ? 'selected' : ''}>Casio</option>
-                                                                <option value="Citizen" ${param.brand == 'Citizen' ? 'selected' : ''}>Citizen</option>
-                                                                <option value="Seiko" ${param.brand == 'Seiko' ? 'selected' : ''}>Seiko</option>
-                                                                <option value="Tissot" ${param.brand == 'Tissot' ? 'selected' : ''}>Tissot</option>
-                                                                <option value="Doxa" ${param.brand == 'Doxa' ? 'selected' : ''}>Doxa</option>
-                                                                <option value="KOI" ${param.brand == 'KOI' ? 'selected' : ''}>KOI</option>
-                                                                <option value="Saga" ${param.brand == 'Saga' ? 'selected' : ''}>Saga</option>
-                                                                <option value="Orient" ${param.brand == 'Orient' ? 'selected' : ''}>Orient</option>
+                                                                <c:forEach var="brand" items="${requestScope.listBrands}">
+                                                                    <option value="${brand.brandName}" ${param.brand == brand.brandName ? 'selected' : ''}>${brand.brandName}</option>
+                                                                </c:forEach>
                                                             </select>
                                                         </div>
 

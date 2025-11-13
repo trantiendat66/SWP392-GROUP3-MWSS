@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.BrandDAO;
 import dao.FeedbackDAO;
 import dao.OrderDAO;
 import dao.StaffDAO;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import model.Staff;
 import model.Product;
 import java.util.List;
+import model.Brand;
 import model.FeedbackView;
 import model.Order;
 
@@ -68,57 +70,6 @@ public class StaffControlServlet extends HttpServlet {
         StaffDAO staffDAO = new StaffDAO();
         Staff staff = staffDAO.getStaffByEmail(loggedInCustomer.getEmail());
         request.setAttribute("staff", staff);
-        try {
-            ProductDAO productDAO = new ProductDAO();
-            List<Product> listProducts;
-
-            String keyword = request.getParameter("keyword");
-            String brand = request.getParameter("brand");
-            String gender = request.getParameter("gender");
-            String priceRange = request.getParameter("priceRange");
-            int minPrice = 0;
-            int maxPrice = 0;
-
-            if (priceRange != null && !priceRange.isEmpty()) {
-                if (priceRange.contains("-")) {
-                    String[] parts = priceRange.split("-");
-                    minPrice = Integer.parseInt(parts[0]);
-                    maxPrice = Integer.parseInt(parts[1]);
-                } else if (priceRange.endsWith("+")) {
-                    minPrice = Integer.parseInt(priceRange.replace("+", ""));
-                    maxPrice = 0; // 0 nghĩa là không giới hạn trên
-                }
-            }
-
-            if ((brand != null && !brand.isEmpty())
-                    || (gender != null && !gender.isEmpty())
-                    || (priceRange != null && !priceRange.isEmpty())) {
-
-                listProducts = productDAO.filterProducts(brand, gender, minPrice, maxPrice);
-                request.setAttribute("brand", brand);
-                request.setAttribute("gender", gender);
-                request.setAttribute("priceRange", priceRange);
-            } else if (keyword != null && !keyword.trim().isEmpty()) {
-                String trimmedKeyword = keyword.trim();
-                request.setAttribute("keyword", trimmedKeyword);
-
-                if (trimmedKeyword.length() >= 2) {
-
-                    listProducts = productDAO.searchProducts(trimmedKeyword);
-                } else {
-
-                    listProducts = new ArrayList<>();
-                }
-            } else {
-
-                listProducts = productDAO.getAllProducts();
-                request.setAttribute("keyword", "");
-            }
-            request.setAttribute("listProducts", listProducts);
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "Error loading product data.");
-        }
 
         if (getActive.equals("order")) {
             OrderDAO orderDao = new OrderDAO();
@@ -131,17 +82,14 @@ public class StaffControlServlet extends HttpServlet {
             request.setAttribute("activeTab", "feedback");
             request.setAttribute("listFeedbacks", listFeedbacks);
         } else {
+            BrandDAO bdao = new BrandDAO();
+            List<Brand> listB = bdao.getAllBrand();
             ProductDAO productDAO = new ProductDAO();
             List<Product> listProducts = productDAO.getAllProducts();
             request.setAttribute("activeTab", "product");
             request.setAttribute("listProducts", listProducts);
+            request.setAttribute("listBrands", listB);
         }
-//        else if (getActive.equals("product")) {
-//            ProductDAO productDAO = new ProductDAO();
-//            List<Product> listProducts = productDAO.getAllProducts();
-//            request.setAttribute("activeTab", "product");
-//            request.setAttribute("listProducts", listProducts);
-//        }
 
         if (getActive.equals("admin")) {
             FeedbackDAO feedbackDao = new FeedbackDAO();

@@ -57,23 +57,22 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-   public List<Product> getAllProductsForImport() {
-    List<Product> list = new ArrayList<>();
-    String sql = "SELECT * FROM Product";
-    try (PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-        while (rs.next()) {
-            Product p = new Product();
-            p.setProductId(rs.getInt("product_id"));
-            p.setProductName(rs.getString("product_name"));
-            list.add(p);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return list;
-}
 
+    public List<Product> getAllProductsForImport() {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM Product";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Product p = new Product();
+                p.setProductId(rs.getInt("product_id"));
+                p.setProductName(rs.getString("product_name"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public Product getProductById(int id) {
         String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
@@ -452,4 +451,17 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
+    public Category getCategoriesById(int id) {
+        Category c = new Category();
+        String sql = "SELECT category_id, category_name FROM Category ORDER BY category_name";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                c.setId(rs.getInt("category_id"));
+                c.setName(rs.getString("category_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
 }

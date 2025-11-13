@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.BrandDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Brand;
 import model.Category;
 import model.Product;
 
@@ -70,6 +72,8 @@ public class HomeServlet extends HttpServlet {
                 active = 0; // fallback nếu người dùng nhập linh tinh
             }
         }
+        BrandDAO bdao = new BrandDAO();
+        List<Brand> listB = bdao.getAllBrand();
 
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.getAllProducts();
@@ -78,9 +82,11 @@ public class HomeServlet extends HttpServlet {
             List<Product> menu = dao.getProductsByCategory(active);
             request.setAttribute("listC", listC);
             request.setAttribute("listP", menu);
+            request.setAttribute("listBrands", listB);
             request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             return;
         }
+        request.setAttribute("listBrands", listB);
         request.setAttribute("listC", listC);
         request.setAttribute("listP", list);
         request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);

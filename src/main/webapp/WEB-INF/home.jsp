@@ -52,6 +52,27 @@
         background: rgba(0,0,0,0.25);
         z-index: 2;
     }
+    p {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #222;
+        text-align: center;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin: 30px 0;
+        position: relative;
+    }
+
+    p::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 3px;
+        background-color: #c5a46d; /* màu vàng ánh kim */
+        margin: 10px auto 0;
+        border-radius: 2px;
+    }
+
 
     @media (max-width: 480px) {
         .intro-section {
@@ -174,13 +195,16 @@
     <h2 class="section-title text-center mb-4">Explore Categories</h2>
     <div class="row g-4">
         <div class="col-md-4">
-            <img src="${pageContext.request.contextPath}/assert/image/watch1.jpg" class="img-fluid rounded category-thumb" alt="Category 1">
+            <img src="${pageContext.request.contextPath}/assert/image/BST-dong-ho-nam-ban-chay.jpg" class="img-fluid rounded category-thumb" alt="Category 1">
+            <p>BST ĐỒNG HỒ NAM HOT</p>
         </div>
         <div class="col-md-4">
-            <img src="${pageContext.request.contextPath}/assert/image/watch2.jpg" class="img-fluid rounded category-thumb" alt="Category 2">
+            <img src="${pageContext.request.contextPath}/assert/image/BST-dong-ho-nu-ban-chay.jpg" class="img-fluid rounded category-thumb" alt="Category 2">
+            <p>BST ĐỒNG HỒ NỮ HOT</p>
         </div>
         <div class="col-md-4">
             <img src="${pageContext.request.contextPath}/assert/image/watch3.jpg" class="img-fluid rounded category-thumb" alt="Category 3">
+            <p>BST ĐỒNG HỒ NEW</p>
         </div>
     </div>
 </section>
@@ -228,14 +252,9 @@
                         <label for="brand" class="form-label">Brand</label>
                         <select class="form-select" id="brand" name="brand">
                             <option value="">-- All brands --</option>
-                            <option value="Casio">Casio</option>
-                            <option value="Seiko">Seiko</option>
-                            <option value="Citizen">Citizen</option>
-                            <option value="Tissot">Tissot</option>
-                            <option value="Doxa">Doxa</option>
-                            <option value="KOI">KOI</option>
-                            <option value="Saga">Saga</option>
-                            <option value="Orient">Orient</option>
+                            <c:forEach var="brand" items="${requestScope.listBrands}">
+                                <option value=${brand.brandName}>${brand.brandName}</option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -297,7 +316,7 @@
             showMessage('Product is out of stock', 'error');
             return;
         }
-        
+
         fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=1', {
             method: 'GET'
         })
@@ -331,11 +350,11 @@
                 alert.remove();
         }, 3000);
     }
-    
+
     // Prevent Buy Now form submission if product is out of stock
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.buy-now-form').forEach(function(form) {
-            form.addEventListener('submit', function(e) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.buy-now-form').forEach(function (form) {
+            form.addEventListener('submit', function (e) {
                 const quantityProduct = parseInt(form.getAttribute('data-quantity'));
                 if (quantityProduct === 0 || quantityProduct <= 0) {
                     e.preventDefault();

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.BrandDAO;
 import dao.OrderDAO;
 import dao.ProductDAO;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.Brand;
 import model.Order;
 import model.Product;
 import model.Staff;
@@ -116,6 +118,8 @@ public class SearchServlet extends HttpServlet {
         } else {
             ///Search Product
             ProductDAO dao = new ProductDAO();
+            BrandDAO bdao = new BrandDAO();
+            List<Brand> listB = bdao.getAllBrand();
             List<Product> allProducts = dao.getAllProducts();
             if (allProducts == null) {
                 allProducts = new ArrayList<>();
@@ -136,6 +140,7 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("listP", searchResult);
             request.setAttribute("listProducts", searchResult);
             request.setAttribute("products", searchResult);
+            request.setAttribute("listBrands", listB);
         }
 
         switch (role) {
