@@ -127,19 +127,19 @@
         background: #218838;
     }
 
-    .price-display {
-        font-size: 1rem;
+    .price-chip {
+        font-size: 0.95rem;
         font-weight: 600;
         color: #dc3545;
-        min-width: 160px;
         white-space: nowrap;
     }
 
     .total-price {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: #28a745;
         white-space: nowrap;
+        margin-bottom: 0;
     }
 
     .cart-item .product-col {
@@ -149,21 +149,17 @@
     .cart-item-actions {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        gap: 16px;
+        gap: 24px;
         flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .cart-item-actions > * {
+        flex: 0 0 auto;
     }
 
     .cart-item-actions .quantity-controls {
-        flex: 0 0 auto;
-    }
-
-    .cart-item-actions .total-price {
-        margin-bottom: 0;
-    }
-
-    .cart-item-actions .btn-remove {
-        flex: 0 0 auto;
+        gap: 8px;
     }
 
     @media (max-width: 992px) {
@@ -174,12 +170,20 @@
             margin-top: 20px;
         }
 
-        .cart-item-actions {
-            justify-content: flex-start;
-        }
-
         .cart-item .product-col {
             min-width: 0;
+        }
+
+        .cart-item-actions {
+            gap: 12px;
+            justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cart-item-actions {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 
@@ -241,13 +245,13 @@
                                 <div class="col-xl-4 col-md-5 col-8 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
-                                    <p class="price-display mb-1">
-                                        <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                    </p>                                
                                 </div>
 
                                 <div class="col-xl-6 col-md-4 col-12">
                                     <div class="cart-item-actions">
+                                        <span class="price-chip">
+                                            <fmt:formatNumber value="${item.price}" type="number"/> VND
+                                        </span>
                                         <div class="quantity-controls">
                                             <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
                                                 <i class="bi bi-dash"></i>
@@ -259,7 +263,8 @@
                                                    min="1" 
                                                    max="${item.availableQuantity}"
                                                    data-cart-id="${item.cartId}"
-                                                   data-max-quantity="${item.availableQuantity}">
+                                                   data-max-quantity="${item.availableQuantity}"
+                                                   data-unit-price="${item.price}">
                                             <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                                 <i class="bi bi-plus"></i>
                                             </button>
@@ -388,12 +393,8 @@
                         // Lưu giá trị cũ để có thể reset nếu cần
                         quantityInput.setAttribute('data-old-value', newQuantity);
                         
-                        const priceElement = document.querySelector('#total-' + cartId);
-                        const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
-                        const currentTotal = parseInt(currentTotalText);
-                        const currentQuantity = parseInt(document.getElementById('quantity-' + cartId).value);
-                        const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
-                        const total = price * newQuantity;
+                        const unitPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
+                        const total = unitPrice * newQuantity;
                         document.getElementById('total-' + cartId).textContent =
                                 new Intl.NumberFormat('en-US').format(total) + ' VND';
 
