@@ -21,7 +21,7 @@ import java.util.Base64;
 import java.util.List;
 
 /**
- * Servlet xử lý tạo payment request tới MoMo
+ * Servlet handles creating payment request to MoMo
  * @author Oanh Nguyen
  */
 @WebServlet(name = "MoMoPaymentServlet", urlPatterns = {"/momo/payment"})
@@ -53,7 +53,7 @@ public class MoMoPaymentServlet extends HttpServlet {
         CartDAO cartDAO = new CartDAO();
 
         try {
-            // Kiểm tra có buy-now pending hay không?
+            // Check if there's a pending buy-now
             Integer bnPid = (Integer) session.getAttribute("bn_pid");
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
             boolean isBuyNow = (bnPid != null && bnQty != null && bnQty > 0);
@@ -62,13 +62,13 @@ public class MoMoPaymentServlet extends HttpServlet {
             long totalAmount = 0;
 
             if (isBuyNow) {
-                // Build list đơn hàng chỉ với sản phẩm buy-now
+                // Build order list with only buy-now product
                 int price = new ProductDAO().getCurrentPrice(bnPid);
                 items = new java.util.ArrayList<>();
                 items.add(new Cart(0, cus.getCustomer_id(), bnPid, price, bnQty));
                 totalAmount = (long) price * bnQty;
             } else {
-                // Checkout từ giỏ
+                // Checkout from cart
                 items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
                 for (Cart item : items) {
                     totalAmount += (long) item.getPrice() * item.getQuantity();
@@ -84,20 +84,20 @@ public class MoMoPaymentServlet extends HttpServlet {
 
             System.out.println("Total amount: " + totalAmount + " VND");
             
-            // Tạo orderId và requestId cho MoMo
+            // Generate orderId and requestId for MoMo
             String momoOrderId = MoMoConfig.generateOrderId(cus.getCustomer_id());
             String requestId = MoMoConfig.generateRequestId();
             
             System.out.println("MoMo OrderId: " + momoOrderId);
             System.out.println("RequestId: " + requestId);
             
-            // Tạo orderInfo
+            // Create orderInfo
             String orderInfo = "Payment for order " + momoOrderId;
             
-            // Tạo extraData - lưu thông tin để xử lý sau khi callback
+            // Create extraData - save info for callback processing
             // Format: customerId|phone|address|isBuyNow
             String extraData = cus.getCustomer_id() + "|" + phone + "|" + address + "|" + isBuyNow;
-            // Encode base64 để tránh ký tự đặc biệt
+            // Encode base64 to avoid special characters
             extraData = Base64.getEncoder().encodeToString(extraData.getBytes());
 
         System.out.println("Calling MoMo API...");
@@ -112,7 +112,7 @@ public class MoMoPaymentServlet extends HttpServlet {
         System.out.println("Computed redirectUrl: " + redirectUrl);
         System.out.println("Computed ipnUrl: " + ipnUrl);
             
-        // Gọi MoMo API với URL động (đúng context hiện tại)
+        // Call MoMo API with dynamic URL (matches current context)
         JSONObject momoResponse = MoMoPaymentUtil.createPaymentRequest(
             momoOrderId,
             requestId,
@@ -123,7 +123,7 @@ public class MoMoPaymentServlet extends HttpServlet {
             ipnUrl
         );
 
-            // Kiểm tra response
+            // Check response
             int resultCode = momoResponse.optInt("resultCode", -1);
             System.out.println("MoMo API Result Code: " + resultCode);
             
@@ -132,7 +132,7 @@ public class MoMoPaymentServlet extends HttpServlet {
                 String payUrl = momoResponse.getString("payUrl");
                 System.out.println("Success! Redirecting to: " + payUrl);
                 
-                // Lưu momoOrderId vào session để tracking
+                // Save momoOrderId to session for tracking
                 session.setAttribute("momo_order_id", momoOrderId);
                 session.setAttribute("momo_request_id", requestId);
                 

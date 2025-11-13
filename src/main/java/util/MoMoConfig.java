@@ -19,9 +19,9 @@ public class MoMoConfig {
     // Request type
     public static final String REQUEST_TYPE = "payWithMethod";
     
-    // IPN URL and Return URL (cần config theo domain của bạn)
-    // Khi deploy production, thay localhost bằng domain thật
-    public static final String IPN_URL = "http://localhost:8080/SWP_MWSS-V1.0/momo/callback";
+    // IPN URL and Return URL (need to configure according to your domain)
+    // When deploying to production, replace localhost with actual domain
+    public static final String IPN_URL = "http://localhost:8080/SWP_MWSS/momo/callback";
     public static final String RETURN_URL = "http://localhost:8080/SWP_MWSS-V1.0/momo/return";
     
     // Auto capture

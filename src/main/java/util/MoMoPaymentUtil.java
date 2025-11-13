@@ -22,7 +22,7 @@ import java.util.Map;
 public class MoMoPaymentUtil {
     
     /**
-     * Tạo chữ ký HMAC SHA256
+     * Generate HMAC SHA256 signature
      */
     public static String hmacSHA256(String data, String secretKey) throws Exception {
         Mac hmacSha256 = Mac.getInstance("HmacSHA256");
@@ -43,8 +43,8 @@ public class MoMoPaymentUtil {
     }
     
     /**
-     * Tạo payment request tới MoMo
-     * @return JSONObject chứa payUrl và các thông tin khác
+     * Create payment request to MoMo
+     * @return JSONObject containing payUrl and other information
      */
     public static JSONObject createPaymentRequest(
         String orderId,
@@ -53,7 +53,7 @@ public class MoMoPaymentUtil {
         String orderInfo,
         String extraData) throws Exception {
         
-        // Tính thời gian hết hạn: 20 phút kể từ bây giờ (timestamp in milliseconds)
+        // Calculate expiration time: 20 minutes from now (timestamp in milliseconds)
         long orderExpireTime = System.currentTimeMillis() + (20 * 60 * 1000);
         
         // Build raw signature
@@ -89,7 +89,7 @@ public class MoMoPaymentUtil {
         requestBody.put("requestType", MoMoConfig.REQUEST_TYPE);
         requestBody.put("signature", signature);
         requestBody.put("autoCapture", MoMoConfig.AUTO_CAPTURE);
-        requestBody.put("orderExpireTime", orderExpireTime); // Thêm 20 phút timeout
+        requestBody.put("orderExpireTime", orderExpireTime); // Add 20-minute timeout
         
         System.out.println("Request body: " + requestBody.toString());
         System.out.println("Order expire time: " + orderExpireTime + " (20 minutes from now)");

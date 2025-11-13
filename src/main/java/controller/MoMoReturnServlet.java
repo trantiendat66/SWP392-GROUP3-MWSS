@@ -18,7 +18,7 @@ import java.util.Base64;
 import java.util.List;
 
 /**
- * Servlet xử lý return URL từ MoMo (khi user hoàn tất thanh toán và được redirect về)
+ * Servlet handles return URL from MoMo (when user completes payment and gets redirected back)
  * @author Oanh Nguyen
  */
 @WebServlet(name = "MoMoReturnServlet", urlPatterns = {"/momo/return"})
@@ -30,7 +30,7 @@ public class MoMoReturnServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         
-        // Parse parameters từ MoMo
+        // Parse parameters from MoMo
         String partnerCode = req.getParameter("partnerCode");
         String orderId = req.getParameter("orderId");
         String requestId = req.getParameter("requestId");
@@ -47,9 +47,9 @@ public class MoMoReturnServlet extends HttpServlet {
 
         System.out.println("MoMo Return - OrderId: " + orderId + ", ResultCode: " + resultCode + ", Message: " + message);
 
-        // Kiểm tra resultCode
+        // Check resultCode
         if ("0".equals(resultCode)) {
-            // Payment success - Fallback tạo đơn tại Return (dùng khi IPN không tới được localhost)
+            // Payment success - Fallback to create order at Return (used when IPN cannot reach localhost)
             try {
                 if (session == null || session.getAttribute("customer") == null) {
                     resp.sendRedirect(req.getContextPath() + "/login.jsp?next=orders");
@@ -58,7 +58,7 @@ public class MoMoReturnServlet extends HttpServlet {
 
                 Customer cus = (Customer) session.getAttribute("customer");
 
-                // Lấy thông tin phone/address/isBuyNow từ extraData đã gửi đi lúc tạo yêu cầu thanh toán
+                // Get phone/address/isBuyNow info from extraData sent during payment request
                 String phone = cus.getPhone();
                 String address = null;
                 boolean isBuyNow = false;
@@ -74,11 +74,11 @@ public class MoMoReturnServlet extends HttpServlet {
                         }
                     }
                 } catch (IllegalArgumentException ignore) {
-                    // Không giải mã được extraData -> dùng fallback dưới
+                    // Cannot decode extraData -> use fallback below
                 }
 
                 if (address == null || address.isBlank()) {
-                    // Fallback: nếu không có địa chỉ trong extraData, lấy từ tham số cũ nếu có
+                    // Fallback: if no address in extraData, get from old parameter if available
                     address = req.getParameter("shipping_address");
                     if (address == null) address = "";
                 }
@@ -88,11 +88,11 @@ public class MoMoReturnServlet extends HttpServlet {
 
                 List<Cart> items;
                 if (isBuyNow) {
-                    // Lấy item buy-now từ session
+                    // Get buy-now item from session
                     Integer bnPid = (Integer) session.getAttribute("bn_pid");
                     Integer bnQty = (Integer) session.getAttribute("bn_qty");
                     if (bnPid == null || bnQty == null || bnQty <= 0) {
-                        // Không còn thông tin buy-now -> quay về payment để user thử lại
+                        // No buy-now info -> return to payment for user to retry
                         session.setAttribute("error", "Không tìm thấy thông tin đơn buy-now để tạo đơn. Vui lòng thử lại.");
                         resp.sendRedirect(req.getContextPath() + "/payment");
                         return;
@@ -101,7 +101,7 @@ public class MoMoReturnServlet extends HttpServlet {
                     items = new java.util.ArrayList<>();
                     items.add(new Cart(0, cus.getCustomer_id(), bnPid, price, bnQty));
                 } else {
-                    // Lấy item từ giỏ
+                    // Get items from cart
                     items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
                 }
 
@@ -115,11 +115,11 @@ public class MoMoReturnServlet extends HttpServlet {
                         cus.getCustomer_id(),
                         phone,
                         address,
-                        1, // đã thanh toán qua MoMo
+                        1, // already paid via MoMo
                         items
                 );
 
-                // Dọn state
+                // Clean up state
                 if (isBuyNow) {
                     session.removeAttribute("bn_pid");
                     session.removeAttribute("bn_qty");
@@ -143,9 +143,9 @@ public class MoMoReturnServlet extends HttpServlet {
             }
             
         } else if ("1006".equals(resultCode)) {
-            // User cancelled/rejected transaction - GIỮ LẠI session buy-now/cart để user thử lại
+            // User cancelled/rejected transaction - KEEP session buy-now/cart for user to retry
             if (session != null) {
-                // Chỉ xóa tracking MoMo, KHÔNG xóa bn_pid/bn_qty
+                // Only remove MoMo tracking, DO NOT remove bn_pid/bn_qty
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
@@ -154,9 +154,9 @@ public class MoMoReturnServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/payment");
             
         } else if ("9000".equals(resultCode)) {
-            // Transaction timeout - GIỮ LẠI session để user thử lại
+            // Transaction timeout - KEEP session for user to retry
             if (session != null) {
-                // Chỉ xóa tracking MoMo, KHÔNG xóa bn_pid/bn_qty
+                // Only remove MoMo tracking, DO NOT remove bn_pid/bn_qty
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
@@ -165,9 +165,9 @@ public class MoMoReturnServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/payment");
             
         } else {
-            // Other errors - GIỮ LẠI session để user thử lại
+            // Other errors - KEEP session for user to retry
             if (session != null) {
-                // Chỉ xóa tracking MoMo, KHÔNG xóa bn_pid/bn_qty
+                // Only remove MoMo tracking, DO NOT remove bn_pid/bn_qty
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
@@ -175,7 +175,7 @@ public class MoMoReturnServlet extends HttpServlet {
                 session.setAttribute("error", errorMsg);
             }
             
-            // Redirect về trang payment để user có thể thử lại
+            // Redirect to payment page for user to retry
             resp.sendRedirect(req.getContextPath() + "/payment");
         }
     }
