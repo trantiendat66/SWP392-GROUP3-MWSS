@@ -14,7 +14,7 @@
 </head>
 <style>
     .cart-container {
-        max-width: 1600px;
+        max-width: 1500px;
         margin: 0 auto;
         padding: 20px;
     }
@@ -39,6 +39,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        flex-wrap: nowrap;
     }
 
     .quantity-btn {
@@ -73,6 +74,8 @@
         padding: 20px;
         position: sticky;
         top: 20px;
+        max-width: 320px;
+        margin-left: auto;
     }
 
     .empty-cart {
@@ -125,30 +128,59 @@
     }
 
     .price-display {
-        font-size: 1.2rem;
-        font-weight: bold;
+        font-size: 1rem;
+        font-weight: 600;
         color: #dc3545;
-        min-width: 200px;
+        min-width: 160px;
         white-space: nowrap;
     }
 
     .total-price {
-        font-size: 1.5rem;
-        font-weight: bold;
+        font-size: 1.25rem;
+        font-weight: 700;
         color: #28a745;
         white-space: nowrap;
     }
 
     .cart-item .product-col {
-        min-width: 260px;
+        min-width: 320px;
     }
 
-    .cart-item .qty-col {
-        min-width: 150px;
+    .cart-item-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px;
+        flex-wrap: wrap;
     }
 
-    .cart-item .total-col {
-        min-width: 220px;
+    .cart-item-actions .quantity-controls {
+        flex: 0 0 auto;
+    }
+
+    .cart-item-actions .total-price {
+        margin-bottom: 0;
+    }
+
+    .cart-item-actions .btn-remove {
+        flex: 0 0 auto;
+    }
+
+    @media (max-width: 992px) {
+        .cart-summary {
+            position: static;
+            max-width: none;
+            margin-left: 0;
+            margin-top: 20px;
+        }
+
+        .cart-item-actions {
+            justify-content: flex-start;
+        }
+
+        .cart-item .product-col {
+            min-width: 0;
+        }
     }
 
     @media (max-width: 768px) {
@@ -196,17 +228,17 @@
         <c:otherwise>
             <div class="row">
                 <!-- Cart Items -->
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     <c:forEach var="item" items="${cartItems}">
                         <div class="cart-item" id="cart-item-${item.cartId}">
-                            <div class="row align-items-center">
-                                <div class="col-md-2 col-3">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-xl-2 col-md-3 col-4">
                                     <img src="${pageContext.request.contextPath}/assert/image/${item.productImage}" 
                                          alt="${item.productName}" 
                                          class="cart-item-image">
                                 </div>
 
-                                <div class="col-md-3 col-9 product-col">
+                                <div class="col-xl-4 col-md-5 col-8 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
                                     <p class="price-display mb-1">
@@ -214,37 +246,33 @@
                                     </p>                                
                                 </div>
 
-                                <div class="col-md-3 col-6 qty-col">
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
-                                        <input type="number" 
-                                               class="quantity-input" 
-                                               id="quantity-${item.cartId}"
-                                               value="${item.quantity}" 
-                                               min="1" 
-                                               max="${item.availableQuantity}"
-                                               data-cart-id="${item.cartId}"
-                                               data-max-quantity="${item.availableQuantity}">
-                                        <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
-                                            <i class="bi bi-plus"></i>
+                                <div class="col-xl-6 col-md-4 col-12">
+                                    <div class="cart-item-actions">
+                                        <div class="quantity-controls">
+                                            <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <input type="number" 
+                                                   class="quantity-input" 
+                                                   id="quantity-${item.cartId}"
+                                                   value="${item.quantity}" 
+                                                   min="1" 
+                                                   max="${item.availableQuantity}"
+                                                   data-cart-id="${item.cartId}"
+                                                   data-max-quantity="${item.availableQuantity}">
+                                            <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                        <p class="total-price" id="total-${item.cartId}">
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
+                                        </p>
+                                        <button class="btn-cart-action btn-remove" 
+                                                data-cart-id="${item.cartId}"
+                                                title="Remove item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
-                                </div>
-
-                                <div class="col-md-3 col-4 text-end total-col">
-                                    <p class="total-price mb-1" id="total-${item.cartId}">
-                                        <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
-                                    </p>
-                                </div>
-
-                                <div class="col-md-1 col-3 text-end">
-                                    <button class="btn-cart-action btn-remove" 
-                                            data-cart-id="${item.cartId}"
-                                            title="Remove item">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +287,7 @@
                 </div>
 
                 <!-- Cart Summary -->
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="cart-summary">
                         <h4 class="mb-3">Order Summary</h4>
 
