@@ -12,9 +12,10 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <style>
     .cart-container {
-        max-width: 1500px;
+        max-width: 1600px;
         margin: 0 auto;
         padding: 20px;
     }
@@ -33,13 +34,6 @@
         height: 100px;
         object-fit: cover;
         border-radius: 8px;
-    }
-
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: nowrap;
     }
 
     .quantity-btn {
@@ -66,27 +60,6 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 8px;
-    }
-
-    .cart-summary {
-        background: #f8f9fa;
-        border-radius: 8px;
-        padding: 20px;
-        position: sticky;
-        top: 20px;
-        max-width: 320px;
-        margin-left: auto;
-    }
-
-    .empty-cart {
-        text-align: center;
-        padding: 60px 20px;
-    }
-
-    .empty-cart i {
-        font-size: 4rem;
-        color: #6c757d;
-        margin-bottom: 20px;
     }
 
     .btn-cart-action {
@@ -127,79 +100,54 @@
         background: #218838;
     }
 
-    .price-chip {
-        font-size: 0.95rem;
-        font-weight: 600;
+    .price-display {
+        font-size: 1.1rem;
+        font-weight: bold;
         color: #dc3545;
         white-space: nowrap;
     }
 
     .total-price {
-        font-size: 1.1rem;
-        font-weight: 700;
+        font-size: 1.2rem;
+        font-weight: bold;
         color: #28a745;
         white-space: nowrap;
-        margin-bottom: 0;
     }
 
-    .cart-item .product-col {
-        min-width: 320px;
-    }
-
+    /* 👇 Thêm phần mới để xếp hàng ngang */
     .cart-item-actions {
         display: flex;
         align-items: center;
-        gap: 24px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
+        justify-content: flex-start;
+        gap: 16px;
+        flex-wrap: nowrap;
+        margin-top: 8px;
     }
 
-    .cart-item-actions > * {
-        flex: 0 0 auto;
+    .cart-item-actions .price-display,
+    .cart-item-actions .total-price {
+        margin: 0;
+        white-space: nowrap;
     }
 
     .cart-item-actions .quantity-controls {
+        display: flex;
+        align-items: center;
         gap: 8px;
     }
 
-    @media (max-width: 992px) {
-        .cart-summary {
-            position: static;
-            max-width: none;
-            margin-left: 0;
-            margin-top: 20px;
-        }
-
-        .cart-item .product-col {
-            min-width: 0;
-        }
-
-        .cart-item-actions {
-            gap: 12px;
-            justify-content: flex-start;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .cart-item-actions {
-            flex-direction: column;
-            align-items: flex-start;
-        }
+    .cart-summary {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        position: sticky;
+        top: 20px;
     }
 
     @media (max-width: 768px) {
-        .cart-item {
-            padding: 15px;
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-        }
-
-        .quantity-controls {
-            flex-direction: column;
-            gap: 5px;
+        .cart-item-actions {
+            flex-wrap: wrap;
+            gap: 10px;
         }
     }
 </style>
@@ -219,8 +167,8 @@
     <c:choose>
         <c:when test="${empty cartItems}">
             <!-- Empty Cart -->
-            <div class="empty-cart">
-                <i class="bi bi-cart-x"></i>
+            <div class="empty-cart text-center">
+                <i class="bi bi-cart-x display-4 text-muted"></i>
                 <h3>Your cart is empty</h3>
                 <p class="text-muted">You have no items in your cart.</p>
                 <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">
@@ -232,26 +180,27 @@
         <c:otherwise>
             <div class="row">
                 <!-- Cart Items -->
-                <div class="col-lg-9">
+                <div class="col-lg-8">
                     <c:forEach var="item" items="${cartItems}">
                         <div class="cart-item" id="cart-item-${item.cartId}">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-xl-2 col-md-3 col-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 col-3">
                                     <img src="${pageContext.request.contextPath}/assert/image/${item.productImage}" 
                                          alt="${item.productName}" 
                                          class="cart-item-image">
                                 </div>
 
-                                <div class="col-xl-4 col-md-5 col-8 product-col">
+                                <div class="col-md-10 col-9 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
-                                    <p class="text-muted mb-1">${item.brand}</p>
-                                </div>
+                                    <p class="text-muted mb-2">${item.brand}</p>
 
-                                <div class="col-xl-6 col-md-4 col-12">
                                     <div class="cart-item-actions">
-                                        <span class="price-chip">
+                                        <!-- Giá -->
+                                        <p class="price-display mb-0">
                                             <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                        </span>
+                                        </p>
+
+                                        <!-- Số lượng -->
                                         <div class="quantity-controls">
                                             <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
                                                 <i class="bi bi-dash"></i>
@@ -263,15 +212,18 @@
                                                    min="1" 
                                                    max="${item.availableQuantity}"
                                                    data-cart-id="${item.cartId}"
-                                                   data-max-quantity="${item.availableQuantity}"
-                                                   data-unit-price="${item.price}">
+                                                   data-max-quantity="${item.availableQuantity}">
                                             <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                                 <i class="bi bi-plus"></i>
                                             </button>
                                         </div>
-                                        <p class="total-price" id="total-${item.cartId}">
+
+                                        <!-- Tổng tiền -->
+                                        <p class="total-price mb-0" id="total-${item.cartId}">
                                             <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
                                         </p>
+
+                                        <!-- Nút xóa -->
                                         <button class="btn-cart-action btn-remove" 
                                                 data-cart-id="${item.cartId}"
                                                 title="Remove item">
@@ -292,7 +244,7 @@
                 </div>
 
                 <!-- Cart Summary -->
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="cart-summary">
                         <h4 class="mb-3">Order Summary</h4>
 
@@ -393,8 +345,12 @@
                         // Lưu giá trị cũ để có thể reset nếu cần
                         quantityInput.setAttribute('data-old-value', newQuantity);
                         
-                        const unitPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
-                        const total = unitPrice * newQuantity;
+                        const priceElement = document.querySelector('#total-' + cartId);
+                        const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
+                        const currentTotal = parseInt(currentTotalText);
+                        const currentQuantity = parseInt(document.getElementById('quantity-' + cartId).value);
+                        const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
+                        const total = price * newQuantity;
                         document.getElementById('total-' + cartId).textContent =
                                 new Intl.NumberFormat('en-US').format(total) + ' VND';
 
