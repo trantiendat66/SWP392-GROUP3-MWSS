@@ -76,6 +76,9 @@ public class CartServlet extends HttpServlet {
             case "count":
                 getCartCount(request, response, customer);
                 break;
+            case "currentQuantity":
+                getCurrentQuantity(request, response, customer);
+                break;
             default:
                 viewCart(request, response, customer);
                 break;
@@ -119,7 +122,7 @@ public class CartServlet extends HttpServlet {
                 if (product.getQuantityProduct() <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Product is out of stock\"}");
+                    out.print("{\"success\": false, \"message\": \"Sản phẩm đã hết hàng.\"}");
                     out.flush();
                     return;
                 }
@@ -128,7 +131,7 @@ public class CartServlet extends HttpServlet {
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " items left.\"}");
+                    out.print("{\"success\": false, \"message\": \"Số lượng bạn chọn vượt quá tồn kho. Chỉ còn " + product.getQuantityProduct() + " sản phẩm.\"}");
                     out.flush();
                     return;
                 }
@@ -142,9 +145,9 @@ public class CartServlet extends HttpServlet {
                 if (remainingAllowable <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"You already have all "
+                    out.print("{\"success\": false, \"message\": \"Bạn đã có tối đa " 
                             + product.getQuantityProduct()
-                            + " item(s) of this product in your cart.\"}");
+                            + " sản phẩm này trong giỏ hàng.\"}");
                     out.flush();
                     return;
                 }
@@ -153,6 +156,8 @@ public class CartServlet extends HttpServlet {
                     quantity = remainingAllowable;
                     capped = true;
                 }
+
+                int addedQuantity = quantity;
                 
                 boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
                 
@@ -162,39 +167,44 @@ public class CartServlet extends HttpServlet {
                     // Lấy số lượng sản phẩm mới trong giỏ hàng
                     int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
                     int totalForProduct = currentInCart + quantity;
+                    int remainingAfterAdd = Math.max(product.getQuantityProduct() - totalForProduct, 0);
                     
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     if (capped) {
-                        String message = "You already had " + currentInCart + " item(s) of this product in your cart. "
-                                + "Only " + quantity + " more item(s) were added (stock limit "
+                        String message = "Bạn đã có " + currentInCart + " sản phẩm này trong giỏ hàng. "
+                                + "Chỉ có thể thêm thêm " + quantity + " sản phẩm (giới hạn tồn kho "
                                 + product.getQuantityProduct() + "). "
-                                + "Current total in cart: " + totalForProduct + " item(s).";
-                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
+                                + "Hiện tại bạn có tổng " + totalForProduct + " sản phẩm trong giỏ.";
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
+                                + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
+                                + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     } else {
-                        String message = "Product added to cart successfully! You now have "
-                                + totalForProduct + " item(s) of this product in your cart.";
-                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
+                        String message = "Đã thêm sản phẩm vào giỏ hàng thành công! Hiện tại bạn có "
+                                + totalForProduct + " sản phẩm này trong giỏ.";
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
+                                + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
+                                + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     }
                 } else {
-                    out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
+                    out.print("{\"success\": false, \"message\": \"Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.\"}");
                 }
                 out.flush();
             } else {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                out.print("{\"success\": false, \"message\": \"Product not found.\"}");
+                out.print("{\"success\": false, \"message\": \"Không tìm thấy sản phẩm.\"}");
                 out.flush();
             }
         } catch (NumberFormatException e) {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"Invalid input data.\"}");
+            out.print("{\"success\": false, \"message\": \"Dữ liệu đầu vào không hợp lệ.\"}");
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            out.print("{\"success\": false, \"message\": \"An unexpected error occurred.\"}");
+            out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi không xác định.\"}");
             out.flush();
         }
     }
@@ -318,6 +328,31 @@ public class CartServlet extends HttpServlet {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.print("{\"count\": 0}");
+            out.flush();
+        }
+    }
+
+    private void getCurrentQuantity(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws IOException {
+        try {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
+            int quantity = existingCart != null ? existingCart.getQuantity() : 0;
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": true, \"quantity\": " + quantity + "}");
+            out.flush();
+        } catch (NumberFormatException e) {
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Dữ liệu đầu vào không hợp lệ.\"}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi không xác định.\"}");
             out.flush();
         }
     }
