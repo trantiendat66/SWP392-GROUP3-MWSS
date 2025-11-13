@@ -4,13 +4,10 @@
  */
 package controller;
 
-import dao.CartDAO;
-import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.sql.SQLException;
 import model.Customer;
 
 /**
@@ -37,13 +34,7 @@ public class PaymentCancelBuyNowServlet extends HttpServlet {
         session.removeAttribute("bn_qty");
 
         if (pid != null && qty != null && qty > 0) {
-            try {
-                int price = new ProductDAO().getCurrentPrice(pid);
-                new CartDAO().addToCart(cus.getCustomer_id(), pid, price, qty);
-                session.setAttribute("flash_success", "Product has been added to your cart.");
-            } catch (SQLException e) {
-                session.setAttribute("error", "Unable to add to cart: " + e.getMessage());
-            }
+            session.setAttribute("flash_success", "Buy-now product has been canceled.");
         }
         resp.sendRedirect(req.getContextPath() + "/cart");
     }

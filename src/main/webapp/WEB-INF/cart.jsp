@@ -12,6 +12,7 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <style>
     .cart-container {
         max-width: 1600px;
@@ -33,12 +34,6 @@
         height: 100px;
         object-fit: cover;
         border-radius: 8px;
-    }
-
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
     }
 
     .quantity-btn {
@@ -65,25 +60,6 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 8px;
-    }
-
-    .cart-summary {
-        background: #f8f9fa;
-        border-radius: 8px;
-        padding: 20px;
-        position: sticky;
-        top: 20px;
-    }
-
-    .empty-cart {
-        text-align: center;
-        padding: 60px 20px;
-    }
-
-    .empty-cart i {
-        font-size: 4rem;
-        color: #6c757d;
-        margin-bottom: 20px;
     }
 
     .btn-cart-action {
@@ -125,10 +101,9 @@
     }
 
     .price-display {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: bold;
         color: #dc3545;
-        min-width: 200px;
         white-space: nowrap;
     }
 
@@ -139,31 +114,40 @@
         white-space: nowrap;
     }
 
-    .cart-item .product-col {
-        min-width: 260px;
+    /* 👇 Thêm phần mới để xếp hàng ngang */
+    .cart-item-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        flex-wrap: nowrap;
+        margin-top: 8px;
     }
 
-    .cart-item .qty-col {
-        min-width: 150px;
+    .cart-item-actions .price-display,
+    .cart-item-actions .total-price {
+        margin: 0;
+        white-space: nowrap;
     }
 
-    .cart-item .total-col {
-        min-width: 220px;
+    .cart-item-actions .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .cart-summary {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        position: sticky;
+        top: 20px;
     }
 
     @media (max-width: 768px) {
-        .cart-item {
-            padding: 15px;
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-        }
-
-        .quantity-controls {
-            flex-direction: column;
-            gap: 5px;
+        .cart-item-actions {
+            flex-wrap: wrap;
+            gap: 10px;
         }
     }
 </style>
@@ -183,8 +167,8 @@
     <c:choose>
         <c:when test="${empty cartItems}">
             <!-- Empty Cart -->
-            <div class="empty-cart">
-                <i class="bi bi-cart-x"></i>
+            <div class="empty-cart text-center">
+                <i class="bi bi-cart-x display-4 text-muted"></i>
                 <h3>Your cart is empty</h3>
                 <p class="text-muted">You have no items in your cart.</p>
                 <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">
@@ -206,45 +190,54 @@
                                          class="cart-item-image">
                                 </div>
 
-                                <div class="col-md-3 col-9 product-col">
+                                <div class="col-md-10 col-9 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
                                     <p class="text-muted mb-1">${item.brand}</p>
-                                    <p class="price-display mb-1">
-                                        <fmt:formatNumber value="${item.price}" type="number"/> VND
-                                    </p>                                
-                                </div>
+                                    <p class="mb-2">
+                                        <small class="text-muted">
+                                            <strong>Stock:</strong> 
+                                            <span class="badge ${item.availableQuantity > 0 ? 'bg-success' : 'bg-danger'}">
+                                                ${item.availableQuantity} item(s)
+                                            </span>
+                                        </small>
+                                    </p>
 
-                                <div class="col-md-3 col-6 qty-col">
-                                    <div class="quantity-controls">
-                                        <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
-                                        <input type="number" 
-                                               class="quantity-input" 
-                                               id="quantity-${item.cartId}"
-                                               value="${item.quantity}" 
-                                               min="1" 
-                                               max="${item.availableQuantity}"
-                                               data-cart-id="${item.cartId}"
-                                               data-max-quantity="${item.availableQuantity}">
-                                        <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
-                                            <i class="bi bi-plus"></i>
+                                    <div class="cart-item-actions">
+                                        <!-- Giá -->
+                                        <p class="price-display mb-0">
+                                            <fmt:formatNumber value="${item.price}" type="number"/> VND
+                                        </p>
+
+                                        <!-- Số lượng -->
+                                        <div class="quantity-controls">
+                                            <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="decrease">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <input type="number" 
+                                                   class="quantity-input" 
+                                                   id="quantity-${item.cartId}"
+                                                   value="${item.quantity}" 
+                                                   min="1" 
+                                                   max="${item.availableQuantity}"
+                                                   data-cart-id="${item.cartId}"
+                                                   data-max-quantity="${item.availableQuantity}">
+                                            <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Tổng tiền -->
+                                        <p class="total-price mb-0" id="total-${item.cartId}">
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
+                                        </p>
+
+                                        <!-- Nút xóa -->
+                                        <button class="btn-cart-action btn-remove" 
+                                                data-cart-id="${item.cartId}"
+                                                title="Remove item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
-                                </div>
-
-                                <div class="col-md-3 col-4 text-end total-col">
-                                    <p class="total-price mb-1" id="total-${item.cartId}">
-                                        <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
-                                    </p>
-                                </div>
-
-                                <div class="col-md-1 col-3 text-end">
-                                    <button class="btn-cart-action btn-remove" 
-                                            data-cart-id="${item.cartId}"
-                                            title="Remove item">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -510,3 +503,5 @@
 </script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
+
+

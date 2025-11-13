@@ -451,15 +451,17 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public void updateQuantity(int productId, int addedQuantity) {
-        String sql = "UPDATE Product SET product_quantity = product_quantity + ? WHERE product_id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, addedQuantity);
-            ps.setInt(2, productId);
-            ps.executeUpdate();
-        } catch (Exception e) {
+    public Category getCategoriesById(int id) {
+        Category c = new Category();
+        String sql = "SELECT category_id, category_name FROM Category ORDER BY category_name";
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                c.setId(rs.getInt("category_id"));
+                c.setName(rs.getString("category_name"));
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        return c;
     }
-
 }

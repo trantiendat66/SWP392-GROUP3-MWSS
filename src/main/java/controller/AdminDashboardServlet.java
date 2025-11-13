@@ -38,7 +38,11 @@ public class AdminDashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/staffcontrol");
             return;
         }
-
+        
+        ProductDAO dao = new ProductDAO();
+        List<Product> products = dao.getAllProducts();
+        request.setAttribute("products", products);
+      
         AnalyticsDAO analyticsDAO = new AnalyticsDAO();
         long totalRevenue = analyticsDAO.getTotalRevenue();
         List<TopProduct> topProducts = analyticsDAO.getTop5Products();

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.BrandDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Brand;
 import model.Product;
 
 /**
@@ -63,15 +65,7 @@ public class FilterServlet extends HttpServlet {
         String brand = request.getParameter("brand");
         String gender = request.getParameter("gender");
         String priceRange = request.getParameter("priceRange");
-//        String getActive = request.getParameter("active");
-//        int active = 0;
-//        if (getActive != null) {
-//            try {
-//                active = Integer.parseInt(getActive);
-//            } catch (NumberFormatException e) {
-//                active = 0; // fallback nếu người dùng nhập linh tinh
-//            }
-//        }
+        String getActive = request.getParameter("active") == null ? "" : request.getParameter("active");
 
         int minPrice = 0;
         int maxPrice = 0;
@@ -95,13 +89,18 @@ public class FilterServlet extends HttpServlet {
 
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.filterProducts(brand, gender, minPrice, maxPrice);
-
-//        if (active != 0) {
-//            List<Product> menu = dao.getProductsByCategory(active);
-//            request.setAttribute("listP", menu);
-//            request.getRequestDispatcher("home").forward(request, response);
-//            return;
-//        }
+        if (getActive.equals("staff")) {
+            BrandDAO bdao = new BrandDAO();
+            List<Brand> listB = bdao.getAllBrand();
+            request.setAttribute("listBrands", listB);
+            request.setAttribute("listProducts", list);
+            request.setAttribute("brand", brand);
+            request.setAttribute("gender", gender);
+            request.setAttribute("priceRange", priceRange);
+            request.setAttribute("activeTab", "product");
+            request.getRequestDispatcher("/WEB-INF/staff.jsp").forward(request, response);
+            return;
+        }
         if (list == null || list.isEmpty()) {
             request.getRequestDispatcher("/partials/product-list.jsp").forward(request, response);
         } else {

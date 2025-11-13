@@ -20,8 +20,9 @@ import model.Customer;
 import model.Product;
 
 /**
- * Cart Servlet - Controller for Cart operations
- * Handles all cart-related HTTP requests and responses
+ * Cart Servlet - Controller for Cart operations Handles all cart-related HTTP
+ * requests and responses
+ *
  * @author Dang Vi Danh
  */
 @WebServlet(name = "CartServlet", urlPatterns = {"/cart"})
@@ -40,7 +41,7 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
+
         if (action == null) {
             action = "view";
         }
@@ -76,6 +77,9 @@ public class CartServlet extends HttpServlet {
             case "count":
                 getCartCount(request, response, customer);
                 break;
+            case "currentQuantity":
+                getCurrentQuantity(request, response, customer);
+                break;
             default:
                 viewCart(request, response, customer);
                 break;
@@ -94,11 +98,11 @@ public class CartServlet extends HttpServlet {
         try {
             var cartItems = cartDAO.getCartByCustomerId(customer.getCustomer_id());
             int totalAmount = cartDAO.getCartTotal(customer.getCustomer_id());
-            
+
             request.setAttribute("cartItems", cartItems);
             request.setAttribute("totalAmount", totalAmount);
             request.setAttribute("cartItemCount", cartItems.size());
-            
+
             request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,27 +116,27 @@ public class CartServlet extends HttpServlet {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            
+
             Product product = productDAO.getProductById(productId);
             if (product != null) {
                 // Kiểm tra sản phẩm đã hết hàng
                 if (product.getQuantityProduct() <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Product is out of stock\"}");
+                    out.print("{\"success\": false, \"message\": \"Product is out of stock.\"}");
                     out.flush();
                     return;
                 }
-                
+
                 // Kiểm tra số lượng sản phẩm trong kho
                 if (quantity > product.getQuantityProduct()) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " items left.\"}");
+                    out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " item(s) left.\"}");
                     out.flush();
                     return;
                 }
-                
+
                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng, tính tổng số lượng
                 Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
                 boolean capped = false;
@@ -142,8 +146,8 @@ public class CartServlet extends HttpServlet {
                 if (remainingAllowable <= 0) {
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"success\": false, \"message\": \"You already have all "
-                            + product.getQuantityProduct()
+                    out.print("{\"success\": false, \"message\": \"You already have "
+                            + currentInCart
                             + " item(s) of this product in your cart.\"}");
                     out.flush();
                     return;
@@ -153,27 +157,34 @@ public class CartServlet extends HttpServlet {
                     quantity = remainingAllowable;
                     capped = true;
                 }
-                
+
+                int addedQuantity = quantity;
+
                 boolean success = cartDAO.addToCart(customer.getCustomer_id(), productId, product.getPrice(), quantity);
-                
+
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 if (success) {
                     // Lấy số lượng sản phẩm mới trong giỏ hàng
                     int newCartCount = cartDAO.getCartItemCount(customer.getCustomer_id());
                     int totalForProduct = currentInCart + quantity;
-                    
+                    int remainingAfterAdd = Math.max(product.getQuantityProduct() - totalForProduct, 0);
+
                     // Trả về JSON response cho AJAX với thông báo tiếng Anh
                     if (capped) {
                         String message = "You already had " + currentInCart + " item(s) of this product in your cart. "
                                 + "Only " + quantity + " more item(s) were added (stock limit "
                                 + product.getQuantityProduct() + "). "
                                 + "Current total in cart: " + totalForProduct + " item(s).";
-                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
+                                + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
+                                + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     } else {
                         String message = "Product added to cart successfully! You now have "
                                 + totalForProduct + " item(s) of this product in your cart.";
-                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount + "}");
+                        out.print("{\"success\": true, \"message\": \"" + message + "\", \"cartCount\": " + newCartCount
+                                + ", \"addedQuantity\": " + addedQuantity + ", \"currentQuantity\": " + totalForProduct
+                                + ", \"remainingQuantity\": " + remainingAfterAdd + "}");
                     }
                 } else {
                     out.print("{\"success\": false, \"message\": \"Error occurred while adding product to cart.\"}");
@@ -205,7 +216,7 @@ public class CartServlet extends HttpServlet {
         try {
             int cartId = Integer.parseInt(request.getParameter("cartId"));
             int newQuantity = Integer.parseInt(request.getParameter("quantity"));
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
 
@@ -228,7 +239,7 @@ public class CartServlet extends HttpServlet {
                         return;
                     }
                 }
-                
+
                 boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
                 if (success) {
                     out.print("{\"success\": true, \"message\": \"Quantity updated successfully.\"}");
@@ -257,7 +268,7 @@ public class CartServlet extends HttpServlet {
         try {
             int cartId = Integer.parseInt(request.getParameter("cartId"));
             boolean success = cartDAO.removeFromCart(cartId);
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
@@ -285,7 +296,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             boolean success = cartDAO.clearCart(customer.getCustomer_id());
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             if (success) {
@@ -308,7 +319,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             int count = cartDAO.getCartItemCount(customer.getCustomer_id());
-            
+
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.print("{\"count\": " + count + "}");
@@ -318,6 +329,31 @@ public class CartServlet extends HttpServlet {
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.print("{\"count\": 0}");
+            out.flush();
+        }
+    }
+
+    private void getCurrentQuantity(HttpServletRequest request, HttpServletResponse response, Customer customer)
+            throws IOException {
+        try {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            Cart existingCart = cartDAO.getCartItem(customer.getCustomer_id(), productId);
+            int quantity = existingCart != null ? existingCart.getQuantity() : 0;
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": true, \"quantity\": " + quantity + "}");
+            out.flush();
+        } catch (NumberFormatException e) {
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Dữ liệu đầu vào không hợp lệ.\"}");
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"success\": false, \"message\": \"Đã xảy ra lỗi không xác định.\"}");
             out.flush();
         }
     }

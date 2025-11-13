@@ -44,11 +44,13 @@ public class PaymentPageServlet extends HttpServlet {
         try {
             Integer bnPid = (Integer) session.getAttribute("bn_pid");
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
+            String bnParam = req.getParameter("bn");
+            boolean isBuyNow = "1".equals(bnParam) && bnPid != null && bnQty != null && bnQty > 0;
             
             System.out.println("bn_pid from session: " + bnPid);
             System.out.println("bn_qty from session: " + bnQty);
 
-            if (bnPid != null && bnQty != null && bnQty > 0) {
+            if (isBuyNow) {
                 // ---- CHẾ ĐỘ BUY-NOW (không đụng DB cart) ----
                 System.out.println("Mode: BUY_NOW");
                 // Tạo danh sách hiển thị từ Product (1 item)
@@ -70,6 +72,11 @@ public class PaymentPageServlet extends HttpServlet {
                 req.setAttribute("totalAmount", total);
                 req.setAttribute("cartItemCount", bnQty);
             } else {
+                // Không phải buy-now => đảm bảo trạng thái buy-now cũ không làm ảnh hưởng checkout từ giỏ
+                if (bnParam == null || !"1".equals(bnParam)) {
+                    session.removeAttribute("bn_pid");
+                    session.removeAttribute("bn_qty");
+                }
                 // ---- CHẾ ĐỘ CART ----
                 System.out.println("Mode: CART");
                 List<Cart> items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
