@@ -1,0 +1,52 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+
+/* 
+    Created on : Oct 10, 2025, 11:02:58 AM
+    Author     : Tran Tien Dat - CE190362
+*/
+/* product.view.css */
+.product-details {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.product-details h2 {
+    font-weight: 600;
+    color: #222;
+}
+
+.product-details p {
+    line-height: 1.6;
+    color: #444;
+}
+
+.product-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.product-details ul li {
+    margin-bottom: 5px;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 4px;
+}
+
+.img-fluid {
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+

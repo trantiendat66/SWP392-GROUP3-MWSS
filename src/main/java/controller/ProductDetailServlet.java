@@ -1,0 +1,150 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package controller;
+
+import dao.ProductDAO;
+import dao.FeedbackDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Product;
+import model.Customer;
+import model.FeedbackView;
+import java.util.Map;
+import java.util.List;
+import model.Reply;
+
+/**
+ *
+ * @author Tran Tien Dat - CE190362
+ */
+@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/productdetail"})
+public class ProductDetailServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ProductDetailServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idStr = request.getParameter("id");
+        System.out.println("ProductDetailServlet called with id=" + idStr); // debug
+
+        if (idStr == null || idStr.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing product id");
+            return;
+        }
+
+        int id;
+        try {
+            id = Integer.parseInt(idStr.trim());
+        } catch (NumberFormatException ex) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product id");
+            return;
+        }
+
+        ProductDAO dao = new ProductDAO();
+        Product product = dao.getProductById(id);
+
+        if (product == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+            return;
+        }
+
+        try {
+            FeedbackDAO fbDAO = new FeedbackDAO();
+
+            // Lấy list review để render
+            List<FeedbackView> productReviews = fbDAO.getFeedbackByProduct(id);
+            List<Reply> rep = fbDAO.getReplyByProductId(id);
+            request.setAttribute("productReviews", productReviews);
+            request.setAttribute("productReplies", rep);
+
+            // Tính phân bố sao + trung bình từ list trên
+            int s1 = 0, s2 = 0, s3 = 0, s4 = 0, s5 = 0;
+            int ratingCount = (productReviews != null) ? productReviews.size() : 0;
+            double sum = 0.0;
+
+            if (productReviews != null) {
+                for (FeedbackView v : productReviews) {
+                    int r = v.getRating();
+                    sum += r;
+                    switch (r) {
+                        case 1 ->
+                            s1++;
+                        case 2 ->
+                            s2++;
+                        case 3 ->
+                            s3++;
+                        case 4 ->
+                            s4++;
+                        case 5 ->
+                            s5++;
+                    }
+                }
+            }
+
+            double ratingAvg = ratingCount > 0 ? (sum / ratingCount) : 0.0;
+
+            // Gửi sang JSP
+            request.setAttribute("ratingCount", ratingCount);
+            request.setAttribute("ratingAvg", ratingAvg);
+            request.setAttribute("roundedAvg", Math.round(ratingAvg)); // để vẽ sao trung bình
+
+            request.setAttribute("star1", s1);
+            request.setAttribute("star2", s2);
+            request.setAttribute("star3", s3);
+            request.setAttribute("star4", s4);
+            request.setAttribute("star5", s5);
+
+            // Kiểm tra người dùng đã đánh giá sản phẩm này chưa (khóa nút nếu cần)
+            HttpSession session = request.getSession(false);
+            Customer cus = (session != null) ? (Customer) session.getAttribute("customer") : null;
+            boolean hasReviewed = false;
+            if (cus != null) {
+                Map<Integer, Boolean> reviewed
+                        = fbDAO.findReviewedProductIds(cus.getCustomer_id(), java.util.List.of(id));
+                hasReviewed = reviewed.getOrDefault(id, Boolean.FALSE);
+            }
+            request.setAttribute("hasReviewed", hasReviewed);
+
+        } catch (Exception ex) {
+            request.setAttribute("feedbackError", ex.getMessage());
+        }
+
+        request.setAttribute("product", product);
+        request.getRequestDispatcher("/WEB-INF/productdetail.jsp").forward(request, response);
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+}
