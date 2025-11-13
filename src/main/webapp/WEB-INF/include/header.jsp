@@ -59,16 +59,16 @@
                             <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
                         </form>
                         <c:choose>
-                            <c:when test="${not empty requestScope.categories}">
+                            <c:when test="${not empty requestScope.listC}">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle fw-semibold text-white" href="#" id="productDropdown" role="button"
                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         Menu
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="productDropdown">
-                                        <c:forEach var="cat" items="${requestScope.categories}">
+                                        <c:forEach var="cat" items="${requestScope.listC}">
                                             <li>
-                                                <a class="dropdown-item" href="${pageContext.request.contextPath}/filterServlet?active=${cat.id}">
+                                                <a class="dropdown-item" href="${pageContext.request.contextPath}/home?active=${cat.id}">
                                                     ${cat.name}
                                                 </a>
                                             </li>
