@@ -108,7 +108,7 @@
     }
 
     .total-price {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #28a745;
         white-space: nowrap;
@@ -192,7 +192,15 @@
 
                                 <div class="col-md-10 col-9 product-col">
                                     <h5 class="mb-1">${item.productName}</h5>
-                                    <p class="text-muted mb-2">${item.brand}</p>
+                                    <p class="text-muted mb-1">${item.brand}</p>
+                                    <p class="mb-2">
+                                        <small class="text-muted">
+                                            <strong>Trong kho:</strong> 
+                                            <span class="badge ${item.availableQuantity > 0 ? 'bg-success' : 'bg-danger'}">
+                                                ${item.availableQuantity} sản phẩm
+                                            </span>
+                                        </small>
+                                    </p>
 
                                     <div class="cart-item-actions">
                                         <!-- Giá -->
@@ -495,3 +503,5 @@
 </script>
 
 <jsp:include page="/WEB-INF/include/footer.jsp" />
+
+
