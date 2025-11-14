@@ -37,17 +37,24 @@
             }
             .d-flex.align-items-start {
                 flex-grow: 1;
-                padding: 20px;
+                padding: 0; /* loại bỏ padding để sidebar sát lề */
+                gap: 0;
+                align-items: stretch;
+                min-height: calc(100vh - 60px); /* trừ chiều cao header */
             }
             .card {
-                width:240px;
-                margin:0 auto;
+                width:280px;
+                min-width: 280px;
+                margin:0;
                 background:#fff;
-                border-radius:8px;
-                box-shadow:0 2px 6px rgba(0,0,0,0.1);
+                border-radius:0; /* loại bỏ border-radius để sát lề */
+                box-shadow:2px 0 8px rgba(0,0,0,0.03);
                 display:flex;
+                flex-direction: column;
+                padding: 22px;
                 padding-bottom: 10px;
                 overflow:hidden;
+                flex-shrink: 0;
             }
             .avatar {
                 width:160px;
@@ -263,6 +270,14 @@
                     min-width:0;
                     font-size:13px
                 }
+            }
+            .main-content {
+                flex: 1;
+                padding: 20px;
+                background: white;
+                margin: 10px;
+                border-radius: 8px;
+                overflow-x: auto;
             }
         </style>
     </head>

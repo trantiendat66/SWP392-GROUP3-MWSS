@@ -7,14 +7,53 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/include/header.jsp" %>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Import Inventory Detail</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <style>
+            html, body { margin: 0; padding: 0; background: #f5f7fb; overflow-x: hidden; height: 100%; }
+            .page-wrap { padding: 0; background: #f5f7fb; min-height: calc(100vh - 60px); }
+            .main-container { display: flex; gap: 0; align-items: stretch; width: 100%; min-height: calc(100vh - 60px); overflow: hidden; }
+            .sidebar { width: 280px; min-width: 280px; background: #fff; padding: 22px; box-shadow: 2px 0 8px rgba(0,0,0,0.03); border-radius: 0; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
+            .profile-card { text-align: center; margin-bottom: 18px; }
+            .profile-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: inline-block; border: 2px solid #e9ecef; background: #f0f0f0; }
+            .profile-role { display: block; background-color: #000; color: #fff; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 6px; margin-top: 10px; width: fit-content; margin-left: auto; margin-right: auto; }
+            .nav-menu { list-style: none; padding: 0; margin: 12px 0 0 0; }
+            .nav-menu li { margin-bottom: 10px; }
+            .nav-link { display: block; padding: 10px 14px; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600; }
+            .nav-link.active, .nav-link:hover { background: #dc3545; color: white; }
+            .main-content { background: white; margin: 10px; border-radius: 8px; flex: 1 1 auto; padding: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.04); min-width: 0; overflow-x: auto; }
+        </style>
     </head>
-    <body class="p-4">
-        <h2 class="mb-4">Import Inventory Detail</h2>
+    <body>
+        <div class="page-wrap">
+            <div class="main-container">
+                <aside class="sidebar">
+                    <div class="profile-card">
+                        <img class="profile-avatar" src="${pageContext.request.contextPath}/assert/image/account.jpg" alt="avatar"/>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.staff}">
+                                <div class="profile-role">${sessionScope.staff.role}</div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="profile-role">Guest</div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                    <ul class="nav-menu">
+                        <li><a class="nav-link" href="${pageContext.request.contextPath}/product">Product Management</a></li>
+                        <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
+                        <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
+                        <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
+                        <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
+                        <li><a class="nav-link active" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+                    </ul>
+                </aside>
+                <main class="main-content">
+                    <h2 class="mb-4">Import Inventory Detail</h2>
 
         <c:set var="inv" value="${inventory}" />
 
@@ -78,6 +117,10 @@
             </tbody>
         </table>
 
-        <a href="listimportinventory" class="btn btn-secondary mt-3">Back to list</a>
+                    <a href="listimportinventory" class="btn btn-secondary mt-3">Back to list</a>
+                </main>
+            </div>
+        </div>
+        <jsp:include page="/WEB-INF/include/footer.jsp" />
     </body>
 </html>

@@ -16,32 +16,34 @@
         padding: 0;
         background: #f5f7fb;
         overflow-x: hidden;
+        height: 100%;
     }
     /* Layout */
     .page-wrap {
-        padding: 10px; /* tăng khoảng cách 2 bên tổng thể */
+        padding: 0; /* loại bỏ padding để sidebar sát lề */
         background: #f5f7fb;
+        min-height: calc(100vh - 60px); /* trừ đi chiều cao header */
     }
     .main-container {
         display: flex;
-        gap: 10px; /* rộng ra 1 chút */
-        align-items: flex-start;
+        gap: 0; /* loại bỏ gap để sidebar sát lề */
+        align-items: stretch;
         width: 100%;
-        max-width: 1500px; /* giới hạn chiều ngang để nội dung bự nhưng trung tâm */
-        margin: 0 auto; /* căn giữa */
-        overflow: hidden
+        min-height: calc(100vh - 60px); /* trừ chiều cao header */
+        overflow: hidden;
     }
     /* Sidebar */
     .sidebar {
-        width: 300px; /* to hơn */
-        min-width: 220px;
-        max-width: 320px;
+        width: 280px;
+        min-width: 280px;
         background: #fff;
         padding: 22px;
         box-shadow: 2px 0 8px rgba(0,0,0,0.03);
-        border-radius: 8px;
+        border-radius: 0; /* loại bỏ border-radius để sát lề */
         flex-shrink: 0;
         position: relative;
+        display: flex;
+        flex-direction: column;
     }
     .profile-card {
         text-align: center;    /* căn giữa toàn bộ bên trong */
@@ -99,6 +101,8 @@
     /* Main content */
     .main-content {
         background: white;
+        margin: 10px;
+        border-radius: 8px;
         flex: 1 1 auto;
         padding: 24px;
         border-radius: 10px;

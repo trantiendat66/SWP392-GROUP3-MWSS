@@ -9,10 +9,22 @@
 <%@ include file="/WEB-INF/include/header.jsp" %>
 
 <style>
+    html, body { margin: 0; padding: 0; background: #f5f7fb; overflow-x: hidden; height: 100%; }
+    .page-wrap { padding: 0; background: #f5f7fb; min-height: calc(100vh - 60px); }
+    .main-container { display: flex; gap: 0; align-items: stretch; width: 100%; min-height: calc(100vh - 60px); overflow: hidden; }
+    .sidebar { width: 280px; min-width: 280px; background: #fff; padding: 22px; box-shadow: 2px 0 8px rgba(0,0,0,0.03); border-radius: 0; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
+    .profile-card { text-align: center; margin-bottom: 18px; }
+    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: inline-block; border: 2px solid #e9ecef; background: #f0f0f0; }
+    .profile-role { display: block; background-color: #000; color: #fff; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 6px; margin-top: 10px; width: fit-content; margin-left: auto; margin-right: auto; }
+    .nav-menu { list-style: none; padding: 0; margin: 12px 0 0 0; }
+    .nav-menu li { margin-bottom: 10px; }
+    .nav-link { display: block; padding: 10px 14px; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600; }
+    .nav-link.active, .nav-link:hover { background: #dc3545; color: white; }
+    .main-content { background: white; margin: 10px; border-radius: 8px; flex: 1 1 auto; padding: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.04); min-width: 0; overflow-x: auto; }
     .staff-page {
-        padding: 22px;
-        max-width:1200px;
-        margin: 0 auto;
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
     }
     .staff-hero {
         display:flex;
@@ -22,7 +34,7 @@
         margin-bottom:18px;
     }
     .staff-hero h2 {
-        font-size:30px;
+        font-size:24px;
         font-weight:700;
         color:#dc3545;
         margin-bottom:20px;
@@ -144,7 +156,31 @@
     }
 </style>
 
-<div class="staff-page">
+<div class="page-wrap">
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="profile-card">
+                <img class="profile-avatar" src="${pageContext.request.contextPath}/assert/image/account.jpg" alt="avatar"/>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.staff}">
+                        <div class="profile-role">${sessionScope.staff.role}</div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="profile-role">Guest</div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <ul class="nav-menu">
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/product">Product Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
+                <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="staff-page">
     <div class="staff-hero">
         <h2>Staff Management</h2>
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
@@ -219,11 +255,8 @@
             </tbody>
         </table>
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
-        <a href="${pageContext.request.contextPath}/admin/dashboard" 
-           style="padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; background-color: #f0f0f0; color: #333; border: 1px solid #ccc;">
-            ← Back
-        </a>
+            </div>
+        </main>
     </div>
 </div>
 

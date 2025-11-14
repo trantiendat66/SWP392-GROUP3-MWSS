@@ -16,10 +16,83 @@
 %>
 
 <style>
+    .page-wrap {
+        padding: 0;
+        min-height: calc(100vh - 60px);
+    }
+
+    .main-container {
+        display: flex;
+        gap: 0;
+        min-height: calc(100vh - 60px);
+        align-items: stretch;
+    }
+
+    .sidebar {
+        width: 280px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .profile-card {
+        padding: 24px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 12px;
+    }
+
+    .profile-role {
+        font-size: 14px;
+        color: #666;
+        text-transform: uppercase;
+    }
+
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex: 1;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 16px 24px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .nav-link:hover {
+        background-color: #f5f5f5;
+    }
+
+    .nav-link.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .main-content {
+        flex: 1;
+        margin: 10px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 24px;
+        overflow-y: auto;
+    }
+
     .staff-page {
-        max-width: 900px;
-        margin: 30px auto;
-        padding: 0 20px;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
         font-family: "Inter", "Segoe UI", Tahoma, sans-serif;
     }
     .page-header h2 {
@@ -123,7 +196,24 @@
     }
 </style>
 
-<div class="staff-page">
+<div class="page-wrap">
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="profile-card">
+                <img class="profile-avatar" src="${pageContext.request.contextPath}/assert/avatar/account.jpg" alt="Profile">
+                <div class="profile-role">${sessionScope.staff.role}</div>
+            </div>
+            <ul class="nav-menu">
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/product">Product Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
+                <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
+                <li><a class="nav-link" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="staff-page">
     <div class="page-header">
         <h2>Edit Staff</h2>
     </div>
@@ -196,6 +286,8 @@
             </div>
 
         </form>
+            </div>
+        </main>
     </div>
 </div>
 

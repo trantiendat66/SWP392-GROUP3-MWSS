@@ -89,8 +89,16 @@ public class AddImportInventoryServlet extends HttpServlet {
             String[] prices = request.getParameterValues("importPrice");
             String[] quantities = request.getParameterValues("importQuantity");
             String supplier = request.getParameter("supplier");
-            Date importDate = Date.valueOf(request.getParameter("importDate"));
+            String importDateStr = request.getParameter("importDate");
+            Date importDate = Date.valueOf(importDateStr);
             Date importAt = Date.valueOf(LocalDate.now());
+
+            // Validate import date must not be in the past
+            LocalDate selectedDate = LocalDate.parse(importDateStr);
+            LocalDate today = LocalDate.now();
+            if (selectedDate.isBefore(today)) {
+                throw new IllegalArgumentException("Import date cannot be in the past. Please select today or a future date.");
+            }
 
             int totalPrice = 0;
             int totalQuantity = 0;
