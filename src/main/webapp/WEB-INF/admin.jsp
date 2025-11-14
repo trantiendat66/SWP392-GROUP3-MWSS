@@ -476,11 +476,10 @@
                                                     </a>
 
                                                     <%-- EDIT--%>                                                   
-                                                    <a href="${pageContext.request.contextPath}/edit_profile?id=${c.customer_id}"
+                                                    <a href="${pageContext.request.contextPath}/edit_customer?id=${c.customer_id}"
                                                        class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
-
                                                     <%--DELETE--%>
                                                     <a href="deletecustomer?id=${c.customer_id}" 
                                                        onclick="return confirm('Xóa? ${c.customer_name} (${c.email})?')"
