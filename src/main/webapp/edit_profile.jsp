@@ -10,18 +10,15 @@
     Customer c = (Customer) request.getAttribute("customer");
     String ctx = request.getContextPath();
 %>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Edit Profile</title>
+<%@ include file="/WEB-INF/include/header.jsp" %>
         <style>
-            body {
+            .edit-profile-page {
                 font-family: Arial, sans-serif;
                 background:#f4f6f8;
-                padding:30px;
+                padding:24px 0;
+                min-height:60vh;
             }
-            .container {
+            .profile-box {
                 max-width:800px;
                 margin:0 auto;
                 background:#fff;
@@ -29,34 +26,43 @@
                 border-radius:8px;
                 box-shadow:0 2px 6px rgba(0,0,0,0.08);
             }
-            label {
+            .edit-profile-page label {
                 display:block;
                 margin-top:10px;
                 font-weight:600;
                 color:#333;
             }
-            input[type="text"], input[type="email"], input[type="date"], select, textarea {
+            .edit-profile-page input[type="text"],
+            .edit-profile-page input[type="email"],
+            .edit-profile-page input[type="date"],
+            .edit-profile-page select,
+            .edit-profile-page textarea {
                 width:90%;
                 padding:8px 10px;
                 margin-top:6px;
                 border:1px solid #ddd;
                 border-radius:6px;
             }
-            input[type="name"], input[type="address"], input[type="password"], input[type="image"], select, textarea {
+            .edit-profile-page input[type="name"],
+            .edit-profile-page input[type="address"],
+            .edit-profile-page input[type="password"],
+            .edit-profile-page input[type="image"],
+            .edit-profile-page select,
+            .edit-profile-page textarea {
                 width:95%;
                 padding:8px 10px;
                 margin-top:6px;
                 border:1px solid #ddd;
                 border-radius:6px;
             }
-            .row {
+            .edit-profile-page .row {
                 display:flex;
                 gap:12px;
             }
-            .col {
+            .edit-profile-page .col {
                 flex:1;
             }
-            .btn {
+            .edit-profile-page .btn {
                 margin-top:14px;
                 padding:10px 16px;
                 border-radius:6px;
@@ -64,30 +70,29 @@
                 font-weight:600;
                 cursor:pointer;
             }
-            .btn-save {
+            .edit-profile-page .btn-save {
                 background:#2e7d32;
                 color:#fff;
             }
-            .btn-cancel {
+            .edit-profile-page .btn-cancel {
                 background:#eee;
                 color:#333;
                 margin-left:8px;
             }
-            .avatar-preview {
+            .edit-profile-page .avatar-preview {
                 width:100px;
                 height:100px;
                 border-radius:50%;
                 object-fit:cover;
                 margin-top:10px;
             }
-            .error {
+            .edit-profile-page .error {
                 color:#b00020;
                 margin-top:10px;
             }
         </style>
-    </head>
-    <body>
-        <div class="container">
+        <div class="edit-profile-page">
+        <div class="profile-box">
             <h2>Edit Profile</h2>
             <form method="post" action="<%=ctx%>/edit_profile" enctype="multipart/form-data">
                 <input type="hidden" name="customerID" value="<%= (c != null ? c.getCustomer_id() : "")%>" />
@@ -164,5 +169,5 @@
 
             </form>
         </div>
-    </body>
-</html>
+        </div>
+    <jsp:include page="/WEB-INF/include/footer.jsp" />

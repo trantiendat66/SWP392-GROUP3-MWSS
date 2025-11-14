@@ -4,7 +4,8 @@
     Author     : Tran Tien Dat - CE190362
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    </div><!-- close .container opened in header.jsp -->
+
 <footer class="site-footer footer-full">
     <div class="container text-center">
         <div class="row">
@@ -70,3 +71,6 @@ crossorigin="anonymous"></script>
         overflow-x: hidden;
     }
 </style>
+
+</body>
+</html>

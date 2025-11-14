@@ -164,7 +164,7 @@ public class EditProfileServlet extends HttpServlet {
 
         String dateOfBirthStr = request.getParameter("dob");
         String genderParam = request.getParameter("gender");
-        String image = request.getParameter("image");
+        
 
         // Check không thay đổi gì
         boolean noChange
@@ -214,7 +214,7 @@ public class EditProfileServlet extends HttpServlet {
             }
             c.setGender(genderValue);
 
-            c.setImage("assert/avatar/avatar_md.jpg");
+            
 
             // Chỉ Admin mới được đổi trạng thái tài khoản
             if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {

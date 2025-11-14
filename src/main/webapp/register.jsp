@@ -88,6 +88,13 @@
                 outline: none;
                 box-sizing: border-box;
             }
+            select option { background:#222; color:#fff; }
+            .pw-hints { margin-top:10px; font-size:12px; line-height:1.4; }
+            .pw-hints ul { list-style:none; padding-left:0; margin:6px 0 0; }
+            .pw-hints li { display:flex; align-items:center; gap:6px; color:#ff9999; }
+            .pw-hints li.met { color:#7dd87d; }
+            .pw-hints li span.icon { display:none; }
+            .pw-hints li.met span.icon { display:inline-flex; justify-content:center; align-items:center; width:16px; height:16px; background:#2e7d32; color:#fff; font-size:12px; font-weight:700; border-radius:4px; }
 
             input::placeholder {
                 color: rgba(255, 255, 255, 0.6);
@@ -195,12 +202,22 @@
 
                     <div class="field">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="Password" required>
+                        <input id="reg-password" type="password" name="password" placeholder="Password" required>
+                        <div class="pw-hints" id="pw-hints">
+                            <strong>Password must contain:</strong>
+                            <ul>
+                                <li data-crit="len"><span class="icon"></span>At least 6 characters</li>
+                                <li data-crit="upper"><span class="icon"></span>One uppercase letter (A-Z)</li>
+                                <li data-crit="lower"><span class="icon"></span>One lowercase letter (a-z)</li>
+                                <li data-crit="digit"><span class="icon"></span>One number (0-9)</li>
+                                <li data-crit="special"><span class="icon"></span>One special character (!@#$%^&* etc)</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="field">
                         <label>Confirm Password</label>
-                        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                        <input id="reg-confirm" type="password" name="confirm_password" placeholder="Confirm password" required>
                     </div>
 
                     <button type="submit">REGISTER</button>
@@ -213,6 +230,34 @@
             </div>
         </form>
 
+    <script>
+        const pw = document.getElementById('reg-password');
+        const confirmPw = document.getElementById('reg-confirm');
+        const listItems = Array.from(document.querySelectorAll('#pw-hints li'));
+        function evalStrength(val){
+            const tests = {
+                len: val.length >= 6,
+                upper: /[A-Z]/.test(val),
+                lower: /[a-z]/.test(val),
+                digit: /\d/.test(val),
+                special: /[^A-Za-z0-9]/.test(val)
+            };
+            listItems.forEach(li => {
+                const key = li.getAttribute('data-crit');
+                const icon = li.querySelector('.icon');
+                if(tests[key]){ 
+                    li.classList.add('met');
+                    if(icon) icon.textContent='✓';
+                } else { 
+                    li.classList.remove('met');
+                    if(icon) icon.textContent='';
+                }
+            });
+        }
+        pw.addEventListener('input', e => evalStrength(e.target.value));
+        // initial
+        evalStrength(pw.value);
+    </script>
     </body>
 </html>
 

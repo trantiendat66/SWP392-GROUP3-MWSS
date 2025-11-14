@@ -85,8 +85,18 @@ public class RegisterController extends HttpServlet {
         if (phone == null || !phone.matches("^0\\d{9}$")) {
             err.append("Invalid phone number (10 digits).<br/>");
         }
-        if (password == null || password.length() < 6) {
-            err.append("Password must be at least 6 characters.<br/>");
+        if (password == null) {
+            err.append("Password is required.<br/>");
+        } else {
+            StringBuilder pwErr = new StringBuilder();
+            if (password.length() < 6) pwErr.append("• At least 6 characters<br/>");
+            if (!password.matches(".*[A-Z].*")) pwErr.append("• One uppercase letter (A-Z)<br/>");
+            if (!password.matches(".*[a-z].*")) pwErr.append("• One lowercase letter (a-z)<br/>");
+            if (!password.matches(".*\\d.*")) pwErr.append("• One number (0-9)<br/>");
+            if (!password.matches(".*[^A-Za-z0-9].*")) pwErr.append("• One special character (!@#$%^&*)<br/>");
+            if (pwErr.length() > 0) {
+                err.append("Password is not strong enough:<br/>" + pwErr);
+            }
         }
         if (confirm == null || !confirm.equals(password)) {
             err.append("Password confirmation does not match.<br/>");
@@ -94,8 +104,8 @@ public class RegisterController extends HttpServlet {
         if (dobStr == null || dobStr.isBlank()) {
             err.append("Date of birth is required.<br/>");
         }
-        if (gender == null || !(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"))) {
-            err.append("Gender is required (Male/Female).<br/>");
+        if (gender == null || !(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Other"))) {
+            err.append("Gender is required (Male/Female/Other).<br/>");
         }
 
         if (err.length() > 0) {

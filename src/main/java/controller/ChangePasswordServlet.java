@@ -106,6 +106,13 @@ public class ChangePasswordServlet extends HttpServlet {
                 return;
             }
 
+            // Strength validation
+            String strengthError = validateStrength(newPass);
+            if (strengthError != null) {
+                request.setAttribute("error", strengthError);
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
             if (!newPass.equals(confirmPass)) {
                 request.setAttribute("error", "New password and confirm password do not match");
                 request.getRequestDispatcher("change_password.jsp").forward(request, response);
@@ -130,6 +137,12 @@ ses.setAttribute("successMessage", "Password updated successfully!");
                 return;
             }
 
+            String strengthError = validateStrength(newPass);
+            if (strengthError != null) {
+                request.setAttribute("error", strengthError);
+                request.getRequestDispatcher("change_password.jsp").forward(request, response);
+                return;
+            }
             if (!newPass.equals(confirmPass)) {
                 request.setAttribute("error", "New password and confirm password do not match");
                 request.getRequestDispatcher("change_password.jsp").forward(request, response);
@@ -156,5 +169,16 @@ ses.setAttribute("successMessage", "Password updated successfully!");
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String validateStrength(String pw) {
+        if (pw == null) return "Password is required.";
+        StringBuilder sb = new StringBuilder();
+        if (pw.length() < 6) sb.append("• At least 6 characters<br/>");
+        if (!pw.matches(".*[A-Z].*")) sb.append("• One uppercase letter (A-Z)<br/>");
+        if (!pw.matches(".*[a-z].*")) sb.append("• One lowercase letter (a-z)<br/>");
+        if (!pw.matches(".*\\d.*")) sb.append("• One number (0-9)<br/>");
+        if (!pw.matches(".*[^A-Za-z0-9].*")) sb.append("• One special character (!@#$%^&*)<br/>");
+        return sb.length() == 0 ? null : ("Password is not strong enough:<br/>" + sb.toString());
+    }
 
 }

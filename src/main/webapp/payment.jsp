@@ -133,7 +133,7 @@
                         <div class="card-body">
                             <h5 class="card-title mb-3">Thông tin giao hàng</h5>
 
-                            <form action="${ctx}/order/create-from-cart" method="post">
+                            <form id="orderForm" action="${ctx}/order/create-from-cart" method="post">
                                 <div class="mb-2">
                                     <label class="form-label">Số điện thoại</label>
                                     <input type="text" name="phone" value="${sessionScope.customer.phone}"
@@ -148,13 +148,13 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Thanh toán</label>
-                                    <select name="payment_method" class="form-select">
-                                        <option value="0">COD (chưa thanh toán)</option>
-                                        <option value="1">Đã thanh toán online</option>
+                                    <select id="payment-method-select" name="payment_method" class="form-select">
+                                        <option value="0">COD (Thanh toán khi nhận hàng)</option>
+                                        <option value="2">Thanh toán bằng MoMo (Online)</option>
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
+                                <button id="submitBtn" type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
                             </form>
 
                             <hr>
@@ -174,29 +174,30 @@
 </div>
 
 <script>
-    // MoMo payment integration - change form action based on payment method
+    // Switch form target between COD and MoMo based on selected payment method
     document.addEventListener('DOMContentLoaded', function() {
         const orderForm = document.getElementById('orderForm');
         const paymentMethodSelect = document.getElementById('payment-method-select');
-        const btnText = document.getElementById('btn-text');
-        
-        // Xử lý khi thay đổi payment method
+        const submitBtn = document.getElementById('submitBtn');
+
+        function applyPaymentTarget() {
+            const selectedMethod = paymentMethodSelect ? paymentMethodSelect.value : '0';
+            if (!orderForm || !submitBtn) return;
+            if (selectedMethod === '2') {
+                // MoMo payment
+                orderForm.action = '${ctx}/momo/payment';
+                submitBtn.textContent = 'Thanh toán bằng MoMo';
+            } else {
+                // COD
+                orderForm.action = '${ctx}/order/create-from-cart';
+                submitBtn.textContent = 'Xác nhận đặt hàng';
+            }
+        }
+
         if (paymentMethodSelect) {
-            paymentMethodSelect.addEventListener('change', function() {
-                const selectedMethod = this.value;
-                console.log('Payment method changed to:', selectedMethod);
-                if (selectedMethod === '2') {
-                    // MoMo payment
-                    btnText.textContent = 'Pay with MoMo';
-                    orderForm.action = '${ctx}/momo/payment';
-                    console.log('Form action set to:', orderForm.action);
-                } else {
-                    // COD
-                    btnText.textContent = 'Confirm Order';
-                    orderForm.action = '${ctx}/order/create-from-cart';
-                    console.log('Form action set to:', orderForm.action);
-                }
-            });
+            paymentMethodSelect.addEventListener('change', applyPaymentTarget);
+            // Initialize on first load
+            applyPaymentTarget();
         }
     });
 </script>

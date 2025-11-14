@@ -199,21 +199,16 @@
         });
 
         function showMessage(message, type) {
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-            const alertHtml = `
-                <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
-                     style="top: 20px; right: 20px; z-index: 9999;">
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', alertHtml);
-            setTimeout(() => {
-                const alert = document.querySelector('.alert');
-                if (alert) {
-                    alert.remove();
-                }
-            }, 3000);
+            if (window.showToast) {
+                window.showToast(message, type);
+                return;
+            }
+            const box = document.createElement('div');
+            box.style.cssText = 'position:fixed;top:20px;right:20px;z-index:2147483647;background:'+
+                (type==='success'?'#198754':'#dc3545')+';color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.2);font-weight:600;max-width:340px;';
+            box.textContent = (message||'').toString();
+            document.body.appendChild(box);
+            setTimeout(()=>box.remove(),3000);
         }
     </script>
 

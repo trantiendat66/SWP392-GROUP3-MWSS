@@ -21,6 +21,7 @@ import java.util.List;
 
 import model.Cart;
 import model.Customer;
+import model.Product;
 
 /**
  *
@@ -92,20 +93,42 @@ public class OrderCreateFromCartServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/order-success.jsp?orderId=" + orderId);
 
         } catch (SQLException e) {
-            // Nếu lỗi và có buy-now pending: đẩy sản phẩm vào giỏ rồi quay lại giỏ
+            // Nếu lỗi và có buy-now pending: cố gắng thêm sản phẩm vào giỏ với giới hạn tồn kho
             Integer pid = (Integer) session.getAttribute("bn_pid");
             Integer qty = (Integer) session.getAttribute("bn_qty");
             if (pid != null && qty != null && qty > 0) {
                 try {
-                    int price = new ProductDAO().getCurrentPrice(pid);
-                    cartDAO.addToCart(cus.getCustomer_id(), pid, price, qty);
+                    ProductDAO pdao = new ProductDAO();
+                    Product product = pdao.getProductById(pid);
+                    if (product != null) {
+                        int stock = product.getQuantityProduct();
+                        Cart existing = cartDAO.getCartItem(cus.getCustomer_id(), pid);
+                        int already = existing != null ? existing.getQuantity() : 0;
+                        int remaining = stock - already;
+                        if (remaining <= 0) {
+                            session.setAttribute("error", "Payment failed; cart already at maximum stock for this product.");
+                        } else {
+                            int addQty = Math.min(qty, remaining);
+                            cartDAO.addToCart(cus.getCustomer_id(), pid, product.getPrice(), addQty);
+                            if (addQty < qty) {
+                                session.setAttribute("error", "Payment failed; only " + addQty + " added due to stock limit.");
+                            } else {
+                                session.setAttribute("error", "Payment failed; product added to your cart.");
+                            }
+                        }
+                    } else {
+                        session.setAttribute("error", "Payment failed; product not found.");
+                    }
                     session.removeAttribute("bn_pid");
                     session.removeAttribute("bn_qty");
-                    session.setAttribute("error", "Payment failed, the product has been added to your cart.");
                     resp.sendRedirect(req.getContextPath() + "/cart");
                     return;
-                } catch (SQLException ex) {
-                    // fallthrough
+                } catch (Exception ex) {
+                    session.setAttribute("error", "Payment failed; could not move product to cart.");
+                    session.removeAttribute("bn_pid");
+                    session.removeAttribute("bn_qty");
+                    resp.sendRedirect(req.getContextPath() + "/cart");
+                    return;
                 }
             }
             req.setAttribute("error", e.getMessage());

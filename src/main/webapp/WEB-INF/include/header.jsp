@@ -4,9 +4,6 @@
     Author     : Tran Tien Dat - CE190362
 --%>
 
-<%@page import="java.util.List"%>
-<%@page import=" model.Category"%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 
@@ -188,6 +185,31 @@
 
             // Hàm để cập nhật số lượng giỏ hàng từ các trang khác
             window.updateCartCount = updateCartCount;
+
+            // Lightweight global toast (no Bootstrap alert dependency)
+            window.showToast = function(message, type) {
+                try {
+                    const palette = {
+                        success: '#198754',
+                        error:   '#dc3545',
+                        info:    '#0d6efd',
+                        warning: '#f59f00'
+                    };
+                    const bg = palette[type] || palette.info;
+                    const toast = document.createElement('div');
+                    toast.className = 'ws-toast';
+                    Object.assign(toast.style, {
+                        position: 'fixed', top: '20px', right: '20px',
+                        zIndex: '2147483647', background: bg, color: '#fff',
+                        padding: '10px 14px', borderRadius: '8px',
+                        boxShadow: '0 6px 18px rgba(0,0,0,.2)',
+                        maxWidth: '340px', fontWeight: '600',
+                        fontSize: '14px', lineHeight: '1.4'
+                    });
+                    toast.textContent = (message || '').toString();
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                } catch (_) { /* noop */ }
+            };
         </script>
         <div class="container mt-4">
-    </body>
