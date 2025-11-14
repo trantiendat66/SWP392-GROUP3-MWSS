@@ -50,19 +50,6 @@
 
     <h3 class="mb-3">Payment Confirmation</h3>
 
-    <!-- Buy-now banner: direct single item purchase not yet in cart -->
-    <c:if test="${not empty sessionScope.bn_pid}">
-        <div class="alert alert-warning d-flex justify-content-between align-items-center">
-            <div>
-                <strong>Buy now:</strong> You are buying one item directly (not yet in cart).
-                If you go back or cancel, the item will be added to your cart.
-            </div>
-            <form action="${ctx}/payment/cancel-buynow" method="post" class="ms-3">
-                <button type="submit" class="btn btn-sm btn-outline-dark">Cancel Direct Purchase</button>
-            </form>
-        </div>
-    </c:if>
-
     <c:choose>
         <c:when test="${empty cartItems}">
             <div class="alert alert-info">Your cart is empty. Please add products before checkout.</div>
@@ -95,16 +82,39 @@
                                             <div class="fw-semibold">${item.productName}</div>
                                             <small class="text-muted">Brand: ${item.brand}</small>
                                         </td>
-                                        <td class="text-center">${item.quantity}</td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${not empty sessionScope.bn_pid}">
+                                                    <!-- Buy Now mode: cho phép chỉnh số lượng -->
+                                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                                        <input type="number" 
+                                                               class="form-control form-control-sm buynow-qty-input" 
+                                                               style="width:80px; text-align:center;"
+                                                               value="${item.quantity}" 
+                                                               min="1" 
+                                                               max="${item.availableQuantity}"
+                                                               data-product-id="${item.productId}"
+                                                               data-unit-price="${item.price}">
+                                                        <span class="text-muted">/ ${item.availableQuantity}</span>
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- Cart mode: chỉ hiển thị -->
+                                                    ${item.quantity}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td class="text-end text-muted price-col"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
-                                        <td class="text-end fw-semibold total-col"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VND</td>
+                                        <td class="text-end fw-semibold total-col buynow-subtotal" data-unit-price="${item.price}">
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="4" class="text-end">Total:</th>
-                                    <th class="text-end text-danger fs-5">
+                                    <th class="text-end text-danger fs-5" id="payment-total">
                                         <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>
                                 </tr>
@@ -160,7 +170,7 @@
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <span>Order Total</span>
-                                <strong class="text-danger">
+                                <strong class="text-danger" id="order-total-sidebar">
                                     <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                 </strong>
                             </div>
@@ -198,6 +208,83 @@
             paymentMethodSelect.addEventListener('change', applyPaymentTarget);
             // Initialize on first load
             applyPaymentTarget();
+        }
+
+        // Xử lý chỉnh số lượng khi Buy Now
+        const buyNowQtyInputs = document.querySelectorAll('.buynow-qty-input');
+        if (buyNowQtyInputs.length > 0) {
+            buyNowQtyInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const qty = parseInt(this.value) || 1;
+                    const maxQty = parseInt(this.getAttribute('max')) || 1;
+                    const unitPrice = parseInt(this.getAttribute('data-unit-price')) || 0;
+                    const productId = this.getAttribute('data-product-id');
+                    
+                    // Validate số lượng
+                    let finalQty = qty;
+                    if (finalQty < 1) {
+                        finalQty = 1;
+                        this.value = 1;
+                    }
+                    if (finalQty > maxQty) {
+                        finalQty = maxQty;
+                        this.value = maxQty;
+                    }
+
+                    // Cập nhật subtotal
+                    const subtotal = finalQty * unitPrice;
+                    const subtotalCell = this.closest('tr').querySelector('.buynow-subtotal');
+                    if (subtotalCell) {
+                        subtotalCell.textContent = subtotal.toLocaleString('vi-VN') + ' VND';
+                    }
+
+                    // Cập nhật tổng tiền
+                    updateTotalAmount();
+
+                    // Gửi request cập nhật số lượng lên server
+                    updateBuyNowQuantity(productId, finalQty);
+                });
+            });
+        }
+
+        function updateTotalAmount() {
+            const subtotals = document.querySelectorAll('.buynow-subtotal');
+            let total = 0;
+            subtotals.forEach(cell => {
+                const text = cell.textContent.replace(/[^\d]/g, '');
+                total += parseInt(text) || 0;
+            });
+            const totalCell = document.getElementById('payment-total');
+            if (totalCell) {
+                totalCell.textContent = total.toLocaleString('vi-VN') + ' VND';
+            }
+            // Cập nhật Order Total trong sidebar
+            const orderTotalSidebar = document.getElementById('order-total-sidebar');
+            if (orderTotalSidebar) {
+                orderTotalSidebar.textContent = total.toLocaleString('vi-VN') + ' VND';
+            }
+        }
+
+        function updateBuyNowQuantity(productId, qty) {
+            const formData = new FormData();
+            formData.append('action', 'update-buynow-qty');
+            formData.append('qty', qty);
+
+            fetch('${ctx}/payment', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to update quantity:', data.message);
+                    // Reload trang để đồng bộ lại
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error updating quantity:', error);
+            });
         }
     });
 </script>
