@@ -484,9 +484,16 @@
                     setQuantityMessage('', 'hidden');
                 }
             } else {
-                btnAddCart.disabled = true;
-                btnBuyNow.disabled = true;
-                setQuantityMessage(errorMessage, 'error');
+                // Nếu số lượng trong giỏ bằng số lượng tồn kho, chỉ disable Add to cart, vẫn cho Buy now
+                if (remaining === 0 && state.currentCartQuantity === state.stockQuantity) {
+                    btnAddCart.disabled = true;
+                    btnBuyNow.disabled = false; // Vẫn cho phép Buy now
+                    setQuantityMessage('You already have all available items in your cart. You can still buy now.', 'info');
+                } else {
+                    btnAddCart.disabled = true;
+                    btnBuyNow.disabled = true;
+                    setQuantityMessage(errorMessage, 'error');
+                }
             }
 
             return isValid;
