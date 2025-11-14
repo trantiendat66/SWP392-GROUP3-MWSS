@@ -82,28 +82,22 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Import Inventory ID</label>
-                        <input type="number" name="import_inventory_id" class="form-control" value="${product.importInvetoryId}">
-                        <c:if test="${not empty errors.importInvetoryError}">
-                            <div class="text-danger small mt-1">${errors.importInvetoryError}</div>
-                        </c:if>
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Quantity</label>
                         <input type="number" name="quantity_product" class="form-control" value="${product.quantityProduct}">
                         <c:if test="${not empty errors.quantityError}">
                             <div class="text-danger small mt-1">${errors.quantityError}</div>
                         </c:if>
                     </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Image (filename or URL)</label>
+                        <input type="text" name="image" class="form-control" value="${product.image}">
+                        <c:if test="${not empty errors.imageError}">
+                            <div class="text-danger small mt-1">${errors.imageError}</div>
+                        </c:if>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Image (filename or URL)</label>
-                    <input type="text" name="image" class="form-control" value="${product.image}">
-                    <c:if test="${not empty errors.imageError}">
-                        <div class="text-danger small mt-1">${errors.imageError}</div>
-                    </c:if>
-                </div>
+
 
                 <div class="mb-3">
                     <label class="form-label">Description</label>

@@ -94,10 +94,6 @@ public class ProductAddServlet extends HttpServlet {
             String priceStr = request.getParameter("price");
             String quantityStr = request.getParameter("quantity_product");
             String categoryStr = request.getParameter("category_id");
-
-            int import_invetory_Id = 0;
-            ///chưa tạo chức năng nhập hàng gán đùng đỡ
-
             String image = request.getParameter("image");
             String description = request.getParameter("description");
             String warranty = request.getParameter("warranty");
@@ -205,8 +201,6 @@ public class ProductAddServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setImportInvetoryId(import_invetory_Id);
-            ///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
             p.setWarranty(warranty);

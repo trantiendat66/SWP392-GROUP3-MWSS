@@ -66,18 +66,15 @@
                             <div class="text-danger small mt-1">${errors.categoryError}</div>
                         </c:if>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Account ID (Admin)</label>
-                        <input type="number" name="account_id" class="form-control" value="1">
-                    </div>
-                </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Gender</label>
-                    <select name="gender" class="form-select">
-                        <option value="true">Male</option>
-                        <option value="false">Female</option>
-                    </select>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Gender</label>
+                        <select name="gender" class="form-select">
+                            <option value="true">Male</option>
+                            <option value="false">Female</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="row mb-3">
