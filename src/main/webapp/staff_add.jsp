@@ -6,9 +6,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.Staff" %>
 <%@ include file="/WEB-INF/include/header.jsp" %>
-
 <%!
-    // Simple HTML escape helper (no external libs)
     public String esc(String s) {
         if (s == null) {
             return "";
@@ -20,16 +18,10 @@
                 .replace("'", "&#x27;");
     }
 %>
-
 <%
-    // Nếu servlet forward về (trong trường hợp thêm thất bại), có thể truyền lại attribute "staff"
     Staff formStaff = (Staff) request.getAttribute("staff");
-
-    // USERNAME và PASSWORD: theo yêu cầu sẽ **không** được tự điền trước (luôn để trống)
-    String userName = ""; // luôn rỗng (không prefill)
-    // password không prefill, nên không lấy request.getParameter hay formStaff
-
-    // Các field khác vẫn giữ giá trị cũ khi forward (trường hợp lỗi)
+    String userName = request.getParameter("userName") != null ? request.getParameter("userName")
+            : (formStaff != null ? formStaff.getUserName() : "");
     String email = request.getParameter("email") != null ? request.getParameter("email")
             : (formStaff != null ? formStaff.getEmail() : "");
     String phone = request.getParameter("phone") != null ? request.getParameter("phone")
@@ -42,8 +34,6 @@
             : (formStaff != null ? formStaff.getRole() : "Staff");
     String status = request.getParameter("status") != null ? request.getParameter("status")
             : (formStaff != null ? formStaff.getStatus() : "Active");
-
-    // Flash messages: ưu tiên request (forward), nếu redirect dùng session
     String successMessage = (String) request.getAttribute("successMessage");
     String errorMessage = (String) request.getAttribute("errorMessage");
     if (successMessage == null) {
@@ -55,24 +45,106 @@
     if (session.getAttribute("successMessage") != null) {
         session.removeAttribute("successMessage");
     }
-    if (session.getAttribute("errorMessage") != null)
+    if (session.getAttribute("errorMessage") != null) {
         session.removeAttribute("errorMessage");
+    }
+    // field-level errors (set by servlet)
+    String usernameError = (String) request.getAttribute("usernameError");
+    String passwordError = (String) request.getAttribute("passwordError");
+    String emailError = (String) request.getAttribute("emailError");
+    String phoneError = (String) request.getAttribute("phoneError");
+    String positionError = (String) request.getAttribute("positionError");
+    String addressError = (String) request.getAttribute("addressError");
 %>
-
 <style>
-    html, body { margin: 0; padding: 0; background: #f5f7fb; overflow-x: hidden; height: 100%; }
-    .page-wrap { padding: 0; background: #f5f7fb; min-height: calc(100vh - 60px); }
-    .main-container { display: flex; gap: 0; align-items: stretch; width: 100%; min-height: calc(100vh - 60px); overflow: hidden; }
-    .sidebar { width: 280px; min-width: 280px; background: #fff; padding: 22px; box-shadow: 2px 0 8px rgba(0,0,0,0.03); border-radius: 0; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
-    .profile-card { text-align: center; margin-bottom: 18px; }
-    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: inline-block; border: 2px solid #e9ecef; background: #f0f0f0; }
-    .profile-role { display: block; background-color: #000; color: #fff; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 6px; margin-top: 10px; width: fit-content; margin-left: auto; margin-right: auto; }
-    .nav-menu { list-style: none; padding: 0; margin: 12px 0 0 0; }
-    .nav-menu li { margin-bottom: 10px; }
-    .nav-link { display: block; padding: 10px 14px; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600; }
-    .nav-link.active, .nav-link:hover { background: #dc3545; color: white; }
-    .main-content { background: white; margin: 10px; border-radius: 8px; flex: 1 1 auto; padding: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.04); min-width: 0; overflow-x: auto; }
-    /* Basic form styles consistent with staff_list.jsp */
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        overflow-x: hidden;
+        height: 100%;
+    }
+    .page-wrap {
+        padding: 0;
+        background: #f5f7fb;
+        min-height: calc(100vh - 60px);
+    }
+    .main-container {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        overflow: hidden;
+    }
+    .sidebar {
+        width: 280px;
+        min-width: 280px;
+        background: #fff;
+        padding: 22px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        border-radius: 0;
+        flex-shrink: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-card {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-block;
+        border: 2px solid #e9ecef;
+        background: #f0f0f0;
+    }
+    .profile-role {
+        display: block;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-top: 10px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0 0;
+    }
+    .nav-menu li {
+        margin-bottom: 10px;
+    }
+    .nav-link {
+        display: block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .nav-link.active, .nav-link:hover {
+        background: #dc3545;
+        color: white;
+    }
+    .main-content {
+        background: white;
+        margin: 10px;
+        border-radius: 8px;
+        flex: 1 1 auto;
+        padding: 24px;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        min-width: 0;
+        overflow-x: auto;
+    }
     .staff-page {
         padding: 0;
         max-width: 100%;
@@ -167,6 +239,20 @@
         color:#721c24;
         border:1px solid #f5c6cb;
     }
+    .field-error {
+        color: #dc3545;
+        background: #fff1f0;
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin-top:6px;
+        font-size:13px;
+        border: 1px solid #f5c6cb;
+        display:inline-block;
+    }
+    input.error, textarea.error {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220,53,69,0.06);
+    }
     @media (max-width:880px) {
         .form-row {
             grid-template-columns: 1fr;
@@ -181,7 +267,6 @@
         }
     }
 </style>
-
 <div class="page-wrap">
     <div class="main-container">
         <aside class="sidebar">
@@ -207,125 +292,153 @@
         </aside>
         <main class="main-content">
             <div class="staff-page">
-    <div class="page-header">
-        <h2>Add New Staff</h2>
-    </div>
-
-    <% if (successMessage != null) {%>
-    <div class="flash flash-success"><%= esc(successMessage)%></div>
-    <% } else if (errorMessage != null) {%>
-    <div class="flash flash-error"><%= esc(errorMessage)%></div>
-    <% }%>
-
-    <div class="form-card" role="form" aria-label="Add staff form">
-        <form method="post" action="${pageContext.request.contextPath}/admin/staff/add" onsubmit="return validateForm(this);">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="userName">Username <span style="color:#dc3545">*</span></label>
-                    <input id="userName" name="userName" type="text" value="<%= esc(userName)%>" required autocomplete="off" />
+                <div class="page-header">
+                    <h2>Add New Staff</h2>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password <span style="color:#dc3545">*</span></label>
-                    <input id="password" name="password" type="password" placeholder="Enter password" required autocomplete="new-password" />
+                <% if (successMessage != null) {%>
+                <div class="flash flash-success"><%= esc(successMessage)%></div>
+                <% } else if (errorMessage != null) {%>
+                <div class="flash flash-error"><%= esc(errorMessage)%></div>
+                <% }%>
+                <div class="form-card" role="form" aria-label="Add staff form">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/staff/add" onsubmit="return validateForm(this);">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userName">Username <span style="color:#dc3545">*</span></label>
+                                <input id="userName" name="userName" type="text" value="<%= esc(userName)%>" required autocomplete="off"
+                                       <%= (usernameError != null) ? "class=\"error\"" : ""%> />
+                                <% if (usernameError != null) {%>
+                                <div class="field-error"><%= esc(usernameError)%></div>
+                                <% }%>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password <span style="color:#dc3545">*</span></label>
+                                <input id="password" name="password" type="password" placeholder="Enter password" required autocomplete="new-password"
+                                       <%= (passwordError != null) ? "class=\"error\"" : ""%> />
+                                <% if (passwordError != null) {%>
+                                <div class="field-error"><%= esc(passwordError)%></div>
+                                <% }%>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input id="email" name="email" type="email" value="<%= esc(email)%>"
+                                       <%= (emailError != null) ? "class=\"error\"" : ""%> />
+                                <% if (emailError != null) {%>
+                                <div class="field-error"><%= esc(emailError)%></div>
+                                <% }%>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" type="text" value="<%= esc(phone)%>"
+                                       <%= (phoneError != null) ? "class=\"error\"" : ""%> />
+                                <% if (phoneError != null) {%>
+                                <div class="field-error"><%= esc(phoneError)%></div>
+                                <% }%>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" id="role" name="role" value="Staff" readonly class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Position</label>
+                                <input id="position" name="position" type="text" value="<%= esc(position)%>"
+                                       <%= (positionError != null) ? "class=\"error\"" : ""%> />
+                                <% if (positionError != null) {%>
+                                <div class="field-error"><%= esc(positionError)%></div>
+                                <% }%>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="grid-column:1 / -1;">
+                                <label for="address">Address</label>
+                                <textarea id="address" name="address" <%= (addressError != null) ? "class=\"error\"" : ""%>><%= esc(address)%></textarea>
+                                <% if (addressError != null) {%>
+                                <div class="field-error"><%= esc(addressError)%></div>
+                                <% }%>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <input type="hidden" id="status" name="status" value="Active">
+                                <span style="font-weight:600; color:#28a745;">Active</span>
+                            </div>
+                            <div class="form-group" style="align-self:end; text-align:left;">
+                                <div class="btn-actions" style="display:flex; gap:10px; justify-content:flex-end;">
+                                    <button type="submit" class="btn-primary">Add staff</button>
+                                    <a class="btn-ghost" href="${pageContext.request.contextPath}/admin/staff">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+            <script>
+                function validateForm(form) {
+                    const username = form.userName.value.trim();
+                    const password = form.password.value;
+                    const email = form.email.value.trim();
+                    const phone = form.phone.value.trim();
+                    const role = form.role.value.trim();
+                    const position = form.position.value.trim();
+                    const address = form.address.value.trim();
+                    const status = form.status.value.trim();
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" name="email" type="email" value="<%= esc(email)%>" />
-                </div>
 
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input id="phone" name="phone" type="text" value="<%= esc(phone)%>" />
-                </div>
-            </div>
+                    if (username.length < 2) {
+                        alert("Username must have at least 2 characters.");
+                        form.userName.focus();
+                        return false;
+                    }
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <input type="text" id="role" name="role" value="Staff" readonly class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="position">Position</label>
-                    <input id="position" name="position" type="text" value="<%= esc(position)%>" />
-                </div>
-            </div>
+                    if (password.length < 6) {
+                        alert("Password must have at least 6 characters.");
+                        form.password.focus();
+                        return false;
+                    }
 
-            <div class="form-row">
-                <div class="form-group" style="grid-column:1 / -1;">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address"><%= esc(address)%></textarea>
-                </div>
-            </div>
+                    if (email === "" || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+                        alert("Please enter a valid email.");
+                        form.email.focus();
+                        return false;
+                    }
+                    if (phone === "" || !/^\d{10,11}$/.test(phone)) {
+                        alert("Please enter a valid phone number (10-11 digits).");
+                        form.phone.focus();
+                        return false;
+                    }
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Status</label>
-                    <input type="hidden" id="status" name="status" value="Active">
-                    <span style="font-weight:600; color:#28a745;">Active</span>
-                </div>
+                    if (position === "") {
+                        alert("Position cannot be empty.");
+                        form.position.focus();
+                        return false;
+                    }
 
-                <div class="form-group" style="align-self:end; text-align:left;">
-                    <div class="btn-actions" style="display:flex; gap:10px; justify-content:flex-end;">
-                        <button type="submit" class="btn-primary">Add staff</button>
-                        <a class="btn-ghost" href="${pageContext.request.contextPath}/admin/staff">Cancel</a>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+                    if (!/^[\p{L}\d\s]+$/u.test(position) || /^\d+$/.test(position)) {
+                        alert("Position must contain at least one letter and can only contain letters, numbers and spaces (no numbers, no special characters).");
+                        form.position.focus();
+                        return false;
+                    }
 
-<script>
-    function validateForm(form) {
-        const username = form.userName.value.trim();
-        const password = form.password.value;
-        const email = form.email.value.trim();
-        const phone = form.phone.value.trim();
-        const role = form.role.value.trim();
-        const position = form.position.value.trim();
-        const address = form.address.value.trim();
-        const status = form.status.value.trim();
+                    if (address === "") {
+                        alert("Address cannot be empty.");
+                        form.address.focus();
+                        return false;
+                    }
+                    if (!/^[\p{L}\d\s]+$/u.test(address) || /^\d+$/.test(address)) {
+                        alert("Address must contain at least one letter and can only contain letters, numbers and spaces (no numbers, no special characters).");
+                        form.address.focus();
+                        return false;
+                    }
 
-        if (username.length < 2) {
-            alert("Username must have at least 2 characters.");
-            form.userName.focus();
-            return false;
-        }
-        if (password.length < 6) {
-            alert("Password must have at least 6 characters.");
-            form.password.focus();
-            return false;
-        }
-        if (email === "" || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            alert("Please enter a valid email.");
-            form.email.focus();
-            return false;
-        }
-        if (phone === "" || !/^\d{10,11}$/.test(phone)) {
-            alert("Please enter a valid phone number (10-11 digits).");
-            form.phone.focus();
-            return false;
-        }
-        if (position === "") {
-            alert("Position cannot be empty.");
-            form.position.focus();
-            return false;
-        }
-        if (address === "") {
-            alert("Address cannot be empty.");
-            form.address.focus();
-            return false;
-        }
-        return true;
-    }
-</script>
-            </div>
+                    return true;
+                }
+            </script>
         </main>
     </div>
 </div>
-
 <%@ include file="/WEB-INF/include/footer.jsp" %>

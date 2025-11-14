@@ -18,9 +18,20 @@ import model.Staff;
  *
  * @author Tran Tien Dat - CE190362
  */
-
 @WebServlet(name = "StaffEditServlet", urlPatterns = {"/admin/staff/edit"})
 public class StaffEditServlet extends HttpServlet {
+
+    private boolean isValidEmail(String email) {
+        return email != null && email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+
+    private boolean isValidPhone(String phone) {
+        return phone != null && phone.matches("^\\d{10,11}$");
+    }
+
+    private boolean isValidTextField(String input) {
+        return input != null && input.matches("^[\\p{L}\\d\\s]+$") && !input.matches("^\\d+$");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -98,22 +109,41 @@ public class StaffEditServlet extends HttpServlet {
             return;
         }
 
-        Staff staff = new Staff(
-                id,
-                oldStaff.getUserName(),
-                oldStaff.getPassword(),
-                request.getParameter("email"),
-                request.getParameter("phone"),
-                request.getParameter("role"),
-                request.getParameter("position"),
-                request.getParameter("address"),
-                request.getParameter("status")
-        );
+        String email = request.getParameter("email").trim();
+        String phone = request.getParameter("phone").trim();
+        String position = request.getParameter("position").trim();
+        String address = request.getParameter("address").trim();
 
+        boolean hasError = false;
+        if (email.isEmpty() || !email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            request.setAttribute("emailError", "Please enter a valid email.");
+            hasError = true;
+        }
+        if (phone.isEmpty() || !phone.matches("^\\d{10,11}$")) {
+            request.setAttribute("phoneError", "Please enter a valid phone number (10-11 digits).");
+            hasError = true;
+        }
+        if (position.isEmpty() || !position.matches("^[\\p{L}\\d\\s]+$") || position.matches("^\\d+$")) {
+            request.setAttribute("positionError", "Position must contain at least one letter and can only contain letters, numbers and spaces (no numbers, no special characters).");
+            hasError = true;
+        }
+        if (address.isEmpty() || !address.matches("^[\\p{L}\\d\\s]+$") || address.matches("^\\d+$")) {
+            request.setAttribute("addressError", "Address must contain at least one letter and can only contain letters, numbers and spaces (no numbers, no special characters).");
+            hasError = true;
+        }
+
+        if (hasError) {
+
+            Staff staff = new Staff(id, oldStaff.getUserName(), oldStaff.getPassword(), email, phone, oldStaff.getRole(), position, address, oldStaff.getStatus());
+            request.setAttribute("staff", staff);
+            request.getRequestDispatcher("/staff_edit.jsp").forward(request, response);
+            return;
+        }
+
+        Staff staff = new Staff(id, oldStaff.getUserName(), oldStaff.getPassword(), email, phone, oldStaff.getRole(), position, address, oldStaff.getStatus());
         dao.updateStaff(staff);
         response.sendRedirect(request.getContextPath() + "/admin/staff");
     }
-    
 
     /**
      * Returns a short description of the servlet.

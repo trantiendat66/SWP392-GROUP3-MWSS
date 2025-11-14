@@ -217,6 +217,7 @@
                 <tr>
                     <th style="width:80px;">ID</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Username</th>
                     <th style="width:120px;">Role</th>
                     <th style="width:90px;">Status</th>
@@ -232,6 +233,7 @@
                 <tr>
                     <td><%= s.getAccountId()%></td>
                     <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail()%></td>
+                    <td><%= s.getPhone() == null ? "-" : s.getPhone()%></td>
                     <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>
                     <td><%= s.getRole() == null ? "-" : s.getRole()%></td>
                     <td><%= s.getStatus() == null ? "-" : s.getStatus()%></td>

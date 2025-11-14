@@ -80,6 +80,32 @@ public class StaffDAO extends DBContext {
         return staff;
     }
 
+    public Staff getStaffByUserName(String userName) {
+        Staff staff = null;
+        String sql = "SELECT * FROM Staff WHERE user_name = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    staff = new Staff();
+                    staff.setAccountId(rs.getInt("account_id"));
+                    staff.setUserName(rs.getString("user_name"));
+                    staff.setEmail(rs.getString("email"));
+                    staff.setPhone(rs.getString("phone"));
+                    staff.setPassword(rs.getString("password"));
+                    staff.setRole(rs.getString("role"));
+                    staff.setPosition(rs.getString("position"));
+                    staff.setAddress(rs.getString("address"));
+                    staff.setStatus(rs.getString("status"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("getStaffByUserName error: SQLState=" + e.getSQLState() + ", Code=" + e.getErrorCode());
+            e.printStackTrace();
+        }
+        return staff;
+    }
+
     public boolean updatePasswordById(int accountId, String newHash) {
         final String sql = "UPDATE Staff SET password = ? WHERE account_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -98,7 +124,7 @@ public class StaffDAO extends DBContext {
 
     public List<Staff> getAllStaff() {
         List<Staff> list = new ArrayList<>();
-        String sql = "SELECT * FROM Staff ORDER BY account_id DESC";
+        String sql = "SELECT * FROM Staff WHERE LOWER(role) <> 'admin' ORDER BY account_id DESC";
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Staff staff = new Staff();
@@ -175,7 +201,7 @@ public class StaffDAO extends DBContext {
 
     public List<Staff> searchByPhone(String keyword) {
         List<Staff> list = new ArrayList<>();
-        String sql = "SELECT * FROM Staff WHERE phone LIKE ?";
+        String sql = "SELECT * FROM Staff WHERE phone LIKE ? AND LOWER(role) <> 'admin'";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, "%" + keyword + "%");
             try (ResultSet rs = ps.executeQuery()) {

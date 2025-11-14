@@ -48,7 +48,7 @@ public class ProductDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idStr = request.getParameter("id");
-        System.out.println("ProductDetailServlet called with id=" + idStr); // debug
+        System.out.println("ProductDetailServlet called with id=" + idStr);
 
         if (idStr == null || idStr.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing product id");

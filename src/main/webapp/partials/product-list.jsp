@@ -37,17 +37,13 @@
                                     <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                        class="btn btn-outline-primary btn-sm me-2">Details</a>
 
-                                    <!-- BUY NOW: tạo đơn ngay cho 1 sản phẩm (sẽ check login ở servlet) -->
                                     <form action="${pageContext.request.contextPath}/order/buy-now" method="post" class="d-inline">
                                         <input type="hidden" name="product_id" value="${p.productId}">
                                         <input type="hidden" name="quantity" value="1">
-                                        <!-- có thể cho nhập ở trang sau; tạm thời để placeholder -->
                                         <input type="hidden" name="shipping_address" value="Cập nhật sau">
                                         <input type="hidden" name="payment_method" value="COD">
                                         <button type="submit" class="btn btn-danger btn-sm me-2">Buy now</button>
                                     </form>
-
-                                    <!-- Thêm vào giỏ -->
                                     <button class="btn btn-success btn-sm" onclick="addToCartFromHome(${p.productId})" title="Add to cart">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
