@@ -7,6 +7,7 @@ package controller;
 import dao.CartDAO;
 import dao.OrderDAO;
 import dao.ProductDAO;
+import model.Cart;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -54,6 +55,14 @@ public class OrderBuyNowServlet extends HttpServlet {
             session.setAttribute("errorMessage", "Product is out of stock");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
+        }
+
+        // Kiểm tra xem có sản phẩm trong cart không, nếu có thì dùng số lượng đó
+        CartDAO cartDAO = new CartDAO();
+        Cart cartItem = cartDAO.getCartItem(cus.getCustomer_id(), productId);
+        if (cartItem != null && cartItem.getQuantity() > 0) {
+            // Sử dụng số lượng có trong cart
+            qty = cartItem.getQuantity();
         }
 
         // ĐÁNH DẤU Buy-Now đang chờ thanh toán (KHÔNG thêm vào cart)
