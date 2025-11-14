@@ -185,6 +185,7 @@
                 color:#111;
                 border:1px solid #111
             }
+            .icon.hide,
             .icon.edit,
             .icon.reply{
                 background:#fff;
@@ -562,10 +563,10 @@
                                                         <td>${o.comment}</td>
                                                         <td><span class="date-pill">${o.createAt}</span></td>
                                                         <td><div class="right-actions">
-
-                                                                <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
-                                                                <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
-
+                                                                <div class="right-actions">
+                                                                    <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">${o.hidden == true ? '<i class="bi bi-eye-slash"></i>' :'<i class="bi bi-eye">'}</i></button>
+                                                                    <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
+                                                                </div>
                                                             </div></td>
                                                     </tr>
                                                 </c:forEach>
@@ -732,7 +733,7 @@
                                         // Toggle CSS hoặc text để báo đã ẩn/hiện
                                         this.classList.toggle("hidden-active");
                                         this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
-                                        this.textContent = this.classList.contains("hidden-active") ? "👁️‍🗨️" : "👁";
+                                        this.innerHTML = this.classList.contains("hidden-active") ? "<i class='bi bi-eye-slash'></i>" : "<i class='bi bi-eye'></i>";
                                     } else {
                                         alert("Failed to update feedback status!");
                                     }
