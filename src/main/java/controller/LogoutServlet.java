@@ -19,36 +19,23 @@ import java.io.IOException;
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
 
-    /**
-     * Processes both GET and POST requests for logout
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Prevent caching (important for security)
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-        response.setDateHeader("Expires", 0); // Proxies
-
-        // Invalidate session if exists
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-
-        // Redirect user back to login page
-        response.sendRedirect(request.getContextPath() + "/home");
-    }
+   
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         doGet(request, response);
     }
 
     @Override
