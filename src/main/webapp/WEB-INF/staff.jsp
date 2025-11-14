@@ -564,7 +564,7 @@
                                                         <td><span class="date-pill">${o.createAt}</span></td>
                                                         <td><div class="right-actions">
                                                                 <div class="right-actions">
-                                                                    <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">${o.hidden == true ? '<i class="bi bi-eye-slash"></i>' :'<i class="bi bi-eye">'}</i></button>
+                                                                    <button class="icon hide ${o.hidden ? 'hidden-active' : ''}" type="button" name="feedbackIdV" value="${o.feedbackId}" title="Hide" aria-label="Hide">${o.hidden == true ? '<i class="bi bi-eye-slash"></i>' :'<i class="bi bi-eye"></i>'}</button>
                                                                     <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
                                                                 </div>
                                                             </div></td>
