@@ -278,7 +278,6 @@
                 background: white;
                 margin: 10px;
                 border-radius: 8px;
-                overflow-x: auto;
             }
         </style>
     </head>
