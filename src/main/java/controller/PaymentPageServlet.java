@@ -145,8 +145,15 @@ public class PaymentPageServlet extends HttpServlet {
 
                 // Cập nhật số lượng trong session
                 session.setAttribute("bn_qty", newQty);
+                
+                // Tính lại tổng tiền
+                ProductDAO productDAO = new ProductDAO();
+                Product product = productDAO.getProductById(bnPid);
+                int price = productDAO.getCurrentPrice(bnPid);
+                int totalAmount = price * newQty;
+                
                 resp.setContentType("application/json");
-                resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\"}");
+                resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\", \"totalAmount\": " + totalAmount + "}");
             } catch (NumberFormatException e) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 resp.setContentType("application/json");
