@@ -35,15 +35,25 @@ public class FeedbackView {
         this.hidden = hidden;
     }
 
-    public FeedbackView(int rating, String comment, Date createAt, String customerName, String product, int feedbackId) {
+    public FeedbackView(int rating, String comment, Date createAt, String customerName, String product, int feedbackId, boolean hidden) {
         this.rating = rating;
         this.comment = comment;
         this.createAt = createAt;
         this.customerName = customerName;
         this.product = product;
         this.feedbackId = feedbackId;
+        this.hidden = hidden;
     }
 
+//    public FeedbackView(int feedbackId, int rating, String comment, Date createAt, String customerName, String product, boolean hidden) {
+//        this.feedbackId = feedbackId;
+//        this.rating = rating;
+//        this.comment = comment;
+//        this.createAt = createAt;
+//        this.customerName = customerName;
+//        this.product = product;
+//        this.hidden = hidden;
+//    }
     public String getProduct() {
         return product;
     }

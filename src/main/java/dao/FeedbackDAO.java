@@ -248,7 +248,7 @@ public class FeedbackDAO extends DBContext {
 
     public List<FeedbackView> getFeedbackByStaffId(int account_id) {
         List<FeedbackView> list = new ArrayList<>();
-        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at\n"
+        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at, f.hidden\n"
                 + "FROM Feedback f\n"
                 + "JOIN Customer c ON c.customer_id = f.customer_id\n"
                 + "JOIN [Product] p ON p.product_id = f.product_id\n"
@@ -264,7 +264,8 @@ public class FeedbackDAO extends DBContext {
                     String feedback = rs.getString("comment");
                     Timestamp date = rs.getTimestamp("create_at");
                     int feedbackId = rs.getInt("feedback_id");
-                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId));
+                    boolean hide = rs.getBoolean("hidden");
+                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId, hide));
                 }
             }
         } catch (Exception e) {
@@ -526,7 +527,7 @@ public class FeedbackDAO extends DBContext {
 
     public List<FeedbackView> getAllFeedback() {
         List<FeedbackView> list = new ArrayList<>();
-        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at\n"
+        String sql = "SELECT f.feedback_id, c.customer_name, p.product_name, f.rating, f.comment, f.create_at, f.hidden\n"
                 + "FROM Feedback f\n"
                 + "JOIN Customer c ON c.customer_id = f.customer_id\n"
                 + "JOIN [Product] p ON p.product_id = f.product_id\n"
@@ -540,7 +541,8 @@ public class FeedbackDAO extends DBContext {
                     String feedback = rs.getString("comment");
                     Timestamp date = rs.getTimestamp("create_at");
                     int feedbackId = rs.getInt("feedback_id");
-                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId));
+                    boolean hide = rs.getBoolean("hidden");
+                    list.add(new FeedbackView(rating, feedback, date, customerName, productName, feedbackId, hide));
                 }
             }
         } catch (Exception e) {

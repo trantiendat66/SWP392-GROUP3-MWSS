@@ -562,10 +562,10 @@
                                                         <td>${o.comment}</td>
                                                         <td><span class="date-pill">${o.createAt}</span></td>
                                                         <td><div class="right-actions">
-                                                                <form action="orderdetail">
-                                                                    <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
-                                                                    <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
-                                                                </form>
+
+                                                                <button class="icon hide" type="button" name="feedbackIdV" value="${o.feedbackId}" title="hide" aria-label="Hide">👁</button>
+                                                                <button class="icon reply" type="button" name="feedbackIdR" value="${o.feedbackId}" data-status="${o.feedbackId}" title="Reply" aria-label="Reply">✍️️</button>
+
                                                             </div></td>
                                                     </tr>
                                                 </c:forEach>
@@ -625,18 +625,15 @@
                 });
             });
 
-            // Khi nhấn Apply → gửi AJAX để update
             $("#applyStatus").click(function () {
                 const newStatus = $("#order-status").val();
 
                 $.ajax({
-                    url: "orderdetail", // Servlet URL
+                    url: "orderdetail",
                     method: "POST",
                     data: {id: currentOrderId, status: newStatus},
                     success: function (response) {
-                        // response là JSON do Servlet trả về
                         if (response.success) {
-                            // ✅ Cập nhật UI ngay tại chỗ
                             currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
                             alert("Cập nhật thành công!");
                         } else {
@@ -650,12 +647,10 @@
             });
         </script>
         <script>
-            // Sidebar active handling
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-                    // In a real app you'd route or update content here
                 });
             });
 
