@@ -684,7 +684,7 @@
                                         <td><div class="right-actions">
                                                 <form action="orderdetail">
                                                     <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
-                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
+                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa" ${o.order_status == 'DELIVERED' ? "disabled" : ""}>✏️</button>
                                                 </form>
                                             </div></td>
                                         </tr>
@@ -938,7 +938,7 @@
     });
 </script>
 <script>
-    // Example: View
+
     document.querySelectorAll('.icon.view').forEach(viewBtn => {
         viewBtn.addEventListener('click', (e) => {
             const orderId = viewBtn.value;
@@ -957,7 +957,7 @@
                     });
         });
     });
-    //feedback script
+
     document.querySelectorAll('.icon.reply').forEach(fbBtn => {
         fbBtn.addEventListener('click', (e) => {
             const feedbackId = fbBtn.value;
@@ -969,7 +969,7 @@
                         document.querySelector('#feedbackDetailModal .modal-body').innerHTML = html;
                         const modal = new bootstrap.Modal(document.getElementById('feedbackDetailModal'));
                         modal.show();
-                        // Enable nút lại khi modal đóng
+
                         const modalEl = document.getElementById('feedbackDetailModal');
                         modalEl.addEventListener('hidden.bs.modal', () => {
                             fbBtn.disabled = false;   // Enable nút
@@ -997,7 +997,7 @@
                         .then(res => res.json())
                         .then(data => {
                             if (data.success) {
-                                // Toggle CSS hoặc text để báo đã ẩn/hiện
+
                                 this.classList.toggle("hidden-active");
                                 this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
                                 this.innerHTML = this.classList.contains("hidden-active") ? "<i class='bi bi-eye-slash'></i>" : "<i class='bi bi-eye'></i>";
@@ -1009,7 +1009,7 @@
         });
     });
 </script>
-<!--Script Edit Order-->
+
 <script>
     let currentOrderId = null;
     let currentRow = null;
@@ -1030,7 +1030,7 @@
         });
     });
 
-    // Khi nhấn Apply → gửi AJAX để update
+
     $("#applyStatus").click(function () {
         const newStatus = $("#order-status").val();
 
@@ -1039,9 +1039,9 @@
             method: "POST",
             data: {id: currentOrderId, status: newStatus},
             success: function (response) {
-                // response là JSON do Servlet trả về
+
                 if (response.success) {
-                    // ✅ Cập nhật UI ngay tại chỗ
+
                     currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
                     alert("Cập nhật thành công!");
                     modal.hide();
@@ -1052,6 +1052,28 @@
             error: function () {
                 alert("Không thể kết nối server!");
             }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const statusSelect = document.getElementById("order-status");
+        let previousValue = statusSelect.value; // Lưu trạng thái cũ
+
+        statusSelect.addEventListener("change", function () {
+            const newValue = this.value;
+
+            if (newValue === "DELIVERED") {
+                const confirmResult = confirm("Bạn có chắc chắn muốn đánh dấu đơn hàng là DELIVERED không?");
+
+                if (!confirmResult) {
+
+                    this.value = previousValue;
+                    return;
+                }
+            }
+
+
+            previousValue = newValue;
         });
     });
 </script>

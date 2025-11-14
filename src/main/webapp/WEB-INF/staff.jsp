@@ -675,13 +675,13 @@
                         const confirmResult = confirm("Bạn có chắc chắn muốn đánh dấu đơn hàng là DELIVERED không?");
 
                         if (!confirmResult) {
-                            // Hoàn tác, quay lại trạng thái cũ
+
                             this.value = previousValue;
                             return;
                         }
                     }
 
-                    // Cập nhật trạng thái mới
+
                     previousValue = newValue;
                 });
             });
