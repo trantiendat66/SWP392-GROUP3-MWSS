@@ -52,27 +52,6 @@
         background: rgba(0,0,0,0.25);
         z-index: 2;
     }
-    p {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #222;
-        text-align: center;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin: 30px 0;
-        position: relative;
-    }
-
-    p::after {
-        content: "";
-        display: block;
-        width: 80px;
-        height: 3px;
-        background-color: #c5a46d; /* màu vàng ánh kim */
-        margin: 10px auto 0;
-        border-radius: 2px;
-    }
-
 
     @media (max-width: 480px) {
         .intro-section {
@@ -86,7 +65,6 @@
     <div class="container">
         <h1 class="mb-3">Welcome to WatchShop</h1>
         <p class="lead mb-4">Discover Quality Watches.</p>
-        <a href="#featured-products" class="btn btn-primary btn-lg">Shop Now</a>
     </div>
 </section>
 
@@ -190,29 +168,8 @@
         </div>
     </section>
 </c:if>
-
-<section class="container mb-5">
-    <h2 class="section-title text-center mb-4">Explore Categories</h2>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <img src="${pageContext.request.contextPath}/assert/image/BST-dong-ho-nam-ban-chay.jpg" class="img-fluid rounded category-thumb" alt="Category 1">
-            <p>BST ĐỒNG HỒ NAM HOT</p>
-        </div>
-        <div class="col-md-4">
-            <img src="${pageContext.request.contextPath}/assert/image/BST-dong-ho-nu-ban-chay.jpg" class="img-fluid rounded category-thumb" alt="Category 2">
-            <p>BST ĐỒNG HỒ NỮ HOT</p>
-        </div>
-        <div class="col-md-4">
-            <img src="${pageContext.request.contextPath}/assert/image/watch3.jpg" class="img-fluid rounded category-thumb" alt="Category 3">
-            <p>BST ĐỒNG HỒ NEW</p>
-        </div>
-    </div>
-</section>
-
 <!-- Featured Products cuối trang: luôn hiển thị toàn bộ sản phẩm (id khác để không trùng) -->
 <section id="featured-products-default" class="container mb-5">
-    <h2 class="section-title text-center mb-4">Featured Products</h2>
-
     <form class="d-flex mx-lg-0 py-2 flex-grow-0" role="search" action="${pageContext.request.contextPath}/search" method="get">
         <div class="dt-mega-fillter_btn active ms-2 py-1 d-flex align-items-center"
              id="filterButton"
