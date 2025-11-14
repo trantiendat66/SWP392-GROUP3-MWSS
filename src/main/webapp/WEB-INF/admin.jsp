@@ -342,13 +342,10 @@
     }
 
     .listOrders,
-    .listFeedbacks,
-    .table{
+    .listFeedbacks{
         max-height: 400px;
         overflow-y: auto;
-        overflow-y: auto;
         overflow-x: auto;
-        display: inline-block;
         border: 1px solid #ddd;
     }
 
@@ -521,10 +518,10 @@
                                                 <img src="${pageContext.request.contextPath}/${c.image}" 
                                                      alt="Customer Avatar" 
                                                      style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
-                                                     onerror="this.src='${pageContext.request.contextPath}/assert/avatar/avatar_md.jpg'"/>
+                                                     onerror="this.src='${pageContext.request.contextPath}/assert/avatar/default-user.svg'"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <img src="${pageContext.request.contextPath}/assert/avatar/avatar_md.jpg" 
+                                                <img src="${pageContext.request.contextPath}/assert/avatar/default-user.svg" 
                                                      alt="Default Avatar"
                                                      style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"/>
                                             </c:otherwise>
