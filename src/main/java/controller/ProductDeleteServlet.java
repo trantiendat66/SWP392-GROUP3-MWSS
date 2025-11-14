@@ -102,11 +102,12 @@ public class ProductDeleteServlet extends HttpServlet {
             }
             dao.deleteProduct(id);
             request.getSession().setAttribute("successMessage", "Xóa sản phẩm \"" + p.getProductName() + "\" thành công!");
-            request.getSession().setAttribute("errorMessage", "Invalid ID.");
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         } catch (SQLException ex) {
             Logger.getLogger(ProductDeleteServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.getSession().setAttribute("errorMessage", "Invalid ID.");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         }
     }
 

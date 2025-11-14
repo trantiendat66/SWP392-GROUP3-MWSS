@@ -55,7 +55,6 @@ public class StaffDAO extends DBContext {
 
     public Staff getStaffById(int account_id) {
         Staff staff = null;
-        // Tên bảng Staff
         String sql = "SELECT * FROM Staff WHERE account_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, account_id);

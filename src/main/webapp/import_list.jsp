@@ -8,18 +8,94 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/include/header.jsp" %>
 <style>
-    html, body { margin: 0; padding: 0; background: #f5f7fb; overflow-x: hidden; height: 100%; }
-    .page-wrap { padding: 0; background: #f5f7fb; min-height: calc(100vh - 60px); }
-    .main-container { display: flex; gap: 0; align-items: stretch; width: 100%; min-height: calc(100vh - 60px); overflow: hidden; }
-    .sidebar { width: 280px; min-width: 280px; background: #fff; padding: 22px; box-shadow: 2px 0 8px rgba(0,0,0,0.03); border-radius: 0; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
-    .profile-card { text-align: center; margin-bottom: 18px; }
-    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: inline-block; border: 2px solid #e9ecef; background: #f0f0f0; }
-    .profile-role { display: block; background-color: #000; color: #fff; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 6px; margin-top: 10px; width: fit-content; margin-left: auto; margin-right: auto; }
-    .nav-menu { list-style: none; padding: 0; margin: 12px 0 0 0; }
-    .nav-menu li { margin-bottom: 10px; }
-    .nav-link { display: block; padding: 10px 14px; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600; }
-    .nav-link.active, .nav-link:hover { background: #dc3545; color: white; }
-    .main-content { background: white; margin: 10px; border-radius: 8px; flex: 1 1 auto; padding: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.04); min-width: 0; overflow-x: auto; }
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        overflow-x: hidden;
+        height: 100%;
+    }
+    .page-wrap {
+        padding: 0;
+        background: #f5f7fb;
+        min-height: calc(100vh - 60px);
+    }
+    .main-container {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        overflow: hidden;
+    }
+    .sidebar {
+        width: 280px;
+        min-width: 280px;
+        background: #fff;
+        padding: 22px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        border-radius: 0;
+        flex-shrink: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-card {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-block;
+        border: 2px solid #e9ecef;
+        background: #f0f0f0;
+    }
+    .profile-role {
+        display: block;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-top: 10px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0 0;
+    }
+    .nav-menu li {
+        margin-bottom: 10px;
+    }
+    .nav-link {
+        display: block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .nav-link.active, .nav-link:hover {
+        background: #dc3545;
+        color: white;
+    }
+    .main-content {
+        background: white;
+        margin: 10px;
+        border-radius: 8px;
+        flex: 1 1 auto;
+        padding: 24px;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        min-width: 0;
+        overflow-x: auto;
+    }
 </style>
 <div class="page-wrap">
     <div class="main-container">
@@ -42,6 +118,15 @@
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+                <li style="margin-top:18px;">
+                    <form method="post" action="${pageContext.request.contextPath}/logout" style="display:inline;width:100%;">
+                        <button type="submit"
+                                onclick="return confirm('Are you sure you want to logout?');"
+                                style="width:100%;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;font-weight:600;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
             </ul>
         </aside>
         <main class="main-content">

@@ -55,7 +55,7 @@
                 </c:forEach>
             </c:when>
             <c:otherwise>
-                <p class="text-center text-muted">Không tìm thấy sản phẩm phù hợp.</p>
+                <p class="text-center text-muted">No matching products found.</p>
             </c:otherwise>
         </c:choose>
     </div>

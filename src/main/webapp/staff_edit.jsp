@@ -223,6 +223,15 @@
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+                <li style="margin-top:18px;">
+                    <form method="post" action="${pageContext.request.contextPath}/logout" style="display:inline;width:100%;">
+                        <button type="submit"
+                                onclick="return confirm('Are you sure you want to logout?');"
+                                style="width:100%;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;font-weight:600;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
             </ul>
         </aside>
 

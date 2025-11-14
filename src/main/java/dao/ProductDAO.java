@@ -302,27 +302,27 @@ public class ProductDAO extends DBContext {
     }
 
     public void addProduct(Product p) throws SQLException {
-        String sql = "INSERT INTO Product (category_id, import_invetory_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], product_quantity)\n"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Product (category_id, brand_id, image, product_name, price, origin, gender, description, warranty, machine, glass, dial_diameter, bezel, strap, dial_color, [function], product_quantity)\n"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, p.getCategoryId());
-            ps.setInt(2, p.getImportInvetoryId());
-            ps.setInt(3, getBrandIdByBrandName(p.getBrand()));
-            ps.setString(4, p.getImage());
-            ps.setString(5, p.getProductName());
-            ps.setInt(6, p.getPrice());
-            ps.setString(7, p.getOrigin());
-            ps.setBoolean(8, p.isGender());
-            ps.setString(9, p.getDescription());
-            ps.setString(10, p.getWarranty());
-            ps.setString(11, p.getMachine());
-            ps.setString(12, p.getGlass());
-            ps.setString(13, p.getDialDiameter());
-            ps.setString(14, p.getBezel());
-            ps.setString(15, p.getStrap());
-            ps.setString(16, p.getDialColor());
-            ps.setString(17, p.getFunction());
-            ps.setInt(18, p.getQuantityProduct());
+            
+            ps.setInt(2, getBrandIdByBrandName(p.getBrand()));
+            ps.setString(3, p.getImage());
+            ps.setString(4, p.getProductName());
+            ps.setInt(5, p.getPrice());
+            ps.setString(6, p.getOrigin());
+            ps.setBoolean(7, p.isGender());
+            ps.setString(8, p.getDescription());
+            ps.setString(9, p.getWarranty());
+            ps.setString(10, p.getMachine());
+            ps.setString(11, p.getGlass());
+            ps.setString(12, p.getDialDiameter());
+            ps.setString(13, p.getBezel());
+            ps.setString(14, p.getStrap());
+            ps.setString(15, p.getDialColor());
+            ps.setString(16, p.getFunction());
+            ps.setInt(17, p.getQuantityProduct());
             int rowAffected = ps.executeUpdate();
             if (rowAffected == 0) {
                 throw new SQLException("Thêm sản phẩm thất bại, không có hàng nào được thêm.");
@@ -331,7 +331,7 @@ public class ProductDAO extends DBContext {
     }
 
     public void updateProduct(Product p) throws SQLException {
-        String sqlProduct = "UPDATE Product SET category_id = ?, import_invetory_id = ?, brand_id = ?, image = ?, product_name = ?, price = ?, origin = ?, gender = ?, "
+        String sqlProduct = "UPDATE Product SET category_id = ?, brand_id = ?, image = ?, product_name = ?, price = ?, origin = ?, gender = ?, "
                 + "description = ?, warranty = ?, machine = ?, glass = ?, dial_diameter = ?, bezel = ?, strap = ?, dial_color = ?, [function] = ? , product_quantity = ? "
                 + "WHERE product_id = ?";
 
@@ -342,26 +342,26 @@ public class ProductDAO extends DBContext {
 
                 // --- Update Product ---
                 ps1.setInt(1, p.getCategoryId());
-                ps1.setInt(2, p.getImportInvetoryId());
-                ps1.setInt(3, getBrandIdByBrandName(p.getBrand()));
-                ps1.setString(4, p.getImage());
-                ps1.setString(5, p.getProductName());
-                ps1.setInt(6, p.getPrice());
-                ps1.setString(7, p.getOrigin());
-                ps1.setBoolean(8, p.isGender());
-                ps1.setString(9, p.getDescription());
-                ps1.setString(10, p.getWarranty());
-                ps1.setString(11, p.getMachine());
-                ps1.setString(12, p.getGlass());
-                ps1.setString(13, p.getDialDiameter());
-                ps1.setString(14, p.getBezel());
-                ps1.setString(15, p.getStrap());
-                ps1.setString(16, p.getDialColor());
-                ps1.setString(17, p.getFunction());
+                
+                ps1.setInt(2, getBrandIdByBrandName(p.getBrand()));
+                ps1.setString(3, p.getImage());
+                ps1.setString(4, p.getProductName());
+                ps1.setInt(5, p.getPrice());
+                ps1.setString(6, p.getOrigin());
+                ps1.setBoolean(7, p.isGender());
+                ps1.setString(8, p.getDescription());
+                ps1.setString(9, p.getWarranty());
+                ps1.setString(10, p.getMachine());
+                ps1.setString(11, p.getGlass());
+                ps1.setString(12, p.getDialDiameter());
+                ps1.setString(13, p.getBezel());
+                ps1.setString(14, p.getStrap());
+                ps1.setString(15, p.getDialColor());
+                ps1.setString(16, p.getFunction());
                 // set quantity (parameter 18)
-                ps1.setInt(18, p.getQuantityProduct());
+                ps1.setInt(17, p.getQuantityProduct());
                 // set product_id for WHERE clause (parameter 19)
-                ps1.setInt(19, p.getProductId());
+                ps1.setInt(18, p.getProductId());
 
                 int rows1 = ps1.executeUpdate();
                 if (rows1 == 0) {

@@ -9,18 +9,94 @@
 <%@ include file="/WEB-INF/include/header.jsp" %>
 
 <style>
-    html, body { margin: 0; padding: 0; background: #f5f7fb; overflow-x: hidden; height: 100%; }
-    .page-wrap { padding: 0; background: #f5f7fb; min-height: calc(100vh - 60px); }
-    .main-container { display: flex; gap: 0; align-items: stretch; width: 100%; min-height: calc(100vh - 60px); overflow: hidden; }
-    .sidebar { width: 280px; min-width: 280px; background: #fff; padding: 22px; box-shadow: 2px 0 8px rgba(0,0,0,0.03); border-radius: 0; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
-    .profile-card { text-align: center; margin-bottom: 18px; }
-    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: inline-block; border: 2px solid #e9ecef; background: #f0f0f0; }
-    .profile-role { display: block; background-color: #000; color: #fff; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 6px; margin-top: 10px; width: fit-content; margin-left: auto; margin-right: auto; }
-    .nav-menu { list-style: none; padding: 0; margin: 12px 0 0 0; }
-    .nav-menu li { margin-bottom: 10px; }
-    .nav-link { display: block; padding: 10px 14px; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600; }
-    .nav-link.active, .nav-link:hover { background: #dc3545; color: white; }
-    .main-content { background: white; margin: 10px; border-radius: 8px; flex: 1 1 auto; padding: 24px; box-shadow: 0 2px 14px rgba(0,0,0,0.04); min-width: 0; overflow-x: auto; }
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        overflow-x: hidden;
+        height: 100%;
+    }
+    .page-wrap {
+        padding: 0;
+        background: #f5f7fb;
+        min-height: calc(100vh - 60px);
+    }
+    .main-container {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        overflow: hidden;
+    }
+    .sidebar {
+        width: 280px;
+        min-width: 280px;
+        background: #fff;
+        padding: 22px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        border-radius: 0;
+        flex-shrink: 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-card {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-block;
+        border: 2px solid #e9ecef;
+        background: #f0f0f0;
+    }
+    .profile-role {
+        display: block;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-top: 10px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0 0;
+    }
+    .nav-menu li {
+        margin-bottom: 10px;
+    }
+    .nav-link {
+        display: block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .nav-link.active, .nav-link:hover {
+        background: #dc3545;
+        color: white;
+    }
+    .main-content {
+        background: white;
+        margin: 10px;
+        border-radius: 8px;
+        flex: 1 1 auto;
+        padding: 24px;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        min-width: 0;
+        overflow-x: auto;
+    }
     .staff-page {
         padding: 0;
         max-width: 100%;
@@ -177,86 +253,97 @@
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
                 <li><a class="nav-link active" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
                 <li><a class="nav-link" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+                <li style="margin-top:18px;">
+                    <form method="post" action="${pageContext.request.contextPath}/logout" style="display:inline;width:100%;">
+                        <button type="submit"
+                                onclick="return confirm('Are you sure you want to logout?');"
+                                style="width:100%;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;font-weight:600;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+
+
             </ul>
         </aside>
         <main class="main-content">
             <div class="staff-page">
-    <div class="staff-hero">
-        <h2>Staff Management</h2>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <form action="${pageContext.request.contextPath}/admin/staff/search" method="get" style="display: flex; flex-grow: 1; gap: 8px; min-width: 250px;">
-                <input type="text" name="keyword" placeholder="Search staff by phone" value="${param.keyword}" style="flex-grow: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #bbb;">
-                <button type="submit" style="padding: 8px 14px; border-radius: 6px; background-color: #007bff; color: white; font-weight: 600; border: none; cursor: pointer;"> Search
-                </button>
-            </form>
-            <a href="${pageContext.request.contextPath}/admin/staff/add" style="padding: 8px 14px; border-radius: 6px; font-weight: 600;background-color: #28a745; color: white; text-decoration: none; border: none; cursor: pointer;">Add Staff
-            </a>
-        </div>
-    </div>
+                <div class="staff-hero">
+                    <h2>Staff Management</h2>
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <form action="${pageContext.request.contextPath}/admin/staff/search" method="get" style="display: flex; flex-grow: 1; gap: 8px; min-width: 250px;">
+                            <input type="text" name="keyword" placeholder="Search staff by phone" value="${param.keyword}" style="flex-grow: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #bbb;">
+                            <button type="submit" style="padding: 8px 14px; border-radius: 6px; background-color: #007bff; color: white; font-weight: 600; border: none; cursor: pointer;"> Search
+                            </button>
+                        </form>
+                        <a href="${pageContext.request.contextPath}/admin/staff/add" style="padding: 8px 14px; border-radius: 6px; font-weight: 600;background-color: #28a745; color: white; text-decoration: none; border: none; cursor: pointer;">Add Staff
+                        </a>
+                    </div>
+                </div>
 
-    <%-- Flash messages --%>
-    <%
-        String successMessage = (String) session.getAttribute("successMessage");
-        String errorMessage = (String) session.getAttribute("errorMessage");
-        if (successMessage != null) {
-    %>
-    <div class="flash flash-success"><%= successMessage%></div>
-    <%
-        session.removeAttribute("successMessage");
-    } else if (errorMessage != null) {
-    %>
-    <div class="flash flash-error"><%= errorMessage%></div>
-    <%
-            session.removeAttribute("errorMessage");
-        }
-    %>
-
-    <div style="overflow-x:auto;">
-        <table class="staff-table" role="table" aria-label="Staff list">
-            <thead>
-                <tr>
-                    <th style="width:80px;">ID</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Username</th>
-                    <th style="width:120px;">Role</th>
-                    <th style="width:90px;">Status</th>
-                    <th style="width:140px; text-align:center;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+                <%-- Flash messages --%>
                 <%
-                    List<Staff> staffList = (List<Staff>) request.getAttribute("staffList");
-                    if (staffList != null && !staffList.isEmpty()) {
-                        for (Staff s : staffList) {
+                    String successMessage = (String) session.getAttribute("successMessage");
+                    String errorMessage = (String) session.getAttribute("errorMessage");
+                    if (successMessage != null) {
                 %>
-                <tr>
-                    <td><%= s.getAccountId()%></td>
-                    <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail()%></td>
-                    <td><%= s.getPhone() == null ? "-" : s.getPhone()%></td>
-                    <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>
-                    <td><%= s.getRole() == null ? "-" : s.getRole()%></td>
-                    <td><%= s.getStatus() == null ? "-" : s.getStatus()%></td>
-                    <td style="text-align:center;">
-                        <div class="action-links">
-                            <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId()%>">View</a>
-                            <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId()%>">Edit</a>
-                            <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
-                                <input type="hidden" name="id" value="<%= s.getAccountId()%>"/>
-                                <button class="action-delete" type="submit" onclick="return confirm('Are you sure you want to delete employee <%= s.getUserName()%> ?');">Delete</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                <div class="flash flash-success"><%= successMessage%></div>
                 <%
+                    session.removeAttribute("successMessage");
+                } else if (errorMessage != null) {
+                %>
+                <div class="flash flash-error"><%= errorMessage%></div>
+                <%
+                        session.removeAttribute("errorMessage");
                     }
-                } else {
                 %>
-                <tr><td colspan="6" style="text-align:center; padding:18px;">No staff found.</td></tr>
-                <% }%>
-            </tbody>
-        </table>
-    </div>
+
+                <div style="overflow-x:auto;">
+                    <table class="staff-table" role="table" aria-label="Staff list">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">ID</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Username</th>
+                                <th style="width:120px;">Role</th>
+                                <th style="width:90px;">Status</th>
+                                <th style="width:140px; text-align:center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                List<Staff> staffList = (List<Staff>) request.getAttribute("staffList");
+                                if (staffList != null && !staffList.isEmpty()) {
+                                    for (Staff s : staffList) {
+                            %>
+                            <tr>
+                                <td><%= s.getAccountId()%></td>
+                                <td><%= (s.getEmail() == null || s.getEmail().isEmpty()) ? "-" : s.getEmail()%></td>
+                                <td><%= s.getPhone() == null ? "-" : s.getPhone()%></td>
+                                <td><%= s.getUserName() == null ? "-" : s.getUserName()%></td>
+                                <td><%= s.getRole() == null ? "-" : s.getRole()%></td>
+                                <td><%= s.getStatus() == null ? "-" : s.getStatus()%></td>
+                                <td style="text-align:center;">
+                                    <div class="action-links">
+                                        <a class="action-view" href="${pageContext.request.contextPath}/admin/staff/detail?id=<%= s.getAccountId()%>">View</a>
+                                        <a class="action-edit" href="${pageContext.request.contextPath}/admin/staff/edit?id=<%= s.getAccountId()%>">Edit</a>
+                                        <form method="post" action="${pageContext.request.contextPath}/admin/staff/delete" style="display:inline;">
+                                            <input type="hidden" name="id" value="<%= s.getAccountId()%>"/>
+                                            <button class="action-delete" type="submit" onclick="return confirm('Are you sure you want to delete employee <%= s.getUserName()%> ?');">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <tr><td colspan="6" style="text-align:center; padding:18px;">No staff found.</td></tr>
+                            <% }%>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
