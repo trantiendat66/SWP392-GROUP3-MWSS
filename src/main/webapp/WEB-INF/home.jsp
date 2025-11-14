@@ -123,7 +123,7 @@
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title text-center">${fn:escapeXml(p.productName)}</h5>
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
-                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VNĐ</p>
+                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VND</p>
                                     <div class="mt-auto text-center">
                                         <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                            class="btn btn-outline-primary btn-sm me-2">Details</a>
@@ -194,15 +194,15 @@
                         <label for="priceRange" class="form-label">Price Range</label>
                         <select class="form-select" id="priceRange" name="priceRange">
                             <option value="">-- Select range --</option>
-                            <option value="0-2000000">0 - 2 triệu</option>
-                            <option value="2000000-4000000">2 - 4 triệu</option>
-                            <option value="4000000-6000000">4 - 6 triệu</option>
-                            <option value="6000000-8000000">6 - 8 triệu</option>
-                            <option value="8000000-10000000">8 - 10 triệu</option>
-                            <option value="10000000-20000000">10 - 20 triệu</option>
-                            <option value="20000000-40000000">20 - 40 triệu</option>
-                            <option value="40000000-100000000">40 - 100 triệu</option>
-                            <option value="40000000-100000000">Trên 100 triệu</option>
+                            <option value="0-2000000">0 - 2 million</option>
+                            <option value="2000000-4000000">2 - 4 million</option>
+                            <option value="4000000-6000000">4 - 6 million</option>
+                            <option value="6000000-8000000">6 - 8 million</option>
+                            <option value="8000000-10000000">8 - 10 million</option>
+                            <option value="10000000-20000000">10 - 20 million</option>
+                            <option value="20000000-40000000">20 - 40 million</option>
+                            <option value="40000000-100000000">40 - 100 million</option>
+                            <option value="100000000-1000000000000">Over 100 million</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -346,7 +346,7 @@
                     .then(html => {
                         document.getElementById("productList").innerHTML = html;
                     })
-                    .catch(err => console.error("Lỗi khi lọc:", err));
+                    .catch(err => console.error("Error filtering:", err));
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
             modal.hide();

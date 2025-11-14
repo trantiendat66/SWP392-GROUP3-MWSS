@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 
-<html lang="vi">
+<html lang="en">
     <head>
         <style>
             .nav-link1{

@@ -756,7 +756,7 @@
                                     if (totalRevenue != null) {
                                         out.print(String.format("%,d", totalRevenue) + " VND");
                                     } else {
-                                        out.print("0 VNĐ");
+                                        out.print("0 VND");
                                     }
                                 %>
                             </div>

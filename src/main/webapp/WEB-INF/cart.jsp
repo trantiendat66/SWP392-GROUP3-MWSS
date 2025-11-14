@@ -271,7 +271,7 @@
                         <hr>
 
                         <button class="btn-checkout" onclick="checkout()">
-                            <i class="bi bi-credit-card"></i> Thanh toán
+                            <i class="bi bi-credit-card"></i> Payment
                         </button>
 
                         <div class="mt-3">
@@ -337,7 +337,7 @@
         const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
         
         if (newQuantity > maxQuantity) {
-            showMessage('Số lượng không được vượt quá ' + maxQuantity + ' sản phẩm còn lại trong kho', 'error');
+            showMessage('Quantity cannot exceed ' + maxQuantity + ' items remaining in stock', 'error');
             // Reset về giá trị cũ
             quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
             return;

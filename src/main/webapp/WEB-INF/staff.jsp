@@ -652,14 +652,14 @@
                     success: function (response) {
                         if (response.success) {
                             currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
-                            alert("Cập nhật thành công!");
+                            alert("Updated successfully!");
                             modal.hide();
                         } else {
-                            alert("Lỗi khi cập nhật!");
+                            alert("Error updating!");
                         }
                     },
                     error: function () {
-                        alert("Không thể kết nối server!");
+                        alert("Cannot connect to server!");
                     }
                 });
             });
@@ -672,7 +672,7 @@
                     const newValue = this.value;
 
                     if (newValue === "DELIVERED") {
-                        const confirmResult = confirm("Bạn có chắc chắn muốn đánh dấu đơn hàng là DELIVERED không?");
+                        const confirmResult = confirm("Are you sure you want to mark this order as DELIVERED?");
 
                         if (!confirmResult) {
 
@@ -710,7 +710,7 @@
                             })
                             .catch(err => {
                                 console.error('Error loading order detail:', err);
-                                alert('Không thể tải chi tiết đơn hàng.');
+                                alert('Unable to load order details.');
                             });
                 });
             });
@@ -729,7 +729,7 @@
                             })
                             .catch(err => {
                                 console.error('Error loading feedback detail:', err);
-                                alert('Không thể tải chi tiết đơn hàng.');
+                                alert('Unable to load order details.');
                             });
                 });
             });
@@ -743,14 +743,14 @@
                     data: $(this).serialize(),
                     success: function (response) {
                         if (response.success) {
-                            alert("✅ Gửi phản hồi thành công!");
+                            alert("✅ Reply sent successfully!");
                             $("#feedbackDetailModal").modal("hide");
                         } else {
-                            alert("❌ Lỗi: " + (response.message || "Không thể gửi phản hồi."));
+                            alert("❌ Error: " + (response.message || "Unable to send reply."));
                         }
                     },
                     error: function () {
-                        alert("⚠️ Không thể kết nối server!");
+                        alert("⚠️ Cannot connect to server!");
                     }
                 });
             });

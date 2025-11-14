@@ -93,7 +93,7 @@ public class MoMoReturnServlet extends HttpServlet {
                     Integer bnQty = (Integer) session.getAttribute("bn_qty");
                     if (bnPid == null || bnQty == null || bnQty <= 0) {
                         // No buy-now info -> return to payment for user to retry
-                        session.setAttribute("error", "Không tìm thấy thông tin đơn buy-now để tạo đơn. Vui lòng thử lại.");
+                        session.setAttribute("error", "Could not find Buy Now order information. Please try again.");
                         resp.sendRedirect(req.getContextPath() + "/payment");
                         return;
                     }
@@ -106,7 +106,7 @@ public class MoMoReturnServlet extends HttpServlet {
                 }
 
                 if (items == null || items.isEmpty()) {
-                    session.setAttribute("error", "Không có sản phẩm để tạo đơn hàng.");
+                    session.setAttribute("error", "No items available to create the order.");
                     resp.sendRedirect(req.getContextPath() + "/cart");
                     return;
                 }
@@ -129,14 +129,14 @@ public class MoMoReturnServlet extends HttpServlet {
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
 
-                session.setAttribute("flash_success", "Thanh toán thành công! Đơn hàng #" + dbOrderId + " đã được tạo. Mã giao dịch: " + transId);
+                session.setAttribute("flash_success", "Payment successful! Order #" + dbOrderId + " has been created. Transaction ID: " + transId);
                 resp.sendRedirect(req.getContextPath() + "/order-success.jsp?orderId=" + dbOrderId);
                 return;
 
             } catch (SQLException e) {
                 e.printStackTrace();
                 if (session != null) {
-                    session.setAttribute("error", "Lỗi khi tạo đơn sau thanh toán: " + e.getMessage());
+                    session.setAttribute("error", "Error creating order after payment: " + e.getMessage());
                 }
                 resp.sendRedirect(req.getContextPath() + "/payment");
                 return;
@@ -149,7 +149,7 @@ public class MoMoReturnServlet extends HttpServlet {
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
-                session.setAttribute("error", "Bạn đã hủy thanh toán MoMo. Vui lòng chọn phương thức thanh toán khác hoặc thử lại.");
+                session.setAttribute("error", "You canceled the MoMo payment. Please choose another payment method or try again.");
             }
             resp.sendRedirect(req.getContextPath() + "/payment");
             
@@ -160,7 +160,7 @@ public class MoMoReturnServlet extends HttpServlet {
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
-                session.setAttribute("error", "Giao dịch đã hết hạn (quá 20 phút). Vui lòng tạo lại đơn hàng.");
+                session.setAttribute("error", "The transaction expired (over 20 minutes). Please create the order again.");
             }
             resp.sendRedirect(req.getContextPath() + "/payment");
             
@@ -171,7 +171,7 @@ public class MoMoReturnServlet extends HttpServlet {
                 session.removeAttribute("momo_order_id");
                 session.removeAttribute("momo_request_id");
                 
-                String errorMsg = "Thanh toán thất bại: " + message + " (Mã lỗi: " + resultCode + ")";
+                String errorMsg = "Payment failed: " + message + " (Error code: " + resultCode + ")";
                 session.setAttribute("error", errorMsg);
             }
             

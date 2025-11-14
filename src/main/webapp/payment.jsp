@@ -48,25 +48,25 @@
         <c:remove var="flash_success" scope="session"/>
     </c:if>
 
-    <h3 class="mb-3">Xác nhận thanh toán</h3>
+    <h3 class="mb-3">Payment Confirmation</h3>
 
-    <!-- Banner buy-now: đang mua nhanh, chưa thêm vào giỏ -->
+    <!-- Buy-now banner: direct single item purchase not yet in cart -->
     <c:if test="${not empty sessionScope.bn_pid}">
         <div class="alert alert-warning d-flex justify-content-between align-items-center">
             <div>
-                <strong>Buy now:</strong> Bạn đang mua nhanh 1 sản phẩm (chưa thêm vào giỏ).
-                Nếu bạn quay lại hoặc hủy, sản phẩm sẽ được thêm vào giỏ hàng của bạn.
+                <strong>Buy now:</strong> You are buying one item directly (not yet in cart).
+                If you go back or cancel, the item will be added to your cart.
             </div>
             <form action="${ctx}/payment/cancel-buynow" method="post" class="ms-3">
-                <button type="submit" class="btn btn-sm btn-outline-dark">Hủy mua nhanh</button>
+                <button type="submit" class="btn btn-sm btn-outline-dark">Cancel Direct Purchase</button>
             </form>
         </div>
     </c:if>
 
     <c:choose>
         <c:when test="${empty cartItems}">
-            <div class="alert alert-info">Giỏ hàng trống. Vui lòng thêm sản phẩm trước khi thanh toán.</div>
-            <a href="${ctx}/home" class="btn btn-primary">Tiếp tục mua sắm</a>
+            <div class="alert alert-info">Your cart is empty. Please add products before checkout.</div>
+            <a href="${ctx}/home" class="btn btn-primary">Continue Shopping</a>
         </c:when>
 
         <c:otherwise>
@@ -77,11 +77,11 @@
                         <table class="table align-middle payment-table">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width:70px;">Ảnh</th>
-                                    <th class="product-col">Sản phẩm</th>
-                                    <th class="text-center qty-col">Số lượng</th>
-                                    <th class="text-end price-col">Đơn giá</th>
-                                    <th class="text-end total-col">Thành tiền</th>
+                                    <th style="width:70px;">Image</th>
+                                    <th class="product-col">Product</th>
+                                    <th class="text-center qty-col">Quantity</th>
+                                    <th class="text-end price-col">Unit Price</th>
+                                    <th class="text-end total-col">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -96,16 +96,16 @@
                                             <small class="text-muted">Brand: ${item.brand}</small>
                                         </td>
                                         <td class="text-center">${item.quantity}</td>
-                                        <td class="text-end text-muted price-col"><fmt:formatNumber value="${item.price}" type="number"/> VNĐ</td>
-                                        <td class="text-end fw-semibold total-col"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VNĐ</td>
+                                        <td class="text-end text-muted price-col"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
+                                        <td class="text-end fw-semibold total-col"><fmt:formatNumber value="${item.totalPrice}" type="number"/> VND</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Tổng cộng:</th>
+                                    <th colspan="4" class="text-end">Total:</th>
                                     <th class="text-end text-danger fs-5">
-                                        <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
+                                        <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>
                                 </tr>
                             </tfoot>
@@ -118,11 +118,11 @@
                     <c:choose>
                         <c:when test="${not empty sessionScope.bn_pid}">
                             <form action="${ctx}/payment/cancel-buynow" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-outline-secondary">← Quay lại giỏ hàng</button>
+                                <button type="submit" class="btn btn-outline-secondary">← Back to Cart</button>
                             </form>
                         </c:when>
                         <c:otherwise>
-                            <a href="${ctx}/cart" class="btn btn-outline-secondary">← Quay lại giỏ hàng</a>
+                            <a href="${ctx}/cart" class="btn btn-outline-secondary">← Back to Cart</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -131,40 +131,40 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">Thông tin giao hàng</h5>
+                            <h5 class="card-title mb-3">Shipping Information</h5>
 
                             <form id="orderForm" action="${ctx}/order/create-from-cart" method="post">
                                 <div class="mb-2">
-                                    <label class="form-label">Số điện thoại</label>
-                                    <input type="text" name="phone" value="${sessionScope.customer.phone}"
-                                           class="form-control" placeholder="Số điện thoại">
+                                     <label class="form-label">Phone Number</label>
+                                     <input type="text" name="phone" value="${sessionScope.customer.phone}"
+                                         class="form-control" placeholder="Phone number">
                                 </div>
 
                                 <div class="mb-2">
-                                    <label class="form-label">Địa chỉ nhận hàng</label>
-                                    <input type="text" name="shipping_address" class="form-control"
-                                           placeholder="Địa chỉ nhận hàng" required>
+                                     <label class="form-label">Shipping Address</label>
+                                     <input type="text" name="shipping_address" class="form-control"
+                                         placeholder="Shipping address" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Thanh toán</label>
+                                    <label class="form-label">Payment</label>
                                     <select id="payment-method-select" name="payment_method" class="form-select">
-                                        <option value="0">COD (Thanh toán khi nhận hàng)</option>
-                                        <option value="2">Thanh toán bằng MoMo (Online)</option>
+                                        <option value="0">COD (Cash on Delivery)</option>
+                                        <option value="2">MoMo Payment (Online)</option>
                                     </select>
                                 </div>
 
-                                <button id="submitBtn" type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
+                                <button id="submitBtn" type="submit" class="btn btn-primary w-100">Place Order</button>
                             </form>
 
                             <hr>
                             <div class="d-flex justify-content-between">
-                                <span>Tổng tiền hàng</span>
+                                <span>Order Total</span>
                                 <strong class="text-danger">
-                                    <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
+                                    <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                 </strong>
                             </div>
-                            <small class="text-muted d-block mt-2">Phí vận chuyển sẽ tính ở bước sau (nếu áp dụng).</small>
+                            <small class="text-muted d-block mt-2">Shipping fee will be calculated later (if applicable).</small>
                         </div>
                     </div>
                 </div>
@@ -186,11 +186,11 @@
             if (selectedMethod === '2') {
                 // MoMo payment
                 orderForm.action = '${ctx}/momo/payment';
-                submitBtn.textContent = 'Thanh toán bằng MoMo';
+                submitBtn.textContent = 'Pay with MoMo';
             } else {
                 // COD
                 orderForm.action = '${ctx}/order/create-from-cart';
-                submitBtn.textContent = 'Xác nhận đặt hàng';
+                submitBtn.textContent = 'Place Order';
             }
         }
 
