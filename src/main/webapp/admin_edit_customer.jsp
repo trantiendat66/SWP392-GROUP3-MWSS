@@ -207,51 +207,6 @@
 
 <div class="page-wrap">
     <div class="main-container" role="main">
-        <!-- SIDEBAR -->
-        <aside class="sidebar" aria-label="Admin sidebar">
-            <div class="profile-card">
-                <img class="profile-avatar"
-                     src="${pageContext.request.contextPath}/assert/image/account.jpg"
-                     alt="avatar"
-                     onerror="this.src='${pageContext.request.contextPath}/assert/image/watch1.jpg'"/>
-                <c:choose>
-                    <c:when test="${not empty sessionScope.staff}">
-                        <div class="profile-role">${sessionScope.staff.role}</div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="profile-name">Guest</div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-            <ul class="nav-menu">
-                <li>
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/product">Product Management</a>
-                </li>
-                <li>
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a>
-                </li>
-                <li>
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a>
-                </li>
-                <li>
-                    <a class="nav-link active" 
-                       href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a>
-                </li>
-                <li>
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/admin/staff">Staff Management</a>
-                </li>
-                <li>
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/listimportinventory">Import Management</a>
-                </li>
-            </ul>
-
-            <button id="logoutBtn" style="margin-top:18px;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;width:100%;">Logout</button>
-        </aside>
 
         <!-- MAIN CONTENT -->
         <main class="main-content" aria-label="Admin main content">
@@ -307,13 +262,13 @@
 
 
                     <!-- New Password (admin nhập để đổi, sẽ được hash MD5 ở servlet) -->
-                    <div class="form-row">
+<!--                    <div class="form-row">
                         <div class="form-group">
                             <label>New Password</label>
                             <input type="password" name="password"
                                    placeholder="Leave blank to keep current password" />
                         </div>
-                    </div>
+                    </div>-->
 
 
                     <!-- Address -->
