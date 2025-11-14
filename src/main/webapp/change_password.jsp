@@ -81,13 +81,13 @@
             <h2>Change Password</h2>
             <form action="change_password" method="post">
                 <label>Old Password</label>
-                <input type="password" name="oldPassword" required>
+                <input type="password" name="oldPassword" >
 
                 <label>New Password</label>
-                <input type="password" name="newPassword" required>
+                <input type="password" name="newPassword" >
 
                 <label>Confirm New Password</label>
-                <input type="password" name="confirmPassword" required>
+                <input type="password" name="confirmPassword" >
 
                 <button type="submit">Update Password</button>
                 <a class="link" href="<%= cancelLink %>">Cancel</a>

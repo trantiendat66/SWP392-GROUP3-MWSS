@@ -19,7 +19,6 @@ import model.Staff;
  *
  * @author hau
  */
-
 @WebServlet(name = "EditStaffProfileServlet", urlPatterns = {"/edit_staff_profile"})
 public class EditStaffProfileServlet extends HttpServlet {
 
@@ -74,7 +73,6 @@ public class EditStaffProfileServlet extends HttpServlet {
         request.setAttribute("staff", staff);
         request.getRequestDispatcher("/edit_staff_profile.jsp").forward(request, response);
     }
-    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -87,7 +85,7 @@ public class EditStaffProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession(false);
         Staff loggedInStaff = (Staff) session.getAttribute("staff");
@@ -95,7 +93,6 @@ public class EditStaffProfileServlet extends HttpServlet {
         Staff s = dao.getStaffById(loggedInStaff.getAccountId());
 
         // ===== VALIDATE INPUT =====
-
         String phone = request.getParameter("phone");
         if (phone == null || !phone.matches("^0\\d{9}$")) {
             request.setAttribute("phoneError", "Phone must be exactly 10 digits and only numbers.");
@@ -120,14 +117,27 @@ public class EditStaffProfileServlet extends HttpServlet {
             return;
         }
 
+        boolean noChange = phone.equals(s.getPhone()) && email.equals(s.getEmail()) && address.equals(s.getAddress());
+
+
+        if (noChange) {
+            request.setAttribute("noChangeError", "You must change at least one field before updating.");
+            request.setAttribute("staff", s);
+            request.getRequestDispatcher("edit_staff_profile.jsp").forward(request, response);
+            return;
+        }
+
         // ====== UPDATE DATA ======
         s.setPhone(phone);
         s.setEmail(email);
         s.setAddress(address);
 
         boolean ok = dao.updateStaff(s);
-        if (ok) session.setAttribute("updateStatus", "success");
-        else session.setAttribute("updateStatus", "error");
+        if (ok) {
+            session.setAttribute("updateStatus", "success");
+        } else {
+            session.setAttribute("updateStatus", "error");
+        }
 
         session.setAttribute("staff", s);
         response.sendRedirect(request.getContextPath() + "/staff_profile");

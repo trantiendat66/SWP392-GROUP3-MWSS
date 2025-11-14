@@ -14,9 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import java.nio.file.Paths;
 import java.sql.Date;
 import model.Customer;
 
@@ -169,17 +166,23 @@ public class EditProfileServlet extends HttpServlet {
         String genderParam = request.getParameter("gender");
         String image = request.getParameter("image");
 
-        Part filePart = request.getPart("image");
-        String fileName = null;
-        if (filePart != null && filePart.getSize() > 0) {
-            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        }
-        String uploadPath = "C:\\Users\\HP\\SWP392-GROUP3-MWSS\\src\\main\\webapp\\assert\\avatar";
+        // Check không thay đổi gì
+        boolean noChange
+                = customer_name.equals(c.getCustomer_name())
+                && phone.equals(c.getPhone())
+                && email.equals(c.getEmail())
+                && address.equals(c.getAddress())
+                && genderParam.equalsIgnoreCase(c.getGender())
+                && dateOfBirthStr.equals(c.getDob().toString());
 
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
+// Nếu không có gì thay đổi → báo lỗi
+        if (noChange) {
+            request.setAttribute("noChangeError", "You must change at least one field before updating.");
+            request.setAttribute("customer", c);
+            request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
+            return;
         }
+
         Date dob = null;
         if (dateOfBirthStr != null && !dateOfBirthStr.isEmpty()) {
             try {
@@ -210,20 +213,9 @@ public class EditProfileServlet extends HttpServlet {
                 genderValue = "1";
             }
             c.setGender(genderValue);
-            if (fileName != null && !fileName.isEmpty()) {
-                // Có upload ảnh mới
-                filePart.write(uploadPath + File.separator + fileName);
-                c.setImage("assert/avatar/" + fileName);
-            } else {
-                // Không upload ảnh mới
-                if (c.getImage() == null || c.getImage().trim().isEmpty()) {
-                    // Nếu chưa có ảnh trong DB → gán ảnh mặc định
-                    c.setImage("assert/avatar/avatar_md.jpg");
-                } else {
-                    // Nếu đã có ảnh cũ → giữ nguyên
-                    c.setImage(c.getImage());
-                }
-            }
+
+            c.setImage("assert/avatar/avatar_md.jpg");
+
             // Chỉ Admin mới được đổi trạng thái tài khoản
             if (staff != null && "Admin".equalsIgnoreCase(staff.getRole())) {
                 String accountStatus = request.getParameter("account_status"); // từ <select name="account_status">

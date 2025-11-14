@@ -143,6 +143,15 @@
                     <a href="<%= ctx%>/orders?tab=placed" class="btn btn-order">Order History</a>
                     <a href="<%= ctx%>/home" class="btn btn-back">Back</a>
                 </div>
+                <% 
+    String msg = (String) session.getAttribute("successMessage");
+    if (msg != null) { 
+%>
+    <p style="color:green; margin-bottom:10px;"><%= msg %></p>
+<%
+        session.removeAttribute("successMessage"); 
+    }
+%>
             </div>
         </div>
 

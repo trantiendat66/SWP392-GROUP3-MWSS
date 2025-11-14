@@ -96,6 +96,9 @@
 
                 <button type="submit" class="btn btn-save">Save</button>
                 <a href="<%=ctx%>/staff_profile" class="btn btn-cancel">Cancel</a>
+                        <% if (request.getAttribute("noChangeError") != null) { %>
+    <p class="error"><%= request.getAttribute("noChangeError") %></p>
+<% } %>
             </form>
         </div>
     </body>

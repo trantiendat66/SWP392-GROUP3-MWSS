@@ -253,3 +253,6 @@
         });
     });
 </script>
+<div class="mt-3 mb-3 text-end">
+    <a href="profile" class="btn btn-secondary">Back</a>
+</div>

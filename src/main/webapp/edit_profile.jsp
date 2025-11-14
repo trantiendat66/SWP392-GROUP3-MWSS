@@ -149,33 +149,6 @@
                     <option value="Inactive" <%= ("Inactive".equalsIgnoreCase(c.getAccount_status()) ? "selected" : "")%>>Inactive</option>
                 </select>
                 <% } %>
-
-                <%
-                    String avatarPath;
-                    if (c != null && c.getImage() != null && !c.getImage().isEmpty()) {
-
-                        if (c.getImage().startsWith("http")) {
-                            avatarPath = c.getImage();
-                        } else {
-                            avatarPath = ctx + "/" + c.getImage();
-                        }
-                    } else {
-                        avatarPath = ctx + "/assert/avatar/avatar_md.jpg";
-                    }
-                    String avatarWithVersion = avatarPath + "?v=" + System.currentTimeMillis();
-                %>
-                <label>Avatar (Upload)</label>
-                <input type="file" name="image" accept="image/*" onchange="previewImage(event)">
-                <img id="preview" class="avatar-preview" src="<%=avatarWithVersion%>">
-                <script>
-                    function previewImage(event) {
-                        const reader = new FileReader();
-                        reader.onload = function () {
-                            document.getElementById('preview').src = reader.result;
-                        };
-                        reader.readAsDataURL(event.target.files[0]);
-                    }
-                </script>
                 <div>
                     <button type="submit" class="btn btn-save">Save</button>
 
@@ -185,6 +158,10 @@
                     <a href="<%= ctx%>/profile" class="btn btn-cancel">Cancel</a>
                     <% }%>
                 </div>
+                <% if (request.getAttribute("noChangeError") != null) { %>
+    <p class="error"><%= request.getAttribute("noChangeError") %></p>
+<% } %>
+
             </form>
         </div>
     </body>

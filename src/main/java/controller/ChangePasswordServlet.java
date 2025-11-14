@@ -86,6 +86,15 @@ public class ChangePasswordServlet extends HttpServlet {
         String oldPass = request.getParameter("oldPassword");
         String newPass = request.getParameter("newPassword");
         String confirmPass = request.getParameter("confirmPassword");
+        
+         if (oldPass == null || oldPass.trim().isEmpty()
+            || newPass == null || newPass.trim().isEmpty()
+            || confirmPass == null || confirmPass.trim().isEmpty()) {
+
+        request.setAttribute("error", "All fields are required.");
+        request.getRequestDispatcher("change_password.jsp").forward(request, response);
+        return;
+    }
 
         // Kiểm tra Customer
         if (c != null) {
@@ -105,6 +114,8 @@ public class ChangePasswordServlet extends HttpServlet {
             // Mã hóa mật khẩu mới
             String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
             dao.updatePasswordById(c.getCustomer_id(), newPassMD5);
+            HttpSession ses = request.getSession();
+ses.setAttribute("successMessage", "Password updated successfully!");
             response.sendRedirect("profile");
             return;
         }
@@ -127,6 +138,8 @@ public class ChangePasswordServlet extends HttpServlet {
             // Mã hóa mật khẩu mới
             String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
             sdao.updatePasswordById(s.getAccountId(), newPassMD5);
+            HttpSession ses = request.getSession();
+ses.setAttribute("successMessage", "Password updated successfully!");
             response.sendRedirect("staff_profile");
             return;
         }
