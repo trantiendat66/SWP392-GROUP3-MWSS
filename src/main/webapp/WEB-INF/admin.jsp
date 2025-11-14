@@ -1013,7 +1013,7 @@
 <script>
     let currentOrderId = null;
     let currentRow = null;
-
+    let modal = null;
     document.querySelectorAll('.icon.edit').forEach(function (editBtn) {
         editBtn.addEventListener('click', function (e) {
             const orderId = this.value;
@@ -1023,7 +1023,7 @@
             const select = document.getElementById('order-status');
             select.value = status;
 
-            const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+            modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
             currentRow = $(this).closest("tr");
             currentOrderId = currentRow.data("id");
             modal.show();
@@ -1044,6 +1044,7 @@
                     // ✅ Cập nhật UI ngay tại chỗ
                     currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
                     alert("Cập nhật thành công!");
+                    modal.hide();
                 } else {
                     alert("Lỗi khi cập nhật!");
                 }

@@ -490,7 +490,7 @@
                                                         <td><div class="right-actions">
                                                                 <form action="orderdetail">
                                                                     <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
-                                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa">✏️</button>
+                                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa" ${o.order_status == 'DELIVERED' ? "disabled" : ""}>✏️</button> 
                                                                 </form>
                                                             </div></td>
                                                     </tr>
@@ -624,6 +624,7 @@
         <script>
             let currentOrderId = null;
             let currentRow = null;
+            let modal = null;
 
             document.querySelectorAll('.icon.edit').forEach(function (editBtn) {
                 editBtn.addEventListener('click', function (e) {
@@ -634,7 +635,7 @@
                     const select = document.getElementById('order-status');
                     select.value = status;
 
-                    const modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
+                    modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
                     currentRow = $(this).closest("tr");
                     currentOrderId = currentRow.data("id");
                     modal.show();
@@ -652,6 +653,7 @@
                         if (response.success) {
                             currentRow.find(".status-order").removeClass("pending shipping delivered cancelled").addClass(response.orderStatus.toLowerCase()).text(response.orderStatus);
                             alert("Cập nhật thành công!");
+                            modal.hide();
                         } else {
                             alert("Lỗi khi cập nhật!");
                         }
@@ -661,6 +663,29 @@
                     }
                 });
             });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const statusSelect = document.getElementById("order-status");
+                let previousValue = statusSelect.value; // Lưu trạng thái cũ
+
+                statusSelect.addEventListener("change", function () {
+                    const newValue = this.value;
+
+                    if (newValue === "DELIVERED") {
+                        const confirmResult = confirm("Bạn có chắc chắn muốn đánh dấu đơn hàng là DELIVERED không?");
+
+                        if (!confirmResult) {
+                            // Hoàn tác, quay lại trạng thái cũ
+                            this.value = previousValue;
+                            return;
+                        }
+                    }
+
+                    // Cập nhật trạng thái mới
+                    previousValue = newValue;
+                });
+            });
+
         </script>
         <script>
             document.querySelectorAll('.nav-item').forEach(item => {
