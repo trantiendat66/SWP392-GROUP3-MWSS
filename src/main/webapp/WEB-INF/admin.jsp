@@ -551,12 +551,12 @@
                                             <p><strong>Full Name:</strong> ${c.customer_name}</p>
                                             <p><strong>Email:</strong> ${c.email}</p>
                                             <p><strong>Phone:</strong> ${c.phone}</p>
-                                            <p><strong>Date of Birth:</strong> ${c.dob}</p>
+                                            
                                         </div>
                                         <div class="col-sm-6">
+                                            <p><strong>Date of Birth:</strong> ${c.dob}</p>
                                             <p><strong>Address:</strong> ${c.address}</p>
-                                            <p><strong>Gender:</strong> ${c.gender}</p>
-                                            <p><strong>Status:</strong> ${c.account_status}</p>
+                                            <p><strong>Gender:</strong> ${c.gender}</p>                                           
                                         </div>
                                     </div>
                                     <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
