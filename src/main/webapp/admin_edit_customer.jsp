@@ -1,4 +1,4 @@
-<%-- 
+f<%-- 
     Document   : admin_edit_customer
     Created on : Nov 14, 2025, 3:28:15 PM
     Author     : Cola
@@ -214,15 +214,9 @@
                 <div class="page-title">
                     Edit Customer
                 </div>
-                <a href="<%=ctx%>/admin/customerlist" class="btn btn-secondary btn-link">
-                    ← Back to Customer List
-                </a>
             </div>
 
             <div class="card">
-                <div class="card-title">
-                    Basic Information
-                </div>
                 <form method="post" action="<%=ctx%>/edit_customer">
                     <input type="hidden" name="customerID"
                            value="<%= (customer != null ? customer.getCustomer_id() : "")%>" />
