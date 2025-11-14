@@ -99,11 +99,13 @@
                                                             <c:when test="${fb.can_edit}">
                                                                 <%-- Show Edit and Delete buttons --%>
                                                                 <div class="btn-group-vertical btn-group-sm" role="group">
-                                                                    <a href="${ctx}/feedback/edit?id=${fb.feedback_id}" 
-                                                                       class="btn btn-sm btn-outline-warning" 
-                                                                       title="Edit your review">
+                                                                    <button type="button"
+                                                                            class="btn btn-sm btn-outline-warning" 
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#fbEditModal-${fb.feedback_id}"
+                                                                            title="Edit your review">
                                                                         <i class="bi bi-pencil-square"></i> Edit
-                                                                    </a>
+                                                                    </button>
                                                                     <form action="${ctx}/feedback/delete" method="post" 
                                                                           style="display:inline;"
                                                                           onsubmit="return confirm('Are you sure you want to delete this review?');">
@@ -112,6 +114,58 @@
                                                                             <i class="bi bi-trash"></i> Delete
                                                                         </button>
                                                                     </form>
+                                                                </div>
+                                                                
+                                                                <%-- Edit Modal --%>
+                                                                <div class="modal fade" id="fbEditModal-${fb.feedback_id}" tabindex="-1" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title">Edit Your Feedback</h5>
+                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                            </div>
+
+                                                                            <div class="modal-body">
+                                                                                <form action="${ctx}/feedback/edit" method="post" class="feedback-form">
+                                                                                    <input type="hidden" name="feedback_id" value="${fb.feedback_id}">
+
+                                                                                    <!-- Rating -->
+                                                                                    <div class="mb-3 text-start">
+                                                                                        <label class="form-label mb-2">Rating</label>
+
+                                                                                        <%-- star picker: 1 row of stars, click to select rating --%>
+                                                                                        <div class="momo-stars" dir="rtl">
+                                                                                            <c:set var="__edit_suf" value="edit-${fb.feedback_id}" />
+                                                                                            <input type="radio" name="rating" id="s5-${__edit_suf}" value="5" ${fb.rating == 5 ? 'checked' : ''}>
+                                                                                            <label for="s5-${__edit_suf}" title="5 stars">★</label>
+
+                                                                                            <input type="radio" name="rating" id="s4-${__edit_suf}" value="4" ${fb.rating == 4 ? 'checked' : ''}>
+                                                                                            <label for="s4-${__edit_suf}" title="4 stars">★</label>
+
+                                                                                            <input type="radio" name="rating" id="s3-${__edit_suf}" value="3" ${fb.rating == 3 ? 'checked' : ''}>
+                                                                                            <label for="s3-${__edit_suf}" title="3 stars">★</label>
+
+                                                                                            <input type="radio" name="rating" id="s2-${__edit_suf}" value="2" ${fb.rating == 2 ? 'checked' : ''}>
+                                                                                            <label for="s2-${__edit_suf}" title="2 stars">★</label>
+
+                                                                                            <input type="radio" name="rating" id="s1-${__edit_suf}" value="1" ${fb.rating == 1 ? 'checked' : ''}>
+                                                                                            <label for="s1-${__edit_suf}" title="1 star">★</label>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="mb-2 text-start">
+                                                                                        <label class="form-label fw-semibold d-block text-start mb-2">Comment</label>
+                                                                                        <textarea name="comment" class="form-control fb-comment" rows="4"
+                                                                                                  placeholder="Enter your review (optional – please type in Vietnamese with diacritics)…">${fb.comment}</textarea>
+                                                                                        <div class="form-text text-danger d-none comment-help"></div>
+                                                                                    </div>
+
+                                                                                    <button type="submit" class="btn btn-primary">Update Feedback</button>
+                                                                                </form>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </c:when>
                                                             <c:otherwise>
