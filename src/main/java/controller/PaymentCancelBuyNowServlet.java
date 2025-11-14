@@ -50,14 +50,14 @@ public class PaymentCancelBuyNowServlet extends HttpServlet {
                     int stock = product.getQuantityProduct();
                     int remaining = stock - already;
                     if (remaining <= 0) {
-                        session.setAttribute("flash_success", "Buy-now canceled. Cart already has maximum stock (" + already + ").");
+                        session.setAttribute("flash_success", "Cart already has maximum stock (" + already + ").");
                     } else {
                         int addQty = Math.min(qty, remaining);
                         cartDAO.addToCart(cus.getCustomer_id(), pid, product.getPrice(), addQty);
                         if (addQty < qty) {
-                            session.setAttribute("flash_success", "Buy-now canceled. Added only " + addQty + " item(s) due to stock limit (now " + (already + addQty) + ").");
+                            session.setAttribute("flash_success", "Added only " + addQty + " item(s) due to stock limit (now " + (already + addQty) + ").");
                         } else {
-                            session.setAttribute("flash_success", "Buy-now canceled. Added " + addQty + " item(s) to cart (now " + (already + addQty) + ").");
+                            session.setAttribute("flash_success", "Added " + addQty + " item(s) to cart (now " + (already + addQty) + ").");
                         }
                     }
                 }
