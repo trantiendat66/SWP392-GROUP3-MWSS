@@ -123,6 +123,22 @@
                 <a href="<%= ctx%>/staffcontrol" class="btn btn-back">Back</a>
             </div>
         </div>
+            <% 
+    String successMessage = (String) session.getAttribute("successMessage");
+    if (successMessage != null) {
+        session.removeAttribute("successMessage");
+%>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: '<%= successMessage %>',
+        timer: 2000,
+        showConfirmButton: false
+    });
+</script>
+<% } %>
+
 
         <% String updateStatus = (String) session.getAttribute("updateStatus");
         if (updateStatus != null) {

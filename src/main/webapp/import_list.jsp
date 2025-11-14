@@ -30,6 +30,14 @@
             </tr>
         </thead>
         <tbody>
+            <c:if test="${empty importList}">
+                <tr>
+                    <td colspan="7" class="text-center text-danger fw-bold">
+                        No import receipt
+                    </td>
+                </tr>
+            </c:if>
+
             <c:forEach var="i" items="${importList}">
                 <tr>
                     <td>${i.importInvetoryId}</td>
