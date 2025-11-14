@@ -37,10 +37,26 @@
             <div class="container">
 
                 <!-- Left: logo -->
-                <a class="navbar-brand d-flex align-items-center me-3" href="${pageContext.request.contextPath}/home">
-                    <img src="${pageContext.request.contextPath}/assert/image/logo.jpg" alt="WatchStore" class="logo-icon me-2">
-                    <span class="d-none d-lg-inline logo-text"><strong>Watch<span class="logo-accent">Shop</span></strong></span>
-                </a>
+                <c:choose>
+
+                    <c:when test="${not empty sessionScope.staff}">
+                        <div class="navbar-brand d-flex align-items-center me-3">
+                            <img src="${pageContext.request.contextPath}/assert/image/logo.jpg" alt="WatchStore" class="logo-icon me-2">
+                            <span class="d-none d-lg-inline logo-text">
+                                <strong>Watch<span class="logo-accent">Shop</span></strong>
+                            </span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="navbar-brand d-flex align-items-center me-3"
+                           href="${pageContext.request.contextPath}/home">
+                            <img src="${pageContext.request.contextPath}/assert/image/logo.jpg" alt="WatchStore" class="logo-icon me-2">
+                            <span class="d-none d-lg-inline logo-text">
+                                <strong>Watch<span class="logo-accent">Shop</span></strong>
+                            </span>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
 
                 <!-- Toggler cho mobile -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"

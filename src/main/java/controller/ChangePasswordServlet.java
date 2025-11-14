@@ -122,7 +122,7 @@ public class ChangePasswordServlet extends HttpServlet {
             String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
             dao.updatePasswordById(c.getCustomer_id(), newPassMD5);
             HttpSession ses = request.getSession();
-ses.setAttribute("successMessage", "Password updated successfully!");
+            ses.setAttribute("successMessage", "Password updated successfully!");
             response.sendRedirect("profile");
             return;
         }
@@ -152,7 +152,7 @@ ses.setAttribute("successMessage", "Password updated successfully!");
             String newPassMD5 = MD5PasswordHasher.hashPassword(newPass);
             sdao.updatePasswordById(s.getAccountId(), newPassMD5);
             HttpSession ses = request.getSession();
-ses.setAttribute("successMessage", "Password updated successfully!");
+            ses.setAttribute("successMessage", "Password updated successfully!");
             response.sendRedirect("staff_profile");
             return;
         }
