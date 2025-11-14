@@ -95,7 +95,7 @@ public class ProductAddServlet extends HttpServlet {
             String quantityStr = request.getParameter("quantity_product");
             String categoryStr = request.getParameter("category_id");
 
-            int import_invetory_Id = 1;
+            int import_invetory_Id = 0;
             ///chưa tạo chức năng nhập hàng gán đùng đỡ
 
             String image = request.getParameter("image");

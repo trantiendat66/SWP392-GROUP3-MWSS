@@ -82,10 +82,10 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Account ID</label>
-                        <input type="number" name="account_id" class="form-control" value="${product.accountId}">
-                        <c:if test="${not empty errors.accountError}">
-                            <div class="text-danger small mt-1">${errors.accountError}</div>
+                        <label class="form-label">Import Inventory ID</label>
+                        <input type="number" name="import_inventory_id" class="form-control" value="${product.importInvetoryId}">
+                        <c:if test="${not empty errors.importInvetoryError}">
+                            <div class="text-danger small mt-1">${errors.importInvetoryError}</div>
                         </c:if>
                     </div>
                     <div class="col-md-4">

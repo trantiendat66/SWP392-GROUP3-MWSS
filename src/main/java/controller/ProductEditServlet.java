@@ -114,7 +114,7 @@ public class ProductEditServlet extends HttpServlet {
         String priceStr = trim(request.getParameter("price"));
         String quantityStr = trim(request.getParameter("quantity_product"));
         String categoryStr = trim(request.getParameter("category_id"));
-        String importStr = trim(request.getParameter("account_id"));
+        String importStr = trim(request.getParameter("import_inventory_id"));
         ///chưa tạo chức năng nhập hàng gán đùng đỡ, thay account_id này thành import_invetory_id
         String image = trim(request.getParameter("image"));
         String description = trim(request.getParameter("description"));
@@ -177,7 +177,7 @@ public class ProductEditServlet extends HttpServlet {
             errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
         }
 
-        int price = 0, quantity = 0, categoryId = 0, accountId = 0;
+        int price = 0, quantity = 0, categoryId = 0, importInvetoryId = 0;
         boolean gender = "true".equalsIgnoreCase(genderParam);
 
         try {
@@ -208,9 +208,9 @@ public class ProductEditServlet extends HttpServlet {
         }
 
         try {
-            accountId = Integer.parseInt(importStr);
+            importInvetoryId = Integer.parseInt(importStr);
             ///chưa tạo chức năng nhập hàng gán đùng đỡ
-            if (accountId <= 0) {
+            if (importInvetoryId <= 0) {
                 errors.put("accountError", "Account ID cannot be negative");
             }
         } catch (NumberFormatException e) {
@@ -228,7 +228,7 @@ public class ProductEditServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setImportInvetoryId(accountId);
+            p.setImportInvetoryId(importInvetoryId);
             ///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
@@ -260,7 +260,7 @@ public class ProductEditServlet extends HttpServlet {
             p.setPrice(price);
             p.setQuantityProduct(quantity);
             p.setCategoryId(categoryId);
-            p.setImportInvetoryId(accountId);///chưa tạo chức năng nhập hàng gán đùng đỡ
+            p.setImportInvetoryId(importInvetoryId);///chưa tạo chức năng nhập hàng gán đùng đỡ
             p.setImage(image);
             p.setDescription(description);
             p.setWarranty(warranty);
