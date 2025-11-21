@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import model.Category;
 import model.Product;
 
 /**
@@ -64,9 +66,11 @@ public class ProductAddServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Hiển thị trang thêm sản phẩm
+        ProductDAO pdao = new ProductDAO();
+        List<Category> categories = pdao.getAllCategories();
+        request.setAttribute("categories", categories);
         RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
         rd.forward(request, response);
-
     }
 
     /**
@@ -84,6 +88,7 @@ public class ProductAddServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         Map<String, String> errors = new HashMap<>();
+        ProductDAO pdao = new ProductDAO();
         try {
 
             String productName = request.getParameter("product_name");
@@ -93,7 +98,7 @@ public class ProductAddServlet extends HttpServlet {
             boolean gender = "1".equals(genderParam) || "true".equalsIgnoreCase(genderParam);
             String priceStr = request.getParameter("price");
             String quantityStr = request.getParameter("quantity_product");
-            String categoryStr = request.getParameter("category_id");
+            String categoryStr = request.getParameter("categoryid");
             String image = request.getParameter("image");
             String description = request.getParameter("description");
             String warranty = request.getParameter("warranty");
@@ -124,9 +129,6 @@ public class ProductAddServlet extends HttpServlet {
             if (categoryStr == null || categoryStr.trim().isEmpty()) {
                 errors.put("categoryError", "Category cannot be left blank."); // Danh mục không được để trống.
             }
-            if (image == null || image.trim().isEmpty()) {
-                errors.put("imageError", "Please enter the image name or path."); // Vui lòng nhập tên hoặc đường dẫn hình ảnh.
-            }
             if (description == null || description.trim().isEmpty()) {
                 errors.put("descriptionError", "Description cannot be left blank."); // Mô tả không được để trống.
             }
@@ -154,6 +156,8 @@ public class ProductAddServlet extends HttpServlet {
 
             // 🟥 Nếu có bất kỳ lỗi rỗng nào → quay lại form
             if (!errors.isEmpty()) {
+                List<Category> categories = pdao.getAllCategories();
+                request.setAttribute("categories", categories);
                 request.setAttribute("errors", errors);
                 RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
                 rd.forward(request, response);
@@ -187,6 +191,8 @@ public class ProductAddServlet extends HttpServlet {
 
             // If there are logic errors, return to the form
             if (!errors.isEmpty()) {
+                List<Category> categories = pdao.getAllCategories();
+                request.setAttribute("categories", categories);
                 request.setAttribute("errors", errors);
                 RequestDispatcher rd = request.getRequestDispatcher("/add_product.jsp");
                 rd.forward(request, response);

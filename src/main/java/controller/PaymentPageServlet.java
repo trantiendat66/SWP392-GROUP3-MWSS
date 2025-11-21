@@ -29,7 +29,7 @@ public class PaymentPageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         System.out.println("=== PaymentPageServlet: doGet called ===");
-        
+
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("customer") == null) {
             System.out.println("Session null or customer not logged in");
@@ -46,7 +46,7 @@ public class PaymentPageServlet extends HttpServlet {
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
             String bnParam = req.getParameter("bn");
             boolean isBuyNow = "1".equals(bnParam) && bnPid != null && bnQty != null && bnQty > 0;
-            
+
             System.out.println("bn_pid from session: " + bnPid);
             System.out.println("bn_qty from session: " + bnQty);
 
@@ -107,7 +107,7 @@ public class PaymentPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
+
         // Xử lý cập nhật buy-now quantity
         String action = req.getParameter("action");
         if ("update-buynow-qty".equals(action)) {
@@ -145,15 +145,23 @@ public class PaymentPageServlet extends HttpServlet {
 
                 // Cập nhật số lượng trong session
                 session.setAttribute("bn_qty", newQty);
-                
+
                 // Tính lại tổng tiền
-                ProductDAO productDAO = new ProductDAO();
-                Product product = productDAO.getProductById(bnPid);
-                int price = productDAO.getCurrentPrice(bnPid);
-                int totalAmount = price * newQty;
-                
-                resp.setContentType("application/json");
-                resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\", \"totalAmount\": " + totalAmount + "}");
+                try {
+                    int price = productDAO.getCurrentPrice(bnPid);
+                    int totalAmount = price * newQty;
+
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\", \"totalAmount\": " + totalAmount + "}");
+                } catch (SQLException e) {
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    resp.setContentType("application/json");
+                    resp.getWriter().write("{\"success\": false, \"message\": \"Database error\"}");
+                    e.printStackTrace();
+                }
+
+//                resp.setContentType("application/json");
+//                resp.getWriter().write("{\"success\": true, \"message\": \"Quantity updated\", \"totalAmount\": " + totalAmount + "}");
             } catch (NumberFormatException e) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 resp.setContentType("application/json");
@@ -161,7 +169,7 @@ public class PaymentPageServlet extends HttpServlet {
             }
             return;
         }
-        
+
         // Nếu không phải action update-buynow-qty, redirect về GET
         doGet(req, resp);
     }

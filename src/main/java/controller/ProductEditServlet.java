@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import model.Category;
 import model.Product;
 
 /**
@@ -64,6 +66,9 @@ public class ProductEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("id");
+        ProductDAO pdao = new ProductDAO();
+        List<Category> categories = pdao.getAllCategories();
+        request.setAttribute("categories", categories);
         if (idParam == null) {
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;

@@ -160,7 +160,16 @@
                         <!-- Supplier -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">Supplier:</label>
-                            <input type="text" name="supplier" class="form-control" placeholder="Enter supplier name" required>
+                            <select name="supplierId" class="form-control" required>
+                                <option value="" disabled selected>-- Select Supplier --</option>
+                                <option value="1">DWatch Authentic</option>
+                                <option value="2">Đăng Quang Watch</option>
+                                <option value="3">Boss Luxury</option>
+                                <option value="4">Galle Watch</option>
+                                <option value="5">PNJ Watch4</option>
+                            </select>
+
+                            <!--                            <input type="text" name="supplier" class="form-control" placeholder="Enter supplier name" required>-->
                         </div>
 
                         <!-- Table sản phẩm -->

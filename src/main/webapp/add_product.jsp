@@ -60,8 +60,15 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">Category ID</label>
-                        <input type="number" name="category_id" class="form-control" value="${param.category_id}">
+                        <label class="form-label fw-bold">Category</label>
+                        <select name="categoryid" class="form-control">
+                            <option value="">-- Select Category --</option>
+                            <c:forEach var="c" items="${categories}">
+                                <option value="${c.id}">${c.name}</option>
+                            </c:forEach>
+                        </select>
+
+
                         <c:if test="${not empty errors.categoryError}">
                             <div class="text-danger small mt-1">${errors.categoryError}</div>
                         </c:if>
@@ -81,9 +88,6 @@
                     <div class="col-md-8">
                         <label class="form-label fw-bold">Image (filename or URL)</label>
                         <input type="text" name="image" class="form-control" placeholder="e.g. product1.jpg"value="${param.image}">
-                        <c:if test="${not empty errors.imageError}">
-                            <div class="text-danger small mt-1">${errors.imageError}</div>
-                        </c:if>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Quantity</label>

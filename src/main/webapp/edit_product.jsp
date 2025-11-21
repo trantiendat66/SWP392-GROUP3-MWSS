@@ -66,7 +66,11 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Category ID</label>
-                        <input type="number" name="category_id" class="form-control" value="${product.categoryId}">
+                         <select name="category_id" class="form-select">
+                            <c:forEach var="c" items="${categories}">
+                                <option value="${c.id}" ${c.id == product.categoryId ? 'selected' : ''}>${c.name}</option>
+                            </c:forEach>
+                        </select>
                         <c:if test="${not empty errors.categoryError}">
                             <div class="text-danger small mt-1">${errors.categoryError}</div>
                         </c:if>
