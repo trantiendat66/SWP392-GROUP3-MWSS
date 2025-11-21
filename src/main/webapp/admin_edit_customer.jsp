@@ -1,4 +1,4 @@
-f<%-- 
+<%-- 
     Document   : admin_edit_customer
     Created on : Nov 14, 2025, 3:28:15 PM
     Author     : Cola
@@ -33,6 +33,7 @@ f<%--
         max-width: 1500px;
         margin: 0 auto;
         overflow: hidden;
+        min-height: calc(100vh - 455px);
     }
     .sidebar {
         width: 300px;
@@ -221,78 +222,12 @@ f<%--
                     <input type="hidden" name="customerID"
                            value="<%= (customer != null ? customer.getCustomer_id() : "")%>" />
 
-                    <!-- Name -->
+                    <!-- New Password -->
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>User Name</label>
-                            <input type="text" name="customer_name"
-                                   value="<%= (customer != null ? customer.getCustomer_name() : "")%>" />
-                            <% if (request.getAttribute("nameError") != null) {%>
-                            <div class="error"><%= request.getAttribute("nameError")%></div>
-                            <% }%>
-                        </div>
-                    </div>
-
-                    <!-- Phone + Email -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" name="phone"
-                                   value="<%= (customer != null ? customer.getPhone() : "")%>"/>
-                            <% if (request.getAttribute("phoneError") != null) {%>
-                            <div class="error"><%= request.getAttribute("phoneError")%></div>
-                            <% }%>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email"
-                                   value="<%= (customer != null ? customer.getEmail() : "")%>" />
-                            <% if (request.getAttribute("emailError") != null) {%>
-                            <div class="error"><%= request.getAttribute("emailError")%></div>
-                            <% }%>
-                        </div>
-                    </div>
-
-
-
-                    <!-- New Password (admin nhập để đổi, sẽ được hash MD5 ở servlet) -->
-<!--                    <div class="form-row">
                         <div class="form-group">
                             <label>New Password</label>
                             <input type="password" name="password"
                                    placeholder="Leave blank to keep current password" />
-                        </div>
-                    </div>-->
-
-
-                    <!-- Address -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input type="text" name="address"
-                                   value="<%= (customer != null ? customer.getAddress() : "")%>" />
-                            <% if (request.getAttribute("addressError") != null) {%>
-                            <div class="error"><%= request.getAttribute("addressError")%></div>
-                            <% }%>
-                        </div>
-                    </div>
-
-                    <!-- DOB + Gender -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Date of Birth</label>
-                            <input type="date" name="dob"
-                                   value="<%= (customer != null && customer.getDob() != null ? customer.getDob().toString() : "")%>"/>
-                            <% if (request.getAttribute("dobError") != null) {%>
-                            <div class="error"><%= request.getAttribute("dobError")%></div>
-                            <% }%>
-                        </div>
-                        <div class="form-group">
-                            <label>Gender</label>
-                            <select name="gender">
-                                <option value="Male"  <%= (customer != null && "0".equals(customer.getGender()) ? "selected" : "")%>>Male</option>
-                                <option value="Female" <%= (customer != null && "1".equals(customer.getGender()) ? "selected" : "")%>>Female</option>
-                            </select>
                         </div>
                     </div>
 
@@ -310,6 +245,9 @@ f<%--
                                     Inactive
                                 </option>
                             </select>
+                            <% if (request.getAttribute("statusError") != null) {%>
+                            <div class="error"><%= request.getAttribute("statusError")%></div>
+                            <% }%>
                         </div>
                     </div>
 
@@ -318,6 +256,7 @@ f<%--
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
+
             </div>
         </main>
     </div>
@@ -335,6 +274,4 @@ f<%--
         }
     });
 </script>
-
-
 <jsp:include page="/WEB-INF/include/footer.jsp" />
