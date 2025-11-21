@@ -272,4 +272,35 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
+    public boolean updateCustomerStatusAndPassword(int customerId, String hashedPassword, String status) {
+        // Nếu có truyền mật khẩu mới -> update cả status + password
+        // Nếu không truyền mật khẩu (hashedPassword == null) -> chỉ update status
+
+        String sql;
+        boolean updatePassword = (hashedPassword != null && !hashedPassword.trim().isEmpty());
+
+        if (updatePassword) {
+            sql = "UPDATE Customer SET account_status = ?, password = ? WHERE customer_id = ?";
+        } else {
+            sql = "UPDATE Customer SET account_status = ? WHERE customer_id = ?";
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+
+            if (updatePassword) {
+                ps.setString(2, hashedPassword);
+                ps.setInt(3, customerId);
+            } else {
+                ps.setInt(2, customerId);
+            }
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
