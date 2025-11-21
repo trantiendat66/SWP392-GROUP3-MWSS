@@ -5,6 +5,7 @@ package controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 import dao.CustomerDAO;
+import hashpw.MD5PasswordHasher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -108,8 +109,8 @@ public class EditCustomerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        String view = "/admin_edit_customer.jsp";
 
+        // 1. Check login + quyền Admin
         HttpSession session = request.getSession(false);
         if (session == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -124,83 +125,49 @@ public class EditCustomerServlet extends HttpServlet {
 
         CustomerDAO dao = new CustomerDAO();
 
+        // 2. Lấy id customer từ form
         String idFromForm = request.getParameter("customerID");
         if (idFromForm == null || idFromForm.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/admin/customerlist");
             return;
         }
 
-        Customer c = dao.getCustomerById(Integer.parseInt(idFromForm));
+        int customerId = Integer.parseInt(idFromForm);
+        Customer c = dao.getCustomerById(customerId);
         if (c == null) {
             response.sendRedirect(request.getContextPath() + "/admin/customerlist");
             return;
         }
 
-        String customer_name = request.getParameter("customer_name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String dateOfBirthStr = request.getParameter("dob");
-        String genderParam = request.getParameter("gender");
+        // 3. Chỉ lấy 2 field: status + password
         String accountStatus = request.getParameter("account_status");
+        String rawPassword = request.getParameter("password");
 
-        c.setCustomer_name(customer_name);
-        c.setPhone(phone);
-        c.setEmail(email);
-        c.setAddress(address);
-        c.setAccount_status(accountStatus);
-
-        if ("Male".equalsIgnoreCase(genderParam)) {
-            c.setGender("0");
-        } else if ("Female".equalsIgnoreCase(genderParam)) {
-            c.setGender("1");
-        }
-
-        boolean hasError = false;
-
-        if (customer_name == null || !customer_name.matches("[a-zA-Z\\s]+")) {
-            request.setAttribute("nameError", "Name can only contain letters.");
-            hasError = true;
-        }
-
-        if (phone == null || !phone.matches("^0\\d{9}$")) {
-            request.setAttribute("phoneError", "Phone must be exactly 10 digits and only numbers.");
-            hasError = true;
-        }
-
-        if (email == null || !email.matches("^[\\w._%+-]+@gmail\\.com$")) {
-            request.setAttribute("emailError",
-                    "Email must be a valid Gmail address (vd: user@gmail.com).");
+        // Validate status
+        if (accountStatus == null || accountStatus.trim().isEmpty()) {
+            request.setAttribute("statusError", "Please choose account status.");
             request.setAttribute("customer", c);
             request.getRequestDispatcher("/admin_edit_customer.jsp").forward(request, response);
             return;
         }
 
-        if (address == null || address.trim().isEmpty()) {
-            request.setAttribute("addressError", "Address cannot be blank.");
-            hasError = true;
-        }
+        String statusTrim = accountStatus.trim();
 
-        Date dob = null;
-        if (dateOfBirthStr == null || dateOfBirthStr.isEmpty()) {
-            request.setAttribute("dobError", "Date of birth cannot be blank.");
-            hasError = true;
-        } else {
-            try {
-                dob = Date.valueOf(dateOfBirthStr);
-                c.setDob(dob);
-            } catch (IllegalArgumentException ex) {
-                request.setAttribute("dobError", "Invalid date of birth.");
-                hasError = true;
+        // Hash password nếu có nhập
+        String hashedPassword = null;
+        if (rawPassword != null && !rawPassword.trim().isEmpty()) {
+            hashedPassword = MD5PasswordHasher.hashPassword(rawPassword.trim());
+            if (hashedPassword == null) {
+                request.setAttribute("statusError", "Error while hashing password. Please try again.");
+                request.setAttribute("customer", c);
+                request.getRequestDispatcher("/admin_edit_customer.jsp").forward(request, response);
+                return;
             }
         }
-        if (hasError) {
-            request.setAttribute("customer", c);
-            request.getRequestDispatcher(view).forward(request, response);
-            return;
-        }
 
-        boolean ok = dao.updateCustomer(c);
+        // 4. Gọi DAO mới để update
+        boolean ok = dao.updateCustomerStatusAndPassword(customerId, hashedPassword, statusTrim);
+
         if (ok) {
             session.setAttribute("updateStatus", "success");
         } else {
@@ -210,21 +177,6 @@ public class EditCustomerServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/customerlist");
     }
 
-    // ====== HÀM MÃ HOÁ MD5 ======
-//    private String md5(String input) {
-//        try {
-//            MessageDigest md = MessageDigest.getInstance("MD5");
-//            byte[] messageDigest = md.digest(input.getBytes("UTF-8"));
-//            BigInteger no = new BigInteger(1, messageDigest);
-//            String hashtext = no.toString(16);
-//            while (hashtext.length() < 32) {
-//                hashtext = "0" + hashtext;
-//            }
-//            return hashtext;
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     /**
      * Returns a short description of the servlet.
      *
