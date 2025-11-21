@@ -34,10 +34,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Price (VND)</label>
-                        <input type="number" name="price" class="form-control"value="${param.price}">
-                        <c:if test="${not empty errors.priceError}">
-                            <div class="text-danger small mt-1">${errors.priceError}</div>
-                        </c:if>
+                        <input type="number" name="price" class="form-control" value="0" readonly>
                     </div>
                 </div>
 
@@ -91,10 +88,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Quantity</label>
-                        <input type="number" name="quantity_product" class="form-control" value="${param.quantity_product}">
-                        <c:if test="${not empty errors.quantityError}">
-                            <div class="text-danger small mt-1">${errors.quantityError}</div>
-                        </c:if>
+                        <input type="number" name="quantity_product" class="form-control" value="0" readonly>
                     </div>
 
                 </div>

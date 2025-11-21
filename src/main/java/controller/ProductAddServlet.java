@@ -120,12 +120,12 @@ public class ProductAddServlet extends HttpServlet {
             if (origin == null || origin.trim().isEmpty()) {
                 errors.put("originError", "Origin cannot be left blank."); // Xuất xứ không được để trống.
             }
-            if (priceStr == null || priceStr.trim().isEmpty()) {
-                errors.put("priceError", "Product price cannot be left blank."); // Giá sản phẩm không được để trống.
-            }
-            if (quantityStr == null || quantityStr.trim().isEmpty()) {
-                errors.put("quantityError", "Quantity cannot be left blank."); // Số lượng không được để trống.
-            }
+//            if (priceStr == null || priceStr.trim().isEmpty()) {
+//                errors.put("priceError", "Product price cannot be left blank."); // Giá sản phẩm không được để trống.
+//            }
+//            if (quantityStr == null || quantityStr.trim().isEmpty()) {
+//                errors.put("quantityError", "Quantity cannot be left blank."); // Số lượng không được để trống.
+//            }
             if (categoryStr == null || categoryStr.trim().isEmpty()) {
                 errors.put("categoryError", "Category cannot be left blank."); // Danh mục không được để trống.
             }
@@ -177,18 +177,19 @@ public class ProductAddServlet extends HttpServlet {
                 rd.forward(request, response);
                 return;
             }
+            price = 0;
+            quantity = 0;
 
             // 🟩 Kiểm tra logic hợp lệ
-            if (price <= 0) {
-                errors.put("priceError", "Price must be greater than 0."); // Giá phải lớn hơn 0.
-            }
-            if (quantity < 0) {
-                errors.put("quantityError", "Quantity cannot be negative."); // Số lượng không được âm.
-            }
-            if (categoryId <= 0) {
-                errors.put("categoryError", "Category ID must be greater than 0."); // ID danh mục phải lớn hơn 0.
-            }
-
+//            if (price <= 0) {
+//                errors.put("priceError", "Price must be greater than 0."); // Giá phải lớn hơn 0.
+//            }
+//            if (quantity < 0) {
+//                errors.put("quantityError", "Quantity cannot be negative."); // Số lượng không được âm.
+//            }
+//            if (categoryId <= 0) {
+//                errors.put("categoryError", "Category ID must be greater than 0."); // ID danh mục phải lớn hơn 0.
+//            }
             // If there are logic errors, return to the form
             if (!errors.isEmpty()) {
                 List<Category> categories = pdao.getAllCategories();

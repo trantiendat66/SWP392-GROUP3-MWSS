@@ -25,6 +25,10 @@
         background: #fff;
         padding: 22px;
         box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
     .profile-card {
         text-align: center;
@@ -38,17 +42,22 @@
         border: 2px solid #e9ecef;
     }
     .profile-role {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 8px 16px;
-        background: #000;
+        display: block;
+        background-color: #000;
         color: #fff;
-        border-radius: 6px;
+        font-size: 18px;
         font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-top: 10px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
     }
     .nav-menu {
         list-style: none;
         padding: 0;
+        margin: 12px 0 0 0;
     }
     .nav-menu li {
         margin-bottom: 10px;
@@ -64,6 +73,7 @@
     .nav-link.active, .nav-link:hover {
         background: #dc3545;
         color: #fff;
+        border-color: #dc3545;
     }
     .main-content {
         background: white;
@@ -78,29 +88,38 @@
         overflow-y: auto;
     }
 </style>
-<div class="page-wrap">
-    <div class="main-container">
-        <aside class="sidebar">
-            <div class="profile-card">
-                <img class="profile-avatar" src="${pageContext.request.contextPath}/assert/image/account.jpg" alt="avatar"/>
-                <c:choose>
-                    <c:when test="${not empty sessionScope.staff}">
-                        <div class="profile-role">${sessionScope.staff.role}</div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="profile-role">Guest</div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-            <ul class="nav-menu">
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/product">Product Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
-                <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
-                <li><a class="nav-link active" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
-            </ul>
-        </aside>
+ <div class="page-wrap">
+        <div class="main-container">
+            <aside class="sidebar">
+                <div class="profile-card">
+                    <img class="profile-avatar" src="${pageContext.request.contextPath}/assert/image/account.jpg" alt="avatar"/>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.staff}">
+                            <div class="profile-role">${sessionScope.staff.role}</div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="profile-role">Guest</div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <ul class="nav-menu">
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/product">Product Management</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admino">Order Management</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/staffcontrol?active=admin">Ratings & Feedback</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/customerlist">Customer Management</a></li>
+                    <li><a class="nav-link" href="${pageContext.request.contextPath}/admin/staff">Staff Management</a></li>
+                    <li><a class="nav-link active" href="${pageContext.request.contextPath}/listimportinventory">Import Management</a></li>
+                    <li style="margin-top:18px;">
+                        <form method="post" action="${pageContext.request.contextPath}/logout" style="display:inline;width:100%;">
+                            <button type="submit"
+                                    onclick="return confirm('Are you sure you want to logout?');"
+                                    style="width:100%;padding:12px;border-radius:8px;border:none;background:#dc3545;color:#fff;cursor:pointer;font-weight:600;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </aside>
         <main class="main-content">
             <h2 class="mb-4 text-center">Edit Import Inventory #${inventory.importInvetoryId}</h2>
 
@@ -114,6 +133,7 @@
             <form action="editimportinventory" method="post">
                 <input type="hidden" name="inventoryId" value="${inventory.importInvetoryId}"/>
                 <div class="mb-4">
+                    <!-- Viết tạm chờ thêm database -->
                     <label class="form-label fw-bold">Supplier:</label>
                     <select name="supplier" class="form-control" required>
                         <option value="" disabled>-- Select Supplier --</option>
