@@ -140,6 +140,12 @@
                 </div>
                 <c:remove var="success" scope="session"/>
             </c:if>
+            <c:if test="${not empty sessionScope.error}">
+                <div class="alert alert-danger text-center">
+                    ${sessionScope.error}
+                </div>
+                <c:remove var="error" scope="session"/>
+            </c:if>
             <div style="max-height: 500px; overflow-y: auto;">
                 <table class="table table-striped">
                     <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
@@ -151,6 +157,7 @@
                             <th>Import Date</th>
                             <th>Created At</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,6 +180,20 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </a>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${!i.importStatus}">
+                                            <a href="editimportinventory?id=${i.importInvetoryId}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                                            <form action="deleteimportinventory" method="post" style="display:inline" onsubmit="return confirm('Delete this import permanently?');">
+                                                <input type="hidden" name="id" value="${i.importInvetoryId}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            </form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-muted">Locked</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>

@@ -91,6 +91,8 @@ public class UpdateImportStatusServlet extends HttpServlet {
             List<ImportProduct> list = ipDao.getByInventoryId(id);
             for (ImportProduct item : list) {
                 productDao.updateQuantity(item.getProductId(), item.getImportQuantity());
+                int sellingPrice = productDao.calculateSellingPriceFromImport(item.getImportProductPrice());
+                productDao.updatePrice(item.getProductId(), sellingPrice);
             }
             response.sendRedirect("importinventorydetail?id=" + id);
             return;

@@ -16,6 +16,8 @@ import model.Product;
  */
 public class ProductDAO extends DBContext {
 
+    private static final double IMPORT_MARKUP_RATE = 0.2;
+
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.product_id, c.category_id, p.import_invetory_id, p.image,\n"
@@ -376,6 +378,25 @@ public class ProductDAO extends DBContext {
                 cn.setAutoCommit(true);
             }
         }
+    }
+
+    public void updatePrice(int productId, int newPrice) {
+        String sql = "UPDATE Product SET price = ? WHERE product_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newPrice);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int calculateSellingPriceFromImport(int importPrice) {
+        if (importPrice <= 0) {
+            return importPrice;
+        }
+        double sellingPrice = importPrice * (1 + IMPORT_MARKUP_RATE);
+        return (int) Math.round(sellingPrice);
     }
 
     public void deleteProduct(int productId) throws SQLException {

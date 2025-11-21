@@ -112,4 +112,20 @@ public class ImportInventoryDAO extends DBContext {
             e.printStackTrace();
         }
     }
+
+    public boolean updateImportInventory(ImportInventory item) {
+        String sql = "UPDATE ImportInvetory SET total_import_price = ?, import_date = ?, total_import_quantity = ?, supplier = ? "
+                + "WHERE import_invetory_id = ? AND import_status = 0";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, item.getTotalImportPrice());
+            ps.setDate(2, item.getImportDate());
+            ps.setInt(3, item.getTotalImportQuantity());
+            ps.setString(4, item.getSupplier());
+            ps.setInt(5, item.getImportInvetoryId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

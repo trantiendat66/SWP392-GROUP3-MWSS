@@ -160,13 +160,13 @@
                         <!-- Supplier -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">Supplier:</label>
-                            <select name="supplierId" class="form-control" required>
+                            <select name="supplier" class="form-control" required>
                                 <option value="" disabled selected>-- Select Supplier --</option>
-                                <option value="1">DWatch Authentic</option>
-                                <option value="2">Đăng Quang Watch</option>
-                                <option value="3">Boss Luxury</option>
-                                <option value="4">Galle Watch</option>
-                                <option value="5">PNJ Watch4</option>
+                                <option value="DWatch Authentic">DWatch Authentic</option>
+                                <option value="Đăng Quang Watch">Đăng Quang Watch</option>
+                                <option value="Boss Luxury">Boss Luxury</option>
+                                <option value="Galle Watch">Galle Watch</option>
+                                <option value="PNJ Watch4">PNJ Watch4</option>
                             </select>
 
                             <!--                            <input type="text" name="supplier" class="form-control" placeholder="Enter supplier name" required>-->
