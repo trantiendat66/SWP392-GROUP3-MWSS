@@ -47,7 +47,7 @@ public class OrderListServlet extends HttpServlet {
         try {
 
             List<Order> ordersPlaced = orderDAO.findOrdersByStatuses(
-                    cus.getCustomer_id(), "PENDING", "CONFIRMED");
+                    cus.getCustomer_id(), "PENDING", "CONFIRMED", "CANCELLED");
             List<Order> ordersShipping = orderDAO.findOrdersByStatuses(
                     cus.getCustomer_id(), "SHIPPING");
             List<Order> ordersDelivered = orderDAO.findOrdersByStatuses(
@@ -108,6 +108,19 @@ public class OrderListServlet extends HttpServlet {
             Set<String> eligibleKeys
                     = orderDAO.findEligibleFeedbackKeys(cus.getCustomer_id(), orderIds);
             req.setAttribute("eligibleKeys", eligibleKeys);
+
+            if (session != null) {
+                Object successMsg = session.getAttribute("orderSuccess");
+                Object errorMsg = session.getAttribute("orderError");
+                if (successMsg != null) {
+                    req.setAttribute("success", successMsg);
+                    session.removeAttribute("orderSuccess");
+                }
+                if (errorMsg != null) {
+                    req.setAttribute("error", errorMsg);
+                    session.removeAttribute("orderError");
+                }
+            }
 
             req.getRequestDispatcher("/order-list.jsp").forward(req, resp);
         } catch (SQLException e) {

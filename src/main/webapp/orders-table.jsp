@@ -49,6 +49,20 @@
                                     ${o.shipping_address} | ${o.phone} |
                                     Payment: <c:out value="${o.payment_method == 1 ? 'Paid' : 'COD'}"/>
                                 </small>
+                                <div class="mt-2 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                                    <c:if test="${o.order_status eq 'PENDING'}">
+                                        <form action="${ctx}/order/cancel" method="post" class="d-inline"
+                                              onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn #${o.order_id}?');">
+                                            <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger order-action-btn">
+                                                Cancel Order
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${o.order_status eq 'CANCELLED'}">
+                                        <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                    </c:if>
+                                </div>
                             </div>
                         </button>
                     </h2>
@@ -258,6 +272,9 @@
         </div>
 
         <style>
+            .order-action-btn {
+                min-width: 140px;
+            }
             /* star row */
             .momo-stars {
                 display:inline-flex;

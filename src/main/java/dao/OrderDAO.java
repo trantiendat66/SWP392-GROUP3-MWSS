@@ -321,6 +321,31 @@ public class OrderDAO extends DBContext {
         return success;
     }
 
+    public String getOrderStatus(int orderId) {
+        String sql = "SELECT order_status FROM [Order] WHERE order_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean cancelPendingOrder(int orderId, int customerId) throws SQLException {
+        String sql = "UPDATE [Order] SET order_status = 'CANCELLED', delivered_at = NULL "
+                + "WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.setInt(2, customerId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     /**
      * Lấy danh sách đơn theo 1..n trạng thái cho 1 customer. Ví dụ:
      * findOrdersByStatuses(5, "PENDING", "CONFIRMED") findOrdersByStatuses(5,

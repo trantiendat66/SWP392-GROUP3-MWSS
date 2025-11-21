@@ -142,12 +142,25 @@ public class OrderDetailServlet extends HttpServlet {
         OrderDAO dao = new OrderDAO();
         int id = Integer.parseInt(request.getParameter("id"));
         String status = request.getParameter("status");
-        success = dao.updateOrderStatus(id, status);
+        String currentStatus = dao.getOrderStatus(id);
+        String message = null;
+        if ("CANCELLED".equalsIgnoreCase(currentStatus)) {
+            success = false;
+            message = "Đơn hàng đã bị hủy và không thể chỉnh sửa.";
+        } else {
+            success = dao.updateOrderStatus(id, status);
+            if (!success) {
+                message = "Không thể cập nhật trạng thái đơn hàng.";
+            }
+        }
 
         response.setContentType("application/json");
         JSONObject json = new JSONObject();
         json.put("success", success);
         json.put("orderStatus", status);
+        if (message != null) {
+            json.put("message", message);
+        }
         response.getWriter().write(json.toString());
     }
 

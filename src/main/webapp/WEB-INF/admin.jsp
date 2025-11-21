@@ -680,7 +680,10 @@
                                         <td><div class="right-actions">
                                                 <form action="orderdetail">
                                                     <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
-                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}" data-status="${o.order_status}" title="Edit" aria-label="Sửa" ${o.order_status == 'DELIVERED' ? "disabled" : ""}>✏️</button>
+                                                    
+                                                    <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}"
+        data-status="${o.order_status}" title="Edit" aria-label="Sửa"
+        ${(o.order_status == 'DELIVERED' || o.order_status == 'CANCELLED') ? "disabled" : ""}>✏️</button>
                                                 </form>
                                             </div></td>
                                         </tr>

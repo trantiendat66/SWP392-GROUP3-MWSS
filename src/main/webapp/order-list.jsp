@@ -12,6 +12,9 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <div class="container my-4">
+    <c:if test="${not empty success}">
+        <div class="alert alert-success">${success}</div>
+    </c:if>
     <c:if test="${not empty error}">
         <div class="alert alert-danger">${error}</div>
     </c:if>
@@ -37,7 +40,7 @@
     <div class="tab-content">
         <div class="tab-pane fade ${activeTab == 'placed' ? 'show active' : ''}">
             <jsp:include page="/orders-table.jsp">
-                <jsp:param name="title" value="Placed Orders (PENDING/CONFIRMED)"/>
+                <jsp:param name="title" value="Placed Orders (PENDING/CONFIRMED/CANCELLED)"/>
                 <jsp:param name="listAttr" value="ordersPlaced"/>
             </jsp:include>
         </div>
