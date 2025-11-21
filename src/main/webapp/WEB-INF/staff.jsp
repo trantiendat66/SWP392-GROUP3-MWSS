@@ -665,7 +665,7 @@
 
             document.addEventListener("DOMContentLoaded", function () {
                 const statusSelect = document.getElementById("order-status");
-                let previousValue = statusSelect.value; // Lưu trạng thái cũ
+                let previousValue = statusSelect.value; 
 
                 statusSelect.addEventListener("change", function () {
                     const newValue = this.value;
@@ -694,7 +694,7 @@
                 });
             });
 
-            // Example: action button handlers (just demo)
+
             document.querySelectorAll('.icon.view').forEach(viewBtn => {
                 viewBtn.addEventListener('click', (e) => {
                     const orderId = viewBtn.value;
@@ -769,7 +769,6 @@
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.success) {
-                                        // Toggle CSS hoặc text để báo đã ẩn/hiện
                                         this.classList.toggle("hidden-active");
                                         this.title = this.classList.contains("hidden-active") ? "Unhide" : "Hide";
                                         this.innerHTML = this.classList.contains("hidden-active") ? "<i class='bi bi-eye-slash'></i>" : "<i class='bi bi-eye'></i>";

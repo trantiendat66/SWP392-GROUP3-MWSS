@@ -87,19 +87,22 @@ public class ProductDetailServlet extends HttpServlet {
 
             if (productReviews != null) {
                 for (FeedbackView v : productReviews) {
-                    int r = v.getRating();
-                    sum += r;
-                    switch (r) {
-                        case 1 ->
-                            s1++;
-                        case 2 ->
-                            s2++;
-                        case 3 ->
-                            s3++;
-                        case 4 ->
-                            s4++;
-                        case 5 ->
-                            s5++;
+                    ///feedback đang ẩn không được tính toán.
+                    if (v.isHidden() == false) {
+                        int r = v.getRating();
+                        sum += r;
+                        switch (r) {
+                            case 1 ->
+                                s1++;
+                            case 2 ->
+                                s2++;
+                            case 3 ->
+                                s3++;
+                            case 4 ->
+                                s4++;
+                            case 5 ->
+                                s5++;
+                        }
                     }
                 }
             }

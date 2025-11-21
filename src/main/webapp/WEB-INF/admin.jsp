@@ -676,7 +676,7 @@
                                                 <td>${o.customer_name}</td>
                                                 <td><span class="date-pill">${o.order_date}</span></td>
                                                 <td><span class="status-order ${fn:toLowerCase(o.order_status)}">${o.order_status}</span></td>
-                                                <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/></td>
+                                                <td class="text-left text-muted"><fmt:formatNumber value="${o.total_amount}" type="number"/>${o.total_amount}</td>
                                         <td><div class="right-actions">
                                                 <form action="orderdetail">
                                                     <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
@@ -1053,7 +1053,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const statusSelect = document.getElementById("order-status");
-        let previousValue = statusSelect.value; // Lưu trạng thái cũ
+        let previousValue = statusSelect.value;
 
         statusSelect.addEventListener("change", function () {
             const newValue = this.value;

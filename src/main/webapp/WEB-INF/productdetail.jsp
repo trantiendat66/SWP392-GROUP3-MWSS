@@ -217,7 +217,7 @@
                                         <c:forEach begin="1" end="5" var="s">
                                             <c:choose>
                                                 <c:when test="${s <= rv.rating}">
-                                                    <span class="text-warning">&#9733;</span>
+                                                    <span class="text-warning">${rv.hidden == true ? "" : '&#9733;'}</span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="text-muted">&#9734;</span>  <%-- sao rỗng, thêm class ở đây --%>
@@ -504,175 +504,175 @@
                 return;
             }
             fetch(`${state.contextPath}/cart?action=currentQuantity&productId=${state.productId}`, {
-                method: 'GET'
-            })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success && typeof data.quantity === 'number') {
-                            state.currentCartQuantity = data.quantity;
-                            state.notifyChange();
+                            method: 'GET'
+                        })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success && typeof data.quantity === 'number') {
+                                        state.currentCartQuantity = data.quantity;
+                                        state.notifyChange();
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching current cart quantity:', error);
+                                });
+                    }
+
+                    state.notifyChange = () => {
+                        validateQuantity(true);
+                    };
+
+                    // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
+                    quantityInput.addEventListener('input', function () {
+                        if (quantityFeedback && quantityFeedback.dataset.state === 'success') {
+                            setQuantityMessage('', 'hidden');
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching current cart quantity:', error);
+                        validateQuantity(false);
                     });
-        }
 
-        state.notifyChange = () => {
-            validateQuantity(true);
-        };
+                    // Validate khi người dùng thay đổi và blur (tự động sửa nếu cần)
+                    quantityInput.addEventListener('change', function () {
+                        validateQuantity(true);
+                    });
 
-        // Validate khi người dùng đang nhập (chỉ hiển thị warning, không tự động sửa)
-        quantityInput.addEventListener('input', function () {
-            if (quantityFeedback && quantityFeedback.dataset.state === 'success') {
-                setQuantityMessage('', 'hidden');
-            }
-            validateQuantity(false);
-        });
+                    quantityInput.addEventListener('blur', function () {
+                        validateQuantity(true);
+                    });
 
-        // Validate khi người dùng thay đổi và blur (tự động sửa nếu cần)
-        quantityInput.addEventListener('change', function () {
-            validateQuantity(true);
-        });
-
-        quantityInput.addEventListener('blur', function () {
-            validateQuantity(true);
-        });
-
-        // Validate lần đầu khi trang load
-        validateQuantity(true);
-        fetchCurrentQuantity();
-    });
-
-    function addToCart(productId) {
-        if (!isLoggedIn()) {
-            showLoginRequired('To add a product to the cart, you must log in first');
-            return;
-        }
-
-        const quantityInput = document.getElementById('quantity-input');
-        const quantity = parseInt(quantityInput.value) || 0;
-        const cartState = window.__productDetailCartState || {
-            stockQuantity: parseInt('${product.quantityProduct}') || 0,
-            currentCartQuantity: 0,
-            getRemaining() {
-                return Math.max(this.stockQuantity - this.currentCartQuantity, 0);
-            }
-        };
-        const stockQuantity = cartState.stockQuantity;
-        const remaining = typeof cartState.getRemaining === 'function'
-                ? cartState.getRemaining()
-                : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
-
-        if (quantity < 1) {
-            setQuantityMessage('Quantity must be greater than 0.', 'error');
-            quantityInput.focus();
-            return;
-        }
-
-        if (stockQuantity === 0) {
-            setQuantityMessage('Product is out of stock.', 'error');
-            return;
-        }
-
-        if (remaining <= 0) {
-            setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
-            quantityInput.value = 0;
-            quantityInput.focus();
-            return;
-        }
-
-        if (quantity > remaining) {
-            setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
-                    + ' item(s) of this product in your cart.', 'error');
-            quantityInput.value = remaining;
-            quantityInput.focus();
-            return;
-        }
-
-        fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
-            method: 'GET'
-        })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        setQuantityMessage('', 'hidden');
-                        if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
-                            window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
-                            if (typeof window.__productDetailCartState.notifyChange === 'function') {
-                                window.__productDetailCartState.notifyChange();
-                            }
-                        }
-                        if (typeof updateCartCount === 'function') {
-                            updateCartCount();
-                        }
-                    } else {
-                        if (data.redirect) {
-                            showLoginRequired(data.message);
-                        } else {
-                            setQuantityMessage(data.message, 'error');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
+                    // Validate lần đầu khi trang load
+                    validateQuantity(true);
+                    fetchCurrentQuantity();
                 });
-    }
 
-    // Function để cập nhật số lượng giỏ hàng
-    function updateCartCount() {
-        fetch('${pageContext.request.contextPath}/cart?action=count', {
-            method: 'GET'
-        })
-                .then(response => response.json())
-                .then(data => {
-                    const cartBadge = document.getElementById('cart-count');
-                    if (cartBadge) {
-                        cartBadge.textContent = data.count;
-                        // Chỉ hiển thị badge khi có sản phẩm trong giỏ hàng
-                        if (data.count > 0) {
-                            cartBadge.style.display = 'block';
-                            cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
-                        } else {
-                            cartBadge.style.display = 'none';
-                        }
+                function addToCart(productId) {
+                    if (!isLoggedIn()) {
+                        showLoginRequired('To add a product to the cart, you must log in first');
+                        return;
                     }
-                })
-                .catch(error => {
-                    console.error('Error updating cart count:', error);
-                });
-    }
 
-    // Function kiểm tra đăng nhập
-    function isLoggedIn() {
-        // Kiểm tra xem có session customer không
+                    const quantityInput = document.getElementById('quantity-input');
+                    const quantity = parseInt(quantityInput.value) || 0;
+                    const cartState = window.__productDetailCartState || {
+                        stockQuantity: parseInt('${product.quantityProduct}') || 0,
+                        currentCartQuantity: 0,
+                        getRemaining() {
+                            return Math.max(this.stockQuantity - this.currentCartQuantity, 0);
+                        }
+                    };
+                    const stockQuantity = cartState.stockQuantity;
+                    const remaining = typeof cartState.getRemaining === 'function'
+                            ? cartState.getRemaining()
+                            : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
+
+                    if (quantity < 1) {
+                        setQuantityMessage('Quantity must be greater than 0.', 'error');
+                        quantityInput.focus();
+                        return;
+                    }
+
+                    if (stockQuantity === 0) {
+                        setQuantityMessage('Product is out of stock.', 'error');
+                        return;
+                    }
+
+                    if (remaining <= 0) {
+                        setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
+                        quantityInput.value = 0;
+                        quantityInput.focus();
+                        return;
+                    }
+
+                    if (quantity > remaining) {
+                        setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
+                                + ' item(s) of this product in your cart.', 'error');
+                        quantityInput.value = remaining;
+                        quantityInput.focus();
+                        return;
+                    }
+
+                    fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
+                        method: 'GET'
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    setQuantityMessage('', 'hidden');
+                                    if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
+                                        window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
+                                        if (typeof window.__productDetailCartState.notifyChange === 'function') {
+                                            window.__productDetailCartState.notifyChange();
+                                        }
+                                    }
+                                    if (typeof updateCartCount === 'function') {
+                                        updateCartCount();
+                                    }
+                                } else {
+                                    if (data.redirect) {
+                                        showLoginRequired(data.message);
+                                    } else {
+                                        setQuantityMessage(data.message, 'error');
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
+                            });
+                }
+
+                // Function để cập nhật số lượng giỏ hàng
+                function updateCartCount() {
+                    fetch('${pageContext.request.contextPath}/cart?action=count', {
+                        method: 'GET'
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                const cartBadge = document.getElementById('cart-count');
+                                if (cartBadge) {
+                                    cartBadge.textContent = data.count;
+                                    // Chỉ hiển thị badge khi có sản phẩm trong giỏ hàng
+                                    if (data.count > 0) {
+                                        cartBadge.style.display = 'block';
+                                        cartBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge';
+                                    } else {
+                                        cartBadge.style.display = 'none';
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating cart count:', error);
+                            });
+                }
+
+                // Function kiểm tra đăng nhập
+                function isLoggedIn() {
+                    // Kiểm tra xem có session customer không
     <c:choose>
         <c:when test="${not empty sessionScope.customer}">
-        return true;
+                    return true;
         </c:when>
         <c:otherwise>
-        return false;
+                    return false;
         </c:otherwise>
     </c:choose>
-    }
+                }
 
-    // Function hiển thị thông báo yêu cầu đăng nhập
-    function showLoginRequired(message) {
-        // Lưu thông tin sản phẩm vào localStorage để sử dụng sau khi đăng nhập
-        const productInfo = {
-            productId: '${product.productId}',
-            productName: '${product.productName}',
-            price: '${product.price}',
-            image: '${product.image}',
-            quantity: document.getElementById('quantity-input').value,
-            timestamp: new Date().getTime()
-        };
+                // Function hiển thị thông báo yêu cầu đăng nhập
+                function showLoginRequired(message) {
+                    // Lưu thông tin sản phẩm vào localStorage để sử dụng sau khi đăng nhập
+                    const productInfo = {
+                        productId: '${product.productId}',
+                        productName: '${product.productName}',
+                        price: '${product.price}',
+                        image: '${product.image}',
+                        quantity: document.getElementById('quantity-input').value,
+                        timestamp: new Date().getTime()
+                    };
 
-        // Lưu vào localStorage
-        localStorage.setItem('pendingProduct', JSON.stringify(productInfo));
+                    // Lưu vào localStorage
+                    localStorage.setItem('pendingProduct', JSON.stringify(productInfo));
 
-        const alertHtml = `
+                    const alertHtml = `
             <div class="alert alert-warning alert-dismissible fade show position-fixed" 
                  style="top: 20px; right: 20px; z-index: 9999; max-width: 400px;">
                 <div class="d-flex align-items-center">
@@ -693,16 +693,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
-        document.body.insertAdjacentHTML('beforeend', alertHtml);
+                    document.body.insertAdjacentHTML('beforeend', alertHtml);
 
-        // Tự động ẩn sau 10 giây
-        setTimeout(() => {
-            const alert = document.querySelector('.alert-warning');
-            if (alert) {
-                alert.remove();
-            }
-        }, 10000);
-    }
+                    // Tự động ẩn sau 10 giây
+                    setTimeout(() => {
+                        const alert = document.querySelector('.alert-warning');
+                        if (alert) {
+                            alert.remove();
+                        }
+                    }, 10000);
+                }
 
 </script>
 
