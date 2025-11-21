@@ -52,21 +52,17 @@ public class SearchServlet extends HttpServlet {
             keyword = keyword.trim();
         }
 
-        // ==============================
-        // Nếu là Admin → luôn load Analytics
-        // ==============================
         if ("ADMIN".equals(role)) {
             AdminDataServlet.loadAnalytics(request);
         }
 
-        // ==============================
-        // SEARCH ORDER
-        // ==============================
         if (getActive.equals("order")) {
 
             OrderDAO oDao = new OrderDAO();
             List<Order> allOrder = oDao.getAllOrder();
-            if (allOrder == null) allOrder = new ArrayList<>();
+            if (allOrder == null) {
+                allOrder = new ArrayList<>();
+            }
 
             List<Order> searchOrder;
 
@@ -74,7 +70,9 @@ public class SearchServlet extends HttpServlet {
                 searchOrder = allOrder;
             } else {
                 searchOrder = oDao.getOrderBySearch(keyword);
-                if (searchOrder == null) searchOrder = new ArrayList<>();
+                if (searchOrder == null) {
+                    searchOrder = new ArrayList<>();
+                }
             }
 
             request.setAttribute("keyword", keyword);
@@ -82,15 +80,14 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("listOrders", searchOrder);
 
         } else {
-            // ==============================
-            // SEARCH PRODUCT
-            // ==============================
             ProductDAO dao = new ProductDAO();
             BrandDAO bdao = new BrandDAO();
 
             List<Brand> listB = bdao.getAllBrand();
             List<Product> allProducts = dao.getAllProducts();
-            if (allProducts == null) allProducts = new ArrayList<>();
+            if (allProducts == null) {
+                allProducts = new ArrayList<>();
+            }
 
             List<Product> searchResult;
 
@@ -98,7 +95,9 @@ public class SearchServlet extends HttpServlet {
                 searchResult = allProducts;
             } else {
                 searchResult = dao.searchProducts(keyword);
-                if (searchResult == null) searchResult = new ArrayList<>();
+                if (searchResult == null) {
+                    searchResult = new ArrayList<>();
+                }
             }
 
             request.setAttribute("keyword", keyword);
@@ -109,9 +108,6 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("listP", searchResult);
         }
 
-        // ==============================
-        // FORWARD THEO ROLE
-        // ==============================
         switch (role) {
             case "ADMIN":
                 request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
