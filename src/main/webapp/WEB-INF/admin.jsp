@@ -453,10 +453,11 @@
                                 <tr>
                                     <th style="min-width:60px;">#</th>
                                     <th>Email</th>
-                                    <th>Password</th>
+                                    <th>Name</th>   <%-- hoặc Customer Name --%>
                                     <th style="min-width: 210px; text-align: center;">Action</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 <c:choose>
                                     <c:when test="${not empty listCustomers}">
@@ -464,7 +465,7 @@
                                             <tr>
                                                 <td>${st.index + 1}</td>
                                                 <td>${c.email}</td>
-                                                <td>${c.password}</td>
+                                                <td>${c.customer_name}</td>
                                                 <td style="text-align:center;">
 
                                                     <%--VIEW--%>
@@ -477,13 +478,13 @@
                                                        class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
-                                                    <%--DELETE--%>
+<!--                                                    <%--DELETE--%>
                                                     <a href="deletecustomer?id=${c.customer_id}" 
                                                        onclick="return confirm('Xóa? ${c.customer_name} (${c.email})?')"
                                                        class="btn btn-sm btn-danger" title="Delete Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-trash"></i> Delete
 
-                                                    </a>
+                                                    </a>-->
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -551,7 +552,7 @@
                                             <p><strong>Full Name:</strong> ${c.customer_name}</p>
                                             <p><strong>Email:</strong> ${c.email}</p>
                                             <p><strong>Phone:</strong> ${c.phone}</p>
-                                            
+
                                         </div>
                                         <div class="col-sm-6">
                                             <p><strong>Date of Birth:</strong> ${c.dob}</p>
@@ -680,10 +681,10 @@
                                         <td><div class="right-actions">
                                                 <form action="orderdetail">
                                                     <button class="icon view" type="button" name="orderIdV" value="${o.order_id}" title="View" aria-label="Xem">👁</button>
-                                                    
+
                                                     <button class="icon edit" type="button" name="orderIdE" value="${o.order_id}"
-        data-status="${o.order_status}" title="Edit" aria-label="Sửa"
-        ${(o.order_status == 'DELIVERED' || o.order_status == 'CANCELLED') ? "disabled" : ""}>✏️</button>
+                                                            data-status="${o.order_status}" title="Edit" aria-label="Sửa"
+                                                            ${(o.order_status == 'DELIVERED' || o.order_status == 'CANCELLED') ? "disabled" : ""}>✏️</button>
                                                 </form>
                                             </div></td>
                                         </tr>
