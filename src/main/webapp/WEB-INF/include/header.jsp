@@ -17,6 +17,24 @@
                 margin: 5px auto;
                 text-decoration:none !important;
             }
+            .cart-notification {
+                position: fixed;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 2147483647;
+                color: #fff;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 6px 18px rgba(0,0,0,.2);
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 1.4;
+                text-align: center;
+                min-width: 300px;
+                max-width: 600px;
+                transition: opacity 0.3s ease;
+            }
         </style>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -156,6 +174,9 @@
             </div>
         </nav>
 
+        <!-- Fixed notification area for cart messages -->
+        <div id="cart-notification" class="cart-notification" style="display: none;"></div>
+
         <script>
             // Cập nhật số lượng giỏ hàng khi tải trang
             document.addEventListener('DOMContentLoaded', function () {
@@ -202,9 +223,12 @@
             // Hàm để cập nhật số lượng giỏ hàng từ các trang khác
             window.updateCartCount = updateCartCount;
 
-            // Lightweight global toast (no Bootstrap alert dependency)
+            // Fixed notification for cart messages (no popup)
             window.showToast = function(message, type) {
                 try {
+                    const notification = document.getElementById('cart-notification');
+                    if (!notification) return;
+                    
                     const palette = {
                         success: '#198754',
                         error:   '#dc3545',
@@ -212,19 +236,17 @@
                         warning: '#f59f00'
                     };
                     const bg = palette[type] || palette.info;
-                    const toast = document.createElement('div');
-                    toast.className = 'ws-toast';
-                    Object.assign(toast.style, {
-                        position: 'fixed', top: '20px', right: '20px',
-                        zIndex: '2147483647', background: bg, color: '#fff',
-                        padding: '10px 14px', borderRadius: '8px',
-                        boxShadow: '0 6px 18px rgba(0,0,0,.2)',
-                        maxWidth: '340px', fontWeight: '600',
-                        fontSize: '14px', lineHeight: '1.4'
-                    });
-                    toast.textContent = (message || '').toString();
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
+                    
+                    // Set notification content and style
+                    notification.textContent = (message || '').toString();
+                    notification.style.background = bg;
+                    notification.style.display = 'block';
+                    
+                    // Auto hide after 3 seconds
+                    clearTimeout(window.cartNotificationTimeout);
+                    window.cartNotificationTimeout = setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 3000);
                 } catch (_) { /* noop */ }
             };
         </script>

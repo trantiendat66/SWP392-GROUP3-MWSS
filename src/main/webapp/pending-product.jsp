@@ -203,12 +203,27 @@
                 window.showToast(message, type);
                 return;
             }
-            const box = document.createElement('div');
-            box.style.cssText = 'position:fixed;top:20px;right:20px;z-index:2147483647;background:'+
-                (type==='success'?'#198754':'#dc3545')+';color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.2);font-weight:600;max-width:340px;';
-            box.textContent = (message||'').toString();
-            document.body.appendChild(box);
-            setTimeout(()=>box.remove(),3000);
+            // Fallback: use fixed notification if available
+            const notification = document.getElementById('cart-notification');
+            if (notification) {
+                const palette = {
+                    success: '#198754',
+                    error:   '#dc3545',
+                    info:    '#0d6efd',
+                    warning: '#f59f00'
+                };
+                const bg = palette[type] || palette.info;
+                notification.textContent = (message || '').toString();
+                notification.style.background = bg;
+                notification.style.display = 'block';
+                clearTimeout(window.cartNotificationTimeout);
+                window.cartNotificationTimeout = setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            // Last resort fallback (should not happen)
+            console.log('Cart notification:', message);
         }
     </script>
 

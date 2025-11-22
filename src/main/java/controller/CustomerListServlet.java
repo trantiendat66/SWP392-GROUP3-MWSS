@@ -69,7 +69,7 @@ public class CustomerListServlet extends HttpServlet {
             List<Customer> listCustomers;
 
             if (keyword != null && !keyword.trim().isEmpty()) {
-                listCustomers = customerDAO.searchByEmail(keyword.trim());
+                listCustomers = customerDAO.searchByName(keyword.trim());
             } else {
                 // Nếu không search → lấy toàn bộ
                 listCustomers = customerDAO.getAllCustomers();

@@ -57,13 +57,9 @@ public class OrderBuyNowServlet extends HttpServlet {
             return;
         }
 
-        // Kiểm tra xem có sản phẩm trong cart không, nếu có thì dùng số lượng đó
-        CartDAO cartDAO = new CartDAO();
-        Cart cartItem = cartDAO.getCartItem(cus.getCustomer_id(), productId);
-        if (cartItem != null && cartItem.getQuantity() > 0) {
-            // Sử dụng số lượng có trong cart
-            qty = cartItem.getQuantity();
-        }
+        // Buy Now luôn bắt đầu với số lượng 1, không lấy từ cart
+        // Người dùng có thể chỉnh số lượng trong trang Payment Confirmation
+        qty = 1;
 
         // ĐÁNH DẤU Buy-Now đang chờ thanh toán (KHÔNG thêm vào cart)
         session.setAttribute("bn_pid", productId);
