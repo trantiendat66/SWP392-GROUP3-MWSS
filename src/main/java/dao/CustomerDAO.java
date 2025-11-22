@@ -247,9 +247,9 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    public List<Customer> searchByEmail(String keyword) {
+    public List<Customer> searchByName(String keyword) {
         List<Customer> list = new ArrayList<>();
-        String sql = "SELECT * FROM Customer WHERE email LIKE ?";
+        String sql = "SELECT * FROM Customer WHERE customer_name LIKE ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, "%" + keyword + "%");

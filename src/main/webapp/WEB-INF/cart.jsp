@@ -220,14 +220,15 @@
                                                    min="1" 
                                                    max="${item.availableQuantity}"
                                                    data-cart-id="${item.cartId}"
-                                                   data-max-quantity="${item.availableQuantity}">
+                                                   data-max-quantity="${item.availableQuantity}"
+                                                   data-unit-price="${item.price}">
                                             <button class="quantity-btn" data-cart-id="${item.cartId}" data-action="increase">
                                                 <i class="bi bi-plus"></i>
                                             </button>
                                         </div>
 
                                         <!-- Tổng tiền -->
-                                        <p class="total-price mb-0" id="total-${item.cartId}">
+                                        <p class="total-price mb-0" id="total-${item.cartId}" data-total-value="${item.totalPrice}">
                                             <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
                                         </p>
 
@@ -343,42 +344,56 @@
             return;
         }
 
+        // Lưu giá trị cũ trước khi cập nhật (để rollback nếu có lỗi)
+        const oldQuantity = parseInt(quantityInput.value) || 1;
+        const totalElement = document.getElementById('total-' + cartId);
+        const oldTotalValue = parseInt(totalElement.getAttribute('data-total-value')) || 0;
+        
+        // Cập nhật tổng tiền ngay lập tức (optimistic update)
+        const unitPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
+        const newTotal = unitPrice * newQuantity;
+        totalElement.setAttribute('data-total-value', newTotal);
+        totalElement.textContent = new Intl.NumberFormat('en-US').format(newTotal) + ' VND';
+        updateCartTotal();
+
+        // Cập nhật giá trị input
+        quantityInput.value = newQuantity;
+        quantityInput.setAttribute('data-old-value', newQuantity);
+
+        // Gọi API để cập nhật trên server
         fetch('${pageContext.request.contextPath}/cart?action=update&cartId=' + cartId + '&quantity=' + newQuantity, {
             method: 'GET'
         })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('quantity-' + cartId).value = newQuantity;
-                        // Lưu giá trị cũ để có thể reset nếu cần
-                        quantityInput.setAttribute('data-old-value', newQuantity);
+                        // Cập nhật lại từ server để đảm bảo chính xác (nếu có thay đổi giá)
+                        // Nếu server trả về totalPrice mới, có thể cập nhật lại ở đây
+                        // Hiện tại giữ nguyên giá trị đã tính toán
                         
-                        const priceElement = document.querySelector('#total-' + cartId);
-                        const currentTotalText = priceElement.textContent.replace(/[^\d]/g, '');
-                        const currentTotal = parseInt(currentTotalText);
-                        const currentQuantity = parseInt(document.getElementById('quantity-' + cartId).value);
-                        const price = currentQuantity > 0 ? currentTotal / currentQuantity : 0;
-                        const total = price * newQuantity;
-                        document.getElementById('total-' + cartId).textContent =
-                                new Intl.NumberFormat('en-US').format(total) + ' VND';
-
-                        updateCartTotal();
-                        showMessage(data.message, 'success');
                         // Cập nhật số lượng giỏ hàng trong header
                         if (typeof updateCartCount === 'function') {
                             updateCartCount();
                         }
                     } else {
                         showMessage(data.message, 'error');
-                        // Reset về giá trị cũ nếu có lỗi
-                        quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
+                        // Rollback về giá trị cũ
+                        quantityInput.value = oldQuantity;
+                        quantityInput.setAttribute('data-old-value', oldQuantity);
+                        totalElement.setAttribute('data-total-value', oldTotalValue);
+                        totalElement.textContent = new Intl.NumberFormat('en-US').format(oldTotalValue) + ' VND';
+                        updateCartTotal();
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     showMessage('An error occurred while updating.', 'error');
-                    // Reset về giá trị cũ nếu có lỗi
-                    quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
+                    // Rollback về giá trị cũ
+                    quantityInput.value = oldQuantity;
+                    quantityInput.setAttribute('data-old-value', oldQuantity);
+                    totalElement.setAttribute('data-total-value', oldTotalValue);
+                    totalElement.textContent = new Intl.NumberFormat('en-US').format(oldTotalValue) + ' VND';
+                    updateCartTotal();
                 });
     }
 
@@ -442,9 +457,26 @@
     // Update total cart amount
     function updateCartTotal() {
         let total = 0;
+        // Chỉ lấy các element có id là total-{cartId}, không lấy total-items hay cart-total
         document.querySelectorAll('[id^="total-"]').forEach(element => {
-            const priceText = element.textContent.replace(/[^\d]/g, '');
-            total += parseInt(priceText);
+            const elementId = element.getAttribute('id');
+            // Bỏ qua total-items và cart-total, chỉ lấy total-{cartId}
+            if (elementId === 'total-items' || elementId === 'cart-total') {
+                return;
+            }
+            
+            // Lấy giá trị từ data attribute thay vì parse từ text để tránh sai số
+            const totalValue = element.getAttribute('data-total-value');
+            if (totalValue) {
+                total += parseInt(totalValue);
+            } else {
+                // Fallback: parse từ text nếu không có data attribute
+                const priceText = element.textContent.replace(/[^\d]/g, '');
+                const value = parseInt(priceText) || 0;
+                total += value;
+                // Lưu lại vào data attribute để lần sau dùng
+                element.setAttribute('data-total-value', value);
+            }
         });
 
         document.getElementById('cart-total').textContent =
@@ -462,12 +494,27 @@
             window.showToast(message, type);
             return;
         }
-        const box = document.createElement('div');
-        box.style.cssText = 'position:fixed;top:20px;right:20px;z-index:2147483647;background:'+
-            (type==='success'?'#198754':'#dc3545')+';color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.2);font-weight:600;max-width:340px;';
-        box.textContent = (message||'').toString();
-        document.body.appendChild(box);
-        setTimeout(()=>box.remove(),3000);
+        // Fallback: use fixed notification if available
+        const notification = document.getElementById('cart-notification');
+        if (notification) {
+            const palette = {
+                success: '#198754',
+                error:   '#dc3545',
+                info:    '#0d6efd',
+                warning: '#f59f00'
+            };
+            const bg = palette[type] || palette.info;
+            notification.textContent = (message || '').toString();
+            notification.style.background = bg;
+            notification.style.display = 'block';
+            clearTimeout(window.cartNotificationTimeout);
+            window.cartNotificationTimeout = setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+            return;
+        }
+        // Last resort fallback (should not happen)
+        console.log('Cart notification:', message);
     }
 
     // Function để cập nhật số lượng giỏ hàng trong header

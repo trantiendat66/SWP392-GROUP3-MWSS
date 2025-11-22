@@ -438,7 +438,7 @@
                     <div class="controls">
                         <div class="page-title">Customer Management</div>
                         <form action="${pageContext.request.contextPath}/admin/customerlist" method="get" style="display:flex; gap:10px; align-items:center;">
-                            <input type="text" name="keyword" placeholder="Search customer by email" 
+                            <input type="text" name="keyword" placeholder="Search customer by name" 
                                    value="${param.keyword}"
                                    style="padding:6px 10px; border-radius:6px; border:1px solid #bbb;">
                             <button type="submit" class="btn btn-primary">Search</button>
@@ -452,8 +452,9 @@
                             <thead>
                                 <tr>
                                     <th style="min-width:60px;">#</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Name</th>   <%-- hoặc Customer Name --%>
+                                        <%-- hoặc Customer Name --%>
                                     <th style="min-width: 210px; text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -464,8 +465,9 @@
                                         <c:forEach var="c" items="${listCustomers}" varStatus="st">
                                             <tr>
                                                 <td>${st.index + 1}</td>
-                                                <td>${c.email}</td>
                                                 <td>${c.customer_name}</td>
+                                                <td>${c.email}</td>
+
                                                 <td style="text-align:center;">
 
                                                     <%--VIEW--%>
@@ -478,13 +480,6 @@
                                                        class="btn btn-sm btn-warning" title="Edit Customer" style="margin: 2px 1px;">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </a>
-<!--                                                    <%--DELETE--%>
-                                                    <a href="deletecustomer?id=${c.customer_id}" 
-                                                       onclick="return confirm('Xóa? ${c.customer_name} (${c.email})?')"
-                                                       class="btn btn-sm btn-danger" title="Delete Customer" style="margin: 2px 1px;">
-                                                        <i class="fa fa-trash"></i> Delete
-
-                                                    </a>-->
                                                 </td>
                                             </tr>
                                         </c:forEach>
