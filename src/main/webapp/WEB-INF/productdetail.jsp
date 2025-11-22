@@ -239,7 +239,8 @@
                                                         <div class="d-flex justify-content-between">
                                                             <div class="fw-semibold">Staff</div>
                                                         </div>
-                                                        <c:if test="${not empty re.contentReply}">
+<!--                                                        and rv.hidden == false muốn ẩn reply của staff thì thêm dòng này vào if phía dưới-->
+                                                        <c:if test="${not empty re.contentReply}"> 
                                                             <p class="mb-0">${re.contentReply}</p>
                                                         </c:if>
                                                     </div>

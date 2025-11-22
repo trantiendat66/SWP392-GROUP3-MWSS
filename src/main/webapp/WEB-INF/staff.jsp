@@ -637,6 +637,12 @@
 
                     const select = document.getElementById('order-status');
                     select.value = status;
+                    const optionPending = document.querySelector('#order-status option[value="PENDING"]');
+                    if (status === 'SHIPPING') {
+                        optionPending.disabled = true;   
+                    } else {
+                        optionPending.disabled = false; 
+                    }
 
                     modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
                     currentRow = $(this).closest("tr");
@@ -669,7 +675,7 @@
 
             document.addEventListener("DOMContentLoaded", function () {
                 const statusSelect = document.getElementById("order-status");
-                let previousValue = statusSelect.value; 
+                let previousValue = statusSelect.value;
 
                 statusSelect.addEventListener("change", function () {
                     const newValue = this.value;
