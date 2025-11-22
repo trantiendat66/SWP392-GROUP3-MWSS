@@ -337,12 +337,57 @@ public class OrderDAO extends DBContext {
     }
 
     public boolean cancelPendingOrder(int orderId, int customerId) throws SQLException {
-        String sql = "UPDATE [Order] SET order_status = 'CANCELLED', delivered_at = NULL "
-                + "WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING' AND payment_method = 0"; // Chỉ hủy đơn PENDING thanh toán COD
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            ps.setInt(2, customerId);
-            return ps.executeUpdate() > 0;
+        // Thực hiện trong transaction: verify -> hoàn kho -> cập nhật trạng thái
+        try (Connection cn = new DBContext().getConnection()) {
+            if (cn == null) throw new SQLException("Cannot connect to database.");
+            boolean ok = false;
+            boolean oldAuto = cn.getAutoCommit();
+            try {
+                cn.setAutoCommit(false);
+
+                // 1) Verify: đúng khách hàng, trạng thái PENDING, phương thức COD (0)
+                String sqlVerify = "SELECT 1 FROM [Order] WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING' AND payment_method = 0";
+                try (PreparedStatement ps = cn.prepareStatement(sqlVerify)) {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, customerId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            cn.rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                // 2) Hoàn kho: cộng lại số lượng từ OrderDetail vào Product
+                String sqlRestore = "UPDATE p SET p.product_quantity = p.product_quantity + od.quantity "
+                        + "FROM Product p INNER JOIN OrderDetail od ON p.product_id = od.product_id "
+                        + "WHERE od.order_id = ?";
+                try (PreparedStatement ps = cn.prepareStatement(sqlRestore)) {
+                    ps.setInt(1, orderId);
+                    ps.executeUpdate();
+                }
+
+                // 3) Cập nhật trạng thái đơn hàng thành CANCELLED
+                String sqlCancel = "UPDATE [Order] SET order_status = 'CANCELLED', delivered_at = NULL "
+                        + "WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING' AND payment_method = 0";
+                try (PreparedStatement ps = cn.prepareStatement(sqlCancel)) {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, customerId);
+                    ok = ps.executeUpdate() > 0;
+                }
+
+                if (ok) {
+                    cn.commit();
+                } else {
+                    cn.rollback();
+                }
+                return ok;
+            } catch (SQLException e) {
+                try { cn.rollback(); } catch (SQLException ignore) {}
+                throw e;
+            } finally {
+                try { cn.setAutoCommit(oldAuto); } catch (SQLException ignore) {}
+            }
         }
     }
 

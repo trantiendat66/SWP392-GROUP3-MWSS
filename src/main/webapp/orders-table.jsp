@@ -56,7 +56,7 @@
                                     ${o.shipping_address} | ${o.phone} | Payment:
                                     <c:choose>
                                         <c:when test="${o.payment_method == 0}">COD</c:when>
-                                        <c:when test="${o.payment_method == 2}">MoMo</c:when>
+                                        <c:when test="${o.payment_method == 1}">MoMo</c:when>
                                         <c:otherwise>Other</c:otherwise>
                                     </c:choose>
                                 </div>

@@ -40,7 +40,7 @@
     <div class="tab-content">
         <div class="tab-pane fade ${activeTab == 'placed' ? 'show active' : ''}">
             <jsp:include page="/orders-table.jsp">
-                <jsp:param name="title" value="Placed Orders (PENDING/CONFIRMED/CANCELLED)"/>
+                <jsp:param name="title" value="Placed Orders (PENDING/CANCELLED)"/>
                 <jsp:param name="listAttr" value="ordersPlaced"/>
             </jsp:include>
         </div>
