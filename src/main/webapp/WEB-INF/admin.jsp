@@ -1017,6 +1017,13 @@
 
             const select = document.getElementById('order-status');
             select.value = status;
+            const optionPending = document.querySelector('#order-status option[value="PENDING"]');
+            if (status === 'SHIPPING') {
+                optionPending.disabled = true;
+            } else {
+                optionPending.disabled = false;
+            }
+
 
             modal = new bootstrap.Modal(document.getElementById('editStatusPopup'));
             currentRow = $(this).closest("tr");
