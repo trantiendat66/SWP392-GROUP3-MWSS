@@ -483,4 +483,16 @@ public class ProductDAO extends DBContext {
         }
     }
 
+    public void restoreStock(int productId, int quantity) throws SQLException {
+        String sql = "UPDATE Product SET product_quantity = product_quantity + ? WHERE product_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, productId);
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Failed to restore stock for product_id = " + productId);
+            }
+        }
+    }
+
 }

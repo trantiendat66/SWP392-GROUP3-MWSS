@@ -1,19 +1,16 @@
 package controller;
 
 import dao.OrderDAO;
-import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Order;
-import model.OrderDetail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Auto-cancel expired PENDING_HOLD orders and restore inventory.
@@ -50,22 +47,16 @@ public class AutoCancelHoldServlet extends HttpServlet {
                 return;
             }
             
-            // Get order details to restore stock
-            List<OrderDetail> details = orderDAO.getOrderDetailsByOrderId(orderId);
-            ProductDAO productDAO = new ProductDAO();
+            // Cancel the hold order (restore stock and update status)
+            boolean cancelled = orderDAO.cancelHoldOrder(orderId);
             
-            // Restore inventory for each product
-            for (OrderDetail detail : details) {
-                productDAO.restoreStock(detail.getProduct_id(), detail.getQuantity());
-            }
-            
-            // Update order status to CANCELLED
-            orderDAO.updateOrderStatus(orderId, "CANCELLED");
-            
-            System.out.println("Auto-cancelled expired hold order #" + orderId + ", restored stock for " + details.size() + " items");
-            
-            try (PrintWriter out = resp.getWriter()) {
-                out.printf("{\"success\":true,\"orderId\":%d,\"message\":\"Order auto-cancelled, stock restored\"}", orderId);
+            if (cancelled) {
+                System.out.println("Auto-cancelled expired hold order #" + orderId);
+                try (PrintWriter out = resp.getWriter()) {
+                    out.printf("{\"success\":true,\"orderId\":%d,\"message\":\"Order auto-cancelled, stock restored\"}", orderId);
+                }
+            } else {
+                resp.getWriter().write("{\"success\":false,\"message\":\"Failed to cancel order\"}");
             }
             
         } catch (SQLException e) {

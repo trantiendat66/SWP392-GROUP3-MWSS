@@ -408,6 +408,62 @@ public class OrderDAO extends DBContext {
     }
 
     /**
+     * Cancel expired PENDING_HOLD order and restore stock.
+     * Similar to cancelPendingOrder but for PENDING_HOLD status.
+     */
+    public boolean cancelHoldOrder(int orderId) throws SQLException {
+        try (Connection cn = new DBContext().getConnection()) {
+            if (cn == null) throw new SQLException("Cannot connect to database.");
+            boolean ok = false;
+            boolean oldAuto = cn.getAutoCommit();
+            try {
+                cn.setAutoCommit(false);
+
+                // 1) Verify: order exists and is in PENDING_HOLD state
+                String sqlVerify = "SELECT 1 FROM [Order] WHERE order_id = ? AND order_status = 'PENDING_HOLD'";
+                try (PreparedStatement ps = cn.prepareStatement(sqlVerify)) {
+                    ps.setInt(1, orderId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            cn.rollback();
+                            return false;
+                        }
+                    }
+                }
+
+                // 2) Restore stock: add quantity back from OrderDetail to Product
+                String sqlRestore = "UPDATE p SET p.product_quantity = p.product_quantity + od.quantity "
+                        + "FROM Product p INNER JOIN OrderDetail od ON p.product_id = od.product_id "
+                        + "WHERE od.order_id = ?";
+                try (PreparedStatement ps = cn.prepareStatement(sqlRestore)) {
+                    ps.setInt(1, orderId);
+                    ps.executeUpdate();
+                }
+
+                // 3) Update order status to CANCELLED
+                String sqlCancel = "UPDATE [Order] SET order_status = 'CANCELLED', delivered_at = NULL "
+                        + "WHERE order_id = ? AND order_status = 'PENDING_HOLD'";
+                try (PreparedStatement ps = cn.prepareStatement(sqlCancel)) {
+                    ps.setInt(1, orderId);
+                    ok = ps.executeUpdate() > 0;
+                }
+
+                if (ok) {
+                    cn.commit();
+                } else {
+                    cn.rollback();
+                }
+                return ok;
+            } catch (SQLException e) {
+                try { cn.rollback(); } catch (SQLException ignore) {}
+                throw e;
+            } finally {
+                try { cn.setAutoCommit(oldAuto); } catch (SQLException ignore) {}
+            }
+        }
+    }
+
+    /**
      * Lấy danh sách đơn theo 1..n trạng thái cho 1 customer. Ví dụ:
      * findOrdersByStatuses(5, "PENDING", "CONFIRMED") findOrdersByStatuses(5,
      * "SHIPPING") findOrdersByStatuses(5, "DELIVERED")
