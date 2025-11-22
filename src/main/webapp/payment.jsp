@@ -163,7 +163,7 @@
                                         <option value="2">MoMo Payment (Online)</option>
                                     </select>
                                     <div id="momo-warning" class="alert alert-warning mt-2 py-2 px-3 d-none" style="font-size: .85rem;">
-                                        Lưu ý: Đơn hàng thanh toán qua <strong>MoMo</strong> sẽ không thể hủy sau khi đặt.
+                                        Note: Orders paid via <strong>MoMo</strong> cannot be cancelled after placement.
                                     </div>
                                 </div>
 

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh toán MoMo</title>
+    <title>MoMo Payment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -170,7 +170,7 @@
 <body>
     <div class="payment-container">
         <div class="payment-header">
-            <h2><i class="fas fa-qrcode"></i> Thanh toán MoMo</h2>
+            <h2><i class="fas fa-qrcode"></i> MoMo Payment</h2>
             <div class="countdown-timer" id="countdown">
                 <i class="fas fa-clock"></i> <span id="timer">01:00</span>
             </div>
@@ -180,17 +180,17 @@
             <!-- Order Info -->
             <div class="order-info">
                 <div class="order-info-item">
-                    <span><i class="fas fa-shopping-cart"></i> Mã đơn hàng:</span>
+                    <span><i class="fas fa-shopping-cart"></i> Order ID:</span>
                     <strong>${sessionScope.hold_order_id}</strong>
                 </div>
                 <div class="order-info-item">
-                    <span><i class="fas fa-tag"></i> Mã giao dịch MoMo:</span>
+                    <span><i class="fas fa-tag"></i> MoMo Transaction ID:</span>
                     <strong>${sessionScope.momo_order_id}</strong>
                 </div>
                 <div class="order-info-item">
-                    <span><i class="fas fa-money-bill-wave"></i> Tổng tiền:</span>
+                    <span><i class="fas fa-money-bill-wave"></i> Total Amount:</span>
                     <strong style="color: #d5006d;">
-                        <fmt:formatNumber value="${sessionScope.total_amount}" type="number" pattern="#,###" /> VNĐ
+                        <fmt:formatNumber value="${sessionScope.total_amount}" type="number" pattern="#,###" /> VND
                     </strong>
                 </div>
             </div>
@@ -199,19 +199,19 @@
             <div class="text-center mb-4" id="momoFrame">
                 <div class="alert alert-info">
                     <i class="fas fa-mobile-alt"></i> 
-                    Nhấn nút bên dưới để mở trang thanh toán MoMo. Bạn có <strong>1 phút</strong> để quét mã QR và hoàn tất thanh toán.
+                    Click the button below to open MoMo payment page. You have <strong>1 minute</strong> to scan QR code and complete payment.
                 </div>
                 
                 <c:if test="${not empty sessionScope.momo_pay_url}">
                     <button onclick="openMoMoPayment()" class="btn btn-lg btn-retry" id="openMomoBtn">
-                        <i class="fas fa-qrcode"></i> Mở cổng thanh toán MoMo
+                        <i class="fas fa-qrcode"></i> Open MoMo Payment Gateway
                     </button>
                     
                     <p class="text-muted mt-3">
                         <small>
                             <i class="fas fa-info-circle"></i> 
-                            Sau khi thanh toán xong, vui lòng đóng cửa sổ thanh toán và quay lại đây.
-                            <br>Hệ thống sẽ tự động cập nhật trạng thái đơn hàng.
+                            After completing payment, please close the payment window and return here.
+                            <br>The system will automatically update your order status.
                         </small>
                     </p>
                 </c:if>
@@ -219,39 +219,39 @@
 
             <!-- Success message (hidden until payment completes) -->
             <div class="expired-message" id="successMessage" style="display:none;">
-                <h3 style="color:#28a745;"><i class="fas fa-check-circle"></i> Thanh toán thành công</h3>
-                <p>Đơn hàng đã được xác nhận thanh toán. Bạn có thể xem chi tiết hoặc tiếp tục mua sắm.</p>
+                <h3 style="color:#28a745;"><i class="fas fa-check-circle"></i> Payment Successful</h3>
+                <p>Your order has been confirmed. You can view order details or continue shopping.</p>
                 <div class="action-buttons">
-                    <a href="${ctx}/orders" class="btn btn-retry" style="background:linear-gradient(135deg,#28a745 0%,#3fcf5d 100%);"><i class="fas fa-list"></i> Xem đơn hàng</a>
-                    <a href="${ctx}/index.jsp" class="btn btn-cod" style="background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);"><i class="fas fa-home"></i> Về trang chủ</a>
+                    <a href="${ctx}/orders" class="btn btn-retry" style="background:linear-gradient(135deg,#28a745 0%,#3fcf5d 100%);"><i class="fas fa-list"></i> View Orders</a>
+                    <a href="${ctx}/index.jsp" class="btn btn-cod" style="background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);"><i class="fas fa-home"></i> Home</a>
                 </div>
             </div>
 
             <!-- Expired message -->
             <div class="expired-message" id="expiredMessage">
-                <h3><i class="fas fa-exclamation-circle"></i> Mã QR đã hết hạn</h3>
-                <p>Thời gian thanh toán đã kết thúc. Bạn có thể thử lại hoặc chuyển sang thanh toán COD.</p>
+                <h3><i class="fas fa-exclamation-circle"></i> QR Code Expired</h3>
+                <p>Payment time has ended. You can retry or switch to Cash on Delivery.</p>
                 
                 <div class="action-buttons">
                     <form action="${ctx}/momo/retry" method="post" style="display: inline;">
                         <input type="hidden" name="orderId" value="${sessionScope.hold_order_id}"/>
                         <button type="submit" class="btn btn-retry">
-                            <i class="fas fa-redo"></i> Thanh toán lại MoMo
+                            <i class="fas fa-redo"></i> Retry MoMo Payment
                         </button>
                     </form>
                     
                     <form action="${ctx}/order/switch-to-cod" method="post" style="display: inline;"
-                          onsubmit="return confirm('Chuyển sang thanh toán COD cho đơn hàng #${sessionScope.hold_order_id}?');">
+                          onsubmit="return confirm('Switch to Cash on Delivery for order #${sessionScope.hold_order_id}?');">
                         <input type="hidden" name="orderId" value="${sessionScope.hold_order_id}"/>
                         <button type="submit" class="btn btn-cod">
-                            <i class="fas fa-money-bill"></i> Chuyển sang COD
+                            <i class="fas fa-money-bill"></i> Switch to COD
                         </button>
                     </form>
                 </div>
 
                 <div class="mt-4">
                     <a href="${ctx}/orders" class="btn btn-outline-secondary">
-                        <i class="fas fa-list"></i> Xem đơn hàng của tôi
+                        <i class="fas fa-list"></i> View My Orders
                     </a>
                 </div>
             </div>

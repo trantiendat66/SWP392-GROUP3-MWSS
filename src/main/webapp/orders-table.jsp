@@ -68,18 +68,20 @@
                                     <c:choose>
                                         <c:when test="${o.order_status eq 'PENDING_HOLD'}">
                                             <!-- Đơn hàng giữ chỗ MoMo: hiển thị countdown + nút retry/COD -->
-                                            <div class="d-flex flex-column gap-1 align-items-end">
-                                                <span class="badge bg-info text-dark">Hold: 
+                                            <div class="d-flex flex-column gap-1 align-items-end hold-order-actions" data-orderid="${o.order_id}" data-orderdate="${o.order_date}">
+                                                <span class="badge bg-info text-dark hold-badge">Hold: 
                                                     <span class="hold-countdown" data-orderdate="${o.order_date}"></span>
                                                 </span>
-                                                <form action="${ctx}/momo/retry" method="post" class="d-inline">
-                                                    <input type="hidden" name="orderId" value="${o.order_id}"/>
-                                                    <button type="submit" class="btn btn-xs btn-outline-primary">Retry MoMo</button>
-                                                </form>
-                                                <form action="${ctx}/order/switch-to-cod" method="post" class="d-inline" onsubmit="return confirm('Switch order #${o.order_id} to COD?');">
-                                                    <input type="hidden" name="orderId" value="${o.order_id}"/>
-                                                    <button type="submit" class="btn btn-xs btn-outline-secondary">Switch to COD</button>
-                                                </form>
+                                                <div class="hold-buttons">
+                                                    <form action="${ctx}/momo/retry" method="post" class="d-inline">
+                                                        <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                                        <button type="submit" class="btn btn-xs btn-outline-primary">Retry MoMo</button>
+                                                    </form>
+                                                    <form action="${ctx}/order/switch-to-cod" method="post" class="d-inline" onsubmit="return confirm('Switch order #${o.order_id} to COD?');">
+                                                        <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                                        <button type="submit" class="btn btn-xs btn-outline-secondary">Switch to COD</button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </c:when>
                                         <c:when test="${o.order_status eq 'PENDING' && o.payment_method == 0}">
@@ -327,25 +329,48 @@
             });
         });
 
-        // Hold order countdown (PENDING_HOLD): order_date + 12h
+        // Hold order countdown (PENDING_HOLD): order_date + 5min (for test)
+        const cancelledOrders = new Set();
         function updateCountdowns() {
-            document.querySelectorAll('.hold-countdown').forEach(function(el) {
-                const orderDateStr = el.getAttribute('data-orderdate'); // "yyyy-MM-dd HH:mm:ss"
+            document.querySelectorAll('.hold-order-actions').forEach(function(container) {
+                const orderDateStr = container.getAttribute('data-orderdate');
+                const orderId = container.getAttribute('data-orderid');
                 if (!orderDateStr) return;
+                
                 const orderDate = new Date(orderDateStr.replace(' ', 'T'));
-                const until = new Date(orderDate.getTime() + 12 * 60 * 60 * 1000); // +12h
+                const until = new Date(orderDate.getTime() + 5 * 60 * 1000); // +5min for test (change to 12*60*60*1000 for production)
                 const now = new Date();
                 const diffMs = until - now;
+                
+                const countdownEl = container.querySelector('.hold-countdown');
+                const badgeEl = container.querySelector('.hold-badge');
+                const buttonsEl = container.querySelector('.hold-buttons');
+                
                 if (diffMs <= 0) {
-                    el.textContent = 'Expired';
-                    el.parentElement.classList.remove('bg-info');
-                    el.parentElement.classList.add('bg-danger');
+                    // Expired: hide buttons, show expired badge
+                    countdownEl.textContent = 'Expired';
+                    badgeEl.classList.remove('bg-info');
+                    badgeEl.classList.add('bg-danger');
+                    if (buttonsEl) buttonsEl.style.display = 'none';
+                    
+                    // Auto-cancel order once (prevent multiple calls)
+                    if (!cancelledOrders.has(orderId)) {
+                        cancelledOrders.add(orderId);
+                        fetch('${ctx}/api/auto-cancel-hold?orderId=' + orderId, { method: 'POST' })
+                            .then(r => r.ok ? r.json() : Promise.reject('HTTP ' + r.status))
+                            .then(data => {
+                                console.log('Auto-cancelled order #' + orderId, data);
+                                // Optionally reload page after 2 seconds
+                                setTimeout(() => location.reload(), 2000);
+                            })
+                            .catch(err => console.error('Auto-cancel error:', err));
+                    }
                     return;
                 }
                 const h = Math.floor(diffMs / 3600000);
                 const m = Math.floor((diffMs % 3600000) / 60000);
                 const s = Math.floor((diffMs % 60000) / 1000);
-                el.textContent = h + 'h ' + m + 'm ' + s + 's';
+                countdownEl.textContent = h + 'h ' + m + 'm ' + s + 's';
             });
         }
         updateCountdowns();

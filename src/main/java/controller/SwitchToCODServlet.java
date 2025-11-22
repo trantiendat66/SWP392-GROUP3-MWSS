@@ -68,7 +68,7 @@ public class SwitchToCODServlet extends HttpServlet {
                 String orderDateStr = order.getOrder_date(); // format: "yyyy-MM-dd HH:mm:ss"
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date orderDate = sdf.parse(orderDateStr);
-                Date holdExpires = new Date(orderDate.getTime() + 12 * 60 * 60 * 1000); // +12h
+                Date holdExpires = new Date(orderDate.getTime() + 5 * 60 * 1000); // +12h
                 if (new Date().after(holdExpires)) {
                     session.setAttribute("orderError", "Hold reservation has expired (12h). Cannot switch to COD.");
                     resp.sendRedirect(req.getContextPath() + "/orders");
