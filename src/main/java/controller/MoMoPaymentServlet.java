@@ -6,6 +6,7 @@ package controller;
 
 import dao.CartDAO;
 import dao.ProductDAO;
+import dao.OrderDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -14,6 +15,14 @@ import model.Customer;
 import org.json.JSONObject;
 import util.MoMoConfig;
 import util.MoMoPaymentUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -84,7 +93,31 @@ public class MoMoPaymentServlet extends HttpServlet {
 
             System.out.println("Total amount: " + totalAmount + " VND");
             
-            // Generate orderId and requestId for MoMo
+            // ====== CREATE / REUSE HOLD ORDER ======
+            OrderDAO orderDAO = new OrderDAO();
+            Integer holdOrderId = (Integer) session.getAttribute("hold_order_id");
+            boolean reuseHold = false;
+            if (holdOrderId != null) {
+                // Simple verification could be added (status still PENDING_HOLD & not expired)
+                reuseHold = true; // assume valid; refine later if needed
+            }
+
+            if (!reuseHold) {
+                // Create new hold order (reserve stock): order_status=PENDING_HOLD, payment_method=2 (MoMo), payment_status=UNPAID
+                int newId = createHoldOrder(orderDAO, cus.getCustomer_id(), phone, address, isBuyNow, items);
+                holdOrderId = newId;
+                session.setAttribute("hold_order_id", holdOrderId);
+                // Clear cart / buy-now since already reserved
+                if (isBuyNow) {
+                    // remove buy-now markers
+                    session.removeAttribute("bn_pid");
+                    session.removeAttribute("bn_qty");
+                } else {
+                    cartDAO.clearCart(cus.getCustomer_id());
+                }
+            }
+
+            // Generate orderId and requestId for MoMo (MoMo's own identifiers)
             String momoOrderId = MoMoConfig.generateOrderId(cus.getCustomer_id());
             String requestId = MoMoConfig.generateRequestId();
             
@@ -128,15 +161,24 @@ public class MoMoPaymentServlet extends HttpServlet {
             System.out.println("MoMo API Result Code: " + resultCode);
             
             if (resultCode == 0) {
-                // Success - redirect to MoMo payment page
+                // Success - get QR code URL and deeplink
                 String payUrl = momoResponse.getString("payUrl");
-                System.out.println("Success! Redirecting to: " + payUrl);
+                String qrCodeUrl = momoResponse.optString("qrCodeUrl", "");
+                String deeplink = momoResponse.optString("deeplink", payUrl);
                 
-                // Save momoOrderId to session for tracking
+                System.out.println("Success! PayUrl: " + payUrl);
+                System.out.println("QR Code URL: " + qrCodeUrl);
+                
+                // Save MoMo tracking + URLs for display
                 session.setAttribute("momo_order_id", momoOrderId);
                 session.setAttribute("momo_request_id", requestId);
+                session.setAttribute("momo_pay_url", payUrl);
+                session.setAttribute("momo_qr_url", qrCodeUrl);
+                session.setAttribute("momo_deeplink", deeplink);
+                session.setAttribute("total_amount", totalAmount);
                 
-                resp.sendRedirect(payUrl);
+                // Redirect to intermediate page with countdown
+                resp.sendRedirect(req.getContextPath() + "/momo-payment.jsp");
             } else {
                 // Failed
                 String message = momoResponse.optString("message", "Unknown error");
@@ -156,5 +198,101 @@ public class MoMoPaymentServlet extends HttpServlet {
             session.setAttribute("error", "Payment error: " + e.getMessage());
             resp.sendRedirect(req.getContextPath() + "/payment");
         }
+    }
+
+    private int createHoldOrder(OrderDAO orderDAO, int customerId, String phone, String address, boolean isBuyNow, List<Cart> items) throws SQLException {
+        // Reuse existing create logic: temporarily mimic createOrder but custom status & payment
+        // Insert order header
+        long total = 0;
+        Map<Integer, Cart> merged = new LinkedHashMap<>();
+        for (Cart it : items) {
+            merged.merge(it.getProductId(), it, (a,b)->{a.setQuantity(a.getQuantity()+b.getQuantity());return a;});
+        }
+        for (Cart it : merged.values()) total += (long) it.getPrice() * it.getQuantity();
+
+        try (Connection cn = new db.DBContext().getConnection()) {
+            if (cn == null) throw new SQLException("Cannot connect DB");
+            cn.setAutoCommit(false);
+            cn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+            // staff id resolution simplified: reuse method via reflection or duplicate minimal logic
+            int staffId = resolveStaffFallback(cn);
+
+            int orderId;
+            // Tạo đơn PENDING_HOLD, dùng order_date để tính hết hạn (order_date + 12h)
+            String sqlOrder = "INSERT INTO [Order](account_id, customer_id, phone, order_date, order_status, shipping_address, payment_method, total_amount) " +
+                    "VALUES(?, ?, ?, GETDATE(), 'PENDING_HOLD', ?, 2, ?)";
+            try (PreparedStatement ps = cn.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, staffId);
+                ps.setInt(2, customerId);
+                ps.setString(3, phone);
+                ps.setString(4, address == null ? "" : address);
+                ps.setLong(5, total);
+                ps.executeUpdate();
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (!rs.next()) throw new SQLException("No order id generated");
+                    orderId = rs.getInt(1);
+                }
+            }
+
+            String sqlDetail = "INSERT INTO OrderDetail(order_id, product_id, quantity, unit_price) VALUES(?,?,?,?)";
+            try (PreparedStatement ps = cn.prepareStatement(sqlDetail)) {
+                for (Cart it : merged.values()) {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, it.getProductId());
+                    ps.setInt(3, it.getQuantity());
+                    ps.setInt(4, it.getPrice());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+
+            // Reserve stock
+            String sqlStock = "UPDATE Product SET product_quantity = product_quantity - ? WHERE product_id=? AND product_quantity >= ?";
+            List<Integer> fail = new ArrayList<>();
+            try (PreparedStatement ps = cn.prepareStatement(sqlStock)) {
+                for (Cart it : merged.values()) {
+                    ps.setInt(1, it.getQuantity());
+                    ps.setInt(2, it.getProductId());
+                    ps.setInt(3, it.getQuantity());
+                    if (ps.executeUpdate()==0) fail.add(it.getProductId());
+                }
+            }
+            if (!fail.isEmpty()) {
+                cn.rollback();
+                throw new SQLException("Insufficient stock for products: " + fail);
+            }
+            cn.commit();
+            return orderId;
+        }
+    }
+
+    private int resolveStaffFallback(Connection cn) throws SQLException {
+        // Simplified copy of logic from OrderDAO.resolveDefaultAccountId
+        String pickActiveNotAdmin = "SELECT TOP 1 s.account_id FROM Staff s WHERE s.[status] = N'ACTIVE' AND s.account_id <> 1 ORDER BY s.account_id";
+        try (PreparedStatement ps = cn.prepareStatement(pickActiveNotAdmin); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        // fallback any not admin
+        try (PreparedStatement ps = cn.prepareStatement("SELECT TOP 1 account_id FROM Staff WHERE account_id <> 1 ORDER BY account_id"); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        // final: seed one staff
+        String seed = "INSERT INTO Staff(user_name,[password],email,phone,role,[position],[address],[status]) VALUES(?,?,?,?,?,?,?,?)";
+        try (PreparedStatement ps = cn.prepareStatement(seed, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, "seed_operator");
+            ps.setString(2, "seed@123");
+            ps.setString(3, "operator@example.com");
+            ps.setString(4, "0900000000");
+            ps.setString(5, "STAFF");
+            ps.setString(6, "Operator");
+            ps.setString(7, "-");
+            ps.setString(8, "ACTIVE");
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        throw new SQLException("Cannot resolve staff id for hold order");
     }
 }

@@ -47,7 +47,7 @@ public class OrderListServlet extends HttpServlet {
         try {
 
             List<Order> ordersPlaced = orderDAO.findOrdersByStatuses(
-                    cus.getCustomer_id(), "PENDING", "CONFIRMED", "CANCELLED");
+                    cus.getCustomer_id(), "PENDING_HOLD", "PENDING", "CONFIRMED", "CANCELLED");
             List<Order> ordersShipping = orderDAO.findOrdersByStatuses(
                     cus.getCustomer_id(), "SHIPPING");
             List<Order> ordersDelivered = orderDAO.findOrdersByStatuses(

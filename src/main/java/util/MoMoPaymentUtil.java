@@ -53,9 +53,6 @@ public class MoMoPaymentUtil {
         String orderInfo,
         String extraData) throws Exception {
         
-        // Calculate expiration time: 20 minutes from now (timestamp in milliseconds)
-        long orderExpireTime = System.currentTimeMillis() + (20 * 60 * 1000);
-        
         // Build raw signature
     String rawSignature = "accessKey=" + MoMoConfig.ACCESS_KEY
                 + "&amount=" + amount
@@ -89,10 +86,8 @@ public class MoMoPaymentUtil {
         requestBody.put("requestType", MoMoConfig.REQUEST_TYPE);
         requestBody.put("signature", signature);
         requestBody.put("autoCapture", MoMoConfig.AUTO_CAPTURE);
-        requestBody.put("orderExpireTime", orderExpireTime); // Add 20-minute timeout
         
         System.out.println("Request body: " + requestBody.toString());
-        System.out.println("Order expire time: " + orderExpireTime + " (20 minutes from now)");
         
         // Send POST request to MoMo
         URI uri = new URI(MoMoConfig.ENDPOINT);

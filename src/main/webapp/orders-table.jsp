@@ -62,10 +62,26 @@
                                 </div>
                             </div>
 
-                            <div class="text-end ms-3" style="min-width:170px;">
+                            <div class="text-end ms-3" style="min-width:200px;">
 
                                 <div class="mt-2">
                                     <c:choose>
+                                        <c:when test="${o.order_status eq 'PENDING_HOLD'}">
+                                            <!-- Đơn hàng giữ chỗ MoMo: hiển thị countdown + nút retry/COD -->
+                                            <div class="d-flex flex-column gap-1 align-items-end">
+                                                <span class="badge bg-info text-dark">Hold: 
+                                                    <span class="hold-countdown" data-orderdate="${o.order_date}"></span>
+                                                </span>
+                                                <form action="${ctx}/momo/retry" method="post" class="d-inline">
+                                                    <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                                    <button type="submit" class="btn btn-xs btn-outline-primary">Retry MoMo</button>
+                                                </form>
+                                                <form action="${ctx}/order/switch-to-cod" method="post" class="d-inline" onsubmit="return confirm('Switch order #${o.order_id} to COD?');">
+                                                    <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                                    <button type="submit" class="btn btn-xs btn-outline-secondary">Switch to COD</button>
+                                                </form>
+                                            </div>
+                                        </c:when>
                                         <c:when test="${o.order_status eq 'PENDING' && o.payment_method == 0}">
                                             <form action="${ctx}/order/cancel" method="post" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn #${o.order_id}?');">
                                                 <input type="hidden" name="orderId" value="${o.order_id}"/>
@@ -292,6 +308,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Feedback form validation
         document.querySelectorAll('.feedback-form').forEach(function (form) {
             form.addEventListener('submit', function (e) {
                 const rating = parseInt(form.querySelector('input[name="rating"]:checked')?.value || '5', 10);
@@ -309,5 +326,29 @@
                 }
             });
         });
+
+        // Hold order countdown (PENDING_HOLD): order_date + 12h
+        function updateCountdowns() {
+            document.querySelectorAll('.hold-countdown').forEach(function(el) {
+                const orderDateStr = el.getAttribute('data-orderdate'); // "yyyy-MM-dd HH:mm:ss"
+                if (!orderDateStr) return;
+                const orderDate = new Date(orderDateStr.replace(' ', 'T'));
+                const until = new Date(orderDate.getTime() + 12 * 60 * 60 * 1000); // +12h
+                const now = new Date();
+                const diffMs = until - now;
+                if (diffMs <= 0) {
+                    el.textContent = 'Expired';
+                    el.parentElement.classList.remove('bg-info');
+                    el.parentElement.classList.add('bg-danger');
+                    return;
+                }
+                const h = Math.floor(diffMs / 3600000);
+                const m = Math.floor((diffMs % 3600000) / 60000);
+                const s = Math.floor((diffMs % 60000) / 1000);
+                el.textContent = h + 'h ' + m + 'm ' + s + 's';
+            });
+        }
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
     });
 </script>
