@@ -34,11 +34,23 @@ public class CancelOrderServlet extends HttpServlet {
         try {
             int orderId = Integer.parseInt(orderIdRaw);
             OrderDAO dao = new OrderDAO();
-            boolean cancelled = dao.cancelPendingOrder(orderId, customer.getCustomer_id());
-            if (cancelled) {
-                session.setAttribute("orderSuccess", "Đơn hàng #" + orderId + " đã được hủy thành công.");
+            String status = dao.getOrderStatus(orderId);
+            Integer payMethod = dao.getPaymentMethod(orderId);
+
+            if (status == null) {
+                session.setAttribute("orderError", "Không tìm thấy đơn hàng.");
+            } else if (!"PENDING".equalsIgnoreCase(status)) {
+                session.setAttribute("orderError", "Chỉ có thể hủy đơn hàng ở trạng thái PENDING.");
+            } else if (payMethod != null && payMethod != 0) {
+                // payMethod != 0 nghĩa là thanh toán online (MoMo) => không cho hủy
+                session.setAttribute("orderError", "Đơn hàng thanh toán qua MoMo không thể hủy.");
             } else {
-                session.setAttribute("orderError", "Đơn hàng không thể hủy (có thể đã được xử lý).");
+                boolean cancelled = dao.cancelPendingOrder(orderId, customer.getCustomer_id());
+                if (cancelled) {
+                    session.setAttribute("orderSuccess", "Đơn hàng #" + orderId + " đã được hủy thành công.");
+                } else {
+                    session.setAttribute("orderError", "Không thể hủy đơn hàng (kiểm tra quyền sở hữu hoặc trạng thái).");
+                }
             }
         } catch (NumberFormatException e) {
             session.setAttribute("orderError", "Mã đơn hàng không hợp lệ.");

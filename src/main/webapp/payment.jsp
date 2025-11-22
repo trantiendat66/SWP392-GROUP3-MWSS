@@ -123,12 +123,12 @@
                     </div>
 
                     <!-- Nút quay lại:
-                         - Nếu đang buy-now (sessionScope.bn_pid có) => POST /payment/cancel-buynow để add vào giỏ rồi về /cart
+                         - Nếu đang buy-now (sessionScope.bn_pid có) => POST /payment/cancel-buynow để về /home (không thêm vào giỏ)
                          - Ngược lại => chỉ link về /cart -->
                     <c:choose>
                         <c:when test="${not empty sessionScope.bn_pid}">
                             <form action="${ctx}/payment/cancel-buynow" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-outline-secondary">← Back to Cart</button>
+                                <button type="submit" class="btn btn-outline-secondary">← Back to Home</button>
                             </form>
                         </c:when>
                         <c:otherwise>
@@ -162,6 +162,9 @@
                                         <option value="0">COD (Cash on Delivery)</option>
                                         <option value="2">MoMo Payment (Online)</option>
                                     </select>
+                                    <div id="momo-warning" class="alert alert-warning mt-2 py-2 px-3 d-none" style="font-size: .85rem;">
+                                        Lưu ý: Đơn hàng thanh toán qua <strong>MoMo</strong> sẽ không thể hủy sau khi đặt.
+                                    </div>
                                 </div>
 
                                 <button id="submitBtn" type="submit" class="btn btn-primary w-100">Place Order</button>
@@ -197,10 +200,12 @@
                 // MoMo payment
                 orderForm.action = '${ctx}/momo/payment';
                 submitBtn.textContent = 'Pay with MoMo';
+                document.getElementById('momo-warning')?.classList.remove('d-none');
             } else {
                 // COD
                 orderForm.action = '${ctx}/order/create-from-cart';
                 submitBtn.textContent = 'Place Order';
+                document.getElementById('momo-warning')?.classList.add('d-none');
             }
         }
 

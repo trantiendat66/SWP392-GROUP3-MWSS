@@ -338,12 +338,28 @@ public class OrderDAO extends DBContext {
 
     public boolean cancelPendingOrder(int orderId, int customerId) throws SQLException {
         String sql = "UPDATE [Order] SET order_status = 'CANCELLED', delivered_at = NULL "
-                + "WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING'";
+                + "WHERE order_id = ? AND customer_id = ? AND order_status = 'PENDING' AND payment_method = 0"; // Chỉ hủy đơn PENDING thanh toán COD
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
             ps.setInt(2, customerId);
             return ps.executeUpdate() > 0;
         }
+    }
+
+    // Lấy phương thức thanh toán của đơn hàng (giá trị nguyên lưu trong cột payment_method)
+    public Integer getPaymentMethod(int orderId) {
+        String sql = "SELECT payment_method FROM [Order] WHERE order_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -401,7 +417,8 @@ public class OrderDAO extends DBContext {
                     o.setOrder_date(rs.getString("order_date"));
                     o.setOrder_status(rs.getString("order_status"));
                     o.setShipping_address(rs.getString("shipping_address"));
-                    o.setPayment_method(rs.getBoolean("payment_method") ? 1 : 0);
+                    // Lấy đúng giá trị nguyên của phương thức thanh toán (0=COD, 2=MoMo, ...)
+                    o.setPayment_method(rs.getInt("payment_method"));
                     o.setTotal_amount(rs.getBigDecimal("total_amount"));
 
                     // >>> NEW: gán delivered_at nếu có
@@ -417,18 +434,6 @@ public class OrderDAO extends DBContext {
         }
     }
 
-//    // ====== Hàm tiện ích (tuỳ dùng) ======
-//    public List<Order> findPlacedOrders(int customerId) throws SQLException {
-//        return findOrdersByStatuses(customerId, "PENDING", "CONFIRMED");
-//    }
-//
-//    public List<Order> findShippingOrders(int customerId) throws SQLException {
-//        return findOrdersByStatuses(customerId, "SHIPPING");
-//    }
-//
-//    public List<Order> findDeliveredOrders(int customerId) throws SQLException {
-//        return findOrdersByStatuses(customerId, "DELIVERED");
-//    }
     /**
      * Lấy chi tiết sản phẩm của 1 đơn (phục vụ accordion ở trang /orders)
      */

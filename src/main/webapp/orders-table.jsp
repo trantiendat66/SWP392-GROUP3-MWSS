@@ -53,23 +53,32 @@
                                 </div>
 
                                 <div class="small text-muted mt-1">
-                                    ${o.shipping_address} | ${o.phone} | Payment: <c:out value="${o.payment_method == 1 ? 'Paid' : 'COD'}"/>
+                                    ${o.shipping_address} | ${o.phone} | Payment:
+                                    <c:choose>
+                                        <c:when test="${o.payment_method == 0}">COD</c:when>
+                                        <c:when test="${o.payment_method == 2}">MoMo</c:when>
+                                        <c:otherwise>Other</c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
 
                             <div class="text-end ms-3" style="min-width:170px;">
 
                                 <div class="mt-2">
-                                    <c:if test="${o.order_status eq 'PENDING'}">
-                                        <form action="${ctx}/order/cancel" method="post" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn #${o.order_id}?');">
-                                            <input type="hidden" name="orderId" value="${o.order_id}"/>
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Cancel Order</button>
-                                        </form>
-                                    </c:if>
-
-                                    <c:if test="${o.order_status eq 'CANCELLED'}">
-                                        <span class="badge bg-danger-subtle text-danger">Cancelled</span>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${o.order_status eq 'PENDING' && o.payment_method == 0}">
+                                            <form action="${ctx}/order/cancel" method="post" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn #${o.order_id}?');">
+                                                <input type="hidden" name="orderId" value="${o.order_id}"/>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel Order</button>
+                                            </form>
+                                        </c:when>
+                                        <c:when test="${o.order_status eq 'PENDING' && o.payment_method != 0}">
+                                            <span class="badge bg-warning text-dark" title="MoMo orders cannot be cancelled">No Cancel (MoMo)</span>
+                                        </c:when>
+                                        <c:when test="${o.order_status eq 'CANCELLED'}">
+                                            <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>
