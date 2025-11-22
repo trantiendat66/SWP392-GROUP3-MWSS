@@ -116,8 +116,8 @@ public class ProductEditServlet extends HttpServlet {
         String brand = trim(request.getParameter("brand"));
         String origin = trim(request.getParameter("origin"));
         String genderParam = request.getParameter("gender");
-        String priceStr = trim(request.getParameter("price"));
-        String quantityStr = trim(request.getParameter("quantity_product"));
+//        String priceStr = trim(request.getParameter("price"));
+//        String quantityStr = trim(request.getParameter("quantity_product"));
         String categoryStr = trim(request.getParameter("category_id"));
         String image = trim(request.getParameter("image"));
         String description = trim(request.getParameter("description"));
@@ -129,6 +129,28 @@ public class ProductEditServlet extends HttpServlet {
         String strap = trim(request.getParameter("strap"));
         String dialColor = trim(request.getParameter("dial_color"));
         String function = trim(request.getParameter("function"));
+        ProductDAO dao = new ProductDAO();
+        Product original = null;
+
+        try {
+            original = dao.getById(productId);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            request.setAttribute("error", "Database error: " + ex.getMessage());
+            RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
+            rd.forward(request, response);
+            return;
+        }
+
+        if (original == null) {
+            request.setAttribute("error", "Product not found.");
+            RequestDispatcher rd = request.getRequestDispatcher("/edit_product.jsp");
+            rd.forward(request, response);
+            return;
+        }
+
+        int price = original.getPrice();
+        int quantity = original.getQuantityProduct();
 
         // Kiểm tra rỗng
         if (productName.isEmpty()) {
@@ -140,12 +162,12 @@ public class ProductEditServlet extends HttpServlet {
         if (origin.isEmpty()) {
             errors.put("originError", "Origin cannot be left blank"); // Không được bỏ trống xuất xứ
         }
-        if (priceStr.isEmpty()) {
-            errors.put("priceError", "Price cannot be left blank"); // Không được bỏ trống giá
-        }
-        if (quantityStr.isEmpty()) {
-            errors.put("quantityError", "Quantity cannot be left blank"); // Không được bỏ trống số lượng
-        }
+//        if (priceStr.isEmpty()) {
+//            errors.put("priceError", "Price cannot be left blank"); // Không được bỏ trống giá
+//        }
+//        if (quantityStr.isEmpty()) {
+//            errors.put("quantityError", "Quantity cannot be left blank"); // Không được bỏ trống số lượng
+//        }
         if (categoryStr.isEmpty()) {
             errors.put("categoryError", "Category ID cannot be left blank"); // Không được bỏ trống mã danh mục
         }
@@ -177,27 +199,26 @@ public class ProductEditServlet extends HttpServlet {
             errors.put("dialColorError", "Please enter the dial color."); // Vui lòng nhập màu mặt đồng hồ.
         }
 
-        int price = 0, quantity = 0, categoryId = 0, importInvetoryId = 0;
+        int categoryId = 0, importInvetoryId = 0;
         boolean gender = "true".equalsIgnoreCase(genderParam);
 
-        try {
-            price = Integer.parseInt(priceStr);
-            if (price <= 0) {
-                errors.put("priceError", "Price cannot be negative");
-            }
-        } catch (NumberFormatException e) {
-            errors.put("priceError", "Price must be a valid number");
-        }
-
-        try {
-            quantity = Integer.parseInt(quantityStr);
-            if (quantity < 0) {
-                errors.put("quantityError", "Quantity cannot be negative");
-            }
-        } catch (NumberFormatException e) {
-            errors.put("quantityError", "Quantity must be a valid number");
-        }
-
+//        try {
+//            price = Integer.parseInt(priceStr);
+//            if (price <= 0) {
+//                errors.put("priceError", "Price cannot be negative");
+//            }
+//        } catch (NumberFormatException e) {
+//            errors.put("priceError", "Price must be a valid number");
+//        }
+//
+//        try {
+//            quantity = Integer.parseInt(quantityStr);
+//            if (quantity < 0) {
+//                errors.put("quantityError", "Quantity cannot be negative");
+//            }
+//        } catch (NumberFormatException e) {
+//            errors.put("quantityError", "Quantity must be a valid number");
+//        }
         try {
             categoryId = Integer.parseInt(categoryStr);
             if (categoryId <= 0) {
@@ -206,7 +227,6 @@ public class ProductEditServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             errors.put("categoryError", "Category ID must be a valid number");
         }
-
 
         // Nếu có lỗi → quay lại trang edit_product.jsp
         if (!errors.isEmpty()) {
@@ -260,7 +280,6 @@ public class ProductEditServlet extends HttpServlet {
             p.setDialColor(dialColor);
             p.setFunction(function);
 
-            ProductDAO dao = new ProductDAO();
             dao.updateProduct(p);
 
             request.getSession().setAttribute("successMessage", "Product updated successfully!"); // Cập nhật sản phẩm thành công!

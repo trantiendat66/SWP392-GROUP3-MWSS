@@ -42,10 +42,8 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Price</label>
-                        <input type="number" name="price" class="form-control" value="${product.price}">
-                        <c:if test="${not empty errors.priceError}">
-                            <div class="text-danger small mt-1">${errors.priceError}</div>
-                        </c:if>
+                        <input type="number" name="price" class="form-control" value="${product.price}" readonly>
+                       
                     </div>
                 </div>
 
@@ -87,10 +85,8 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Quantity</label>
-                        <input type="number" name="quantity_product" class="form-control" value="${product.quantityProduct}">
-                        <c:if test="${not empty errors.quantityError}">
-                            <div class="text-danger small mt-1">${errors.quantityError}</div>
-                        </c:if>
+                        <input type="number" name="quantity_product" class="form-control" value="${product.quantityProduct}" readonly>
+                       
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Image (filename or URL)</label>
