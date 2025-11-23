@@ -38,8 +38,22 @@ public class OrderBuyNowServlet extends HttpServlet {
         }
         Customer cus = (Customer) session.getAttribute("customer");
 
-        int productId = Integer.parseInt(req.getParameter("product_id"));
-        int qty = Math.max(1, Integer.parseInt(req.getParameter("quantity")));
+        int productId = 0;
+        int qty = 1;
+        try {
+            String pidStr = req.getParameter("product_id");
+            String qtyStr = req.getParameter("quantity");
+            productId = pidStr != null ? Integer.parseInt(pidStr) : 0;
+            qty = qtyStr != null ? Math.max(1, Integer.parseInt(qtyStr)) : 1;
+        } catch (NumberFormatException nfe) {
+            // ignore, defaults applied
+        }
+
+        // Detailed logging of incoming parameters to help debug quantity issues
+        System.out.println("=== OrderBuyNowServlet ===");
+        System.out.println("Request parameters:");
+        req.getParameterMap().forEach((k, v) -> System.out.println("  " + k + " = " + java.util.Arrays.toString(v)));
+        System.out.println("Parsed productId=" + productId + ", quantity=" + qty);
 
         // Kiểm tra sản phẩm có tồn tại và còn hàng không
         ProductDAO productDAO = new ProductDAO();
@@ -57,13 +71,18 @@ public class OrderBuyNowServlet extends HttpServlet {
             return;
         }
 
-        // Buy Now luôn bắt đầu với số lượng 1, không lấy từ cart
-        // Người dùng có thể chỉnh số lượng trong trang Payment Confirmation
-        qty = 1;
+        // Kiểm tra số lượng không vượt quá stock
+        if (qty > product.getQuantityProduct()) {
+            System.out.println("Quantity exceeded stock, adjusting from " + qty + " to " + product.getQuantityProduct());
+            qty = product.getQuantityProduct();
+        }
 
         // ĐÁNH DẤU Buy-Now đang chờ thanh toán (KHÔNG thêm vào cart)
+        // Sử dụng số lượng mà user đã chọn
         session.setAttribute("bn_pid", productId);
         session.setAttribute("bn_qty", qty);
+        
+        System.out.println("Set session bn_pid=" + productId + ", bn_qty=" + qty);
 
         // tới trang payment
         resp.sendRedirect(req.getContextPath() + "/payment?bn=1");

@@ -66,7 +66,11 @@
                                 <tr>
                                     <th style="width:70px;">Image</th>
                                     <th class="product-col">Product</th>
-                                    <th class="text-center qty-col">Quantity</th>
+                                    <c:choose>
+                                        <c:when test="${empty sessionScope.bn_pid}">
+                                            <th class="text-center qty-col">Quantity</th>
+                                        </c:when>
+                                    </c:choose>
                                     <th class="text-end price-col">Unit Price</th>
                                     <th class="text-end total-col">Subtotal</th>
                                 </tr>
@@ -82,28 +86,13 @@
                                             <div class="fw-semibold">${item.productName}</div>
                                             <small class="text-muted">Brand: ${item.brand}</small>
                                         </td>
-                                        <td class="text-center">
-                                            <c:choose>
-                                                <c:when test="${not empty sessionScope.bn_pid}">
-                                                    <!-- Buy Now mode: cho phép chỉnh số lượng -->
-                                                    <div class="d-flex align-items-center justify-content-center gap-2">
-                                                        <input type="number" 
-                                                               class="form-control form-control-sm buynow-qty-input" 
-                                                               style="width:80px; text-align:center;"
-                                                               value="${item.quantity}" 
-                                                               min="1" 
-                                                               max="${item.availableQuantity}"
-                                                               data-product-id="${item.productId}"
-                                                               data-unit-price="${item.price}">
-                                                        <span class="text-muted">/ ${item.availableQuantity}</span>
-                                                    </div>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <!-- Cart mode: chỉ hiển thị -->
+                                        <c:choose>
+                                            <c:when test="${empty sessionScope.bn_pid}">
+                                                <td class="text-center">
                                                     ${item.quantity}
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
+                                                </td>
+                                            </c:when>
+                                        </c:choose>
                                         <td class="text-end text-muted price-col"><fmt:formatNumber value="${item.price}" type="number"/> VND</td>
                                         <td class="text-end fw-semibold total-col buynow-subtotal" data-unit-price="${item.price}">
                                             <fmt:formatNumber value="${item.totalPrice}" type="number"/> VND
@@ -113,7 +102,14 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Total:</th>
+                                    <c:choose>
+                                        <c:when test="${empty sessionScope.bn_pid}">
+                                            <th colspan="4" class="text-end">Total:</th>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <th colspan="3" class="text-end">Total:</th>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <th class="text-end text-danger fs-5" id="payment-total">
                                         <fmt:formatNumber value="${totalAmount}" type="number"/> VND
                                     </th>

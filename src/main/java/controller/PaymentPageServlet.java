@@ -45,15 +45,7 @@ public class PaymentPageServlet extends HttpServlet {
             Integer bnPid = (Integer) session.getAttribute("bn_pid");
             Integer bnQty = (Integer) session.getAttribute("bn_qty");
             String bnParam = req.getParameter("bn");
-            boolean isBuyNow = "1".equals(bnParam) && bnPid != null;
-            
-            // Khi vào trang payment với buy now, luôn reset số lượng về 1
-            if (isBuyNow && bnPid != null) {
-                bnQty = 1; // Luôn bắt đầu với số lượng 1
-                session.setAttribute("bn_qty", bnQty);
-            }
-            
-            isBuyNow = isBuyNow && bnQty != null && bnQty > 0;
+            boolean isBuyNow = "1".equals(bnParam) && bnPid != null && bnQty != null && bnQty > 0;
 
             System.out.println("bn_pid from session: " + bnPid);
             System.out.println("bn_qty from session: " + bnQty);

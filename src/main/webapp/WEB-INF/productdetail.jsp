@@ -45,21 +45,16 @@
                     </div>
 
                     <div class="d-flex align-items-center mb-2 quantity-action-row">
-                        <div class="me-2">
-                            <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
-                                   class="form-control quantity-input" style="width:100px;">
-                        </div>
                         <button type="button" id="btn-add-cart" class="btn btn-danger me-2 custom-btn"
                                 onclick="addToCart('${product.productId}')">
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
-
                         <button type="button" id="btn-buy-now" class="btn btn-primary custom-btn"
                                 onclick="buyNow('${product.productId}')">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
                     </div>
-                    <div id="quantity-feedback" class="quantity-feedback" data-state="hidden" aria-live="polite"></div>
+                    <div class="text-muted small">* Buy Now chỉ cho phép mua 1 sản phẩm mỗi lần</div>
 
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
@@ -714,31 +709,9 @@
             showLoginRequired('To purchase a product, you must log in first');
             return;
         }
-
-        // lấy số lượng hiện trên trang
-        const quantityInput = document.getElementById('quantity-input');
-        let qty = parseInt(quantityInput.value) || 1;
-        if (qty < 1) {
-            qty = 1;
-            quantityInput.value = 1;
-        }
-
-        // Kiểm tra số lượng không vượt quá stock
-        const maxQuantity = parseInt('${product.quantityProduct}');
-        if (qty > maxQuantity) {
-            setQuantityMessage('Quantity cannot exceed stock.', 'error');
-            quantityInput.value = maxQuantity;
-            quantityInput.focus();
-            return;
-        }
-
-        if (maxQuantity === 0) {
-            setQuantityMessage('Product is out of stock.', 'error');
-            return;
-        }
-
-        // set vào input hidden và submit form ẩn tới /order/buy-now
-        document.getElementById('buyNowQty').value = qty;
+        // Chỉ cho phép mua 1 sản phẩm mỗi lần
+        const buyNowQtyInput = document.getElementById('buyNowQty');
+        buyNowQtyInput.value = 1;
         document.getElementById('buyNowForm').submit();
     }
 </script>
