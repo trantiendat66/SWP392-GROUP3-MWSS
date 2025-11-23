@@ -96,12 +96,21 @@ public class CartServlet extends HttpServlet {
     private void viewCart(HttpServletRequest request, HttpServletResponse response, Customer customer)
             throws ServletException, IOException {
         try {
+            // Tự động điều chỉnh số lượng trong cart theo stock hiện tại
+            int adjustedCount = cartDAO.validateAndAdjustCart(customer.getCustomer_id());
+            
             var cartItems = cartDAO.getCartByCustomerId(customer.getCustomer_id());
             int totalAmount = cartDAO.getCartTotal(customer.getCustomer_id());
 
             request.setAttribute("cartItems", cartItems);
             request.setAttribute("totalAmount", totalAmount);
             request.setAttribute("cartItemCount", cartItems.size());
+            
+            // Thông báo nếu có items được điều chỉnh
+            if (adjustedCount > 0) {
+                request.setAttribute("cartAdjusted", true);
+                request.setAttribute("adjustedCount", adjustedCount);
+            }
 
             request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
         } catch (Exception e) {
@@ -233,16 +242,32 @@ public class CartServlet extends HttpServlet {
                 Cart cartItem = cartDAO.getCartItemById(cartId);
                 if (cartItem != null) {
                     Product product = productDAO.getProductById(cartItem.getProductId());
-                    if (product != null && newQuantity > product.getQuantityProduct()) {
-                        out.print("{\"success\": false, \"message\": \"Not enough stock available. Only " + product.getQuantityProduct() + " items left.\"}");
-                        out.flush();
-                        return;
+                    if (product != null) {
+                        // Ràng buộc: số lượng không được vượt quá stock
+                        if (newQuantity > product.getQuantityProduct()) {
+                            // Tự động điều chỉnh về stock nếu vượt
+                            newQuantity = product.getQuantityProduct();
+                            if (newQuantity == 0) {
+                                // Hết hàng, xóa khỏi cart
+                                cartDAO.removeFromCart(cartId);
+                                out.print("{\"success\": true, \"message\": \"Product is out of stock. Item removed from cart.\", \"removed\": true}");
+                                out.flush();
+                                return;
+                            }
+                        }
                     }
                 }
 
+                // Method updateCartQuantity đã có validation, nhưng ta đã validate trước rồi
                 boolean success = cartDAO.updateCartQuantity(cartId, newQuantity);
                 if (success) {
-                    out.print("{\"success\": true, \"message\": \"Quantity updated successfully.\"}");
+                    // Kiểm tra xem có bị điều chỉnh không
+                    Cart updatedItem = cartDAO.getCartItemById(cartId);
+                    if (updatedItem != null && updatedItem.getQuantity() < Integer.parseInt(request.getParameter("quantity"))) {
+                        out.print("{\"success\": true, \"message\": \"Quantity adjusted to available stock: " + updatedItem.getQuantity() + ".\", \"adjusted\": true, \"quantity\": " + updatedItem.getQuantity() + "}");
+                    } else {
+                        out.print("{\"success\": true, \"message\": \"Quantity updated successfully.\", \"quantity\": " + newQuantity + "}");
+                    }
                 } else {
                     out.print("{\"success\": false, \"message\": \"Error occurred while updating quantity.\"}");
                 }
