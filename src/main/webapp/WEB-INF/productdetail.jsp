@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
@@ -45,16 +46,21 @@
                     </div>
 
                     <div class="d-flex align-items-center mb-2 quantity-action-row">
+                        <div class="me-2">
+                            <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
+                                   class="form-control quantity-input" style="width:100px;">
+                        </div>
                         <button type="button" id="btn-add-cart" class="btn btn-danger me-2 custom-btn"
                                 onclick="addToCart('${product.productId}')">
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
+
                         <button type="button" id="btn-buy-now" class="btn btn-primary custom-btn"
                                 onclick="buyNow('${product.productId}')">
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
                     </div>
-                    <div class="text-muted small">* Buy Now chỉ cho phép mua 1 sản phẩm mỗi lần</div>
+                    <div id="quantity-feedback" class="quantity-feedback" data-state="hidden" aria-live="polite"></div>
 
                     <form id="buyNowForm" action="${pageContext.request.contextPath}/order/buy-now" method="post" style="display:none;">
                         <input type="hidden" name="product_id" value="${product.productId}">
@@ -545,8 +551,9 @@
                         showLoginRequired('To add a product to the cart, you must log in first');
                         return;
                     }
-                    // Mặc định thêm 1 sản phẩm vào giỏ
-                    const quantity = 1;
+
+                    const quantityInput = document.getElementById('quantity-input');
+                    const quantity = parseInt(quantityInput.value) || 0;
                     const cartState = window.__productDetailCartState || {
                         stockQuantity: parseInt('${product.quantityProduct}') || 0,
                         currentCartQuantity: 0,
@@ -559,42 +566,60 @@
                             ? cartState.getRemaining()
                             : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
 
+                    if (quantity < 1) {
+                        setQuantityMessage('Quantity must be greater than 0.', 'error');
+                        quantityInput.focus();
+                        return;
+                    }
+
                     if (stockQuantity === 0) {
                         setQuantityMessage('Product is out of stock.', 'error');
                         return;
                     }
+
                     if (remaining <= 0) {
                         setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
+                        quantityInput.value = 0;
+                        quantityInput.focus();
                         return;
                     }
+
+                    if (quantity > remaining) {
+                        setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
+                                + ' item(s) of this product in your cart.', 'error');
+                        quantityInput.value = remaining;
+                        quantityInput.focus();
+                        return;
+                    }
+
                     fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
                         method: 'GET'
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                setQuantityMessage('', 'hidden');
-                                if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
-                                    window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
-                                    if (typeof window.__productDetailCartState.notifyChange === 'function') {
-                                        window.__productDetailCartState.notifyChange();
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    setQuantityMessage('', 'hidden');
+                                    if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
+                                        window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
+                                        if (typeof window.__productDetailCartState.notifyChange === 'function') {
+                                            window.__productDetailCartState.notifyChange();
+                                        }
+                                    }
+                                    if (typeof updateCartCount === 'function') {
+                                        updateCartCount();
+                                    }
+                                } else {
+                                    if (data.redirect) {
+                                        showLoginRequired(data.message);
+                                    } else {
+                                        setQuantityMessage(data.message, 'error');
                                     }
                                 }
-                                if (typeof updateCartCount === 'function') {
-                                    updateCartCount();
-                                }
-                            } else {
-                                if (data.redirect) {
-                                    showLoginRequired(data.message);
-                                } else {
-                                    setQuantityMessage(data.message, 'error');
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
-                        });
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
+                            });
                 }
 
                 // Function để cập nhật số lượng giỏ hàng
@@ -690,9 +715,31 @@
             showLoginRequired('To purchase a product, you must log in first');
             return;
         }
-        // Chỉ cho phép mua 1 sản phẩm mỗi lần
-        const buyNowQtyInput = document.getElementById('buyNowQty');
-        buyNowQtyInput.value = 1;
+
+        // lấy số lượng hiện trên trang
+        const quantityInput = document.getElementById('quantity-input');
+        let qty = parseInt(quantityInput.value) || 1;
+        if (qty < 1) {
+            qty = 1;
+            quantityInput.value = 1;
+        }
+
+        // Kiểm tra số lượng không vượt quá stock
+        const maxQuantity = parseInt('${product.quantityProduct}');
+        if (qty > maxQuantity) {
+            setQuantityMessage('Quantity cannot exceed stock.', 'error');
+            quantityInput.value = maxQuantity;
+            quantityInput.focus();
+            return;
+        }
+
+        if (maxQuantity === 0) {
+            setQuantityMessage('Product is out of stock.', 'error');
+            return;
+        }
+
+        // set vào input hidden và submit form ẩn tới /order/buy-now
+        document.getElementById('buyNowQty').value = qty;
         document.getElementById('buyNowForm').submit();
     }
 </script>
