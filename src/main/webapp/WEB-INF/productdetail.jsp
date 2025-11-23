@@ -545,9 +545,8 @@
                         showLoginRequired('To add a product to the cart, you must log in first');
                         return;
                     }
-
-                    const quantityInput = document.getElementById('quantity-input');
-                    const quantity = parseInt(quantityInput.value) || 0;
+                    // Mặc định thêm 1 sản phẩm vào giỏ
+                    const quantity = 1;
                     const cartState = window.__productDetailCartState || {
                         stockQuantity: parseInt('${product.quantityProduct}') || 0,
                         currentCartQuantity: 0,
@@ -560,60 +559,42 @@
                             ? cartState.getRemaining()
                             : Math.max(stockQuantity - (cartState.currentCartQuantity || 0), 0);
 
-                    if (quantity < 1) {
-                        setQuantityMessage('Quantity must be greater than 0.', 'error');
-                        quantityInput.focus();
-                        return;
-                    }
-
                     if (stockQuantity === 0) {
                         setQuantityMessage('Product is out of stock.', 'error');
                         return;
                     }
-
                     if (remaining <= 0) {
                         setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
-                        quantityInput.value = 0;
-                        quantityInput.focus();
                         return;
                     }
-
-                    if (quantity > remaining) {
-                        setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
-                                + ' item(s) of this product in your cart.', 'error');
-                        quantityInput.value = remaining;
-                        quantityInput.focus();
-                        return;
-                    }
-
                     fetch('${pageContext.request.contextPath}/cart?action=add&productId=' + productId + '&quantity=' + quantity, {
                         method: 'GET'
                     })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    setQuantityMessage('', 'hidden');
-                                    if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
-                                        window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
-                                        if (typeof window.__productDetailCartState.notifyChange === 'function') {
-                                            window.__productDetailCartState.notifyChange();
-                                        }
-                                    }
-                                    if (typeof updateCartCount === 'function') {
-                                        updateCartCount();
-                                    }
-                                } else {
-                                    if (data.redirect) {
-                                        showLoginRequired(data.message);
-                                    } else {
-                                        setQuantityMessage(data.message, 'error');
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                setQuantityMessage('', 'hidden');
+                                if (typeof data.currentQuantity === 'number' && window.__productDetailCartState) {
+                                    window.__productDetailCartState.currentCartQuantity = data.currentQuantity;
+                                    if (typeof window.__productDetailCartState.notifyChange === 'function') {
+                                        window.__productDetailCartState.notifyChange();
                                     }
                                 }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
-                            });
+                                if (typeof updateCartCount === 'function') {
+                                    updateCartCount();
+                                }
+                            } else {
+                                if (data.redirect) {
+                                    showLoginRequired(data.message);
+                                } else {
+                                    setQuantityMessage(data.message, 'error');
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            setQuantityMessage('An error occurred while adding the product to the cart.', 'error');
+                        });
                 }
 
                 // Function để cập nhật số lượng giỏ hàng
