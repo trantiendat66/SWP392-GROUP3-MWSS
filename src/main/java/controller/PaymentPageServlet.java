@@ -79,6 +79,14 @@ public class PaymentPageServlet extends HttpServlet {
                 }
                 // ---- CHẾ ĐỘ CART ----
                 System.out.println("Mode: CART");
+                
+                // Tự động điều chỉnh cart theo stock trước khi checkout
+                int adjustedCount = cartDAO.validateAndAdjustCart(cus.getCustomer_id());
+                if (adjustedCount > 0) {
+                    req.setAttribute("cartAdjusted", true);
+                    req.setAttribute("adjustedCount", adjustedCount);
+                }
+                
                 List<Cart> items = cartDAO.findItemsForCheckout(cus.getCustomer_id());
                 System.out.println("Cart items count: " + items.size());
                 int total = 0, count = 0;
