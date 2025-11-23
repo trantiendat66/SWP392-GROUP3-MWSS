@@ -47,6 +47,24 @@
         <div class="alert alert-success">${sessionScope.flash_success}</div>
         <c:remove var="flash_success" scope="session"/>
     </c:if>
+    
+    <!-- Thông báo khi cart được điều chỉnh do stock thay đổi -->
+    <c:if test="${not empty cartAdjusted && cartAdjusted == true}">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Cart Updated:</strong> 
+            <c:choose>
+                <c:when test="${adjustedCount == 1}">
+                    One item in your cart has been adjusted due to stock changes.
+                </c:when>
+                <c:otherwise>
+                    ${adjustedCount} items in your cart have been adjusted due to stock changes.
+                </c:otherwise>
+            </c:choose>
+            Please review your order before proceeding.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </c:if>
 
     <h3 class="mb-3">Payment Confirmation</h3>
 
