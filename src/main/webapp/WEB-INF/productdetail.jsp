@@ -48,15 +48,18 @@
                     <div class="d-flex align-items-center mb-2 quantity-action-row">
                         <div class="me-2">
                             <input type="number" id="quantity-input" value="1" min="1" max="${product.quantityProduct}"
-                                   class="form-control quantity-input" style="width:100px;">
+                                   class="form-control quantity-input" style="width:100px;"
+                                   ${product.quantityProduct <= 0 ? 'disabled' : ''}>
                         </div>
                         <button type="button" id="btn-add-cart" class="btn btn-danger me-2 custom-btn"
-                                onclick="addToCart('${product.productId}')">
+                                onclick="addToCart('${product.productId}')"
+                                ${product.quantityProduct <= 0 ? 'disabled' : ''}>
                             <i class="fas fa-cart-plus"></i> Add to cart
                         </button>
 
                         <button type="button" id="btn-buy-now" class="btn btn-primary custom-btn"
-                                onclick="buyNow('${product.productId}')">
+                                onclick="buyNow('${product.productId}')"
+                                ${product.quantityProduct <= 0 ? 'disabled' : ''}>
                             <i class="fas fa-shopping-cart"></i> Buy Now
                         </button>
                     </div>
@@ -464,8 +467,13 @@
             let errorMessage = '';
 
             if (state.stockQuantity === 0) {
+                // Out of stock: khóa cả 2 nút, không hiển thị thông báo "you already have all available..."
                 isValid = false;
                 errorMessage = 'Product is out of stock.';
+                btnAddCart.disabled = true;
+                btnBuyNow.disabled = true;
+                setQuantityMessage(errorMessage, 'error');
+                return false;
             } else if (remaining === 0) {
                 isValid = false;
                 errorMessage = 'You already have ' + state.currentCartQuantity
@@ -486,16 +494,10 @@
                     setQuantityMessage('', 'hidden');
                 }
             } else {
-                // Nếu số lượng trong giỏ bằng số lượng tồn kho, chỉ disable Add to cart, vẫn cho Buy now
-                if (remaining === 0 && state.currentCartQuantity === state.stockQuantity) {
-                    btnAddCart.disabled = true;
-                    btnBuyNow.disabled = false; // Vẫn cho phép Buy now
-                    setQuantityMessage('You already have all available items in your cart. You can still buy now.', 'info');
-                } else {
-                    btnAddCart.disabled = true;
-                    btnBuyNow.disabled = true;
-                    setQuantityMessage(errorMessage, 'error');
-                }
+                // Khóa cả 2 nút khi không hợp lệ
+                btnAddCart.disabled = true;
+                btnBuyNow.disabled = true;
+                setQuantityMessage(errorMessage, 'error');
             }
 
             return isValid;
@@ -716,6 +718,13 @@
             return;
         }
 
+        // Kiểm tra stock trước
+        const maxQuantity = parseInt('${product.quantityProduct}');
+        if (maxQuantity === 0) {
+            setQuantityMessage('Product is out of stock.', 'error');
+            return;
+        }
+
         // lấy số lượng hiện trên trang
         const quantityInput = document.getElementById('quantity-input');
         let qty = parseInt(quantityInput.value) || 1;
@@ -725,16 +734,10 @@
         }
 
         // Kiểm tra số lượng không vượt quá stock
-        const maxQuantity = parseInt('${product.quantityProduct}');
         if (qty > maxQuantity) {
             setQuantityMessage('Quantity cannot exceed stock.', 'error');
             quantityInput.value = maxQuantity;
             quantityInput.focus();
-            return;
-        }
-
-        if (maxQuantity === 0) {
-            setQuantityMessage('Product is out of stock.', 'error');
             return;
         }
 
