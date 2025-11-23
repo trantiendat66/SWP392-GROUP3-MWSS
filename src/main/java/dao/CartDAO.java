@@ -60,13 +60,41 @@ public class CartDAO extends DBContext {
         return list;
     }
 
-    // Thêm sản phẩm vào giỏ hàng
+    // Thêm sản phẩm vào giỏ hàng (có ràng buộc với stock)
     public boolean addToCart(int customerId, int productId, int price, int quantity) {
+        // Kiểm tra stock trước khi thêm
+        String stockSql = "SELECT product_quantity FROM Product WHERE product_id = ?";
+        int availableStock = 0;
+        try (PreparedStatement ps = conn.prepareStatement(stockSql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    availableStock = rs.getInt("product_quantity");
+                } else {
+                    return false; // Sản phẩm không tồn tại
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         Cart existingCart = getCartItem(customerId, productId);
+        int currentInCart = existingCart != null ? existingCart.getQuantity() : 0;
+        int totalRequested = currentInCart + quantity;
+        
+        // Ràng buộc: tổng số lượng không được vượt quá stock
+        if (totalRequested > availableStock) {
+            // Điều chỉnh số lượng thêm vào để không vượt stock
+            quantity = Math.max(0, availableStock - currentInCart);
+            if (quantity <= 0) {
+                return false; // Không thể thêm vì đã đạt giới hạn stock
+            }
+        }
 
         if (existingCart != null) {
-            // Nếu đã có, cập nhật số lượng
+            // Nếu đã có, cập nhật số lượng (method updateCartQuantity đã có validation)
             int newQuantity = existingCart.getQuantity() + quantity;
             return updateCartQuantity(existingCart.getCartId(), newQuantity);
         } else {
@@ -133,8 +161,37 @@ public class CartDAO extends DBContext {
         return null;
     }
 
-    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    // Cập nhật số lượng sản phẩm trong giỏ hàng (có ràng buộc với stock)
+    // KHÔNG xóa item khi quantity = 0, chỉ set về 0
     public boolean updateCartQuantity(int cartId, int newQuantity) {
+        // Lấy thông tin cart item và product để kiểm tra stock
+        Cart cartItem = getCartItemById(cartId);
+        if (cartItem == null) {
+            return false;
+        }
+        
+        // Kiểm tra stock hiện tại
+        String stockSql = "SELECT product_quantity FROM Product WHERE product_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(stockSql)) {
+            ps.setInt(1, cartItem.getProductId());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int availableStock = rs.getInt("product_quantity");
+                    // Ràng buộc: số lượng trong cart không được vượt quá stock
+                    if (newQuantity > availableStock) {
+                        newQuantity = Math.max(0, availableStock); // Điều chỉnh về stock nếu vượt
+                    }
+                    if (newQuantity < 0) {
+                        newQuantity = 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        // Cập nhật số lượng (cho phép quantity = 0, không xóa item)
         String sql = "UPDATE Cart SET cart_quantity = ? WHERE cart_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, newQuantity);
@@ -145,6 +202,42 @@ public class CartDAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    /**
+     * Tự động điều chỉnh số lượng trong giỏ hàng để đảm bảo không vượt quá stock
+     * Trả về số lượng items đã được điều chỉnh
+     * KHÔNG xóa item hết hàng, chỉ điều chỉnh quantity về 0
+     */
+    public int validateAndAdjustCart(int customerId) {
+        int adjustedCount = 0;
+        List<Cart> cartItems = getCartByCustomerId(customerId);
+        
+        for (Cart item : cartItems) {
+            int cartQuantity = item.getQuantity();
+            int availableStock = item.getAvailableQuantity();
+            
+            // Nếu số lượng trong cart vượt quá stock, điều chỉnh
+            if (cartQuantity > availableStock) {
+                if (availableStock <= 0) {
+                    // Hết hàng, điều chỉnh quantity về 0 (không xóa)
+                    String sql = "UPDATE Cart SET cart_quantity = 0 WHERE cart_id = ?";
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setInt(1, item.getCartId());
+                        ps.executeUpdate();
+                        adjustedCount++;
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // Điều chỉnh về số lượng stock còn lại
+                    updateCartQuantity(item.getCartId(), availableStock);
+                    adjustedCount++;
+                }
+            }
+        }
+        
+        return adjustedCount;
     }
 
     // Xóa sản phẩm khỏi giỏ hàng
@@ -189,9 +282,12 @@ public class CartDAO extends DBContext {
         return 0;
     }
 
-    // Tính tổng tiền trong giỏ hàng
+    // Tính tổng tiền trong giỏ hàng (chỉ tính items còn hàng, không tính items out of stock)
     public int getCartTotal(int customerId) {
-        String sql = "SELECT SUM(p.price * c.cart_quantity) as total FROM Cart c JOIN [Product] p ON p.product_id = c.product_id WHERE customer_id = ?";
+        String sql = "SELECT SUM(p.price * c.cart_quantity) as total " +
+                     "FROM Cart c " +
+                     "JOIN [Product] p ON p.product_id = c.product_id " +
+                     "WHERE c.customer_id = ? AND p.product_quantity > 0 AND c.cart_quantity > 0";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -206,12 +302,13 @@ public class CartDAO extends DBContext {
     }
 
     public List<Cart> findItemsForCheckout(int customerId) throws SQLException {
+        // Chỉ lấy items còn hàng và có quantity > 0 (không lấy items out of stock)
         String sql = "SELECT c.cart_id, c.customer_id, c.product_id, p.price, c.cart_quantity, "
                 + "       p.product_name, p.image, b.brand_name, p.product_quantity "
                 + "FROM Cart c "
                 + "JOIN Product p ON p.product_id = c.product_id "
                 + "JOIN Brand b ON b.brand_id = p.brand_id "
-                + "WHERE c.customer_id = ?";
+                + "WHERE c.customer_id = ? AND p.product_quantity > 0 AND c.cart_quantity > 0";
         try (Connection cn = new DBContext().getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) {
