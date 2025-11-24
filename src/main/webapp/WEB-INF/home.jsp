@@ -123,7 +123,16 @@
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title text-center">${fn:escapeXml(p.productName)}</h5>
                                     <p class="text-center text-muted mb-1">${fn:escapeXml(p.brand)}</p>
-                                    <p class="text-center fw-bold text-danger mb-3"><fmt:formatNumber value="${p.price}" type="number"/> VND</p>
+                                    <c:choose>
+                                        <c:when test="${p.price > 0}">
+                                            <p class="text-center fw-bold text-danger mb-3">
+                                                <fmt:formatNumber value="${p.price}" type="number"/> VND
+                                            </p>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <p class="text-center text-warning fw-semibold mb-3">Coming Soon</p>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <div class="mt-auto text-center">
                                         <a href="${pageContext.request.contextPath}/productdetail?id=${p.productId}"
                                            class="btn btn-outline-primary btn-sm me-2">Details</a>

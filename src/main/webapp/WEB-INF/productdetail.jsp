@@ -31,7 +31,14 @@
                     <h2>${product.productName}</h2>
                     <p class="text-muted">Brand: ${product.brand} — Origin: ${product.origin}</p>
 
-                    <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VND</h3>
+                    <c:choose>
+                        <c:when test="${product.price > 0}">
+                            <h3 class="text-danger"><fmt:formatNumber value="${product.price}" type="number"/> VND</h3>
+                        </c:when>
+                        <c:otherwise>
+                            <h3 class="text-warning">Coming Soon</h3>
+                        </c:otherwise>
+                    </c:choose>
 
                     <div class="mb-3">
                         <strong>Stock:</strong> 
