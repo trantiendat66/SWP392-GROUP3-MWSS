@@ -32,7 +32,7 @@
 
         <hr style="border-color: rgba(255,255,255,0.06); margin: 24px 0;" />
 
-        <p class="mb-0">© 2025 WatchShop. All rights reserved.</p>
+        <p class="mb-0">@ 2025 WatchShop. All rights reserved.</p>
     </div>
 </footer>
 
