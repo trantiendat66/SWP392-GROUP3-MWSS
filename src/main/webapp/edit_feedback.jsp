@@ -94,6 +94,9 @@
     <div class="edit-feedback-card">
         <div class="edit-feedback-header">
             <h3>✏️ Edit Your Feedback</h3>
+            <div style="font-size: 14px; color: #ffe082; font-weight: 500; margin-top: 4px;">
+                <i class="fas fa-edit"></i> Edited
+            </div>
         </div>
         
         <div class="edit-feedback-body">
