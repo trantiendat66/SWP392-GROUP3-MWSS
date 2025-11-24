@@ -400,13 +400,45 @@ public class ProductDAO extends DBContext {
     }
 
     public void deleteProduct(int productId) throws SQLException {
-        String sql = "DELETE FROM Product WHERE product_id = ?";
-        try (Connection cn = getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, productId);
-            int rows = ps.executeUpdate();
-            if (rows == 0) {
+        Connection cn = getConnection();
+        if (cn == null) {
+            throw new SQLException("Không thể kết nối đến cơ sở dữ liệu.");
+        }
+
+        final String deleteCartSql = "DELETE FROM Cart WHERE product_id = ?";
+        final String deleteImportSql = "DELETE FROM ImportProduct WHERE product_id = ?";
+        final String deleteProductSql = "DELETE FROM Product WHERE product_id = ?";
+
+        boolean previousAutoCommit = cn.getAutoCommit();
+        try {
+            cn.setAutoCommit(false);
+
+            try (PreparedStatement deleteCartStmt = cn.prepareStatement(deleteCartSql)) {
+                deleteCartStmt.setInt(1, productId);
+                deleteCartStmt.executeUpdate();
+            }
+
+            try (PreparedStatement deleteImportStmt = cn.prepareStatement(deleteImportSql)) {
+                deleteImportStmt.setInt(1, productId);
+                deleteImportStmt.executeUpdate();
+            }
+
+            int affectedRows;
+            try (PreparedStatement deleteProductStmt = cn.prepareStatement(deleteProductSql)) {
+                deleteProductStmt.setInt(1, productId);
+                affectedRows = deleteProductStmt.executeUpdate();
+            }
+
+            if (affectedRows == 0) {
                 throw new SQLException("Xóa thất bại, không tìm thấy product_id = " + productId);
             }
+
+            cn.commit();
+        } catch (SQLException ex) {
+            cn.rollback();
+            throw ex;
+        } finally {
+            cn.setAutoCommit(previousAutoCommit);
         }
     }
 
