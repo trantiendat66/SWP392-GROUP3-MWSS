@@ -37,7 +37,13 @@
                         <strong>Stock:</strong> 
                         <c:choose>
                             <c:when test="${product.quantityProduct > 0}">
-                                <span class="badge bg-success">${product.quantityProduct} items available</span>
+                                <span class="badge bg-success">
+                                    ${product.quantityProduct}
+                                    <c:choose>
+                                        <c:when test="${product.quantityProduct == 1}">item</c:when>
+                                        <c:otherwise>items</c:otherwise>
+                                    </c:choose>
+                                </span>
                             </c:when>
                             <c:otherwise>
                                 <span class="badge bg-danger">Out of Stock</span>
@@ -387,6 +393,10 @@
 </c:choose>
 
 <script>
+    function getItemLabel(count) {
+        return count === 1 ? 'item' : 'items';
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-progress-width]').forEach(function (el) {
             const raw = parseFloat(el.getAttribute('data-progress-width'));
@@ -476,15 +486,17 @@
                 return false;
             } else if (remaining === 0) {
                 isValid = false;
+                const itemLabel = getItemLabel(state.currentCartQuantity);
                 errorMessage = 'You already have ' + state.currentCartQuantity
-                        + ' item(s) of this product in your cart.';
+                        + ' ' + itemLabel + ' of this product in your cart.';
             } else if (quantity < 1) {
                 isValid = false;
                 errorMessage = 'Quantity must be greater than 0.';
             } else if (quantity > remaining) {
                 isValid = false;
+                const itemLabel = getItemLabel(state.currentCartQuantity);
                 errorMessage = 'You already have ' + state.currentCartQuantity
-                        + ' item(s) of this product in your cart.';
+                        + ' ' + itemLabel + ' of this product in your cart.';
             }
 
             if (isValid) {
@@ -579,16 +591,22 @@
                         return;
                     }
 
-                    if (remaining <= 0) {
-                        setQuantityMessage('You already have all item(s) of this product in your cart.', 'error');
+        if (remaining <= 0) {
+            const totalStock = cartState.stockQuantity || 0;
+            const stockPhrase = totalStock > 0
+                    ? totalStock + ' ' + getItemLabel(totalStock)
+                    : 'available items';
+            setQuantityMessage('You already have all ' + stockPhrase + ' of this product in your cart.', 'error');
                         quantityInput.value = 0;
                         quantityInput.focus();
                         return;
                     }
 
                     if (quantity > remaining) {
-                        setQuantityMessage('You already have ' + (cartState.currentCartQuantity || 0)
-                                + ' item(s) of this product in your cart.', 'error');
+            const currentCount = cartState.currentCartQuantity || 0;
+            const itemLabel = getItemLabel(currentCount);
+            setQuantityMessage('You already have ' + currentCount
+                    + ' ' + itemLabel + ' of this product in your cart.', 'error');
                         quantityInput.value = remaining;
                         quantityInput.focus();
                         return;

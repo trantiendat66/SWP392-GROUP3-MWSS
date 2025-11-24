@@ -171,7 +171,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-cart"></i> Your Cart
                 <c:if test="${not empty cartItems}">
-                    <span class="badge bg-primary ms-2">${cartItemCount} Product(s)</span>
+                    <span class="badge bg-primary ms-2">${cartItemCount} <c:choose><c:when test="${cartItemCount == 1}">Product</c:when><c:otherwise>Products</c:otherwise></c:choose></span>
                 </c:if>
             </h2>
         </div>
@@ -238,7 +238,7 @@
                                         <small class="text-muted">
                                             <strong>Stock:</strong> 
                                             <span class="badge ${item.availableQuantity > 0 ? 'bg-success' : 'bg-danger'}">
-                                                ${item.availableQuantity} item(s)
+                                                ${item.availableQuantity} <c:choose><c:when test="${item.availableQuantity == 1}">item</c:when><c:otherwise>items</c:otherwise></c:choose>
                                             </span>
                                         </small>
                                     </p>
@@ -313,19 +313,6 @@
                 <div class="col-lg-4">
                     <div class="cart-summary">
                         <h4 class="mb-3">Order Summary</h4>
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Number of Items:</span>
-                            <span id="total-items">
-                                <c:set var="activeItemCount" value="0" />
-                                <c:forEach var="item" items="${cartItems}">
-                                    <c:if test="${item.availableQuantity > 0 && item.quantity > 0}">
-                                        <c:set var="activeItemCount" value="${activeItemCount + item.quantity}" />
-                                    </c:if>
-                                </c:forEach>
-                                ${activeItemCount}
-                            </span>
-                        </div>
 
                         <div class="d-flex justify-content-between mb-3">
                             <span>Total Amount:</span>
@@ -410,7 +397,8 @@
         }
 
         if (newQuantity > maxQuantity) {
-            showMessage('Quantity cannot exceed ' + maxQuantity + ' items remaining in stock', 'error');
+            const itemText = maxQuantity === 1 ? 'item' : 'items';
+            showMessage('Quantity cannot exceed ' + maxQuantity + ' ' + itemText + ' remaining in stock', 'error');
             quantityInput.value = quantityInput.getAttribute('data-old-value') || 1;
             return;
         }
