@@ -256,8 +256,8 @@
                                                         <div class="d-flex justify-content-between">
                                                             <div class="fw-semibold">Staff</div>
                                                         </div>
-<!--                                                        and rv.hidden == false muốn ẩn reply của staff thì thêm dòng này vào if phía dưới-->
-                                                        <c:if test="${not empty re.contentReply}"> 
+                                                        <!--                                                        and rv.hidden == false muốn ẩn reply của staff thì thêm dòng này vào if phía dưới-->
+                                                        <c:if test="${not empty re.contentReply and rv.hidden == false}"> 
                                                             <p class="mb-0">${re.contentReply}</p>
                                                         </c:if>
                                                     </div>
@@ -598,22 +598,22 @@
                         return;
                     }
 
-        if (remaining <= 0) {
-            const totalStock = cartState.stockQuantity || 0;
-            const stockPhrase = totalStock > 0
-                    ? totalStock + ' ' + getItemLabel(totalStock)
-                    : 'available items';
-            setQuantityMessage('You already have all ' + stockPhrase + ' of this product in your cart.', 'error');
+                    if (remaining <= 0) {
+                        const totalStock = cartState.stockQuantity || 0;
+                        const stockPhrase = totalStock > 0
+                                ? totalStock + ' ' + getItemLabel(totalStock)
+                                : 'available items';
+                        setQuantityMessage('You already have all ' + stockPhrase + ' of this product in your cart.', 'error');
                         quantityInput.value = 0;
                         quantityInput.focus();
                         return;
                     }
 
                     if (quantity > remaining) {
-            const currentCount = cartState.currentCartQuantity || 0;
-            const itemLabel = getItemLabel(currentCount);
-            setQuantityMessage('You already have ' + currentCount
-                    + ' ' + itemLabel + ' of this product in your cart.', 'error');
+                        const currentCount = cartState.currentCartQuantity || 0;
+                        const itemLabel = getItemLabel(currentCount);
+                        setQuantityMessage('You already have ' + currentCount
+                                + ' ' + itemLabel + ' of this product in your cart.', 'error');
                         quantityInput.value = remaining;
                         quantityInput.focus();
                         return;

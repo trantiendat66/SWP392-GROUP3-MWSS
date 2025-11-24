@@ -266,7 +266,7 @@
         const momoFrame = document.getElementById('momoFrame');
         const countdownBox = document.getElementById('countdown');
         const timerDisplay = document.getElementById('timer');
-        let timeLeft = 90; // seconds (UI countdown only)
+        let timeLeft = 30; // seconds (UI countdown only)
         let paymentCompleted = false;
 
         function openMoMoPayment() {

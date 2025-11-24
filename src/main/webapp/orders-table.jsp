@@ -338,7 +338,7 @@
                 if (!orderDateStr) return;
                 
                 const orderDate = new Date(orderDateStr.replace(' ', 'T'));
-                const until = new Date(orderDate.getTime() + 3 * 60 * 1000); // +5min for test (change to 12*60*60*1000 for production)
+                const until = new Date(orderDate.getTime() + 2 * 60 * 1000); // +5min for test (change to 12*60*60*1000 for production)
                 const now = new Date();
                 const diffMs = until - now;
                 
